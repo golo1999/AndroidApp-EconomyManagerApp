@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "236665611938",
+    "firebase_url": "https://economymanagerapp.firebaseio.com",
+    "project_id": "economymanagerapp",
+    "storage_bucket": "economymanagerapp.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:236665611938:android:9e858d94f212959b8a99fb",
+        "android_client_info": {
+          "package_name": "com.example.EconomyManager"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "236665611938-1kbke01jbeuq0pfa5n5n4ggt279qrkaj.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAyTeWLvwl-D8-guCOz7-k0WSnR6v-anjY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "236665611938-1kbke01jbeuq0pfa5n5n4ggt279qrkaj.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

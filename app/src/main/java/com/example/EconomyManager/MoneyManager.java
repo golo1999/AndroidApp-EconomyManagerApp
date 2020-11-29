@@ -1,0 +1,60 @@
+package com.example.EconomyManager;
+
+public class MoneyManager implements Comparable<MoneyManager>
+{
+    private String type, date, note;
+    private Float value;
+
+    public MoneyManager(String note, Float value, String date, String type)
+    {
+        this.note=note;
+        this.value=value;
+        this.date=date;
+        this.type=type;
+    }
+
+    public String getNote()
+    {
+        return this.note;
+    }
+
+    public void setNote(String newNote)
+    {
+        this.note=newNote;
+    }
+
+    public Float getValue()
+    {
+        return this.value;
+    }
+
+    public void setValue(Float newValue)
+    {
+        this.value=newValue;
+    }
+
+    public String getDate()
+    {
+        return this.date;
+    }
+
+    public void setDate(String newDate)
+    {
+        this.date=newDate;
+    }
+
+    public String getType()
+    {
+        return this.type;
+    }
+
+    public void setType(String newType)
+    {
+        this.type=newType;
+    }
+
+    public int compareTo(MoneyManager o)
+    {
+        return this.getValue().compareTo(o.getValue());
+    }
+}

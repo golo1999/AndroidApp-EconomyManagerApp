@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.example.EconomyManager">
+
+    <uses-permission android:name="android.permission.INTERNET" />
+
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_new_app_icon"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_new_app_icon_round"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.AppCompat.DayNight.NoActionBar">
+        <activity android:name=".ApplicationPart.ActivitySettings"
+            android:parentActivityName=".ApplicationPart.ActivityMainScreen"/>
+        <activity android:name=".ApplicationPart.ActivitySplashScreen">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".ApplicationPart.ActivityTimeAndDatePicker"
+            android:parentActivityName=".ApplicationPart.ActivityEditSpecificTransaction" />
+        <activity android:name=".ApplicationPart.ActivityEditSpecificTransaction" />
+        <activity
+            android:name=".ApplicationPart.ActivityEditPhoto"
+            android:parentActivityName=".ApplicationPart.ActivityEditAccount" />
+        <activity
+            android:name=".ApplicationPart.ActivityEditAccount"
+            android:parentActivityName=".ApplicationPart.ActivityMainScreen" />
+        <activity
+            android:name=".ApplicationPart.ActivityMonthlyBalance"
+            android:parentActivityName=".ApplicationPart.ActivityMainScreen" />
+        <activity android:name=".ActivityFakeListView" />
+        <activity
+            android:name=".ApplicationPart.ActivityEditTransactions"
+            android:parentActivityName=".ApplicationPart.ActivityMainScreen" />
+        <activity
+            android:name=".ApplicationPart.ActivitySubtractMoney"
+            android:windowSoftInputMode="stateAlwaysHidden"
+            android:parentActivityName=".ApplicationPart.ActivityMainScreen" />
+        <activity
+            android:name=".ApplicationPart.ActivityAddMoney"
+            android:parentActivityName=".ApplicationPart.ActivityMainScreen"
+            android:windowSoftInputMode="stateAlwaysHidden"/>
+        <activity android:name=".LoginPart.LogIn" />
+        <activity
+            android:name=".LoginPart.ForgotPassword"
+            android:parentActivityName=".LoginPart.LogIn" />
+        <activity
+            android:name=".LoginPart.SignUp"
+            android:parentActivityName=".LoginPart.LogIn" />
+        <activity android:name=".ApplicationPart.ActivityMainScreen" />
+
+        <meta-data
+            android:name="com.facebook.sdk.ApplicationId"
+            android:value="@string/facebook_app_id"/>
+
+        <activity
+            android:name="com.facebook.FacebookActivity"
+            android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
+            android:label="@string/app_name" />
+        <activity
+            android:name="com.facebook.CustomTabActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="@string/fb_login_protocol_scheme" />
+            </intent-filter>
+        </activity>
+
+
+    </application>
+
+</manifest>

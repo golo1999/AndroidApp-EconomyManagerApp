@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ApplicationPart.ActivityEditTransactions">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/editTransactionsTopLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:background="#A2A2A1"
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp">
+
+        <ImageView
+            android:id="@+id/editTransactionsBack"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_back"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"/>
+
+        <TextView
+            android:id="@+id/editTransactionsTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textStyle="bold"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toRightOf="@id/editTransactionsBack"
+            android:layout_marginStart="20dp"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <TextView
+        android:id="@+id/editTransactionsCenterText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:textStyle="bold"/>
+
+    <ListView
+        android:id="@+id/editTransactionsListView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/editTransactionsTopLayout"
+        android:layout_above="@id/editTransactionBottomLayout"
+        android:divider="@null"/>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/editTransactionBottomLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:background="#A2A2A1"
+        android:paddingBottom="5dp"
+        android:paddingTop="5dp">
+
+        <Spinner
+            android:id="@+id/editTransactionBottomLayoutMonthSpinner"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintWidth_percent=".45"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toLeftOf="@id/editTransactionBottomLayoutYearSpinner"
+            android:textAlignment="center"
+            android:popupBackground="@drawable/ic_black_gradient_whale_house"
+            style="@style/Widget.AppCompat.TextView.SpinnerItem"
+            android:gravity="center_horizontal"/>
+
+        <Spinner
+            android:id="@+id/editTransactionBottomLayoutYearSpinner"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintWidth_percent=".45"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toRightOf="@id/editTransactionBottomLayoutMonthSpinner"
+            app:layout_constraintRight_toRightOf="parent"
+            android:textAlignment="center"
+            android:popupBackground="@drawable/ic_black_gradient_whale_house"
+            style="@style/Widget.AppCompat.TextView.SpinnerItem"
+            android:gravity="center_horizontal"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</RelativeLayout>

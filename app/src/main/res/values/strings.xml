@@ -1,0 +1,245 @@
+<resources>
+    <string name="add_money_added_successfully">added successfully</string>
+    <string name="add_money_deposits">Deposits</string>
+    <string name="add_money_independent_sources">IndependentSources</string>
+    <string name="add_money_title">New income</string>
+    <string name="already_have_account">Already have an account?&#160;</string>
+    <string name="app_name" translatable="false">Economy Manager</string>
+    <string name="bottom_nav_main_screen_account">Account</string>
+    <string name="bottom_nav_main_screen_edit">Transactions</string>
+    <string name="bottom_nav_main_screen_balance">Balance</string>
+    <string name="bottom_nav_main_screen_sign_out">Sign out</string>
+    <string name="cancel">Cancel</string>
+    <string name="change_password">Change password</string>
+    <string name="choose_file">"Choose"</string>
+    <string name="custom_dialog_enter_password">Please enter your password</string>
+    <string name="custom_dialog_new_password">Enter new password</string>
+    <string name="custom_dialog_old_password">Enter old password</string>
+    <string name="date">Date</string>
+    <string name="day">Day</string>
+    <string name="debt">Debt</string>
+    <string name="delete_error">The deletion could not be performed</string>
+    <string name="delete_account">Delete account</string>
+    <string name="edit_account">Edit account</string>
+    <string name="edit_account_first_name">First name</string>
+    <string name="edit_account_last_name">Last name</string>
+    <string name="edit_account_phone_number">Phone number</string>
+    <string name="edit_account_website">Website</string>
+    <string name="edit_account_birth_date">Birth date</string>
+    <string name="edit_account_career_title">Career title</string>
+    <string name="edit_account_country_albania">Albania</string>
+    <string name="edit_account_country_andorra">Andorra</string>
+    <string name="edit_account_country_armenia">Armenia</string>
+    <string name="edit_account_country_austria">Austria</string>
+    <string name="edit_account_country_azerbaijan">Azerbaijan</string>
+    <string name="edit_account_country_belarus">Belarus</string>
+    <string name="edit_account_country_belgium">Belgium</string>
+    <string name="edit_account_country_bosnia_and_herzegovina">Bosnia and Herzegovina</string>
+    <string name="edit_account_country_bulgaria">Bulgaria</string>
+    <string name="edit_account_country_croatia">Croatia</string>
+    <string name="edit_account_country_cyprus">Cyprus</string>
+    <string name="edit_account_country_czech_republic">Czech Republic</string>
+    <string name="edit_account_country_denmark">Denmark</string>
+    <string name="edit_account_country_estonia">Estonia</string>
+    <string name="edit_account_country_finland">Finland</string>
+    <string name="edit_account_country_france">France</string>
+    <string name="edit_account_country_georgia">Georgia</string>
+    <string name="edit_account_country_germany">Germany</string>
+    <string name="edit_account_country_greece">Greece</string>
+    <string name="edit_account_country_hungary">Hungary</string>
+    <string name="edit_account_country_iceland">Iceland</string>
+    <string name="edit_account_country_ireland">Ireland</string>
+    <string name="edit_account_country_italy">Italy</string>
+    <string name="edit_account_country_kazakhstan">Kazakhstan</string>
+    <string name="edit_account_country_latvia">Latvia</string>
+    <string name="edit_account_country_liechtenstein">Liechtenstein</string>
+    <string name="edit_account_country_lithuania">Lithuania</string>
+    <string name="edit_account_country_luxembourg">Luxembourg</string>
+    <string name="edit_account_country_malta">Malta</string>
+    <string name="edit_account_country_moldova">Moldova</string>
+    <string name="edit_account_country_monaco">Monaco</string>
+    <string name="edit_account_country_montenegro">Montenegro</string>
+    <string name="edit_account_country_netherlands">Netherlands</string>
+    <string name="edit_account_country_north_macedonia">North Macedonia</string>
+    <string name="edit_account_country_norway">Norway</string>
+    <string name="edit_account_country_poland">Poland</string>
+    <string name="edit_account_country_portugal">Portugal</string>
+    <string name="edit_account_country_romania">Romania</string>
+    <string name="edit_account_country_russia">Russia</string>
+    <string name="edit_account_country_san_marino">San Marino</string>
+    <string name="edit_account_country_serbia">Serbia</string>
+    <string name="edit_account_country_slovakia">Slovakia</string>
+    <string name="edit_account_country_slovenia">Slovenia</string>
+    <string name="edit_account_country_spain">Spain</string>
+    <string name="edit_account_country_sweden">Sweden</string>
+    <string name="edit_account_country_switzerland">Switzerland</string>
+    <string name="edit_account_country_turkey">Turkey</string>
+    <string name="edit_account_country_ukraine">Ukraine</string>
+    <string name="edit_account_country_uk">United Kingdom</string>
+    <string name="edit_account_country_vatican_city">Vatican City</string>
+    <string name="edit_account_gender_female">Female</string>
+    <string name="edit_account_gender_male">Male</string>
+    <string name="edit_account_gender_other">Other</string>
+    <string name="edit_account_incorrect_phone_number">Incorrect phone number</string>
+    <string name="edit_account_enter_valid_birth_date">Please enter a valid birth date</string>
+    <string name="edit_photo_title">Change account image</string>
+    <string name="edit_photo_select_file">Please select a file first</string>
+    <string name="edit_photo_upload_successful">Upload successful</string>
+    <string name="edit_specific_transaction_title">Edit specific transaction</string>
+    <string name="edit_transactions_center_text_select">Select the month and the year</string>
+    <string name="edit_transactions_center_text_no_transactions">No transactions made yet</string>
+    <string name="edit_transactions_title">Monthly transactions</string>
+    <string name="email">Email</string>
+    <string name="expense">Expense</string>
+    <string name="Expenses">Expenses</string>
+    <string name="facebook_app_id" translatable="false">973649146445611</string>
+    <string name="fb_login_protocol_scheme" translatable="false">fb973649146445611</string>
+    <string name="forgot_forgot">Forgot your password?</string>
+    <string name="forgot_reset">Reset password</string>
+    <string name="forgot_password_email_does_not_exist">Email does not exist in the database</string>
+    <string name="greet_good_morning">Good morning!</string>
+    <string name="greet_good_afternoon">Good afternoon!</string>
+    <string name="greet_good_evening">Good evening!</string>
+    <string name="hour">Hour</string>
+    <string name="income">Income</string>
+    <string name="incomes">Incomes</string>
+    <string name="last_10_transactions">Last 10 transactions</string>
+    <string name="last_week_expenses">Last week expenses</string>
+    <string name="login_forgot_password">Forgot password</string>
+    <string name="login_login">Log in</string>
+    <string name="login_no_account">Don\'t have an account?&#160;</string>
+    <string name="login_signup">Sign up here</string>
+    <string name="login_incorrect_username_password">Incorrect username or password</string>
+    <string name="login_email_not_valid">Email address is not valid</string>
+    <string name="login_verify_email">Please verify your email</string>
+    <string name="minute">Minute</string>
+    <string name="money_error1">Please select an option</string>
+    <string name="money_error4">Value should not be empty</string>
+    <string name="money_spent_percentage">% of your incomes</string>
+    <string name="money_spent_you_spent">You spent</string>
+    <string name="money_spent_last_week">last week</string>
+    <string name="month_january">January</string>
+    <string name="month_february">February</string>
+    <string name="month_march">March</string>
+    <string name="month_april">April</string>
+    <string name="month_may">May</string>
+    <string name="month_june">June</string>
+    <string name="month_july">July</string>
+    <string name="month_august">August</string>
+    <string name="month_september">September</string>
+    <string name="month_october">October</string>
+    <string name="month_november">November</string>
+    <string name="month_december">December</string>
+    <string name="monthly_balance">Monthly balance</string>
+    <string name="no_money_last_week">No money spent last week</string>
+    <string name="no_money_records_month">No money records this month</string>
+    <string name="no_money_records_yet">No money records yet</string>
+    <string name="no_transactions_this_month">No transactions made this month</string>
+    <string name="no_transactions_this_year">No transactions made this year</string>
+    <string name="no_transactions_yet">No transactions made yet</string>
+    <string name="note">Note</string>
+    <string name="password">Password</string>
+    <string name="proceed"> Proceed </string>
+    <string name="rate_app">Rate the app</string>
+    <string name="remaining_monthly_income">Remaining monthly income</string>
+    <string name="reset_database">Reset database</string>
+    <string name="salary">Salary</string>
+    <string name="save">Save</string>
+    <string name="save_changes">Save changes</string>
+    <string name="saving">Saving</string>
+    <string name="second">Second</string>
+    <string name="settings_text">Settings</string>
+    <string name="settings_dark_theme">Dark theme</string>
+    <string name="settings_currency">Currency</string>
+    <string name="settings_language">Language</string>
+    <string name="settings_account_deleted">The account was successfully deleted</string>
+    <string name="settings_change_password">Are you sure you want to change your password?</string>
+    <string name="settings_database_reset">The database was reset successfully</string>
+    <string name="settings_delete_account">Are you sure you want to delete your account?</string>
+    <string name="settings_email_password_no_match">Email and password do not match</string>
+    <string name="settings_password_updated">Password updated successfully</string>
+    <string name="settings_passwords_not_empty">The passwords should not be empty</string>
+    <string name="settings_old_password_not_empty">The old password should not be empty</string>
+    <string name="settings_new_password_not_empty">The new password should not be empty</string>
+    <string name="settings_reset_database">Are you sure you want to reset the database?</string>
+    <string name="settings_warning">Warning</string>
+    <string name="settings_yes">Yes</string>
+    <string name="signup_error1">Email already exists</string>
+    <string name="signup_error2">Email and password should not be empty</string>
+    <string name="signup_error3">Email should not be empty</string>
+    <string name="signup_error4">Password should not be empty</string>
+    <string name="signup_error5">Email and password are not valid</string>
+    <string name="signup_error6">Please enter a valid email</string>
+    <string name="signup_error7">Password should have at least 7 characters</string>
+    <string name="signup_login">Log in here</string>
+    <string name="signup_signup">Sign up</string>
+    <string name="splash_screen_app_name" translatable="false"> The Economy\n Manager App </string>
+    <string name="subtract_money_title">New expense</string>
+    <string name="subtract_money_bills">Bills</string>
+    <string name="subtract_money_car">Car</string>
+    <string name="subtract_money_clothes">Clothes</string>
+    <string name="subtract_money_communications">Communications</string>
+    <string name="subtract_money_eating_out">EatingOut</string>
+    <string name="subtract_money_entertainment">Entertainment</string>
+    <string name="subtract_money_food">Food</string>
+    <string name="subtract_money_gifts">Gifts</string>
+    <string name="subtract_money_health">Health</string>
+    <string name="subtract_money_house">House</string>
+    <string name="subtract_money_pets">Pets</string>
+    <string name="subtract_money_sports">Sports</string>
+    <string name="subtract_money_taxi">Taxi</string>
+    <string name="subtract_money_toiletry">Toiletry</string>
+    <string name="subtract_money_transport">Transport</string>
+    <string name="time_date_and">&#32;and&#32;</string>
+    <string name="time_date_hour">Hour should be between 0 and 23</string>
+    <string name="time_date_minute">Minute should be between 0 and 59</string>
+    <string name="time_date_second">Second should be between 0 and 59</string>
+    <string name="time_date_month_29_days">&#32;should have maximum 29 days</string>
+    <string name="time_date_month_28_days">&#32;should have maximum 28 days</string>
+    <string name="time_date_month_30_days">&#32;should have maximum 30 days</string>
+    <string name="time_date_month_31_days">No month should have more than 31 days</string>
+    <string name="time_date_year">Year should be between&#32;</string>
+    <string name="top_5_expenses">Top 5 expenses</string>
+    <string name="top_5_expenses_no_expenses_this_month">No expenses made this month</string>
+    <string name="top_5_expenses_no_expenses_yet">No expenses made yet</string>
+    <string name="type">Type</string>
+    <string name="upload">Upload</string>
+    <string name="value">Value</string>
+    <string name="year">Year</string>
+
+    <string-array name="currencies">
+        <item> AUD </item>
+        <item> BRL </item>
+        <item> CAD </item>
+        <item> CHF </item>
+        <item> CNY </item>
+        <item> EUR </item>
+        <item> GBP </item>
+        <item> INR </item>
+        <item> JPY </item>
+        <item> RON </item>
+        <item> RUB </item>
+        <item> USD </item>
+    </string-array>
+
+    <string-array name="months">
+        <item></item>
+        <item> January </item>
+        <item> February </item>
+        <item> March </item>
+        <item> April </item>
+        <item> May </item>
+        <item> June </item>
+        <item> July </item>
+        <item> August </item>
+        <item> September </item>
+        <item> October </item>
+        <item> November </item>
+        <item> December </item>
+    </string-array>
+
+    <string name="add_money_note_length_error">The note should have maximum 15 characters</string>
+    <string name="edit_account_country_select_country" translatable="false">" "</string>
+    <string name="edit_account_gender_select" translatable="false">" "</string>
+    <string name="edit_transaction_time_date">Edit transaction date</string>
+</resources>
