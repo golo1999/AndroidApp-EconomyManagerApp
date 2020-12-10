@@ -30,6 +30,9 @@ import com.example.EconomyManager.CustomDialogChangePassword;
 import com.example.EconomyManager.CustomDialogDeleteAccount;
 import com.example.EconomyManager.LoginPart.LogIn;
 import com.example.EconomyManager.R;
+import com.facebook.AccessToken;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
@@ -134,7 +137,11 @@ public class ActivitySettings extends AppCompatActivity implements CustomDialogD
                         @Override
                         public void onClick(DialogInterface dialog, int which)
                         {
-                            CustomDialogDeleteAccount dialogClass=new CustomDialogDeleteAccount(0);
+                            int choice=0;
+                            if(fbAuth.getCurrentUser()!=null)
+                                if(!fbAuth.getCurrentUser().getProviderData().get(fbAuth.getCurrentUser().getProviderData().size()-1).getProviderId().equals("password"))
+                                    choice=2;
+                            CustomDialogDeleteAccount dialogClass=new CustomDialogDeleteAccount(choice);
                             dialogClass.show(getSupportFragmentManager(), "example dialog");
                         }
                     }).setNegativeButton(getResources().getString(R.string.cancel).trim(), new DialogInterface.OnClickListener()
@@ -172,7 +179,11 @@ public class ActivitySettings extends AppCompatActivity implements CustomDialogD
                         @Override
                         public void onClick(DialogInterface dialog, int which)
                         {
-                            CustomDialogDeleteAccount dialogClass=new CustomDialogDeleteAccount(1);
+                            int choice=1;
+                            if(fbAuth.getCurrentUser()!=null)
+                                if(!fbAuth.getCurrentUser().getProviderData().get(fbAuth.getCurrentUser().getProviderData().size()-1).getProviderId().equals("password"))
+                                    choice=3;
+                            CustomDialogDeleteAccount dialogClass=new CustomDialogDeleteAccount(choice);
                             dialogClass.show(getSupportFragmentManager(), "example dialog");
                         }
                     }).setNegativeButton(getResources().getString(R.string.cancel).trim(), new DialogInterface.OnClickListener()
@@ -378,17 +389,40 @@ public class ActivitySettings extends AppCompatActivity implements CustomDialogD
     @Override
     public void deleteAccount()
     {
-        AuthCredential credential;
-
         if(fbAuth.getCurrentUser()!=null)
-            if(fbAuth.getCurrentUser().getProviderData().get(fbAuth.getCurrentUser().getProviderData().size()-1).getProviderId().equals("facebook.com"))
+        {
+            AuthCredential credential=FacebookAuthProvider.getCredential(String.valueOf(AccessToken.getCurrentAccessToken())); // initializam acreditarea (credential) pentru autentificare cu facebook
+
+            if(fbAuth.getCurrentUser().getProviderData().get(fbAuth.getCurrentUser().getProviderData().size()-1).getProviderId().equals("google.com")) // in cazul in care providerul de autentificare este google
             {
-                credential=FacebookAuthProvider.getCredential();
+                GoogleSignInAccount account=GoogleSignIn.getLastSignedInAccount(this);
+                if(account!=null)
+                    credential=GoogleAuthProvider.getCredential(account.getIdToken(), null);
             }
-            else if(fbAuth.getCurrentUser().getProviderData().get(fbAuth.getCurrentUser().getProviderData().size()-1).getProviderId().equals("google.com"))
+
+            fbAuth.getCurrentUser().reauthenticate(credential).addOnCompleteListener(new OnCompleteListener<Void>()
             {
-                credential= GoogleAuthProvider.getCredential();
-            }
+                @Override
+                public void onComplete(@NonNull Task<Void> task)
+                {
+                    if(fbAuth.getUid()!=null)
+                        myRef.child(fbAuth.getUid()).child("PersonalTransactions").removeValue();
+                    fbAuth.getCurrentUser().delete().addOnCompleteListener(new OnCompleteListener<Void>()
+                    {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task)
+                        {
+                            Intent intent=new Intent(ActivitySettings.this, LogIn.class);
+                            fbAuth.signOut();
+                            finishAffinity();
+                            startActivity(intent);
+                            overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+                            Toast.makeText(ActivitySettings.this, getResources().getString(R.string.settings_account_deleted), Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                }
+            });
+        }
     }
 
     @Override
@@ -425,8 +459,34 @@ public class ActivitySettings extends AppCompatActivity implements CustomDialogD
     }
 
     @Override
-    public void resetDatabase() {
+    public void resetDatabase()
+    {
+        if(fbAuth.getUid()!=null && fbAuth.getCurrentUser()!=null)
+        {
+            AuthCredential credential=FacebookAuthProvider.getCredential(String.valueOf(AccessToken.getCurrentAccessToken())); // initializam acreditarea (credential) pentru autentificare cu facebook
 
+            if(fbAuth.getCurrentUser().getProviderData().get(fbAuth.getCurrentUser().getProviderData().size()-1).getProviderId().equals("google.com")) // in cazul in care providerul de autentificare este google
+            {
+                GoogleSignInAccount account=GoogleSignIn.getLastSignedInAccount(this);
+                if(account!=null)
+                    credential=GoogleAuthProvider.getCredential(account.getIdToken(), null);
+            }
+
+            fbAuth.getCurrentUser().reauthenticate(credential).addOnCompleteListener(new OnCompleteListener<Void>()
+            {
+                @Override
+                public void onComplete(@NonNull Task<Void> task)
+                {
+                    if(task.isSuccessful())
+                    {
+                        myRef.child(fbAuth.getUid()).child("PersonalTransactions").removeValue();
+                        Toast.makeText(ActivitySettings.this, getResources().getString(R.string.settings_database_reset), Toast.LENGTH_SHORT).show();
+                    }
+                    else Toast.makeText(ActivitySettings.this, getResources().getString(R.string.settings_email_password_no_match), Toast.LENGTH_SHORT).show();
+                    closeTheKeyboard();
+                }
+            });
+        }
     }
 
     private void closeTheKeyboard()

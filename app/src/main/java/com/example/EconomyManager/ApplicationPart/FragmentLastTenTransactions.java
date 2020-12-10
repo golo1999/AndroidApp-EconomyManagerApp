@@ -134,7 +134,7 @@ public class FragmentLastTenTransactions extends Fragment
                         if(transactionsList.size()>10)
                             for(int x=0; x<10; x++)
                             {
-                                childLayout=(LinearLayout)getLayoutInflater().inflate(R.layout.linearlayout_last_ten_transactions, null);
+                                childLayout=(LinearLayout)getLayoutInflater().inflate(R.layout.linearlayout_last_ten_transactions, mainLayout, false);
                                 TextView typeFromChildLayout=childLayout.findViewById(R.id.lastTenTransactionsRelativeLayoutTitle), valueFromChildLayout=childLayout.findViewById(R.id.lastTenTransactionsRelativeLayoutPrice);
                                 String valueWithCurrency;
 
@@ -155,7 +155,7 @@ public class FragmentLastTenTransactions extends Fragment
                             }
                         else for(int x=0; x<transactionsList.size(); x++)
                         {
-                            childLayout=(LinearLayout)getLayoutInflater().inflate(R.layout.linearlayout_last_ten_transactions, null);
+                            childLayout=(LinearLayout)getLayoutInflater().inflate(R.layout.linearlayout_last_ten_transactions, mainLayout, false);
                             TextView typeFromChildLayout=childLayout.findViewById(R.id.lastTenTransactionsRelativeLayoutTitle), valueFromChildLayout=childLayout.findViewById(R.id.lastTenTransactionsRelativeLayoutPrice);
                             String valueWithCurrency;
 

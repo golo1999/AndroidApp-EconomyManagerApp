@@ -21,7 +21,6 @@ public class CustomDialogDeleteAccount extends AppCompatDialogFragment
     private EditText password;
     private CustomDialogListener listener;
     private int choice;
-    private FirebaseUser user= FirebaseAuth.getInstance().getCurrentUser();
 
     public CustomDialogDeleteAccount(int choice)
     {
@@ -36,12 +35,13 @@ public class CustomDialogDeleteAccount extends AppCompatDialogFragment
         {
             LayoutInflater inflater=getActivity().getLayoutInflater();
             View view=inflater.inflate(R.layout.linearlayout_custom_dialog, null);
-            builder.setView(view).setPositiveButton(getResources().getString(R.string.proceed), new DialogInterface.OnClickListener()
+
+            if(choice==0 || choice==1)
             {
-                @Override
-                public void onClick(DialogInterface dialog, int which)
+                builder.setView(view).setPositiveButton(getResources().getString(R.string.proceed), new DialogInterface.OnClickListener()
                 {
-                    if(user.getProviderData().get(user.getProviderData().size()-1).getProviderId().equals("password"))
+                    @Override
+                    public void onClick(DialogInterface dialog, int which)
                     {
                         String typedPassword=String.valueOf(password.getText());
                         if(choice==0)
@@ -49,19 +49,20 @@ public class CustomDialogDeleteAccount extends AppCompatDialogFragment
                         else if(choice==1)
                             listener.getTypedPasswordAndResetTheDatabase(typedPassword);
                     }
-                    else if(choice==0)
-                        listener.deleteAccount();
-                    else if(choice==1)
-                        listener.resetDatabase();
-                }
-            }).setNegativeButton(getResources().getString(R.string.cancel), new DialogInterface.OnClickListener()
-            {
-                @Override
-                public void onClick(DialogInterface dialog, int which)
+                }).setNegativeButton(getResources().getString(R.string.cancel), new DialogInterface.OnClickListener()
                 {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which)
+                    {
 
-                }
-            });
+                    }
+                });
+            }
+            else if(choice==2)
+                listener.deleteAccount();
+            else if(choice==3)
+                listener.resetDatabase();
+
             password=view.findViewById(R.id.deleteAccountPassword);
         }
         return builder.create();

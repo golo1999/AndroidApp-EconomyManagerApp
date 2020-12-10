@@ -749,6 +749,7 @@ public class ActivityEditTransactions extends AppCompatActivity
                     overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
                 }
             });
+            transactionEdit.setVisibility(View.GONE);
             return view;
         }
     }

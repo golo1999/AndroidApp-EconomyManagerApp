@@ -7,10 +7,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
 import android.util.Patterns;
 import android.view.View;
-import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
@@ -41,7 +39,6 @@ import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -61,7 +58,7 @@ public class LogIn extends AppCompatActivity
     private DatabaseReference myRef= FirebaseDatabase.getInstance().getReference();
     private GoogleSignInClient mGoogleSignInClient;
     private static final int RC_SIGN_IN=27;
-    private int googleOrFacebookInsideOnActivityResult;
+    private int googleOrFacebookInsideOnActivityResult=0; // 0 pentru facebook, 1 pentru google
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -72,6 +69,7 @@ public class LogIn extends AppCompatActivity
         setGoogleButtonSize();
         setGoogleRequest();
         initializeFacebookLogin();
+        ascundereLogInFB();
         setOnClickListeners();
     }
 
@@ -112,7 +110,7 @@ public class LogIn extends AppCompatActivity
             @Override
             public void onClick(View v)
             {
-                buttonClickLoginFacebook(v);
+                buttonClickLoginFacebook();
             }
         });
 
@@ -132,6 +130,7 @@ public class LogIn extends AppCompatActivity
             @Override
             public void onClick(View v)
             {
+                googleOrFacebookInsideOnActivityResult=1;
                 googleSignIn();
             }
         });
@@ -252,7 +251,7 @@ public class LogIn extends AppCompatActivity
         facebookLogIn.setReadPermissions(Arrays.asList("email", "public_profile"));
     }
 
-    private void buttonClickLoginFacebook(View v)
+    private void buttonClickLoginFacebook()
     {
         LoginManager.getInstance().registerCallback(manager, new FacebookCallback<LoginResult>()
         {
@@ -293,7 +292,7 @@ public class LogIn extends AppCompatActivity
                         goToTheMainScreen();
                     }
                 }
-                //else Toast.makeText(getApplicationContext(), "Facebook authentication failed", Toast.LENGTH_SHORT).show();
+                else Toast.makeText(getApplicationContext(), "Facebook authentication failed", Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -332,7 +331,7 @@ public class LogIn extends AppCompatActivity
                         goToTheMainScreen();
                     }
                 }
-                //else Toast.makeText(getApplicationContext(), "Google authentication failed", Toast.LENGTH_SHORT).show();
+                else Toast.makeText(getApplicationContext(), "Google authentication failed", Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -358,5 +357,10 @@ public class LogIn extends AppCompatActivity
         finishAffinity();
         startActivity(intent); // incepem activitatea urmatoare
         overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+    }
+
+    private void ascundereLogInFB()
+    {
+        this.facebookLogIn.setVisibility(View.GONE);
     }
 }

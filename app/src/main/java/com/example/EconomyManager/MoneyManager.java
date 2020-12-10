@@ -2,6 +2,8 @@ package com.example.EconomyManager;
 
 public class MoneyManager implements Comparable<MoneyManager>
 {
+    private static MoneyManager lastTransaction=null;
+    private static float lastOverall=0f;
     private String type, date, note;
     private Float value;
 
@@ -51,6 +53,26 @@ public class MoneyManager implements Comparable<MoneyManager>
     public void setType(String newType)
     {
         this.type=newType;
+    }
+
+    public static MoneyManager getLastTransaction()
+    {
+        return lastTransaction;
+    }
+
+    public static void setLastTransaction(MoneyManager transaction)
+    {
+        MoneyManager.lastTransaction=transaction;
+    }
+
+    public static float getLastOverall()
+    {
+        return lastOverall;
+    }
+
+    public static void setLastOverall(float lastOverall)
+    {
+        MoneyManager.lastOverall = lastOverall;
     }
 
     public int compareTo(MoneyManager o)

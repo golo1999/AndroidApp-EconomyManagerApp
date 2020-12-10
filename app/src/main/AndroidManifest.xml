@@ -33,7 +33,6 @@
         <activity
             android:name=".ApplicationPart.ActivityMonthlyBalance"
             android:parentActivityName=".ApplicationPart.ActivityMainScreen" />
-        <activity android:name=".ActivityFakeListView" />
         <activity
             android:name=".ApplicationPart.ActivityEditTransactions"
             android:parentActivityName=".ApplicationPart.ActivityMainScreen" />
@@ -45,7 +44,8 @@
             android:name=".ApplicationPart.ActivityAddMoney"
             android:parentActivityName=".ApplicationPart.ActivityMainScreen"
             android:windowSoftInputMode="stateAlwaysHidden"/>
-        <activity android:name=".LoginPart.LogIn" />
+        <activity android:name=".LoginPart.LogIn"
+            android:parentActivityName=".ApplicationPart.ActivitySplashScreen"/>
         <activity
             android:name=".LoginPart.ForgotPassword"
             android:parentActivityName=".LoginPart.LogIn" />

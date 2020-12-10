@@ -812,10 +812,10 @@ public class ActivityEditSpecificTransaction extends AppCompatActivity
         }
     }
 
-    private float getDifferenceBetweenValues(float oldValue, float newValue) // metoda este perfecta
+    /*private float getDifferenceBetweenValues(float oldValue, float newValue) // metoda este perfecta
     {
         return newValue-oldValue;
-    }
+    }*/
 
     private void closeTheKeyboard()
     {
@@ -1111,7 +1111,7 @@ public class ActivityEditSpecificTransaction extends AppCompatActivity
         else return null;
     }
 
-    private void setQueue(char[] queue, boolean noteModified, boolean valueModified, boolean dateModified, boolean typeModified)
+    /*private void setQueue(char[] queue, boolean noteModified, boolean valueModified, boolean dateModified, boolean typeModified)
     {
         if(typeModified)
         {
@@ -1166,9 +1166,9 @@ public class ActivityEditSpecificTransaction extends AppCompatActivity
             }
         }
         Toast.makeText(ActivityEditSpecificTransaction.this, String.valueOf(queue), Toast.LENGTH_SHORT).show();
-    }
+    }*/
 
-    private String getFieldFromQueue(char field)
+    /*private String getFieldFromQueue(char field)
     {
         switch(field)
         {
@@ -1183,7 +1183,7 @@ public class ActivityEditSpecificTransaction extends AppCompatActivity
             default:
                 return null;
         }
-    }
+    }*/
 
     private int getYearFromDate(String date)
     {

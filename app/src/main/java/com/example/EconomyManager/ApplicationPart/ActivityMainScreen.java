@@ -213,7 +213,7 @@ public class ActivityMainScreen extends AppCompatActivity
             greetingMessage=getResources().getString(R.string.greet_good_afternoon);
         else greetingMessage=getResources().getString(R.string.greet_good_evening);
 
-        Toast.makeText(ActivityMainScreen.this, Locale.getDefault().getDisplayLanguage(), Toast.LENGTH_SHORT).show();
+        //Toast.makeText(ActivityMainScreen.this, Locale.getDefault().getDisplayLanguage(), Toast.LENGTH_SHORT).show(); -> afiseaza limba curenta a dispozitivului
 
         switch(Locale.getDefault().getDisplayLanguage())
         {
