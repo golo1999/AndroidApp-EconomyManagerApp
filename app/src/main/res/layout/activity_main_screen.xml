@@ -286,9 +286,36 @@
                 android:id="@+id/scroll_container4"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
                 app:layout_constraintWidth_percent=".9"
                 app:layout_constraintTop_toBottomOf="@id/mainScreenTopFiveExpenses"
+                app:layout_constraintBottom_toTopOf="@+id/mainScreenMoneySpentPercentage"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"/>
+
+            <TextView
+                android:id="@+id/mainScreenMoneySpentPercentage"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="123"
+                app:layout_constraintTop_toBottomOf="@id/scroll_container4"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintBottom_toTopOf="@id/scroll_container5"
+                android:textStyle="bold"
+                android:textSize="20sp"
+                android:textColor="#FFFFFF"
+                app:layout_constraintWidth_percent=".9"/>
+
+            <FrameLayout
+                android:id="@+id/scroll_container5"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_marginTop="10dp"
+                app:layout_constraintWidth_percent=".9"
+                app:layout_constraintHeight_percent=".2"
+                app:layout_constraintTop_toBottomOf="@id/mainScreenMoneySpentPercentage"
                 app:layout_constraintBottom_toTopOf="@+id/mainFABLayout"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
@@ -301,7 +328,7 @@
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/scroll_container4"
+                app:layout_constraintTop_toBottomOf="@id/scroll_container5"
                 android:layout_marginBottom="20dp"
                 android:clipChildren="false">
 

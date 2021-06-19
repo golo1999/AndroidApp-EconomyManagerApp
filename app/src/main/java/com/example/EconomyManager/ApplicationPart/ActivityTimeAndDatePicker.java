@@ -22,6 +22,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.EconomyManager.Months;
 import com.example.EconomyManager.R;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -239,9 +240,9 @@ public class ActivityTimeAndDatePicker extends AppCompatActivity
                     }
                 }
 
-                if(!String.valueOf(month.getSelectedItem()).trim().equals("") && !getMonthInEnglish(String.valueOf(month.getSelectedItem()).trim()).trim().equals(initialMonth))
+                if(!String.valueOf(month.getSelectedItem()).trim().equals("") && !Months.getMonthInEnglish(ActivityTimeAndDatePicker.this, String.valueOf(month.getSelectedItem()).trim()).trim().equals(initialMonth))
                 {
-                    modifiedMonth=getMonthInEnglish(String.valueOf(month.getSelectedItem()).trim()).trim();
+                    modifiedMonth=Months.getMonthInEnglish(ActivityTimeAndDatePicker.this, String.valueOf(month.getSelectedItem()).trim()).trim();
                     monthModified=true;
                 }
 
@@ -465,7 +466,7 @@ public class ActivityTimeAndDatePicker extends AppCompatActivity
         String initialDate=String.valueOf(extras.getString("initialDate"));
         ArrayList<String> monthsList=new ArrayList<>();
         String[] initialDateSplit=initialDate.split("\\W");
-        String initialMonth=getTranslatedMonth(initialDateSplit[0].trim());
+        String initialMonth=Months.getTranslatedMonth(ActivityTimeAndDatePicker.this, initialDateSplit[0].trim());
 
         ArrayAdapter<String> monthAdapter=new ArrayAdapter<String>(this, R.layout.custom_spinner_item, monthsList)
         {
@@ -571,38 +572,38 @@ public class ActivityTimeAndDatePicker extends AppCompatActivity
         editText.setBackgroundTintList(ColorStateList.valueOf(color));
     }
 
-    private String getTranslatedMonth(String monthNameInEnglish)
-    {
-        switch(monthNameInEnglish)
-        {
-            case "January":
-                return getResources().getString(R.string.month_january);
-            case "February":
-                return getResources().getString(R.string.month_february);
-            case "March":
-                return getResources().getString(R.string.month_march);
-            case "April":
-                return getResources().getString(R.string.month_april);
-            case "May":
-                return getResources().getString(R.string.month_may);
-            case "June":
-                return getResources().getString(R.string.month_june);
-            case "July":
-                return getResources().getString(R.string.month_july);
-            case "August":
-                return getResources().getString(R.string.month_august);
-            case "September":
-                return getResources().getString(R.string.month_september);
-            case "October":
-                return getResources().getString(R.string.month_october);
-            case "November":
-                return getResources().getString(R.string.month_november);
-            case "December":
-                return getResources().getString(R.string.month_december);
-            default:
-                return "";
-        }
-    }
+//    private String getTranslatedMonth(String monthNameInEnglish)
+//    {
+//        switch(monthNameInEnglish)
+//        {
+//            case "January":
+//                return getResources().getString(R.string.month_january);
+//            case "February":
+//                return getResources().getString(R.string.month_february);
+//            case "March":
+//                return getResources().getString(R.string.month_march);
+//            case "April":
+//                return getResources().getString(R.string.month_april);
+//            case "May":
+//                return getResources().getString(R.string.month_may);
+//            case "June":
+//                return getResources().getString(R.string.month_june);
+//            case "July":
+//                return getResources().getString(R.string.month_july);
+//            case "August":
+//                return getResources().getString(R.string.month_august);
+//            case "September":
+//                return getResources().getString(R.string.month_september);
+//            case "October":
+//                return getResources().getString(R.string.month_october);
+//            case "November":
+//                return getResources().getString(R.string.month_november);
+//            case "December":
+//                return getResources().getString(R.string.month_december);
+//            default:
+//                return "";
+//        }
+//    }
 
     private int getMonthPositionInMonthsList(String monthName)
     {
@@ -633,32 +634,32 @@ public class ActivityTimeAndDatePicker extends AppCompatActivity
         else return 0;
     }
 
-    private String getMonthInEnglish(String monthName)
-    {
-        if(monthName.trim().equals(getResources().getString(R.string.month_january)))
-            return "January";
-        else if(monthName.trim().equals(getResources().getString(R.string.month_february)))
-            return "February";
-        else if(monthName.trim().equals(getResources().getString(R.string.month_march)))
-            return "March";
-        else if(monthName.trim().equals(getResources().getString(R.string.month_april)))
-            return "April";
-        else if(monthName.trim().equals(getResources().getString(R.string.month_may)))
-            return "May";
-        else if(monthName.trim().equals(getResources().getString(R.string.month_june)))
-            return "June";
-        else if(monthName.trim().equals(getResources().getString(R.string.month_july)))
-            return "July";
-        else if(monthName.trim().equals(getResources().getString(R.string.month_august)))
-            return "August";
-        else if(monthName.trim().equals(getResources().getString(R.string.month_september)))
-            return "September";
-        else if(monthName.trim().equals(getResources().getString(R.string.month_october)))
-            return "October";
-        else if(monthName.trim().equals(getResources().getString(R.string.month_november)))
-            return "November";
-        else if(monthName.trim().equals(getResources().getString(R.string.month_december)))
-            return "December";
-        else return "";
-    }
+//    private String getMonthInEnglish(String monthName)
+//    {
+//        if(monthName.trim().equals(getResources().getString(R.string.month_january)))
+//            return "January";
+//        else if(monthName.trim().equals(getResources().getString(R.string.month_february)))
+//            return "February";
+//        else if(monthName.trim().equals(getResources().getString(R.string.month_march)))
+//            return "March";
+//        else if(monthName.trim().equals(getResources().getString(R.string.month_april)))
+//            return "April";
+//        else if(monthName.trim().equals(getResources().getString(R.string.month_may)))
+//            return "May";
+//        else if(monthName.trim().equals(getResources().getString(R.string.month_june)))
+//            return "June";
+//        else if(monthName.trim().equals(getResources().getString(R.string.month_july)))
+//            return "July";
+//        else if(monthName.trim().equals(getResources().getString(R.string.month_august)))
+//            return "August";
+//        else if(monthName.trim().equals(getResources().getString(R.string.month_september)))
+//            return "September";
+//        else if(monthName.trim().equals(getResources().getString(R.string.month_october)))
+//            return "October";
+//        else if(monthName.trim().equals(getResources().getString(R.string.month_november)))
+//            return "November";
+//        else if(monthName.trim().equals(getResources().getString(R.string.month_december)))
+//            return "December";
+//        else return "";
+//    }
 }

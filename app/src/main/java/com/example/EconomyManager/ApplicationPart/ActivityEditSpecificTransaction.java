@@ -7,8 +7,6 @@ import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,6 +27,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.EconomyManager.MoneyManager;
 import com.example.EconomyManager.R;
+import com.example.EconomyManager.Types;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -37,6 +36,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Locale;
 
@@ -51,6 +51,7 @@ public class ActivityEditSpecificTransaction extends AppCompatActivity
     private FirebaseAuth fbAuth;
     private DatabaseReference myRef;
     private static final int REQUEST_CODE=1;
+    private char[] transactionModifiedQueue=new char[4];
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -90,6 +91,7 @@ public class ActivityEditSpecificTransaction extends AppCompatActivity
         valueText=findViewById(R.id.editSpecificTransactionValueText);
         noteText=findViewById(R.id.editSpecificTransactionNoteText);
         typeText=findViewById(R.id.editSpecificTransactionTypeText);
+
     }
 
     private void setOnClickListeners()
@@ -145,7 +147,15 @@ public class ActivityEditSpecificTransaction extends AppCompatActivity
                             break;
                     }
 
-                    if(!String.valueOf(note.getText()).trim().equals(noteHint))
+//                    if(!noteHint.trim().equals("") && !String.valueOf(note.getText()).trim().equals(noteHint))
+//                    {
+//
+//                    }
+//                    else if()
+//                    {
+//
+//                    }
+                    if(!String.valueOf(note.getText()).trim().equals(noteHint) && !String.valueOf(note.getText()).trim().equals(""))
                         noteModified=true;
                     if(!String.valueOf(value.getText()).trim().equals("") && !String.valueOf(Float.parseFloat(String.valueOf(value.getText()))).trim().equals(valueHint))
                     {
@@ -163,200 +173,261 @@ public class ActivityEditSpecificTransaction extends AppCompatActivity
                     {
                         if(!String.valueOf(date.getHint()).equals(dateHint))
                             dateModified=true;
-                        if(!String.valueOf(getTypeInEnglish(String.valueOf(type.getSelectedItem()))).equals(extras.getString("type")))
+                        if(!String.valueOf(Types.getTypeInEnglish(ActivityEditSpecificTransaction.this, String.valueOf(type.getSelectedItem()))).equals(extras.getString("type")))
                             typeModified=true;
                     }
 
                     if(noteModified || valueModified || dateModified || typeModified)
                     {
-                        if(noteModified)
-                            money.setNote(String.valueOf(note.getText()).trim());
-                        if(valueModified)
-                            money.setValue(valueChanged);
-                        if(dateModified)
-                            money.setDate(String.valueOf(date.getHint()));
-                        if(typeModified)
-                            if(!Locale.getDefault().getDisplayLanguage().equals("English"))
-                                money.setType(getTypeInEnglish(String.valueOf(type.getSelectedItem())));
-                            else money.setType(String.valueOf(type.getSelectedItem()));
+                        setQueue(transactionModifiedQueue, noteModified, valueModified, dateModified, typeModified);
+                        //Toast.makeText(ActivityEditSpecificTransaction.this, String.valueOf(transactionModifiedQueue), Toast.LENGTH_SHORT).show();
 
                         if(fbAuth.getUid()!=null)
                         {
-                            //Toast.makeText(ActivityEditSpecificTransaction.this, noteHint+"\n"+valueHint+"\n"+dateHint+"\n"+typeHint+"\n\n"+money.getNote()+"\n"+money.getValue()+"\n"+money.getDate()+"\n"+money.getType(), Toast.LENGTH_LONG).show();
-                            myRef.child(fbAuth.getUid()).child("PersonalTransactions").child(String.valueOf(getYearFromDate(dateHint))).child(getMonthFromDate(getMonthFromDate(dateHint))).child(getIncomeOrExpense(typeHint)).child(typeHint).child(dateHint).removeValue(); // stergem din vechea locatie
-                            myRef.child(fbAuth.getUid()).child("PersonalTransactions").child(String.valueOf(getYearFromDate(money.getDate()))).child(getMonthFromDate(getMonthFromDate(money.getDate()))).child(getIncomeOrExpense(money.getType())).child(money.getType()).child(money.getDate()).setValue(money); // adaugam in noua locatie
-                            myRef.child(fbAuth.getUid()).child("PersonalTransactions").addListenerForSingleValueEvent(new ValueEventListener() // actualizam/stergem ovr din vechea locatie, precum si din noua locatie
+                            if(noteModified)
+                            money.setNote(String.valueOf(note.getText()).trim());
+                            if(valueModified)
+                                money.setValue(valueChanged);
+                            if(dateModified)
+                                money.setDate(String.valueOf(date.getHint()));
+                            if(typeModified)
+                                if(!Locale.getDefault().getDisplayLanguage().equals("English"))
+                                    money.setType(Types.getTypeInEnglish(ActivityEditSpecificTransaction.this, String.valueOf(type.getSelectedItem())));
+                                else money.setType(String.valueOf(type.getSelectedItem()));
+
+                            switch(String.valueOf(transactionModifiedQueue))
                             {
-                                @Override
-                                public void onDataChange(@NonNull DataSnapshot snapshot)
-                                {
-                                    if(snapshot.hasChild(String.valueOf(getYearFromDate(dateHint))))
-                                        if(snapshot.child(String.valueOf(getYearFromDate(dateHint))).hasChild(getMonthFromDate(dateHint)))
-                                            if(snapshot.child(String.valueOf(getYearFromDate(dateHint))).child(getMonthFromDate(dateHint)).hasChild(getIncomeOrExpense(typeHint)))
-                                                if(snapshot.child(String.valueOf(getYearFromDate(dateHint))).child(getMonthFromDate(dateHint)).child(getIncomeOrExpense(typeHint)).hasChild("Overall"))
-                                                {
-                                                    float overall=Float.parseFloat(String.valueOf(snapshot.child(String.valueOf(getYearFromDate(dateHint))).child(getMonthFromDate(dateHint)).child(getIncomeOrExpense(typeHint)).child("Overall").getValue()));
-                                                    overall-=Float.parseFloat(valueHint);
-                                                    if(overall>0f)
-                                                        myRef.child(fbAuth.getUid()).child("PersonalTransactions").child(String.valueOf(getYearFromDate(dateHint))).child(getMonthFromDate(dateHint)).child(getIncomeOrExpense(typeHint)).child("Overall").setValue(String.valueOf(overall));
-                                                    else myRef.child(fbAuth.getUid()).child("PersonalTransactions").child(String.valueOf(getYearFromDate(dateHint))).child(getMonthFromDate(dateHint)).child(getIncomeOrExpense(typeHint)).child("Overall").removeValue();
-                                                    Toast.makeText(ActivityEditSpecificTransaction.this, "overall in vechea locatie: "+overall, Toast.LENGTH_SHORT).show();
-                                                }
-                                    if(snapshot.hasChild(String.valueOf(getYearFromDate(money.getDate()))))
-                                        if(snapshot.child(String.valueOf(getYearFromDate(money.getDate()))).hasChild(getMonthFromDate(money.getDate())))
-                                            if(snapshot.child(String.valueOf(getYearFromDate(money.getDate()))).child(getMonthFromDate(money.getDate())).hasChild(getIncomeOrExpense(money.getType())))
-                                            {
-                                                float overall;
-
-                                                if(snapshot.child(String.valueOf(getYearFromDate(money.getDate()))).child(getMonthFromDate(money.getDate())).child(getIncomeOrExpense(money.getType())).hasChild("Overall"))
-                                                {
-                                                    overall=Float.parseFloat(String.valueOf(snapshot.child(String.valueOf(getYearFromDate(money.getDate()))).child(getMonthFromDate(money.getDate())).child(getIncomeOrExpense(money.getType())).child("Overall").getValue()));
-                                                    Toast.makeText(ActivityEditSpecificTransaction.this, "overall in noua locatie inainte de adaugare: "+overall, Toast.LENGTH_SHORT).show();
-                                                    overall+=money.getValue();
-
-                                                }
-                                                else overall=money.getValue(); // daca nu exista overall in noua locatie
-                                                myRef.child(fbAuth.getUid()).child("PersonalTransactions").child(String.valueOf(getYearFromDate(money.getDate()))).child(getMonthFromDate(money.getDate())).child(getIncomeOrExpense(money.getType())).child("Overall").setValue(String.valueOf(overall));
-                                                Toast.makeText(ActivityEditSpecificTransaction.this, "overall in noua locatie dupa adaugare: "+overall, Toast.LENGTH_SHORT).show();
-                                            }
-                                }
-
-                                @Override
-                                public void onCancelled(@NonNull DatabaseError error)
-                                {
-
-                                }
-                            });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-                            /*if(getMonthFromDate(dateHint).equals(getMonthFromDate(money.getDate())) && getYearFromDate(dateHint)==getYearFromDate(money.getDate())) // daca luna e aceeasi si acelasi an
-                            {
-                                String oldType=getIncomeOrExpense(typeHint), newType=getIncomeOrExpense(money.getType());
-
-                                if(oldType.equals(newType)) // daca nu am schimbat income/expense: adica vechiul e income si noul e tot income -> merge perfect
-                                {
-                                    try
-                                    {
-                                        myRef.child(fbAuth.getUid()).child("PersonalTransactions").child(String.valueOf(getYearFromDate(dateHint))).child(getMonthFromDate(getMonthFromDate(dateHint))).child(oldType).child(typeHint).child(dateHint).removeValue(); // stergere
-                                        myRef.child(fbAuth.getUid()).child("PersonalTransactions").child(String.valueOf(getYearFromDate(money.getDate()))).child(getMonthFromDate(getMonthFromDate(money.getDate()))).child(newType).child(money.getType()).child(money.getDate()).setValue(money); // adaugare
-                                    }
-                                    catch(NullPointerException e)
-                                    {
-                                        Toast.makeText(ActivityEditSpecificTransaction.this, getResources().getString(R.string.delete_error), Toast.LENGTH_SHORT).show();
-                                    }
-                                }
-                                else // daca am schimbat income/expense: adica vechiul e income si noul e expense
-                                {
-                                    myRef.child(fbAuth.getUid()).child("PersonalTransactions").child(String.valueOf(getYearFromDate(dateHint))).child(getMonthFromDate(getMonthFromDate(dateHint))).child(getIncomeOrExpense(incomeOrExpense)).child(typeHint).child(dateHint).removeValue(); // stergere
-                                    myRef.child(fbAuth.getUid()).child("PersonalTransactions").child(String.valueOf(getYearFromDate(dateHint))).child(getMonthFromDate(getMonthFromDate(dateHint))).child(getIncomeOrExpense(incomeOrExpense)).addListenerForSingleValueEvent(new ValueEventListener()
-                                    {
-                                        @Override
-                                        public void onDataChange(@NonNull DataSnapshot snapshot)
-                                        {
-                                            if(snapshot.hasChild("Overall"))
-                                            {
-                                                float overall=Float.parseFloat(String.valueOf(snapshot.child("Overall").getValue()));
-                                                overall-=Float.parseFloat(valueHint);
-                                                if(overall>0f)
-                                                    myRef.child(fbAuth.getUid()).child("PersonalTransactions").child(String.valueOf(getYearFromDate(dateHint))).child(getMonthFromDate(getMonthFromDate(dateHint))).child(getIncomeOrExpense(typeHint)).child("Overall").setValue(String.valueOf(Float.valueOf(overall)));
-                                                else myRef.child(fbAuth.getUid()).child("PersonalTransactions").child(String.valueOf(getYearFromDate(dateHint))).child(getMonthFromDate(getMonthFromDate(dateHint))).child(getIncomeOrExpense(typeHint)).child("Overall").removeValue();
-                                            }
-                                        }
-
-                                        @Override
-                                        public void onCancelled(@NonNull DatabaseError error)
-                                        {
-
-                                        }
-                                    });
-
-                                    myRef.child(fbAuth.getUid()).child("PersonalTransactions").child(String.valueOf(getYearFromDate(money.getDate()))).child(getMonthFromDate(getMonthFromDate(money.getDate()))).child(getIncomeOrExpense(money.getType())).child(money.getType()).child(money.getDate()).setValue(money); // adaugare
-                                    myRef.child(fbAuth.getUid()).child("PersonalTransactions").child(String.valueOf(getYearFromDate(money.getDate()))).child(getMonthFromDate(getMonthFromDate(money.getDate()))).child(getIncomeOrExpense(money.getType())).addListenerForSingleValueEvent(new ValueEventListener()
-                                    {
-                                        @Override
-                                        public void onDataChange(@NonNull DataSnapshot snapshot)
-                                        {
-                                            if(snapshot.hasChild("Overall"))
-                                            {
-                                                float overall=Float.parseFloat(String.valueOf(snapshot.child("Overall").getValue()));
-                                                overall+=money.getValue();
-                                                myRef.child(fbAuth.getUid()).child("PersonalTransactions").child(String.valueOf(getYearFromDate(money.getDate()))).child(getMonthFromDate(getMonthFromDate(money.getDate()))).child(getIncomeOrExpense(money.getType())).child("Overall").setValue(String.valueOf(Float.valueOf(overall)));
-                                            }
-                                            else myRef.child(fbAuth.getUid()).child("PersonalTransactions").child(String.valueOf(getYearFromDate(money.getDate()))).child(getMonthFromDate(getMonthFromDate(money.getDate()))).child(getIncomeOrExpense(money.getType())).child("Overall").setValue(String.valueOf(money.getValue()));
-                                        }
-
-                                        @Override
-                                        public void onCancelled(@NonNull DatabaseError error)
-                                        {
-
-                                        }
-                                    });
-                                }
+                                case "T000":
+                                    break;
+                                case "D000":
+                                    break;
+                                case "TD00":
+                                    break;
+                                case "V000":
+                                    break;
+                                case "TV00":
+                                    break;
+                                case "DV00":
+                                    break;
+                                case "TDV0":
+                                    break;
+                                case "N000":
+                                    modifyNoteDatabase(money, incomeOrExpense);
+                                    //myRef.child(fbAuth.getUid()).child("PersonalTransactions").child(String.valueOf(getYearFromDate(money.getDate()))).child(getMonthFromDate(money.getDate())).child(incomeOrExpense).child(money.getType()).child(money.getDate()).child("note").setValue(money.getNote());
+                                    break;
+                                case "TN00":
+                                    break;
+                                case "DN00":
+                                    break;
+                                case "TDN0":
+                                    break;
+                                case "TDVN":
+                                    break;
                             }
-                            else // daca nu este aceeasi luna si acelasi an
-                            {
-                                myRef.child(fbAuth.getUid()).child("PersonalTransactions").child(String.valueOf(getYearFromDate(dateHint))).child(getMonthFromDate(getMonthFromDate(dateHint))).child(getIncomeOrExpense(incomeOrExpense)).child(typeHint).child(dateHint).removeValue(); // stergere
-                                myRef.child(fbAuth.getUid()).child("PersonalTransactions").child(String.valueOf(getYearFromDate(dateHint))).child(getMonthFromDate(getMonthFromDate(dateHint))).child(getIncomeOrExpense(incomeOrExpense)).addListenerForSingleValueEvent(new ValueEventListener()
+
+                            if(valueModified)
+                            { // trebuie modificata valoarea tranzactiei, dar si overall (daca e cazul)
+                                //money.setValue(Float.parseFloat(String.valueOf(value.getText()).trim()));
+                                if(getIncomeOrExpense(typeHint).equals(getIncomeOrExpense(money.getType()))) // daca vechiul tip de tranzactie e la fel ca si noul (ex: income=income)
                                 {
-                                    @Override
-                                    public void onDataChange(@NonNull DataSnapshot snapshot)
-                                    {
-                                        if(snapshot.hasChild("Overall"))
-                                        {
-                                            float overall=Float.parseFloat(String.valueOf(snapshot.child("Overall").getValue()));
-                                            overall-=Float.parseFloat(valueHint);
-                                            if(overall>0f)
-                                                myRef.child(fbAuth.getUid()).child("PersonalTransactions").child(String.valueOf(getYearFromDate(dateHint))).child(getMonthFromDate(getMonthFromDate(dateHint))).child(getIncomeOrExpense(typeHint)).child("Overall").setValue(String.valueOf(Float.valueOf(overall)));
-                                            else myRef.child(fbAuth.getUid()).child("PersonalTransactions").child(String.valueOf(getYearFromDate(dateHint))).child(getMonthFromDate(getMonthFromDate(dateHint))).child(getIncomeOrExpense(typeHint)).child("Overall").removeValue();
-                                        }
-                                    }
 
-                                    @Override
-                                    public void onCancelled(@NonNull DatabaseError error)
-                                    {
-
-                                    }
-                                });
-
-                                myRef.child(fbAuth.getUid()).child("PersonalTransactions").child(String.valueOf(getYearFromDate(money.getDate()))).child(getMonthFromDate(getMonthFromDate(money.getDate()))).child(getIncomeOrExpense(money.getType())).child(money.getType()).child(money.getDate()).setValue(money); // adaugare
-                                myRef.child(fbAuth.getUid()).child("PersonalTransactions").child(String.valueOf(getYearFromDate(money.getDate()))).child(getMonthFromDate(getMonthFromDate(money.getDate()))).child(getIncomeOrExpense(money.getType())).addListenerForSingleValueEvent(new ValueEventListener()
+                                }
+                                else
                                 {
-                                    @Override
-                                    public void onDataChange(@NonNull DataSnapshot snapshot)
-                                    {
-                                        if(snapshot.hasChild("Overall"))
-                                        {
-                                            float overall=Float.parseFloat(String.valueOf(snapshot.child("Overall").getValue()));
-                                            overall+=money.getValue();
-                                            myRef.child(fbAuth.getUid()).child("PersonalTransactions").child(String.valueOf(getYearFromDate(money.getDate()))).child(getMonthFromDate(getMonthFromDate(money.getDate()))).child(getIncomeOrExpense(money.getType())).child("Overall").setValue(String.valueOf(Float.valueOf(overall)));
-                                        }
-                                        else myRef.child(fbAuth.getUid()).child("PersonalTransactions").child(String.valueOf(getYearFromDate(money.getDate()))).child(getMonthFromDate(getMonthFromDate(money.getDate()))).child(getIncomeOrExpense(money.getType())).child("Overall").setValue(String.valueOf(money.getValue()));
-                                    }
 
-                                    @Override
-                                    public void onCancelled(@NonNull DatabaseError error)
-                                    {
-
-                                    }
-                                });
-                            }*/
+                                }
+                                //myRef.child(fbAuth.getUid()).child("PersonalTransactions").child(String.valueOf(getYearFromDate(money.getDate()))).child(getMonthFromDate(money.getDate())).child(incomeOrExpense).child(money.getType()).child(money.getDate()).child("note").setValue(money.getNote());
+                            }
                         }
+
+//                        if(noteModified)
+//                            money.setNote(String.valueOf(note.getText()).trim());
+//                        if(valueModified)
+//                            money.setValue(valueChanged);
+//                        if(dateModified)
+//                            money.setDate(String.valueOf(date.getHint()));
+//                        if(typeModified)
+//                            if(!Locale.getDefault().getDisplayLanguage().equals("English"))
+//                                money.setType(Types.getTypeInEnglish(ActivityEditSpecificTransaction.this, String.valueOf(type.getSelectedItem())));
+//                            else money.setType(String.valueOf(type.getSelectedItem()));
+//
+//                        if(fbAuth.getUid()!=null)
+//                        {
+//                            //Toast.makeText(ActivityEditSpecificTransaction.this, noteHint+"\n"+valueHint+"\n"+dateHint+"\n"+typeHint+"\n\n"+money.getNote()+"\n"+money.getValue()+"\n"+money.getDate()+"\n"+money.getType(), Toast.LENGTH_LONG).show();
+//                            myRef.child(fbAuth.getUid()).child("PersonalTransactions").child(String.valueOf(getYearFromDate(dateHint))).child(getMonthFromDate(getMonthFromDate(dateHint))).child(getIncomeOrExpense(typeHint)).child(typeHint).child(dateHint).removeValue(); // stergem din vechea locatie
+//                            myRef.child(fbAuth.getUid()).child("PersonalTransactions").child(String.valueOf(getYearFromDate(money.getDate()))).child(getMonthFromDate(getMonthFromDate(money.getDate()))).child(getIncomeOrExpense(money.getType())).child(money.getType()).child(money.getDate()).setValue(money); // adaugam in noua locatie
+//                            myRef.child(fbAuth.getUid()).child("PersonalTransactions").addListenerForSingleValueEvent(new ValueEventListener() // actualizam/stergem ovr din vechea locatie, precum si din noua locatie
+//                            {
+//                                @Override
+//                                public void onDataChange(@NonNull DataSnapshot snapshot)
+//                                {
+//                                    if(snapshot.hasChild(String.valueOf(getYearFromDate(dateHint))))
+//                                        if(snapshot.child(String.valueOf(getYearFromDate(dateHint))).hasChild(getMonthFromDate(dateHint)))
+//                                            if(snapshot.child(String.valueOf(getYearFromDate(dateHint))).child(getMonthFromDate(dateHint)).hasChild(getIncomeOrExpense(typeHint)))
+//                                                if(snapshot.child(String.valueOf(getYearFromDate(dateHint))).child(getMonthFromDate(dateHint)).child(getIncomeOrExpense(typeHint)).hasChild("Overall"))
+//                                                {
+//                                                    float overall=Float.parseFloat(String.valueOf(snapshot.child(String.valueOf(getYearFromDate(dateHint))).child(getMonthFromDate(dateHint)).child(getIncomeOrExpense(typeHint)).child("Overall").getValue()));
+//                                                    overall-=Float.parseFloat(valueHint);
+//                                                    if(overall>0f)
+//                                                        myRef.child(fbAuth.getUid()).child("PersonalTransactions").child(String.valueOf(getYearFromDate(dateHint))).child(getMonthFromDate(dateHint)).child(getIncomeOrExpense(typeHint)).child("Overall").setValue(String.valueOf(overall));
+//                                                    else myRef.child(fbAuth.getUid()).child("PersonalTransactions").child(String.valueOf(getYearFromDate(dateHint))).child(getMonthFromDate(dateHint)).child(getIncomeOrExpense(typeHint)).child("Overall").removeValue();
+//                                                    Toast.makeText(ActivityEditSpecificTransaction.this, "overall in vechea locatie: "+overall, Toast.LENGTH_SHORT).show();
+//                                                }
+//
+//                                    if(snapshot.hasChild(String.valueOf(getYearFromDate(money.getDate()))))
+//                                        if(snapshot.child(String.valueOf(getYearFromDate(money.getDate()))).hasChild(getMonthFromDate(money.getDate())))
+//                                            if(snapshot.child(String.valueOf(getYearFromDate(money.getDate()))).child(getMonthFromDate(money.getDate())).hasChild(getIncomeOrExpense(money.getType())))
+//                                            {
+//                                                float overall;
+//
+//                                                if(snapshot.child(String.valueOf(getYearFromDate(money.getDate()))).child(getMonthFromDate(money.getDate())).child(getIncomeOrExpense(money.getType())).hasChild("Overall"))
+//                                                {
+//                                                    overall=Float.parseFloat(String.valueOf(snapshot.child(String.valueOf(getYearFromDate(money.getDate()))).child(getMonthFromDate(money.getDate())).child(getIncomeOrExpense(money.getType())).child("Overall").getValue()));
+//                                                    Toast.makeText(ActivityEditSpecificTransaction.this, "overall in noua locatie inainte de adaugare: "+overall, Toast.LENGTH_SHORT).show();
+//                                                    overall+=money.getValue();
+//                                                }
+//                                                else overall=money.getValue(); // daca nu exista overall in noua locatie
+//                                                myRef.child(fbAuth.getUid()).child("PersonalTransactions").child(String.valueOf(getYearFromDate(money.getDate()))).child(getMonthFromDate(money.getDate())).child(getIncomeOrExpense(money.getType())).child("Overall").setValue(String.valueOf(overall));
+//                                                Toast.makeText(ActivityEditSpecificTransaction.this, "overall in noua locatie dupa adaugare: "+overall, Toast.LENGTH_SHORT).show();
+//                                            }
+//                                }
+//
+//                                @Override
+//                                public void onCancelled(@NonNull DatabaseError error)
+//                                {
+//
+//                                }
+//                            });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//                            /*if(getMonthFromDate(dateHint).equals(getMonthFromDate(money.getDate())) && getYearFromDate(dateHint)==getYearFromDate(money.getDate())) // daca luna e aceeasi si acelasi an
+//                            {
+//                                String oldType=getIncomeOrExpense(typeHint), newType=getIncomeOrExpense(money.getType());
+//
+//                                if(oldType.equals(newType)) // daca nu am schimbat income/expense: adica vechiul e income si noul e tot income -> merge perfect
+//                                {
+//                                    try
+//                                    {
+//                                        myRef.child(fbAuth.getUid()).child("PersonalTransactions").child(String.valueOf(getYearFromDate(dateHint))).child(getMonthFromDate(getMonthFromDate(dateHint))).child(oldType).child(typeHint).child(dateHint).removeValue(); // stergere
+//                                        myRef.child(fbAuth.getUid()).child("PersonalTransactions").child(String.valueOf(getYearFromDate(money.getDate()))).child(getMonthFromDate(getMonthFromDate(money.getDate()))).child(newType).child(money.getType()).child(money.getDate()).setValue(money); // adaugare
+//                                    }
+//                                    catch(NullPointerException e)
+//                                    {
+//                                        Toast.makeText(ActivityEditSpecificTransaction.this, getResources().getString(R.string.delete_error), Toast.LENGTH_SHORT).show();
+//                                    }
+//                                }
+//                                else // daca am schimbat income/expense: adica vechiul e income si noul e expense
+//                                {
+//                                    myRef.child(fbAuth.getUid()).child("PersonalTransactions").child(String.valueOf(getYearFromDate(dateHint))).child(getMonthFromDate(getMonthFromDate(dateHint))).child(getIncomeOrExpense(incomeOrExpense)).child(typeHint).child(dateHint).removeValue(); // stergere
+//                                    myRef.child(fbAuth.getUid()).child("PersonalTransactions").child(String.valueOf(getYearFromDate(dateHint))).child(getMonthFromDate(getMonthFromDate(dateHint))).child(getIncomeOrExpense(incomeOrExpense)).addListenerForSingleValueEvent(new ValueEventListener()
+//                                    {
+//                                        @Override
+//                                        public void onDataChange(@NonNull DataSnapshot snapshot)
+//                                        {
+//                                            if(snapshot.hasChild("Overall"))
+//                                            {
+//                                                float overall=Float.parseFloat(String.valueOf(snapshot.child("Overall").getValue()));
+//                                                overall-=Float.parseFloat(valueHint);
+//                                                if(overall>0f)
+//                                                    myRef.child(fbAuth.getUid()).child("PersonalTransactions").child(String.valueOf(getYearFromDate(dateHint))).child(getMonthFromDate(getMonthFromDate(dateHint))).child(getIncomeOrExpense(typeHint)).child("Overall").setValue(String.valueOf(Float.valueOf(overall)));
+//                                                else myRef.child(fbAuth.getUid()).child("PersonalTransactions").child(String.valueOf(getYearFromDate(dateHint))).child(getMonthFromDate(getMonthFromDate(dateHint))).child(getIncomeOrExpense(typeHint)).child("Overall").removeValue();
+//                                            }
+//                                        }
+//
+//                                        @Override
+//                                        public void onCancelled(@NonNull DatabaseError error)
+//                                        {
+//
+//                                        }
+//                                    });
+//
+//                                    myRef.child(fbAuth.getUid()).child("PersonalTransactions").child(String.valueOf(getYearFromDate(money.getDate()))).child(getMonthFromDate(getMonthFromDate(money.getDate()))).child(getIncomeOrExpense(money.getType())).child(money.getType()).child(money.getDate()).setValue(money); // adaugare
+//                                    myRef.child(fbAuth.getUid()).child("PersonalTransactions").child(String.valueOf(getYearFromDate(money.getDate()))).child(getMonthFromDate(getMonthFromDate(money.getDate()))).child(getIncomeOrExpense(money.getType())).addListenerForSingleValueEvent(new ValueEventListener()
+//                                    {
+//                                        @Override
+//                                        public void onDataChange(@NonNull DataSnapshot snapshot)
+//                                        {
+//                                            if(snapshot.hasChild("Overall"))
+//                                            {
+//                                                float overall=Float.parseFloat(String.valueOf(snapshot.child("Overall").getValue()));
+//                                                overall+=money.getValue();
+//                                                myRef.child(fbAuth.getUid()).child("PersonalTransactions").child(String.valueOf(getYearFromDate(money.getDate()))).child(getMonthFromDate(getMonthFromDate(money.getDate()))).child(getIncomeOrExpense(money.getType())).child("Overall").setValue(String.valueOf(Float.valueOf(overall)));
+//                                            }
+//                                            else myRef.child(fbAuth.getUid()).child("PersonalTransactions").child(String.valueOf(getYearFromDate(money.getDate()))).child(getMonthFromDate(getMonthFromDate(money.getDate()))).child(getIncomeOrExpense(money.getType())).child("Overall").setValue(String.valueOf(money.getValue()));
+//                                        }
+//
+//                                        @Override
+//                                        public void onCancelled(@NonNull DatabaseError error)
+//                                        {
+//
+//                                        }
+//                                    });
+//                                }
+//                            }
+//                            else // daca nu este aceeasi luna si acelasi an
+//                            {
+//                                myRef.child(fbAuth.getUid()).child("PersonalTransactions").child(String.valueOf(getYearFromDate(dateHint))).child(getMonthFromDate(getMonthFromDate(dateHint))).child(getIncomeOrExpense(incomeOrExpense)).child(typeHint).child(dateHint).removeValue(); // stergere
+//                                myRef.child(fbAuth.getUid()).child("PersonalTransactions").child(String.valueOf(getYearFromDate(dateHint))).child(getMonthFromDate(getMonthFromDate(dateHint))).child(getIncomeOrExpense(incomeOrExpense)).addListenerForSingleValueEvent(new ValueEventListener()
+//                                {
+//                                    @Override
+//                                    public void onDataChange(@NonNull DataSnapshot snapshot)
+//                                    {
+//                                        if(snapshot.hasChild("Overall"))
+//                                        {
+//                                            float overall=Float.parseFloat(String.valueOf(snapshot.child("Overall").getValue()));
+//                                            overall-=Float.parseFloat(valueHint);
+//                                            if(overall>0f)
+//                                                myRef.child(fbAuth.getUid()).child("PersonalTransactions").child(String.valueOf(getYearFromDate(dateHint))).child(getMonthFromDate(getMonthFromDate(dateHint))).child(getIncomeOrExpense(typeHint)).child("Overall").setValue(String.valueOf(Float.valueOf(overall)));
+//                                            else myRef.child(fbAuth.getUid()).child("PersonalTransactions").child(String.valueOf(getYearFromDate(dateHint))).child(getMonthFromDate(getMonthFromDate(dateHint))).child(getIncomeOrExpense(typeHint)).child("Overall").removeValue();
+//                                        }
+//                                    }
+//
+//                                    @Override
+//                                    public void onCancelled(@NonNull DatabaseError error)
+//                                    {
+//
+//                                    }
+//                                });
+//
+//                                myRef.child(fbAuth.getUid()).child("PersonalTransactions").child(String.valueOf(getYearFromDate(money.getDate()))).child(getMonthFromDate(getMonthFromDate(money.getDate()))).child(getIncomeOrExpense(money.getType())).child(money.getType()).child(money.getDate()).setValue(money); // adaugare
+//                                myRef.child(fbAuth.getUid()).child("PersonalTransactions").child(String.valueOf(getYearFromDate(money.getDate()))).child(getMonthFromDate(getMonthFromDate(money.getDate()))).child(getIncomeOrExpense(money.getType())).addListenerForSingleValueEvent(new ValueEventListener()
+//                                {
+//                                    @Override
+//                                    public void onDataChange(@NonNull DataSnapshot snapshot)
+//                                    {
+//                                        if(snapshot.hasChild("Overall"))
+//                                        {
+//                                            float overall=Float.parseFloat(String.valueOf(snapshot.child("Overall").getValue()));
+//                                            overall+=money.getValue();
+//                                            myRef.child(fbAuth.getUid()).child("PersonalTransactions").child(String.valueOf(getYearFromDate(money.getDate()))).child(getMonthFromDate(getMonthFromDate(money.getDate()))).child(getIncomeOrExpense(money.getType())).child("Overall").setValue(String.valueOf(Float.valueOf(overall)));
+//                                        }
+//                                        else myRef.child(fbAuth.getUid()).child("PersonalTransactions").child(String.valueOf(getYearFromDate(money.getDate()))).child(getMonthFromDate(getMonthFromDate(money.getDate()))).child(getIncomeOrExpense(money.getType())).child("Overall").setValue(String.valueOf(money.getValue()));
+//                                    }
+//
+//                                    @Override
+//                                    public void onCancelled(@NonNull DatabaseError error)
+//                                    {
+//
+//                                    }
+//                                });
+//                            }*/
+//                        }
                     }
                     onBackPressed();
 
@@ -707,7 +778,7 @@ public class ActivityEditSpecificTransaction extends AppCompatActivity
                 else date.setHint(dateText);
             if(typeText!=null)
             {
-                String translatedType=null;
+                String translatedType=Types.getTranslatedType(ActivityEditSpecificTransaction.this, typeText);
                 int positionInTheTransactionTypesList=-1;
                 ArrayList<String> transactionTypesList=new ArrayList<>();
 
@@ -736,69 +807,69 @@ public class ActivityEditSpecificTransaction extends AppCompatActivity
 
                 Collections.sort(transactionTypesList);
 
-                switch(typeText)
-                {
-                    case "Deposits":
-                        translatedType=getResources().getString(R.string.add_money_deposits);
-                        break;
-                    case "IndependentSources":
-                        translatedType=getResources().getString(R.string.add_money_independent_sources);
-                        break;
-                    case "Salary":
-                        translatedType=getResources().getString(R.string.salary);
-                        break;
-                    case "Saving":
-                        translatedType=getResources().getString(R.string.saving);
-                        break;
-                    case "Bills":
-                        translatedType=getResources().getString(R.string.subtract_money_bills);
-                        break;
-                    case "Car":
-                        translatedType=getResources().getString(R.string.subtract_money_car);
-                        break;
-                    case "Clothes":
-                        translatedType=getResources().getString(R.string.subtract_money_clothes);
-                        break;
-                    case "Communications":
-                        translatedType=getResources().getString(R.string.subtract_money_communications);
-                        break;
-                    case "EatingOut":
-                        translatedType=getResources().getString(R.string.subtract_money_eating_out);
-                        break;
-                    case "Entertainment":
-                        translatedType=getResources().getString(R.string.subtract_money_entertainment);
-                        break;
-                    case "Food":
-                        translatedType=getResources().getString(R.string.subtract_money_food);
-                        break;
-                    case "Gifts":
-                        translatedType=getResources().getString(R.string.subtract_money_gifts);
-                        break;
-                    case "Health":
-                        translatedType=getResources().getString(R.string.subtract_money_health);
-                        break;
-                    case "House":
-                        translatedType=getResources().getString(R.string.subtract_money_house);
-                        break;
-                    case "Pets":
-                        translatedType=getResources().getString(R.string.subtract_money_pets);
-                        break;
-                    case "Sports":
-                        translatedType=getResources().getString(R.string.subtract_money_sports);
-                        break;
-                    case "Taxi":
-                        translatedType=getResources().getString(R.string.subtract_money_taxi);
-                        break;
-                    case "Toiletry":
-                        translatedType=getResources().getString(R.string.subtract_money_toiletry);
-                        break;
-                    case "Transport":
-                        translatedType=getResources().getString(R.string.subtract_money_transport);
-                        break;
-                }
+//                switch(typeText)
+//                {
+//                    case "Deposits":
+//                        translatedType=getResources().getString(R.string.add_money_deposits);
+//                        break;
+//                    case "IndependentSources":
+//                        translatedType=getResources().getString(R.string.add_money_independent_sources);
+//                        break;
+//                    case "Salary":
+//                        translatedType=getResources().getString(R.string.salary);
+//                        break;
+//                    case "Saving":
+//                        translatedType=getResources().getString(R.string.saving);
+//                        break;
+//                    case "Bills":
+//                        translatedType=getResources().getString(R.string.subtract_money_bills);
+//                        break;
+//                    case "Car":
+//                        translatedType=getResources().getString(R.string.subtract_money_car);
+//                        break;
+//                    case "Clothes":
+//                        translatedType=getResources().getString(R.string.subtract_money_clothes);
+//                        break;
+//                    case "Communications":
+//                        translatedType=getResources().getString(R.string.subtract_money_communications);
+//                        break;
+//                    case "EatingOut":
+//                        translatedType=getResources().getString(R.string.subtract_money_eating_out);
+//                        break;
+//                    case "Entertainment":
+//                        translatedType=getResources().getString(R.string.subtract_money_entertainment);
+//                        break;
+//                    case "Food":
+//                        translatedType=getResources().getString(R.string.subtract_money_food);
+//                        break;
+//                    case "Gifts":
+//                        translatedType=getResources().getString(R.string.subtract_money_gifts);
+//                        break;
+//                    case "Health":
+//                        translatedType=getResources().getString(R.string.subtract_money_health);
+//                        break;
+//                    case "House":
+//                        translatedType=getResources().getString(R.string.subtract_money_house);
+//                        break;
+//                    case "Pets":
+//                        translatedType=getResources().getString(R.string.subtract_money_pets);
+//                        break;
+//                    case "Sports":
+//                        translatedType=getResources().getString(R.string.subtract_money_sports);
+//                        break;
+//                    case "Taxi":
+//                        translatedType=getResources().getString(R.string.subtract_money_taxi);
+//                        break;
+//                    case "Toiletry":
+//                        translatedType=getResources().getString(R.string.subtract_money_toiletry);
+//                        break;
+//                    case "Transport":
+//                        translatedType=getResources().getString(R.string.subtract_money_transport);
+//                        break;
+//                }
 
-                if(translatedType!=null)
-                {
+                //if(translatedType!=null)
+                //{
                     for(int i=0; i<transactionTypesList.size(); i++)
                         if(transactionTypesList.get(i).equals(translatedType.trim()))
                         {
@@ -807,7 +878,7 @@ public class ActivityEditSpecificTransaction extends AppCompatActivity
                         }
                     if(positionInTheTransactionTypesList!=-1) // aici e problema
                         type.setSelection(positionInTheTransactionTypesList); // nu merge: la independentsources apare pets
-                }
+                //}
             }
         }
     }
@@ -1068,51 +1139,53 @@ public class ActivityEditSpecificTransaction extends AppCompatActivity
         }
     }
 
-    private String getTypeInEnglish(String translatedType)
-    {
-        if(translatedType.equals(getResources().getString(R.string.add_money_deposits)))
-            return "Deposits";
-        else if(translatedType.equals(getResources().getString(R.string.add_money_independent_sources)))
-            return "IndependentSources";
-        else if(translatedType.equals(getResources().getString(R.string.saving)))
-            return "Saving";
-        else if(translatedType.equals(getResources().getString(R.string.salary)))
-            return "Salary";
-        else if(translatedType.equals(getResources().getString(R.string.subtract_money_bills)))
-            return "Bills";
-        else if(translatedType.equals(getResources().getString(R.string.subtract_money_car)))
-            return "Car";
-        else if(translatedType.equals(getResources().getString(R.string.subtract_money_clothes)))
-            return "Clothes";
-        else if(translatedType.equals(getResources().getString(R.string.subtract_money_communications)))
-            return "Communications";
-        else if(translatedType.equals(getResources().getString(R.string.subtract_money_eating_out)))
-            return "EatingOut";
-        else if(translatedType.equals(getResources().getString(R.string.subtract_money_entertainment)))
-            return "Entertainment";
-        else if(translatedType.equals(getResources().getString(R.string.subtract_money_food)))
-            return "Food";
-        else if(translatedType.equals(getResources().getString(R.string.subtract_money_gifts)))
-            return "Gifts";
-        else if(translatedType.equals(getResources().getString(R.string.subtract_money_health)))
-            return "Health";
-        else if(translatedType.equals(getResources().getString(R.string.subtract_money_house)))
-            return "House";
-        else if(translatedType.equals(getResources().getString(R.string.subtract_money_pets)))
-            return "Pets";
-        else if(translatedType.equals(getResources().getString(R.string.subtract_money_sports)))
-            return "Sports";
-        else if(translatedType.equals(getResources().getString(R.string.subtract_money_taxi)))
-            return "Taxi";
-        else if(translatedType.equals(getResources().getString(R.string.subtract_money_toiletry)))
-            return "Toiletry";
-        else if(translatedType.equals(getResources().getString(R.string.subtract_money_transport)))
-            return "Transport";
-        else return null;
-    }
+//    private String getTypeInEnglish(String translatedType)
+//    {
+//        if(translatedType.equals(getResources().getString(R.string.add_money_deposits)))
+//            return "Deposits";
+//        else if(translatedType.equals(getResources().getString(R.string.add_money_independent_sources)))
+//            return "IndependentSources";
+//        else if(translatedType.equals(getResources().getString(R.string.saving)))
+//            return "Saving";
+//        else if(translatedType.equals(getResources().getString(R.string.salary)))
+//            return "Salary";
+//        else if(translatedType.equals(getResources().getString(R.string.subtract_money_bills)))
+//            return "Bills";
+//        else if(translatedType.equals(getResources().getString(R.string.subtract_money_car)))
+//            return "Car";
+//        else if(translatedType.equals(getResources().getString(R.string.subtract_money_clothes)))
+//            return "Clothes";
+//        else if(translatedType.equals(getResources().getString(R.string.subtract_money_communications)))
+//            return "Communications";
+//        else if(translatedType.equals(getResources().getString(R.string.subtract_money_eating_out)))
+//            return "EatingOut";
+//        else if(translatedType.equals(getResources().getString(R.string.subtract_money_entertainment)))
+//            return "Entertainment";
+//        else if(translatedType.equals(getResources().getString(R.string.subtract_money_food)))
+//            return "Food";
+//        else if(translatedType.equals(getResources().getString(R.string.subtract_money_gifts)))
+//            return "Gifts";
+//        else if(translatedType.equals(getResources().getString(R.string.subtract_money_health)))
+//            return "Health";
+//        else if(translatedType.equals(getResources().getString(R.string.subtract_money_house)))
+//            return "House";
+//        else if(translatedType.equals(getResources().getString(R.string.subtract_money_pets)))
+//            return "Pets";
+//        else if(translatedType.equals(getResources().getString(R.string.subtract_money_sports)))
+//            return "Sports";
+//        else if(translatedType.equals(getResources().getString(R.string.subtract_money_taxi)))
+//            return "Taxi";
+//        else if(translatedType.equals(getResources().getString(R.string.subtract_money_toiletry)))
+//            return "Toiletry";
+//        else if(translatedType.equals(getResources().getString(R.string.subtract_money_transport)))
+//            return "Transport";
+//        else return null;
+//    }
 
-    /*private void setQueue(char[] queue, boolean noteModified, boolean valueModified, boolean dateModified, boolean typeModified)
+    private void setQueue(char[] queue, boolean noteModified, boolean valueModified, boolean dateModified, boolean typeModified)
     {
+        Arrays.fill(queue, '0');
+
         if(typeModified)
         {
             int position=-1;
@@ -1165,10 +1238,9 @@ public class ActivityEditSpecificTransaction extends AppCompatActivity
                 }
             }
         }
-        Toast.makeText(ActivityEditSpecificTransaction.this, String.valueOf(queue), Toast.LENGTH_SHORT).show();
-    }*/
+    }
 
-    /*private String getFieldFromQueue(char field)
+    private String getFieldFromQueue(char field)
     {
         switch(field)
         {
@@ -1183,7 +1255,7 @@ public class ActivityEditSpecificTransaction extends AppCompatActivity
             default:
                 return null;
         }
-    }*/
+    }
 
     private int getYearFromDate(String date)
     {
@@ -1223,5 +1295,11 @@ public class ActivityEditSpecificTransaction extends AppCompatActivity
             }
         };
         note.setOnFocusChangeListener(listener);
+    }
+
+    private void modifyNoteDatabase(MoneyManager money, String incomeOrExpense)
+    {
+        if(fbAuth.getUid()!=null)
+            myRef.child(fbAuth.getUid()).child("PersonalTransactions").child(String.valueOf(getYearFromDate(money.getDate()))).child(getMonthFromDate(money.getDate())).child(incomeOrExpense).child(money.getType()).child(money.getDate()).child("note").setValue(money.getNote());
     }
 }

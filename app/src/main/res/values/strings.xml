@@ -1,7 +1,7 @@
 <resources>
     <string name="add_money_added_successfully">added successfully</string>
     <string name="add_money_deposits">Deposits</string>
-    <string name="add_money_independent_sources">IndependentSources</string>
+    <string name="add_money_independent_sources">Independent sources</string>
     <string name="add_money_title">New income</string>
     <string name="already_have_account">Already have an account?&#160;</string>
     <string name="app_name" translatable="false">Economy Manager</string>
@@ -179,7 +179,7 @@
     <string name="subtract_money_car">Car</string>
     <string name="subtract_money_clothes">Clothes</string>
     <string name="subtract_money_communications">Communications</string>
-    <string name="subtract_money_eating_out">EatingOut</string>
+    <string name="subtract_money_eating_out">Eating out</string>
     <string name="subtract_money_entertainment">Entertainment</string>
     <string name="subtract_money_food">Food</string>
     <string name="subtract_money_gifts">Gifts</string>
@@ -206,6 +206,10 @@
     <string name="upload">Upload</string>
     <string name="value">Value</string>
     <string name="year">Year</string>
+    <string name="add_money_note_length_error">The note should have maximum 15 characters</string>
+    <string name="edit_account_country_select_country" translatable="false">" "</string>
+    <string name="edit_account_gender_select" translatable="false">" "</string>
+    <string name="edit_transaction_time_date">Edit transaction date</string>
 
     <string-array name="currencies">
         <item> AUD </item>
@@ -237,9 +241,4 @@
         <item> November </item>
         <item> December </item>
     </string-array>
-
-    <string name="add_money_note_length_error">The note should have maximum 15 characters</string>
-    <string name="edit_account_country_select_country" translatable="false">" "</string>
-    <string name="edit_account_gender_select" translatable="false">" "</string>
-    <string name="edit_transaction_time_date">Edit transaction date</string>
 </resources>

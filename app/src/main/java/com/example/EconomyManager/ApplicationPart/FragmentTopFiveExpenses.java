@@ -83,13 +83,12 @@ public class FragmentTopFiveExpenses extends Fragment
                     String currency=String.valueOf(snapshot.child("ApplicationSettings").child("currencySymbol").getValue());
                     LinearLayout childLayout;
 
-                    if(snapshot.hasChild("PersonalTransactions"))
-                    {
-                        if(!expensesList.isEmpty())
-                            expensesList.clear();
-                        if(numberOfChildren>0)
-                            numberOfChildren=0;
+                    if(!expensesList.isEmpty())
+                        expensesList.clear();
+                    if(numberOfChildren>0)
+                        numberOfChildren=0;
 
+                    if(snapshot.hasChild("PersonalTransactions"))
                         if(snapshot.child("PersonalTransactions").hasChildren())
                             for(DataSnapshot yearIterator:snapshot.child("PersonalTransactions").getChildren())
                                 if(String.valueOf(yearIterator.getKey()).equals(String.valueOf(currentTime.get(Calendar.YEAR)))) // daca a fost gasit anul curent
@@ -100,63 +99,89 @@ public class FragmentTopFiveExpenses extends Fragment
                                                     if(!String.valueOf(expensesChild.getKey()).equals("Overall"))
                                                         for(DataSnapshot expensesGrandChild:expensesChild.getChildren())
                                                             addTransactionToTheList(expensesGrandChild, expensesList);
-                    }
+
                     mainLayout.removeAllViews();
-                    if(numberOfChildren==0)
+
+                    try
                     {
-                        TextView noTransactions=new TextView(getContext());
-                        LinearLayout.LayoutParams params=new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-                        params.setMargins(0, 20, 0, 20);
-
-                        noTransactions.setText(getResources().getString(R.string.top_5_expenses_no_expenses_this_month));
-                        noTransactions.setTextColor(Color.BLACK);
-                        noTransactions.setTypeface(null, Typeface.BOLD);
-                        noTransactions.setTextSize(20);
-                        noTransactions.setGravity(Gravity.CENTER);
-                        noTransactions.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
-                        noTransactions.setLayoutParams(params);
-                        mainLayout.addView(noTransactions);
-                    }
-                    else
-                    {
-                        Collections.sort(expensesList, Collections.<MoneyManager>reverseOrder());
-                        if(expensesList.size()>5)
-                            for(int x=0; x<5; x++)
-                            {
-                                childLayout=(LinearLayout)getLayoutInflater().inflate(R.layout.linearlayout_top_five_expenses, null);
-                                TextView typeFromChildLayout=childLayout.findViewById(R.id.topFiveExpensesRelativeLayoutType), valueFromChildLayout=childLayout.findViewById(R.id.topFiveExpensesRelativeLayoutValue);
-                                String valueWithCurrency;
-
-                                if(Locale.getDefault().getDisplayLanguage().equals("English"))
-                                    valueWithCurrency=currency+expensesList.get(x).getValue();
-                                else valueWithCurrency=expensesList.get(x).getValue()+" "+currency;
-
-                                typeFromChildLayout.setText(getTranslatedExpenseType(expensesList.get(x).getType()));
-                                valueFromChildLayout.setText(valueWithCurrency);
-                                typeFromChildLayout.setTextColor(Color.BLACK);
-                                typeFromChildLayout.setTextSize(18);
-                                valueFromChildLayout.setTextSize(18);
-                                valueFromChildLayout.setTextColor(Color.BLACK);
-                                mainLayout.addView(childLayout);
-                            }
-                        else for(int x=0; x<expensesList.size(); x++)
+                        if(numberOfChildren==0)
                         {
-                            childLayout=(LinearLayout)getLayoutInflater().inflate(R.layout.linearlayout_top_five_expenses, null);
-                            TextView typeFromChildLayout=childLayout.findViewById(R.id.topFiveExpensesRelativeLayoutType), valueFromChildLayout=childLayout.findViewById(R.id.topFiveExpensesRelativeLayoutValue);
-                            String valueWithCurrency;
+                            TextView noTransactions=new TextView(getContext());
+                            LinearLayout.LayoutParams params=new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                            params.setMargins(0, 20, 0, 20);
 
-                            if(Locale.getDefault().getDisplayLanguage().equals("English"))
-                                valueWithCurrency=currency+expensesList.get(x).getValue();
-                            else valueWithCurrency=expensesList.get(x).getValue()+" "+currency;
-
-                            typeFromChildLayout.setText(getTranslatedExpenseType(expensesList.get(x).getType()));
-                            valueFromChildLayout.setText(valueWithCurrency);
-                            typeFromChildLayout.setTextColor(Color.BLACK);
-                            typeFromChildLayout.setTextSize(18);
-                            valueFromChildLayout.setTextSize(18);
-                            valueFromChildLayout.setTextColor(Color.BLACK);
-                            mainLayout.addView(childLayout);
+                            noTransactions.setText(getResources().getString(R.string.top_5_expenses_no_expenses_this_month));
+                            noTransactions.setTextColor(Color.BLACK);
+                            noTransactions.setTypeface(null, Typeface.BOLD);
+                            noTransactions.setTextSize(20);
+                            noTransactions.setGravity(Gravity.CENTER);
+                            noTransactions.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+                            noTransactions.setLayoutParams(params);
+                            mainLayout.addView(noTransactions);
                         }
+                        else
+                        {
+                            Collections.sort(expensesList, Collections.<MoneyManager>reverseOrder());
+
+                            try
+                            {
+                                if(expensesList.size()>5)
+                                    for(int x=0; x<5; x++)
+                                    {
+                                        childLayout=(LinearLayout)getLayoutInflater().inflate(R.layout.linearlayout_top_five_expenses, mainLayout, false);
+                                        TextView typeFromChildLayout=childLayout.findViewById(R.id.topFiveExpensesRelativeLayoutType), valueFromChildLayout=childLayout.findViewById(R.id.topFiveExpensesRelativeLayoutValue);
+                                        String valueWithCurrency;
+                                        float value=+expensesList.get(x).getValue();
+
+                                        if(String.valueOf(value).contains("."))
+                                            if(String.valueOf(value).length()-1-String.valueOf(value).indexOf(".")>2)
+                                                value=Float.parseFloat(String.format(Locale.getDefault(), "%.2f", value));
+
+                                        if(Locale.getDefault().getDisplayLanguage().equals("English"))
+                                            valueWithCurrency=currency+value;
+                                        else valueWithCurrency=value+" "+currency;
+
+                                        typeFromChildLayout.setText(getTranslatedExpenseType(expensesList.get(x).getType()));
+                                        valueFromChildLayout.setText(valueWithCurrency);
+                                        typeFromChildLayout.setTextColor(Color.BLACK);
+                                        typeFromChildLayout.setTextSize(18);
+                                        valueFromChildLayout.setTextSize(18);
+                                        valueFromChildLayout.setTextColor(Color.BLACK);
+                                        mainLayout.addView(childLayout);
+                                    }
+                                else for(int x=0; x<expensesList.size(); x++)
+                                {
+                                    childLayout=(LinearLayout)getLayoutInflater().inflate(R.layout.linearlayout_top_five_expenses, mainLayout, false);
+                                    TextView typeFromChildLayout=childLayout.findViewById(R.id.topFiveExpensesRelativeLayoutType), valueFromChildLayout=childLayout.findViewById(R.id.topFiveExpensesRelativeLayoutValue);
+                                    String valueWithCurrency;
+                                    float value=+expensesList.get(x).getValue();
+
+                                    if(String.valueOf(value).contains("."))
+                                        if(String.valueOf(value).length()-1-String.valueOf(value).indexOf(".")>2)
+                                            value=Float.parseFloat(String.format(Locale.getDefault(), "%.2f", value));
+
+                                    if(Locale.getDefault().getDisplayLanguage().equals("English"))
+                                        valueWithCurrency=currency+value;
+                                    else valueWithCurrency=value+" "+currency;
+
+                                    typeFromChildLayout.setText(getTranslatedExpenseType(expensesList.get(x).getType()));
+                                    valueFromChildLayout.setText(valueWithCurrency);
+                                    typeFromChildLayout.setTextColor(Color.BLACK);
+                                    typeFromChildLayout.setTextSize(18);
+                                    valueFromChildLayout.setTextSize(18);
+                                    valueFromChildLayout.setTextColor(Color.BLACK);
+                                    mainLayout.addView(childLayout);
+                                }
+                            }
+                            catch(IllegalStateException e)
+                            {
+                                e.printStackTrace();
+                            }
+                        }
+                    }
+                    catch(NullPointerException e)
+                    {
+                        e.printStackTrace();
                     }
                 }
 

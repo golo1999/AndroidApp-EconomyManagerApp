@@ -27,6 +27,8 @@ import com.google.firebase.database.ValueEventListener;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class ActivityMainScreen extends AppCompatActivity
 {
@@ -37,11 +39,13 @@ public class ActivityMainScreen extends AppCompatActivity
     private DatabaseReference myRef=FirebaseDatabase.getInstance().getReference();
     private ConstraintLayout firebaseDatabaseLoadingProgressBarLayout;
     private ProgressBar firebaseDatabaseLoadingProgressBar;
+    private int timerCounter=0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
+        setTimer();
         setActivityTheme();
         setContentView(R.layout.activity_main_screen);
         setFragments();
@@ -65,8 +69,9 @@ public class ActivityMainScreen extends AppCompatActivity
         FragmentLastTenTransactions lastTenTransactions=FragmentLastTenTransactions.newInstance();
         FragmentShowSavings savings=FragmentShowSavings.newInstance();
         FragmentTopFiveExpenses expenses=FragmentTopFiveExpenses.newInstance();
+        FragmentMoneySpentPercentage moneySpentPercentage=FragmentMoneySpentPercentage.newInstance();
 
-        getSupportFragmentManager().beginTransaction().replace(R.id.scroll_container0, savings).replace(R.id.scroll_container1, budgetReview).replace(R.id.scroll_container2, moneySpent).replace(R.id.scroll_container3, lastTenTransactions).replace(R.id.scroll_container4, expenses).commit();
+        getSupportFragmentManager().beginTransaction().replace(R.id.scroll_container0, savings).replace(R.id.scroll_container1, budgetReview).replace(R.id.scroll_container2, moneySpent).replace(R.id.scroll_container3, lastTenTransactions).replace(R.id.scroll_container4, expenses).replace(R.id.scroll_container5, moneySpentPercentage).commit();
     }
 
     private void setVariables()
@@ -198,6 +203,31 @@ public class ActivityMainScreen extends AppCompatActivity
                 overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
             }
         });
+    }
+
+    private void setTimer()
+    {
+        final Timer timer=new Timer();
+
+        timer.scheduleAtFixedRate(new TimerTask()
+        {
+            @Override
+            public void run()
+            {
+                runOnUiThread(new Runnable()
+                {
+                    @Override
+                    public void run()
+                    {
+                        ++timerCounter;
+                        if(timerCounter==1) // oprim timerul dupa o secunda
+                        {
+                            timer.cancel();
+                        }
+                    }
+                });
+            }
+        }, 1000, 1000);
     }
 
     private void setDates()

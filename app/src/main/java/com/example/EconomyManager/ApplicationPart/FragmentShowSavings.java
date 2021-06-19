@@ -25,26 +25,19 @@ import java.util.Locale;
 
 public class FragmentShowSavings extends Fragment
 {
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
     private DatabaseReference myRef;
     private FirebaseAuth fbAuth;
     private TextView savings;
-
-    //private String mParam1;
-    //private String mParam2;
 
     public FragmentShowSavings()
     {
 
     }
 
-    public static FragmentShowSavings newInstance(/*String param1, String param2*/)
+    public static FragmentShowSavings newInstance()
     {
         FragmentShowSavings fragment = new FragmentShowSavings();
         Bundle args = new Bundle();
-        //args.putString(ARG_PARAM1, param1);
-        //args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
         return fragment;
     }
@@ -53,11 +46,6 @@ public class FragmentShowSavings extends Fragment
     public void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null)
-        {
-            //mParam1 = getArguments().getString(ARG_PARAM1);
-            //mParam2 = getArguments().getString(ARG_PARAM2);
-        }
     }
 
     @Override
@@ -122,19 +110,42 @@ public class FragmentShowSavings extends Fragment
 
                                     try
                                     {
+                                        if(incomesDB.contains("."))
+                                            if(incomesDB.length()-1-incomesDB.indexOf(".")>2)
+                                                incomesDB=incomesDB.substring(0, incomesDB.indexOf(".")+3);
+
+                                        if(expensesDB.contains("."))
+                                            if(expensesDB.length()-1-expensesDB.indexOf(".")>2)
+                                                expensesDB=expensesDB.substring(0, expensesDB.indexOf(".")+3);
+
                                         if(Float.parseFloat(incomesDB)-Float.parseFloat(expensesDB)<0f)
                                         {
                                             float absOfSaving=Math.abs(Float.parseFloat(incomesDB)-Float.parseFloat(expensesDB));
+
+                                            if(String.valueOf(absOfSaving).contains("."))
+                                                if(String.valueOf(absOfSaving).length()-1-String.valueOf(absOfSaving).indexOf(".")>2)
+                                                    absOfSaving=Float.parseFloat(String.format(Locale.getDefault(), "%.2f", absOfSaving));
+
                                             if(Locale.getDefault().getDisplayLanguage().equals("English"))
                                                 savingsText=currency+absOfSaving;
                                             else savingsText=absOfSaving+" "+currency;
                                         }
                                         else
                                         {
+                                            float saving=Float.parseFloat(incomesDB)-Float.parseFloat(expensesDB);
+
                                             if(Locale.getDefault().getDisplayLanguage().equals("English"))
-                                                savingsText=currency+(Float.parseFloat(incomesDB)-Float.parseFloat(expensesDB));
-                                            else savingsText=(Float.parseFloat(incomesDB)-Float.parseFloat(expensesDB))+" "+currency;
+                                                savingsText=currency+Float.parseFloat(String.format(Locale.getDefault(), "%.2f", saving));
+                                            else savingsText=String.format(Locale.getDefault(), "%.2f", saving)+" "+currency;
                                         }
+
+                                        if(savingsText.contains("."))
+                                            if(savingsText.length()-1-savingsText.indexOf(".")>2)
+                                                savingsText=savingsText.substring(0, savingsText.indexOf(".")+3);
+
+                                        if(savingsText.contains(","))
+                                            savingsText=savingsText.replace(",", ".");
+
                                         savings.setText(savingsText);
                                     }
                                     catch (IllegalStateException e)

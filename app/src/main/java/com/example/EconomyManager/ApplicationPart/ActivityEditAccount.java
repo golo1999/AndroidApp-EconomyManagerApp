@@ -38,21 +38,19 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Locale;
 
-public class ActivityEditAccount extends AppCompatActivity
-{
+public class ActivityEditAccount extends AppCompatActivity {
     private ImageView goBack, accountPhoto, editFirstName, editLastName, editPhone, editWebsite, editCountry, editGender, editBirthDate, editCareerTitle;
     private TextView topText;
     private EditText firstName, lastName, phoneNumber, website, birthDate, careerTitle;
     private Spinner country, gender;
-    private FirebaseAuth fbAuth=FirebaseAuth.getInstance();
-    private DatabaseReference myRef=FirebaseDatabase.getInstance().getReference();
+    private FirebaseAuth fbAuth = FirebaseAuth.getInstance();
+    private DatabaseReference myRef = FirebaseDatabase.getInstance().getReference();
     private int firstNameClicked, lastNameClicked, phoneClicked, websiteClicked, countryClicked, genderClicked, birthDateClicked, careerTitleClicked;
     private boolean darkThemeEnabled;
-    private ArrayList<String> countryList=new ArrayList<>(), genderList=new ArrayList<>();
+    private ArrayList<String> countryList = new ArrayList<>(), genderList = new ArrayList<>();
 
     @Override
-    protected void onCreate(Bundle savedInstanceState)
-    {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_account);
         setVariables();
@@ -68,201 +66,170 @@ public class ActivityEditAccount extends AppCompatActivity
     }
 
     @Override
-    public void onBackPressed()
-    {
+    public void onBackPressed() {
         super.onBackPressed();
         finish();
         overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
     }
 
-    private void setVariables()
-    {
-        goBack=findViewById(R.id.editAccountBack);
-        firstName=findViewById(R.id.editAccountFirstName);
-        lastName=findViewById(R.id.editAccountLastName);
-        phoneNumber=findViewById(R.id.editAccountPhone);
-        website=findViewById(R.id.editAccountWebsite);
-        birthDate=findViewById(R.id.editAccountBirthDate);
-        careerTitle=findViewById(R.id.editAccountTitle);
-        country=findViewById(R.id.editAccountCountrySpinner);
-        gender=findViewById(R.id.editAccountGenderSpinner);
-        accountPhoto=findViewById(R.id.editAccountPhoto);
-        editFirstName=findViewById(R.id.editAccountFirstNameEdit);
-        editLastName=findViewById(R.id.editAccountLastNameEdit);
-        editPhone=findViewById(R.id.editAccountPhoneEdit);
-        editWebsite=findViewById(R.id.editAccountWebsiteEdit);
-        editCountry=findViewById(R.id.editAccountCountryEdit);
-        editGender=findViewById(R.id.editAccountGenderEdit);
-        editBirthDate=findViewById(R.id.editAccountBirthDateEdit);
-        editCareerTitle=findViewById(R.id.editAccountTitleEdit);
-        firstNameClicked=lastNameClicked=phoneClicked=websiteClicked=countryClicked=genderClicked=birthDateClicked=careerTitleClicked=0;
-        topText=findViewById(R.id.editAccountTopText);
+    private void setVariables() {
+        goBack = findViewById(R.id.editAccountBack);
+        firstName = findViewById(R.id.editAccountFirstName);
+        lastName = findViewById(R.id.editAccountLastName);
+        phoneNumber = findViewById(R.id.editAccountPhone);
+        website = findViewById(R.id.editAccountWebsite);
+        birthDate = findViewById(R.id.editAccountBirthDate);
+        careerTitle = findViewById(R.id.editAccountTitle);
+        country = findViewById(R.id.editAccountCountrySpinner);
+        gender = findViewById(R.id.editAccountGenderSpinner);
+        accountPhoto = findViewById(R.id.editAccountPhoto);
+        editFirstName = findViewById(R.id.editAccountFirstNameEdit);
+        editLastName = findViewById(R.id.editAccountLastNameEdit);
+        editPhone = findViewById(R.id.editAccountPhoneEdit);
+        editWebsite = findViewById(R.id.editAccountWebsiteEdit);
+        editCountry = findViewById(R.id.editAccountCountryEdit);
+        editGender = findViewById(R.id.editAccountGenderEdit);
+        editBirthDate = findViewById(R.id.editAccountBirthDateEdit);
+        editCareerTitle = findViewById(R.id.editAccountTitleEdit);
+        firstNameClicked = lastNameClicked = phoneClicked = websiteClicked = countryClicked = genderClicked = birthDateClicked = careerTitleClicked = 0;
+        topText = findViewById(R.id.editAccountTopText);
     }
 
-    private void setOnClickListeners()
-    {
-        goBack.setOnClickListener(new View.OnClickListener()
-        {
+    private void setOnClickListeners() {
+        goBack.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v)
-            {
+            public void onClick(View v) {
                 onBackPressed();
             }
         });
 
-        editFirstName.setOnClickListener(new View.OnClickListener()
-        {
+        editFirstName.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v)
-            {
+            public void onClick(View v) {
                 firstNameClicked++;
 
-                if(firstNameClicked%2!=0)
+                if (firstNameClicked % 2 != 0)
                     ifClickedIsEven(firstName, editFirstName);
-                else if(firstNameClicked!=0)
-                {
+                else if (firstNameClicked != 0) {
                     ifClickedIsOdd(firstName, editFirstName);
                     updateInformationEditText(firstName, "firstName");
                 }
             }
         });
 
-        editLastName.setOnClickListener(new View.OnClickListener()
-        {
+        editLastName.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v)
-            {
+            public void onClick(View v) {
                 lastNameClicked++;
 
-                if(lastNameClicked%2!=0)
+                if (lastNameClicked % 2 != 0)
                     ifClickedIsEven(lastName, editLastName);
-                else if(lastNameClicked!=0)
-                {
+                else if (lastNameClicked != 0) {
                     ifClickedIsOdd(lastName, editLastName);
                     updateInformationEditText(lastName, "lastName");
                 }
             }
         });
 
-        editPhone.setOnClickListener(new View.OnClickListener()
-        {
+        editPhone.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v)
-            {
+            public void onClick(View v) {
                 phoneClicked++;
 
-                if(phoneClicked%2!=0)
+                if (phoneClicked % 2 != 0)
                     ifClickedIsEven(phoneNumber, editPhone);
-                else if(phoneClicked!=0)
-                {
+                else if (phoneClicked != 0) {
                     ifClickedIsOdd(phoneNumber, editPhone);
                     updateInformationPhone();
                 }
             }
         });
 
-        editWebsite.setOnClickListener(new View.OnClickListener()
-        {
+        editWebsite.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v)
-            {
+            public void onClick(View v) {
                 websiteClicked++;
 
-                if(websiteClicked%2!=0)
+                if (websiteClicked % 2 != 0)
                     ifClickedIsEven(website, editWebsite);
-                else if(websiteClicked!=0)
-                {
+                else if (websiteClicked != 0) {
                     ifClickedIsOdd(website, editWebsite);
                     updateInformationEditText(website, "website");
                 }
             }
         });
 
-        editCountry.setOnClickListener(new View.OnClickListener()
-        {
+        editCountry.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v)
-            {
+            public void onClick(View v) {
                 countryClicked++;
 
-                if(countryClicked%2!=0)
+                if (countryClicked % 2 != 0)
                     ifClickedIsEven(country, editCountry);
-                else if(countryClicked!=0)
-                {
+                else if (countryClicked != 0) {
                     ifClickedIsOdd(country, editCountry);
 
-                    if(fbAuth.getUid()!=null && !String.valueOf(country.getSelectedItem()).trim().isEmpty() && !String.valueOf(country.getSelectedItem()).trim().equals("") && country.getSelectedItem()!=null)
-                        if(Locale.getDefault().getDisplayLanguage().equals("English"))
+                    if (fbAuth.getUid() != null && !String.valueOf(country.getSelectedItem()).trim().isEmpty() && !String.valueOf(country.getSelectedItem()).trim().equals("") && country.getSelectedItem() != null)
+                        if (Locale.getDefault().getDisplayLanguage().equals("English"))
                             myRef.child(fbAuth.getUid()).child("PersonalInformation").child("country").setValue(String.valueOf(country.getSelectedItem()).trim());
-                        else if(getCountryNameInEnglish(country.getSelectedItemPosition())!=null)
-                                myRef.child(fbAuth.getUid()).child("PersonalInformation").child("country").setValue(getCountryNameInEnglish(country.getSelectedItemPosition()));
+                        else if (getCountryNameInEnglish(country.getSelectedItemPosition()) != null)
+                            myRef.child(fbAuth.getUid()).child("PersonalInformation").child("country").setValue(getCountryNameInEnglish(country.getSelectedItemPosition()));
                 }
             }
         });
 
-        editGender.setOnClickListener(new View.OnClickListener()
-        {
+        editGender.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v)
-            {
+            public void onClick(View v) {
                 genderClicked++;
 
-                if(genderClicked%2!=0)
+                if (genderClicked % 2 != 0)
                     ifClickedIsEven(gender, editGender);
-                else if(genderClicked!=0)
-                {
+                else if (genderClicked != 0) {
                     ifClickedIsOdd(gender, editGender);
 
-                    if(fbAuth.getUid()!=null && !String.valueOf(gender.getSelectedItem()).trim().isEmpty() && !String.valueOf(gender.getSelectedItem()).trim().equals("") && gender.getSelectedItem()!=null)
-                        if(Locale.getDefault().getDisplayLanguage().equals("English"))
+                    if (fbAuth.getUid() != null && !String.valueOf(gender.getSelectedItem()).trim().isEmpty() && !String.valueOf(gender.getSelectedItem()).trim().equals("") && gender.getSelectedItem() != null)
+                        if (Locale.getDefault().getDisplayLanguage().equals("English"))
                             myRef.child(fbAuth.getUid()).child("PersonalInformation").child("gender").setValue(String.valueOf(gender.getSelectedItem()).trim());
-                        else if(getGenderInEnglish(gender.getSelectedItemPosition())!=null)
+                        else if (getGenderInEnglish(gender.getSelectedItemPosition()) != null)
                             myRef.child(fbAuth.getUid()).child("PersonalInformation").child("gender").setValue(getGenderInEnglish(gender.getSelectedItemPosition()));
                 }
             }
         });
 
-        editBirthDate.setOnClickListener(new View.OnClickListener()
-        {
+        editBirthDate.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v)
-            {
+            public void onClick(View v) {
                 birthDateClicked++;
 
-                if(birthDateClicked%2!=0)
+                if (birthDateClicked % 2 != 0)
                     ifClickedIsEven(birthDate, editBirthDate);
-                else if(birthDateClicked!=0)
-                {
+                else if (birthDateClicked != 0) {
                     ifClickedIsOdd(birthDate, editBirthDate);
-                    if(fbAuth.getUid()!=null && !String.valueOf(birthDate.getText()).isEmpty() && isValidDate(String.valueOf(birthDate.getText())))
+                    if (fbAuth.getUid() != null && !String.valueOf(birthDate.getText()).isEmpty() && isValidDate(String.valueOf(birthDate.getText())))
                         myRef.child(fbAuth.getUid()).child("PersonalInformation").child("birthDate").setValue(String.valueOf(birthDate.getText()));
                 }
             }
         });
 
-        editCareerTitle.setOnClickListener(new View.OnClickListener()
-        {
+        editCareerTitle.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v)
-            {
+            public void onClick(View v) {
                 careerTitleClicked++;
-                
-                if(careerTitleClicked%2!=0)
+
+                if (careerTitleClicked % 2 != 0)
                     ifClickedIsEven(careerTitle, editCareerTitle);
-                else if(careerTitleClicked!=0)
-                {
+                else if (careerTitleClicked != 0) {
                     ifClickedIsOdd(careerTitle, editCareerTitle);
                     updateInformationEditText(careerTitle, "careerTitle");
                 }
             }
         });
 
-        accountPhoto.setOnClickListener(new View.OnClickListener()
-        {
+        accountPhoto.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v)
-            {
-                Intent intent=new Intent(ActivityEditAccount.this, ActivityEditPhoto.class);
+            public void onClick(View v) {
+                Intent intent = new Intent(ActivityEditAccount.this, ActivityEditPhoto.class);
                 startActivity(intent);
                 overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
             }
@@ -271,58 +238,67 @@ public class ActivityEditAccount extends AppCompatActivity
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
     }
 
-    private void getPersonalInformation()
-    {
-        if(fbAuth.getUid()!=null)
-            myRef.child(fbAuth.getUid()).child("PersonalInformation").addValueEventListener(new ValueEventListener()
-            {
+    private void getPersonalInformation() {
+        if (fbAuth.getUid() != null)
+            myRef.child(fbAuth.getUid()).child("PersonalInformation").addValueEventListener(new ValueEventListener() {
                 @Override
-                public void onDataChange(@NonNull DataSnapshot snapshot)
-                {
-                    if(snapshot.exists())
-                    {
-                        String firstname=String.valueOf(snapshot.child("firstName").getValue()), lastname=String.valueOf(snapshot.child("lastName").getValue()), phonenumber=String.valueOf(snapshot.child("phoneNumber").getValue()), web=String.valueOf(snapshot.child("website").getValue()), count=String.valueOf(snapshot.child("country").getValue()), gend=String.valueOf(snapshot.child("gender").getValue()), birthdate=String.valueOf(snapshot.child("birthDate").getValue()), careertitle=String.valueOf(snapshot.child("careerTitle").getValue()), photourl=String.valueOf(snapshot.child("photoURL").getValue());
-                        PersonalInformation information=new PersonalInformation(firstname, lastname, phonenumber, web, count, gend, birthdate, careertitle, photourl);
-
-                        if(!firstname.trim().equals(""))
-                            firstName.setHint(String.valueOf(information.getFirstName()));
-                        else firstName.setHint(getResources().getString(R.string.edit_account_first_name).trim());
-                        if(!lastname.trim().equals(""))
-                            lastName.setHint(String.valueOf(information.getLastName()));
-                        else lastName.setHint(getResources().getString(R.string.edit_account_last_name).trim());
-                        if(!phonenumber.trim().equals(""))
-                            phoneNumber.setHint(String.valueOf(information.getPhoneNumber()));
-                        else phoneNumber.setHint(getResources().getString(R.string.edit_account_phone_number).trim());
-                        if(!web.trim().equals(""))
-                            website.setHint(String.valueOf(information.getWebsite()));
-                        else website.setHint(getResources().getString(R.string.edit_account_website).trim());
-                        if(!birthdate.trim().equals("") && isValidDate(birthdate))
-                            birthDate.setHint(String.valueOf(information.getBirthDate()));
-                        else birthDate.setHint(getResources().getString(R.string.edit_account_birth_date).trim());
-                        if(!careertitle.trim().equals(""))
-                            careerTitle.setHint(String.valueOf(information.getCareerTitle()));
-                        else careerTitle.setHint(getResources().getString(R.string.edit_account_career_title).trim());
-
-                        country.setSelection(getPositionInCountryList(count));
-                        gender.setSelection(getPositionInGenderList(gend));
-
-                        if(photourl.trim().equals(""))
-                            //Picasso.get().load(R.drawable.ic_account).placeholder(R.drawable.ic_account).fit().into(accountPhoto);
-                            Picasso.get().load("https://www.pexels.com/photo/grayscale-photo-of-ferris-wheel-3673785/").placeholder(R.drawable.ic_add_photo).fit().into(accountPhoto);
-                        else Picasso.get().load(photourl).placeholder(R.drawable.ic_add_photo).fit().into(accountPhoto);
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    if (snapshot.exists()) {
+//                        String firstname = String.valueOf(snapshot.child("firstName").getValue());
+//                        String lastname = String.valueOf(snapshot.child("lastName").getValue());
+//                        String phonenumber = String.valueOf(snapshot.child("phoneNumber").getValue());
+//                        String web = String.valueOf(snapshot.child("website").getValue());
+//                        String count = String.valueOf(snapshot.child("country").getValue());
+//                        String gend = String.valueOf(snapshot.child("gender").getValue());
+//                        String birthdate = String.valueOf(snapshot.child("birthDate").getValue());
+//                        String careertitle = String.valueOf(snapshot.child("careerTitle").getValue());
+//                        String photourl = String.valueOf(snapshot.child("photoURL").getValue());
+//                        PersonalInformation information = new PersonalInformation(firstname, lastname, phonenumber, web, count, gend, birthdate, careertitle, photourl);
+//
+//                        if (!firstname.trim().equals(""))
+//                            firstName.setHint(String.valueOf(information.getFirstName()));
+//                        else
+//                            firstName.setHint(getResources().getString(R.string.edit_account_first_name).trim());
+//                        if (!lastname.trim().equals(""))
+//                            lastName.setHint(String.valueOf(information.getLastName()));
+//                        else
+//                            lastName.setHint(getResources().getString(R.string.edit_account_last_name).trim());
+//                        if (!phonenumber.trim().equals(""))
+//                            phoneNumber.setHint(String.valueOf(information.getPhoneNumber()));
+//                        else
+//                            phoneNumber.setHint(getResources().getString(R.string.edit_account_phone_number).trim());
+//                        if (!web.trim().equals(""))
+//                            website.setHint(String.valueOf(information.getWebsite()));
+//                        else
+//                            website.setHint(getResources().getString(R.string.edit_account_website).trim());
+//                        if (!birthdate.trim().equals("") && isValidDate(birthdate))
+//                            birthDate.setHint(String.valueOf(information.getBirthDate()));
+//                        else
+//                            birthDate.setHint(getResources().getString(R.string.edit_account_birth_date).trim());
+//                        if (!careertitle.trim().equals(""))
+//                            careerTitle.setHint(String.valueOf(information.getCareerTitle()));
+//                        else
+//                            careerTitle.setHint(getResources().getString(R.string.edit_account_career_title).trim());
+//
+//                        country.setSelection(getPositionInCountryList(count));
+//                        gender.setSelection(getPositionInGenderList(gend));
+//
+//                        if (photourl.trim().equals(""))
+//                            //Picasso.get().load(R.drawable.ic_account).placeholder(R.drawable.ic_account).fit().into(accountPhoto);
+//                            Picasso.get().load("https://www.pexels.com/photo/grayscale-photo-of-ferris-wheel-3673785/").placeholder(R.drawable.ic_add_photo).fit().into(accountPhoto);
+//                        else
+//                            Picasso.get().load(photourl).placeholder(R.drawable.ic_add_photo).fit().into(accountPhoto);
                     }
                 }
 
                 @Override
-                public void onCancelled(@NonNull DatabaseError error)
-                {
+                public void onCancelled(@NonNull DatabaseError error) {
 
                 }
             });
     }
 
-    private void makeAllInformationNotClickable()
-    {
+    private void makeAllInformationNotClickable() {
         firstName.setEnabled(false);
         lastName.setEnabled(false);
         phoneNumber.setEnabled(false);
@@ -334,134 +310,111 @@ public class ActivityEditAccount extends AppCompatActivity
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
     }
 
-    private void ifClickedIsEven(View field, final ImageView edit)
-    {
+    private void ifClickedIsEven(View field, final ImageView edit) {
         field.setEnabled(true);
 
-        if(fbAuth.getUid()!=null)
-            myRef.child(fbAuth.getUid()).child("ApplicationSettings").addListenerForSingleValueEvent(new ValueEventListener()
-            {
+        if (fbAuth.getUid() != null)
+            myRef.child(fbAuth.getUid()).child("ApplicationSettings").addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
-                public void onDataChange(@NonNull DataSnapshot snapshot)
-                {
-                    if(snapshot.hasChild("darkTheme"))
-                    {
-                        boolean darkThemeEnabled=Boolean.parseBoolean(String.valueOf(snapshot.child("darkTheme").getValue()));
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    if (snapshot.hasChild("darkTheme")) {
+                        boolean darkThemeEnabled = Boolean.parseBoolean(String.valueOf(snapshot.child("darkTheme").getValue()));
                         int color;
 
-                        if(!darkThemeEnabled)
-                            color=R.drawable.ic_save_edit_blue;
-                        else color=R.drawable.ic_save_edit;
+                        if (!darkThemeEnabled)
+                            color = R.drawable.ic_save_edit_blue;
+                        else color = R.drawable.ic_save_edit;
 
                         edit.setImageResource(color);
                     }
                 }
 
                 @Override
-                public void onCancelled(@NonNull DatabaseError error)
-                {
+                public void onCancelled(@NonNull DatabaseError error) {
 
                 }
             });
     }
 
-    private void ifClickedIsOdd(View field, final ImageView edit)
-    {
+    private void ifClickedIsOdd(View field, final ImageView edit) {
         field.setEnabled(false);
 
-        if(fbAuth.getUid()!=null)
-            myRef.child(fbAuth.getUid()).child("ApplicationSettings").addListenerForSingleValueEvent(new ValueEventListener()
-            {
+        if (fbAuth.getUid() != null)
+            myRef.child(fbAuth.getUid()).child("ApplicationSettings").addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
-                public void onDataChange(@NonNull DataSnapshot snapshot)
-                {
-                    if(snapshot.hasChild("darkTheme"))
-                    {
-                        boolean darkThemeEnabled=Boolean.parseBoolean(String.valueOf(snapshot.child("darkTheme").getValue()));
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    if (snapshot.hasChild("darkTheme")) {
+                        boolean darkThemeEnabled = Boolean.parseBoolean(String.valueOf(snapshot.child("darkTheme").getValue()));
                         int color;
 
-                        if(!darkThemeEnabled)
-                            color=R.drawable.ic_edit_blue;
-                        else color=R.drawable.ic_edit;
+                        if (!darkThemeEnabled)
+                            color = R.drawable.ic_edit_blue;
+                        else color = R.drawable.ic_edit;
 
                         edit.setImageResource(color);
                     }
                 }
 
                 @Override
-                public void onCancelled(@NonNull DatabaseError error)
-                {
+                public void onCancelled(@NonNull DatabaseError error) {
 
                 }
             });
     }
 
-    private void updateInformationEditText(EditText field, String childPath)
-    {
-        if(fbAuth.getUid()!=null && !String.valueOf(field.getText()).isEmpty() && !String.valueOf(field.getText()).trim().equals(""))
+    private void updateInformationEditText(EditText field, String childPath) {
+        if (fbAuth.getUid() != null && !String.valueOf(field.getText()).isEmpty() && !String.valueOf(field.getText()).trim().equals(""))
             myRef.child(fbAuth.getUid()).child("PersonalInformation").child(childPath).setValue(String.valueOf(field.getText()));
     }
 
     private void updateInformationPhone() // de refacut
     {
-        if(fbAuth.getUid()!=null && !String.valueOf(phoneNumber.getText()).isEmpty() && !String.valueOf(phoneNumber.getText()).trim().equals("") && PhoneNumberUtils.isGlobalPhoneNumber(String.valueOf(phoneNumber.getText()).trim()))
+        if (fbAuth.getUid() != null && !String.valueOf(phoneNumber.getText()).isEmpty() && !String.valueOf(phoneNumber.getText()).trim().equals("") && PhoneNumberUtils.isGlobalPhoneNumber(String.valueOf(phoneNumber.getText()).trim()))
             myRef.child(fbAuth.getUid()).child("PersonalInformation").child("phoneNumber").setValue(String.valueOf(phoneNumber.getText()));
-        else if(!PhoneNumberUtils.isGlobalPhoneNumber(String.valueOf(phoneNumber.getText()).trim()))
+        else if (!PhoneNumberUtils.isGlobalPhoneNumber(String.valueOf(phoneNumber.getText()).trim()))
             Toast.makeText(ActivityEditAccount.this, getResources().getString(R.string.edit_account_incorrect_phone_number), Toast.LENGTH_SHORT).show();
     }
 
-    private boolean isValidDate(String date)
-    {
-        SimpleDateFormat dateFormat=new SimpleDateFormat("dd/MM/yyyy", Locale.ENGLISH);
+    private boolean isValidDate(String date) {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.ENGLISH);
         dateFormat.setLenient(false);
-        try
-        {
+        try {
             dateFormat.parse(date);
-        }
-        catch(ParseException e)
-        {
+        } catch (ParseException e) {
             e.printStackTrace();
             Toast.makeText(ActivityEditAccount.this, getResources().getString(R.string.edit_account_enter_valid_birth_date), Toast.LENGTH_SHORT).show();
-            return  false;
+            return false;
         }
         return true;
     }
 
-    private void setTopText()
-    {
-        String text=getResources().getString(R.string.edit_account).trim();
+    private void setTopText() {
+        String text = getResources().getString(R.string.edit_account).trim();
         topText.setText(text);
         topText.setTextSize(20);
         topText.setTextColor(Color.WHITE);
     }
 
-    private void setTheme()
-    {
-        if(fbAuth.getUid()!=null)
-            myRef.child(fbAuth.getUid()).child("ApplicationSettings").addListenerForSingleValueEvent(new ValueEventListener()
-            {
+    private void setTheme() {
+        if (fbAuth.getUid() != null)
+            myRef.child(fbAuth.getUid()).child("ApplicationSettings").addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
-                public void onDataChange(@NonNull DataSnapshot snapshot)
-                {
-                    if(snapshot.exists())
-                        if(snapshot.hasChild("darkTheme"))
-                        {
-                            darkThemeEnabled=Boolean.parseBoolean(String.valueOf(snapshot.child("darkTheme").getValue()));
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    if (snapshot.exists())
+                        if (snapshot.hasChild("darkTheme")) {
+                            darkThemeEnabled = Boolean.parseBoolean(String.valueOf(snapshot.child("darkTheme").getValue()));
                             int color, theme, editResource, dropDownTheme;
 
-                            if(!darkThemeEnabled)
-                            {
-                                theme=R.drawable.ic_white_gradient_tobacco_ad;
-                                color=Color.parseColor("#195190"); // turkish sea (albastru)
-                                editResource=R.drawable.ic_edit_blue;
-                                dropDownTheme=R.drawable.ic_blue_gradient_unloved_teen;
-                            }
-                            else
-                            {
-                                theme=R.drawable.ic_black_gradient_night_shift;
-                                color=Color.WHITE;
-                                editResource=R.drawable.ic_edit;
-                                dropDownTheme=R.drawable.ic_white_gradient_tobacco_ad;
+                            if (!darkThemeEnabled) {
+                                theme = R.drawable.ic_white_gradient_tobacco_ad;
+                                color = Color.parseColor("#195190"); // turkish sea (albastru)
+                                editResource = R.drawable.ic_edit_blue;
+                                dropDownTheme = R.drawable.ic_blue_gradient_unloved_teen;
+                            } else {
+                                theme = R.drawable.ic_black_gradient_night_shift;
+                                color = Color.WHITE;
+                                editResource = R.drawable.ic_edit;
+                                dropDownTheme = R.drawable.ic_white_gradient_tobacco_ad;
                             }
 
                             getWindow().setBackgroundDrawableResource(theme); // setam culoarea dropdown
@@ -490,52 +443,43 @@ public class ActivityEditAccount extends AppCompatActivity
                 }
 
                 @Override
-                public void onCancelled(@NonNull DatabaseError error)
-                {
+                public void onCancelled(@NonNull DatabaseError error) {
 
                 }
             });
     }
 
-    private void setEditTextColor(EditText editText, int color)
-    {
+    private void setEditTextColor(EditText editText, int color) {
         editText.setHintTextColor(color);
         editText.setTextColor(color);
         editText.setBackgroundTintList(ColorStateList.valueOf(color));
     }
 
-    private void setCountrySpinner()
-    {
-        ArrayAdapter<String> countryAdapter=new ArrayAdapter<String >(this, R.layout.custom_spinner_item, countryList)
-        {
+    private void setCountrySpinner() {
+        ArrayAdapter<String> countryAdapter = new ArrayAdapter<String>(this, R.layout.custom_spinner_item, countryList) {
             @Override
-            public View getDropDownView(int position, @Nullable View convertView, @NonNull ViewGroup parent)
-            {
-                final View v=super.getDropDownView(position, convertView, parent);
-                ((TextView)v).setGravity(Gravity.CENTER); // toate elementele spinnerului sunt aliniate la centru
+            public View getDropDownView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
+                final View v = super.getDropDownView(position, convertView, parent);
+                ((TextView) v).setGravity(Gravity.CENTER); // toate elementele spinnerului sunt aliniate la centru
 
-                if(fbAuth.getUid()!=null)
-                    myRef.child(fbAuth.getUid()).child("ApplicationSettings").addListenerForSingleValueEvent(new ValueEventListener()
-                    {
+                if (fbAuth.getUid() != null)
+                    myRef.child(fbAuth.getUid()).child("ApplicationSettings").addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
-                        public void onDataChange(@NonNull DataSnapshot snapshot)
-                        {
-                            if(snapshot.hasChild("darkTheme"))
-                            {
-                                boolean darkThemeEnabled=Boolean.parseBoolean(String.valueOf(snapshot.child("darkTheme").getValue()).trim());
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            if (snapshot.hasChild("darkTheme")) {
+                                boolean darkThemeEnabled = Boolean.parseBoolean(String.valueOf(snapshot.child("darkTheme").getValue()).trim());
                                 int itemsColor;
 
-                                if(!darkThemeEnabled)
-                                    itemsColor=Color.WHITE;
-                                else itemsColor=Color.BLACK;
+                                if (!darkThemeEnabled)
+                                    itemsColor = Color.WHITE;
+                                else itemsColor = Color.BLACK;
 
-                                ((TextView)v).setTextColor(itemsColor); // setam culoarea textului elementelor in functie de tema selectata
+                                ((TextView) v).setTextColor(itemsColor); // setam culoarea textului elementelor in functie de tema selectata
                             }
                         }
 
                         @Override
-                        public void onCancelled(@NonNull DatabaseError error)
-                        {
+                        public void onCancelled(@NonNull DatabaseError error) {
 
                         }
                     });
@@ -602,25 +546,20 @@ public class ActivityEditAccount extends AppCompatActivity
 
     private void setSelectedItemColorSpinner(Spinner s) // stilizarea primului element al spinnerului
     {
-        AdapterView.OnItemSelectedListener itemSelectedListener=new AdapterView.OnItemSelectedListener()
-        {
+        AdapterView.OnItemSelectedListener itemSelectedListener = new AdapterView.OnItemSelectedListener() {
             @Override
-            public void onItemSelected(final AdapterView<?> parent, View view, int position, long id)
-            {
-                if(fbAuth.getUid()!=null)
-                    myRef.child(fbAuth.getUid()).child("ApplicationSettings").addListenerForSingleValueEvent(new ValueEventListener()
-                    {
+            public void onItemSelected(final AdapterView<?> parent, View view, int position, long id) {
+                if (fbAuth.getUid() != null)
+                    myRef.child(fbAuth.getUid()).child("ApplicationSettings").addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
-                        public void onDataChange(@NonNull DataSnapshot snapshot)
-                        {
-                            if(snapshot.hasChild("darkTheme"))
-                            {
-                                boolean darkThemeEnabled=Boolean.parseBoolean(String.valueOf(snapshot.child("darkTheme").getValue()).trim());
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            if (snapshot.hasChild("darkTheme")) {
+                                boolean darkThemeEnabled = Boolean.parseBoolean(String.valueOf(snapshot.child("darkTheme").getValue()).trim());
                                 int color;
 
-                                if(!darkThemeEnabled)
-                                    color=Color.parseColor("#195190");
-                                else color=Color.WHITE;
+                                if (!darkThemeEnabled)
+                                    color = Color.parseColor("#195190");
+                                else color = Color.WHITE;
 
                                 ((TextView) parent.getChildAt(0)).setTextColor(color); // primul element va avea textul aliniat la stanga si culoarea in functie de tema selectata
                                 ((TextView) parent.getChildAt(0)).setGravity(Gravity.START);
@@ -628,16 +567,14 @@ public class ActivityEditAccount extends AppCompatActivity
                         }
 
                         @Override
-                        public void onCancelled(@NonNull DatabaseError error)
-                        {
+                        public void onCancelled(@NonNull DatabaseError error) {
 
                         }
                     });
             }
 
             @Override
-            public void onNothingSelected(AdapterView<?> parent)
-            {
+            public void onNothingSelected(AdapterView<?> parent) {
 
             }
         };
@@ -645,38 +582,31 @@ public class ActivityEditAccount extends AppCompatActivity
         s.setOnItemSelectedListener(itemSelectedListener);
     }
 
-    private void setGenderSpinner()
-    {
-        ArrayAdapter<String> genderAdapter=new ArrayAdapter<String>(this, R.layout.custom_spinner_item, genderList)
-        {
+    private void setGenderSpinner() {
+        ArrayAdapter<String> genderAdapter = new ArrayAdapter<String>(this, R.layout.custom_spinner_item, genderList) {
             @Override
-            public View getDropDownView(int position, @Nullable View convertView, @NonNull ViewGroup parent)
-            {
-                final View v=super.getDropDownView(position, convertView, parent);
-                ((TextView)v).setGravity(Gravity.CENTER); // toate elementele spinnerului sunt aliniate la centru
+            public View getDropDownView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
+                final View v = super.getDropDownView(position, convertView, parent);
+                ((TextView) v).setGravity(Gravity.CENTER); // toate elementele spinnerului sunt aliniate la centru
 
-                if(fbAuth.getUid()!=null)
-                    myRef.child(fbAuth.getUid()).child("ApplicationSettings").addListenerForSingleValueEvent(new ValueEventListener()
-                    {
+                if (fbAuth.getUid() != null)
+                    myRef.child(fbAuth.getUid()).child("ApplicationSettings").addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
-                        public void onDataChange(@NonNull DataSnapshot snapshot)
-                        {
-                            if(snapshot.hasChild("darkTheme"))
-                            {
-                                boolean darkThemeEnabled=Boolean.parseBoolean(String.valueOf(snapshot.child("darkTheme").getValue()).trim());
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            if (snapshot.hasChild("darkTheme")) {
+                                boolean darkThemeEnabled = Boolean.parseBoolean(String.valueOf(snapshot.child("darkTheme").getValue()).trim());
                                 int itemsColor;
 
-                                if(!darkThemeEnabled)
-                                    itemsColor=Color.WHITE;
-                                else itemsColor=Color.BLACK;
+                                if (!darkThemeEnabled)
+                                    itemsColor = Color.WHITE;
+                                else itemsColor = Color.BLACK;
 
-                                ((TextView)v).setTextColor(itemsColor); // setam culoarea textului elementelor in functie de tema selectata
+                                ((TextView) v).setTextColor(itemsColor); // setam culoarea textului elementelor in functie de tema selectata
                             }
                         }
 
                         @Override
-                        public void onCancelled(@NonNull DatabaseError error)
-                        {
+                        public void onCancelled(@NonNull DatabaseError error) {
 
                         }
                     });
@@ -693,308 +623,302 @@ public class ActivityEditAccount extends AppCompatActivity
         gender.setAdapter(genderAdapter);
     }
 
-    private String getGenderInEnglish(int positionInGenderList)
-    {
-        String gender=genderList.get(positionInGenderList);
+    private String getGenderInEnglish(int positionInGenderList) {
+        String gender = genderList.get(positionInGenderList);
 
-        if(gender.equals(getResources().getString(R.string.edit_account_gender_female)))
+        if (gender.equals(getResources().getString(R.string.edit_account_gender_female)))
             return "Female";
-        if(gender.equals(getResources().getString(R.string.edit_account_gender_male)))
+        if (gender.equals(getResources().getString(R.string.edit_account_gender_male)))
             return "Male";
-        if(gender.equals(getResources().getString(R.string.edit_account_gender_other)))
+        if (gender.equals(getResources().getString(R.string.edit_account_gender_other)))
             return "Other";
         else return null;
     }
 
-    private String getCountryNameInEnglish(int positionInCountryList)
-    {
-        String countryName=countryList.get(positionInCountryList);
+    private String getCountryNameInEnglish(int positionInCountryList) {
+        String countryName = countryList.get(positionInCountryList);
 
-        if(countryName.equals(getResources().getString(R.string.edit_account_country_albania)))
+        if (countryName.equals(getResources().getString(R.string.edit_account_country_albania)))
             return "Albania";
-        else if(countryName.equals(getResources().getString(R.string.edit_account_country_andorra)))
+        else if (countryName.equals(getResources().getString(R.string.edit_account_country_andorra)))
             return "Andorra";
-        else if(countryName.equals(getResources().getString(R.string.edit_account_country_armenia)))
+        else if (countryName.equals(getResources().getString(R.string.edit_account_country_armenia)))
             return "Armenia";
-        else if(countryName.equals(getResources().getString(R.string.edit_account_country_austria)))
+        else if (countryName.equals(getResources().getString(R.string.edit_account_country_austria)))
             return "Austria";
-        else if(countryName.equals(getResources().getString(R.string.edit_account_country_azerbaijan)))
+        else if (countryName.equals(getResources().getString(R.string.edit_account_country_azerbaijan)))
             return "Azerbaijan";
-        else if(countryName.equals(getResources().getString(R.string.edit_account_country_belarus)))
+        else if (countryName.equals(getResources().getString(R.string.edit_account_country_belarus)))
             return "Belarus";
-        else if(countryName.equals(getResources().getString(R.string.edit_account_country_belgium)))
+        else if (countryName.equals(getResources().getString(R.string.edit_account_country_belgium)))
             return "Belgium";
-        else if(countryName.equals(getResources().getString(R.string.edit_account_country_bosnia_and_herzegovina)))
+        else if (countryName.equals(getResources().getString(R.string.edit_account_country_bosnia_and_herzegovina)))
             return "Bosnia and Herzegovina";
-        else if(countryName.equals(getResources().getString(R.string.edit_account_country_bulgaria)))
+        else if (countryName.equals(getResources().getString(R.string.edit_account_country_bulgaria)))
             return "Bulgaria";
-        else if(countryName.equals(getResources().getString(R.string.edit_account_country_croatia)))
+        else if (countryName.equals(getResources().getString(R.string.edit_account_country_croatia)))
             return "Croatia";
-        else if(countryName.equals(getResources().getString(R.string.edit_account_country_cyprus)))
+        else if (countryName.equals(getResources().getString(R.string.edit_account_country_cyprus)))
             return "Cyprus";
-        else if(countryName.equals(getResources().getString(R.string.edit_account_country_czech_republic)))
+        else if (countryName.equals(getResources().getString(R.string.edit_account_country_czech_republic)))
             return "Czech Republic";
-        else if(countryName.equals(getResources().getString(R.string.edit_account_country_denmark)))
+        else if (countryName.equals(getResources().getString(R.string.edit_account_country_denmark)))
             return "Denmark";
-        else if(countryName.equals(getResources().getString(R.string.edit_account_country_estonia)))
+        else if (countryName.equals(getResources().getString(R.string.edit_account_country_estonia)))
             return "Estonia";
-        else if(countryName.equals(getResources().getString(R.string.edit_account_country_finland)))
+        else if (countryName.equals(getResources().getString(R.string.edit_account_country_finland)))
             return "Finland";
-        else if(countryName.equals(getResources().getString(R.string.edit_account_country_france)))
+        else if (countryName.equals(getResources().getString(R.string.edit_account_country_france)))
             return "France";
-        else if(countryName.equals(getResources().getString(R.string.edit_account_country_georgia)))
+        else if (countryName.equals(getResources().getString(R.string.edit_account_country_georgia)))
             return "Georgia";
-        else if(countryName.equals(getResources().getString(R.string.edit_account_country_germany)))
+        else if (countryName.equals(getResources().getString(R.string.edit_account_country_germany)))
             return "Germany";
-        else if(countryName.equals(getResources().getString(R.string.edit_account_country_greece)))
+        else if (countryName.equals(getResources().getString(R.string.edit_account_country_greece)))
             return "Greece";
-        else if(countryName.equals(getResources().getString(R.string.edit_account_country_hungary)))
+        else if (countryName.equals(getResources().getString(R.string.edit_account_country_hungary)))
             return "Hungary";
-        else if(countryName.equals(getResources().getString(R.string.edit_account_country_iceland)))
+        else if (countryName.equals(getResources().getString(R.string.edit_account_country_iceland)))
             return "Iceland";
-        else if(countryName.equals(getResources().getString(R.string.edit_account_country_ireland)))
+        else if (countryName.equals(getResources().getString(R.string.edit_account_country_ireland)))
             return "Ireland";
-        else if(countryName.equals(getResources().getString(R.string.edit_account_country_italy)))
+        else if (countryName.equals(getResources().getString(R.string.edit_account_country_italy)))
             return "Italy";
-        else if(countryName.equals(getResources().getString(R.string.edit_account_country_kazakhstan)))
+        else if (countryName.equals(getResources().getString(R.string.edit_account_country_kazakhstan)))
             return "Kazakhstan";
-        else if(countryName.equals(getResources().getString(R.string.edit_account_country_latvia)))
+        else if (countryName.equals(getResources().getString(R.string.edit_account_country_latvia)))
             return "Latvia";
-        else if(countryName.equals(getResources().getString(R.string.edit_account_country_liechtenstein)))
+        else if (countryName.equals(getResources().getString(R.string.edit_account_country_liechtenstein)))
             return "Liechtenstein";
-        else if(countryName.equals(getResources().getString(R.string.edit_account_country_lithuania)))
+        else if (countryName.equals(getResources().getString(R.string.edit_account_country_lithuania)))
             return "Lithuania";
-        else if(countryName.equals(getResources().getString(R.string.edit_account_country_luxembourg)))
+        else if (countryName.equals(getResources().getString(R.string.edit_account_country_luxembourg)))
             return "Luxembourg";
-        else if(countryName.equals(getResources().getString(R.string.edit_account_country_malta)))
+        else if (countryName.equals(getResources().getString(R.string.edit_account_country_malta)))
             return "Malta";
-        else if(countryName.equals(getResources().getString(R.string.edit_account_country_moldova)))
+        else if (countryName.equals(getResources().getString(R.string.edit_account_country_moldova)))
             return "Moldova";
-        else if(countryName.equals(getResources().getString(R.string.edit_account_country_monaco)))
+        else if (countryName.equals(getResources().getString(R.string.edit_account_country_monaco)))
             return "Monaco";
-        else if(countryName.equals(getResources().getString(R.string.edit_account_country_montenegro)))
+        else if (countryName.equals(getResources().getString(R.string.edit_account_country_montenegro)))
             return "Montenegro";
-        else if(countryName.equals(getResources().getString(R.string.edit_account_country_netherlands)))
+        else if (countryName.equals(getResources().getString(R.string.edit_account_country_netherlands)))
             return "Netherlands";
-        else if(countryName.equals(getResources().getString(R.string.edit_account_country_north_macedonia)))
+        else if (countryName.equals(getResources().getString(R.string.edit_account_country_north_macedonia)))
             return "North Macedonia";
-        else if(countryName.equals(getResources().getString(R.string.edit_account_country_norway)))
+        else if (countryName.equals(getResources().getString(R.string.edit_account_country_norway)))
             return "Norway";
-        else if(countryName.equals(getResources().getString(R.string.edit_account_country_poland)))
+        else if (countryName.equals(getResources().getString(R.string.edit_account_country_poland)))
             return "Poland";
-        else if(countryName.equals(getResources().getString(R.string.edit_account_country_portugal)))
+        else if (countryName.equals(getResources().getString(R.string.edit_account_country_portugal)))
             return "Portugal";
-        else if(countryName.equals(getResources().getString(R.string.edit_account_country_romania)))
+        else if (countryName.equals(getResources().getString(R.string.edit_account_country_romania)))
             return "Romania";
-        else if(countryName.equals(getResources().getString(R.string.edit_account_country_russia)))
+        else if (countryName.equals(getResources().getString(R.string.edit_account_country_russia)))
             return "Russia";
-        else if(countryName.equals(getResources().getString(R.string.edit_account_country_san_marino)))
+        else if (countryName.equals(getResources().getString(R.string.edit_account_country_san_marino)))
             return "San Marino";
-        else if(countryName.equals(getResources().getString(R.string.edit_account_country_serbia)))
+        else if (countryName.equals(getResources().getString(R.string.edit_account_country_serbia)))
             return "Serbia";
-        else if(countryName.equals(getResources().getString(R.string.edit_account_country_slovakia)))
+        else if (countryName.equals(getResources().getString(R.string.edit_account_country_slovakia)))
             return "Slovakia";
-        else if(countryName.equals(getResources().getString(R.string.edit_account_country_slovenia)))
+        else if (countryName.equals(getResources().getString(R.string.edit_account_country_slovenia)))
             return "Slovenia";
-        else if(countryName.equals(getResources().getString(R.string.edit_account_country_spain)))
+        else if (countryName.equals(getResources().getString(R.string.edit_account_country_spain)))
             return "Spain";
-        else if(countryName.equals(getResources().getString(R.string.edit_account_country_sweden)))
+        else if (countryName.equals(getResources().getString(R.string.edit_account_country_sweden)))
             return "Sweden";
-        else if(countryName.equals(getResources().getString(R.string.edit_account_country_switzerland)))
+        else if (countryName.equals(getResources().getString(R.string.edit_account_country_switzerland)))
             return "Switzerland";
-        else if(countryName.equals(getResources().getString(R.string.edit_account_country_turkey)))
+        else if (countryName.equals(getResources().getString(R.string.edit_account_country_turkey)))
             return "Turkey";
-        else if(countryName.equals(getResources().getString(R.string.edit_account_country_ukraine)))
+        else if (countryName.equals(getResources().getString(R.string.edit_account_country_ukraine)))
             return "Ukraine";
-        else if(countryName.equals(getResources().getString(R.string.edit_account_country_uk)))
+        else if (countryName.equals(getResources().getString(R.string.edit_account_country_uk)))
             return "United Kingdom";
-        else if(countryName.equals(getResources().getString(R.string.edit_account_country_vatican_city)))
+        else if (countryName.equals(getResources().getString(R.string.edit_account_country_vatican_city)))
             return "Vatican City";
         else return null;
 
     }
 
-    private int getPositionInGenderList(String gender)
-    {
+    private int getPositionInGenderList(String gender) {
         String translatedGender;
 
-        switch(gender)
-        {
+        switch (gender) {
             case "Female":
-                translatedGender=getResources().getString(R.string.edit_account_gender_female);
+                translatedGender = getResources().getString(R.string.edit_account_gender_female);
                 break;
             case "Male":
-                translatedGender=getResources().getString(R.string.edit_account_gender_male);
+                translatedGender = getResources().getString(R.string.edit_account_gender_male);
                 break;
             case "Other":
-                translatedGender=getResources().getString(R.string.edit_account_gender_other);
+                translatedGender = getResources().getString(R.string.edit_account_gender_other);
                 break;
             default:
-                translatedGender=" ";
+                translatedGender = " ";
                 break;
         }
 
         return Collections.binarySearch(genderList, translatedGender);
     }
 
-    private int getPositionInCountryList(String countryName)
-    {
+    private int getPositionInCountryList(String countryName) {
         String translatedCountryName;
 
-        switch(countryName)
-        {
+        switch (countryName) {
             case "Albania":
-                translatedCountryName=getResources().getString(R.string.edit_account_country_albania);
+                translatedCountryName = getResources().getString(R.string.edit_account_country_albania);
                 break;
             case "Andorra":
-                translatedCountryName=getResources().getString(R.string.edit_account_country_andorra);
+                translatedCountryName = getResources().getString(R.string.edit_account_country_andorra);
                 break;
             case "Armenia":
-                translatedCountryName=getResources().getString(R.string.edit_account_country_armenia);
+                translatedCountryName = getResources().getString(R.string.edit_account_country_armenia);
                 break;
             case "Austria":
-                translatedCountryName=getResources().getString(R.string.edit_account_country_austria);
+                translatedCountryName = getResources().getString(R.string.edit_account_country_austria);
                 break;
             case "Azerbaijan":
-                translatedCountryName=getResources().getString(R.string.edit_account_country_azerbaijan);
+                translatedCountryName = getResources().getString(R.string.edit_account_country_azerbaijan);
                 break;
             case "Belarus":
-                translatedCountryName=getResources().getString(R.string.edit_account_country_belarus);
+                translatedCountryName = getResources().getString(R.string.edit_account_country_belarus);
                 break;
             case "Belgium":
-                translatedCountryName=getResources().getString(R.string.edit_account_country_belgium);
+                translatedCountryName = getResources().getString(R.string.edit_account_country_belgium);
                 break;
             case "Bosnia and Herzegovina":
-                translatedCountryName=getResources().getString(R.string.edit_account_country_bosnia_and_herzegovina);
+                translatedCountryName = getResources().getString(R.string.edit_account_country_bosnia_and_herzegovina);
                 break;
             case "Bulgaria":
-                translatedCountryName=getResources().getString(R.string.edit_account_country_bulgaria);
+                translatedCountryName = getResources().getString(R.string.edit_account_country_bulgaria);
                 break;
             case "Croatia":
-                translatedCountryName=getResources().getString(R.string.edit_account_country_croatia);
+                translatedCountryName = getResources().getString(R.string.edit_account_country_croatia);
                 break;
             case "Cyprus":
-                translatedCountryName=getResources().getString(R.string.edit_account_country_cyprus);
+                translatedCountryName = getResources().getString(R.string.edit_account_country_cyprus);
                 break;
             case "Czech Republic":
-                translatedCountryName=getResources().getString(R.string.edit_account_country_czech_republic);
+                translatedCountryName = getResources().getString(R.string.edit_account_country_czech_republic);
                 break;
             case "Denmark":
-                translatedCountryName=getResources().getString(R.string.edit_account_country_denmark);
+                translatedCountryName = getResources().getString(R.string.edit_account_country_denmark);
                 break;
             case "Estonia":
-                translatedCountryName=getResources().getString(R.string.edit_account_country_estonia);
+                translatedCountryName = getResources().getString(R.string.edit_account_country_estonia);
                 break;
             case "Finland":
-                translatedCountryName=getResources().getString(R.string.edit_account_country_finland);
+                translatedCountryName = getResources().getString(R.string.edit_account_country_finland);
                 break;
             case "France":
-                translatedCountryName=getResources().getString(R.string.edit_account_country_france);
+                translatedCountryName = getResources().getString(R.string.edit_account_country_france);
                 break;
             case "Georgia":
-                translatedCountryName=getResources().getString(R.string.edit_account_country_georgia);
+                translatedCountryName = getResources().getString(R.string.edit_account_country_georgia);
                 break;
             case "Germany":
-                translatedCountryName=getResources().getString(R.string.edit_account_country_germany);
+                translatedCountryName = getResources().getString(R.string.edit_account_country_germany);
                 break;
             case "Greece":
-                translatedCountryName=getResources().getString(R.string.edit_account_country_greece);
+                translatedCountryName = getResources().getString(R.string.edit_account_country_greece);
                 break;
             case "Hungary":
-                translatedCountryName=getResources().getString(R.string.edit_account_country_hungary);
+                translatedCountryName = getResources().getString(R.string.edit_account_country_hungary);
                 break;
             case "Iceland":
-                translatedCountryName=getResources().getString(R.string.edit_account_country_iceland);
+                translatedCountryName = getResources().getString(R.string.edit_account_country_iceland);
                 break;
             case "Ireland":
-                translatedCountryName=getResources().getString(R.string.edit_account_country_ireland);
+                translatedCountryName = getResources().getString(R.string.edit_account_country_ireland);
                 break;
             case "Italy":
-                translatedCountryName=getResources().getString(R.string.edit_account_country_italy);
+                translatedCountryName = getResources().getString(R.string.edit_account_country_italy);
                 break;
             case "Kazakhstan":
-                translatedCountryName=getResources().getString(R.string.edit_account_country_kazakhstan);
+                translatedCountryName = getResources().getString(R.string.edit_account_country_kazakhstan);
                 break;
             case "Latvia":
-                translatedCountryName=getResources().getString(R.string.edit_account_country_latvia);
+                translatedCountryName = getResources().getString(R.string.edit_account_country_latvia);
                 break;
             case "Liechtenstein":
-                translatedCountryName=getResources().getString(R.string.edit_account_country_liechtenstein);
+                translatedCountryName = getResources().getString(R.string.edit_account_country_liechtenstein);
                 break;
             case "Lithuania":
-                translatedCountryName=getResources().getString(R.string.edit_account_country_lithuania);
+                translatedCountryName = getResources().getString(R.string.edit_account_country_lithuania);
                 break;
             case "Luxembourg":
-                translatedCountryName=getResources().getString(R.string.edit_account_country_luxembourg);
+                translatedCountryName = getResources().getString(R.string.edit_account_country_luxembourg);
                 break;
             case "Malta":
-                translatedCountryName=getResources().getString(R.string.edit_account_country_malta);
+                translatedCountryName = getResources().getString(R.string.edit_account_country_malta);
                 break;
             case "Moldova":
-                translatedCountryName=getResources().getString(R.string.edit_account_country_moldova);
+                translatedCountryName = getResources().getString(R.string.edit_account_country_moldova);
                 break;
             case "Monaco":
-                translatedCountryName=getResources().getString(R.string.edit_account_country_monaco);
+                translatedCountryName = getResources().getString(R.string.edit_account_country_monaco);
                 break;
             case "Montenegro":
-                translatedCountryName=getResources().getString(R.string.edit_account_country_montenegro);
+                translatedCountryName = getResources().getString(R.string.edit_account_country_montenegro);
                 break;
             case "Netherlands":
-                translatedCountryName=getResources().getString(R.string.edit_account_country_netherlands);
+                translatedCountryName = getResources().getString(R.string.edit_account_country_netherlands);
                 break;
             case "North Macedonia":
-                translatedCountryName=getResources().getString(R.string.edit_account_country_north_macedonia);
+                translatedCountryName = getResources().getString(R.string.edit_account_country_north_macedonia);
                 break;
             case "Norway":
-                translatedCountryName=getResources().getString(R.string.edit_account_country_norway);
+                translatedCountryName = getResources().getString(R.string.edit_account_country_norway);
                 break;
             case "Poland":
-                translatedCountryName=getResources().getString(R.string.edit_account_country_poland);
+                translatedCountryName = getResources().getString(R.string.edit_account_country_poland);
                 break;
             case "Portugal":
-                translatedCountryName=getResources().getString(R.string.edit_account_country_portugal);
+                translatedCountryName = getResources().getString(R.string.edit_account_country_portugal);
                 break;
             case "Romania":
-                translatedCountryName=getResources().getString(R.string.edit_account_country_romania);
+                translatedCountryName = getResources().getString(R.string.edit_account_country_romania);
                 break;
             case "Russia":
-                translatedCountryName=getResources().getString(R.string.edit_account_country_russia);
+                translatedCountryName = getResources().getString(R.string.edit_account_country_russia);
                 break;
             case "San Marino":
-                translatedCountryName=getResources().getString(R.string.edit_account_country_san_marino);
+                translatedCountryName = getResources().getString(R.string.edit_account_country_san_marino);
                 break;
             case "Serbia":
-                translatedCountryName=getResources().getString(R.string.edit_account_country_serbia);
+                translatedCountryName = getResources().getString(R.string.edit_account_country_serbia);
                 break;
             case "Slovakia":
-                translatedCountryName=getResources().getString(R.string.edit_account_country_slovakia);
+                translatedCountryName = getResources().getString(R.string.edit_account_country_slovakia);
                 break;
             case "Slovenia":
-                translatedCountryName=getResources().getString(R.string.edit_account_country_slovenia);
+                translatedCountryName = getResources().getString(R.string.edit_account_country_slovenia);
                 break;
             case "Spain":
-                translatedCountryName=getResources().getString(R.string.edit_account_country_spain);
+                translatedCountryName = getResources().getString(R.string.edit_account_country_spain);
                 break;
             case "Sweden":
-                translatedCountryName=getResources().getString(R.string.edit_account_country_sweden);
+                translatedCountryName = getResources().getString(R.string.edit_account_country_sweden);
                 break;
             case "Switzerland":
-                translatedCountryName=getResources().getString(R.string.edit_account_country_switzerland);
+                translatedCountryName = getResources().getString(R.string.edit_account_country_switzerland);
                 break;
             case "Turkey":
-                translatedCountryName=getResources().getString(R.string.edit_account_country_turkey);
+                translatedCountryName = getResources().getString(R.string.edit_account_country_turkey);
                 break;
             case "Ukraine":
-                translatedCountryName=getResources().getString(R.string.edit_account_country_ukraine);
+                translatedCountryName = getResources().getString(R.string.edit_account_country_ukraine);
                 break;
             case "United Kingdom":
-                translatedCountryName=getResources().getString(R.string.edit_account_country_uk);
+                translatedCountryName = getResources().getString(R.string.edit_account_country_uk);
                 break;
             case "Vatican City":
-                translatedCountryName=getResources().getString(R.string.edit_account_country_vatican_city);
+                translatedCountryName = getResources().getString(R.string.edit_account_country_vatican_city);
                 break;
             default:
-                translatedCountryName=" ";
+                translatedCountryName = " ";
                 break;
         }
 

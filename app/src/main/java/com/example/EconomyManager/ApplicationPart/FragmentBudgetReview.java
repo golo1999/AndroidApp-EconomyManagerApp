@@ -92,8 +92,13 @@ public class FragmentBudgetReview extends Fragment
                                             if(snapshot.child("PersonalTransactions").child(String.valueOf(currentTime.get(Calendar.YEAR))).child(currentMonth.format(currentTime.getTime())).child("Incomes").hasChild("Overall"))
                                             {
                                                 if(Locale.getDefault().getDisplayLanguage().equals("English"))
-                                                    incomesDB=currency+snapshot.child("PersonalTransactions").child(String.valueOf(currentTime.get(Calendar.YEAR))).child(currentMonth.format(currentTime.getTime())).child("Incomes").child("Overall").getValue();
-                                                else incomesDB=snapshot.child("PersonalTransactions").child(String.valueOf(currentTime.get(Calendar.YEAR))).child(currentMonth.format(currentTime.getTime())).child("Incomes").child("Overall").getValue()+" "+currency;
+                                                    incomesDB=currency+Float.valueOf(String.valueOf(snapshot.child("PersonalTransactions").child(String.valueOf(currentTime.get(Calendar.YEAR))).child(currentMonth.format(currentTime.getTime())).child("Incomes").child("Overall").getValue()));
+                                                else incomesDB=Float.valueOf(String.valueOf(snapshot.child("PersonalTransactions").child(String.valueOf(currentTime.get(Calendar.YEAR))).child(currentMonth.format(currentTime.getTime())).child("Incomes").child("Overall").getValue()))+" "+currency;
+
+                                                if(incomesDB.contains("."))
+                                                    if(incomesDB.length()-1-incomesDB.indexOf(".")>2)
+                                                        incomesDB=incomesDB.substring(0, incomesDB.indexOf(".")+3);
+
                                                 incomes.setText(incomesDB);
                                             }
                                             if(!snapshot.child("PersonalTransactions").child(String.valueOf(currentTime.get(Calendar.YEAR))).child(currentMonth.format(currentTime.getTime())).hasChild("Expenses"))
@@ -101,6 +106,7 @@ public class FragmentBudgetReview extends Fragment
                                                 if(Locale.getDefault().getDisplayLanguage().equals("English"))
                                                     expensesDB=currency+"0";
                                                 else expensesDB="0 "+currency;
+
                                                 expenses.setText(expensesDB);
                                             }
                                         }
@@ -109,8 +115,13 @@ public class FragmentBudgetReview extends Fragment
                                             if(snapshot.child("PersonalTransactions").child(String.valueOf(currentTime.get(Calendar.YEAR))).child(currentMonth.format(currentTime.getTime())).child("Expenses").hasChild("Overall"))
                                             {
                                                 if(Locale.getDefault().getDisplayLanguage().equals("English"))
-                                                    expensesDB=currency+snapshot.child("PersonalTransactions").child(String.valueOf(currentTime.get(Calendar.YEAR))).child(currentMonth.format(currentTime.getTime())).child("Expenses").child("Overall").getValue();
-                                                else expensesDB=snapshot.child("PersonalTransactions").child(String.valueOf(currentTime.get(Calendar.YEAR))).child(currentMonth.format(currentTime.getTime())).child("Expenses").child("Overall").getValue()+" "+currency;
+                                                    expensesDB=currency+Float.valueOf(String.valueOf(snapshot.child("PersonalTransactions").child(String.valueOf(currentTime.get(Calendar.YEAR))).child(currentMonth.format(currentTime.getTime())).child("Expenses").child("Overall").getValue()));
+                                                else expensesDB=Float.valueOf(String.valueOf(snapshot.child("PersonalTransactions").child(String.valueOf(currentTime.get(Calendar.YEAR))).child(currentMonth.format(currentTime.getTime())).child("Expenses").child("Overall").getValue()))+" "+currency;
+
+                                                if(expensesDB.contains("."))
+                                                    if(expensesDB.length()-1-expensesDB.indexOf(".")>2)
+                                                        expensesDB=expensesDB.substring(0, expensesDB.indexOf(".")+3);
+
                                                 expenses.setText(expensesDB);
                                             }
                                             if(!snapshot.child("PersonalTransactions").child(String.valueOf(currentTime.get(Calendar.YEAR))).child(currentMonth.format(currentTime.getTime())).hasChild("Incomes"))
@@ -118,6 +129,7 @@ public class FragmentBudgetReview extends Fragment
                                                 if(Locale.getDefault().getDisplayLanguage().equals("English"))
                                                     incomesDB=currency+"0";
                                                 else incomesDB="0 "+currency;
+
                                                 incomes.setText(incomesDB);
                                             }
                                         }

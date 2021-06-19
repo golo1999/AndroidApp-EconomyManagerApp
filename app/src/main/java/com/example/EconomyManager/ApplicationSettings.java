@@ -1,51 +1,44 @@
 package com.example.EconomyManager;
 
-public class ApplicationSettings
-{
-    private String currency, currencySymbol;
-    private Boolean darkTheme;
+public class ApplicationSettings {
+    private String currency;
+    private String currencySymbol;
+    private boolean darkTheme;
 
-    public ApplicationSettings(Boolean darkTheme, String currency)
-    {
-        this.darkTheme = darkTheme;
+    public ApplicationSettings(String currency) {
+        this.darkTheme = false;
         this.currency = currency;
 
-        switch(this.currency)
-        {
+        switch (this.currency) {
             case "EUR":
-                this.currencySymbol="€";
+                this.currencySymbol = "€";
                 break;
             case "GBP":
-                this.currencySymbol="£";
+                this.currencySymbol = "£";
                 break;
             default:
-                this.currencySymbol="RON";
+                this.currencySymbol = "RON";
                 break;
         }
     }
 
-    public Boolean getDarkTheme()
-    {
+    public boolean getDarkTheme() {
         return darkTheme;
     }
 
-    public void setDarkTheme(Boolean theme)
-    {
+    public void setDarkTheme(boolean theme) {
         this.darkTheme = theme;
     }
 
-    public String getCurrency()
-    {
+    public String getCurrency() {
         return currency;
     }
 
-    public void setCurrency(String currency)
-    {
+    public void setCurrency(String currency) {
         this.currency = currency;
     }
 
-    public String getCurrencySymbol()
-    {
+    public String getCurrencySymbol() {
         return currencySymbol;
     }
 }

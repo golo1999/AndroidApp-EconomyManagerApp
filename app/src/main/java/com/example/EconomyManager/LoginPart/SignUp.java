@@ -14,6 +14,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.EconomyManager.BirthDate;
 import com.example.EconomyManager.PersonalInformation;
 import com.example.EconomyManager.ApplicationSettings;
 import com.example.EconomyManager.R;
@@ -25,8 +26,9 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
-public class SignUp extends AppCompatActivity
-{
+import java.time.LocalDate;
+
+public class SignUp extends AppCompatActivity {
 
     private TextView logIn, incorrectSignup;
     private EditText email, password;
@@ -35,8 +37,7 @@ public class SignUp extends AppCompatActivity
     private DatabaseReference myRef;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState)
-    {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_up);
         setVariables();
@@ -44,71 +45,59 @@ public class SignUp extends AppCompatActivity
     }
 
     @Override
-    public void onBackPressed()
-    {
+    public void onBackPressed() {
         super.onBackPressed();
         finish();
         overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
     }
 
-    private void setVariables()
-    {
-        logIn=findViewById(R.id.signup_login);
-        signUp=findViewById(R.id.signup_button);
-        email=findViewById(R.id.signup_email);
-        password=findViewById(R.id.signup_password);
-        incorrectSignup=findViewById(R.id.signup_incorrect_signup);
-        fbAuth=FirebaseAuth.getInstance();
-        myRef= FirebaseDatabase.getInstance().getReference();
+    private void setVariables() {
+        logIn = findViewById(R.id.signup_login);
+        signUp = findViewById(R.id.signup_button);
+        email = findViewById(R.id.signup_email);
+        password = findViewById(R.id.signup_password);
+        incorrectSignup = findViewById(R.id.signup_incorrect_signup);
+        fbAuth = FirebaseAuth.getInstance();
+        myRef = FirebaseDatabase.getInstance().getReference();
     }
 
-    private void setOnClickListeners()
-    {
-        logIn.setOnClickListener(new View.OnClickListener()
-        {
+    private void setOnClickListeners() {
+        logIn.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v)
-            {
-                Intent intent=new Intent(SignUp.this, LogIn.class);
+            public void onClick(View v) {
+                Intent intent = new Intent(SignUp.this, LogIn.class);
                 startActivity(intent);
                 overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
             }
         });
 
-        signUp.setOnClickListener(new View.OnClickListener()
-        {
+        signUp.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v)
-            {
+            public void onClick(View v) {
                 verification();
             }
         });
     }
 
-    private void verification()
-    {
-        String val_email=email.getText().toString().trim(); // salvam valoarea input-ului din email, fara spatii la inceput sau la final
-        String val_pass=password.getText().toString(); // salvam valoarea inputului din parola
+    private void verification() {
+        String val_email = email.getText().toString().trim(); // salvam valoarea input-ului din email, fara spatii la inceput sau la final
+        String val_pass = password.getText().toString(); // salvam valoarea inputului din parola
 
         closeTheKeyboard();
-        if(val_pass.length()>6 && Patterns.EMAIL_ADDRESS.matcher(val_email).matches()) // daca parola are cel putin 7 caractere si email-ul este valid
+        if (val_pass.length() > 6 && Patterns.EMAIL_ADDRESS.matcher(val_email).matches()) // daca parola are cel putin 7 caractere si email-ul este valid
         {
-            fbAuth.createUserWithEmailAndPassword(val_email,val_pass).addOnCompleteListener(new OnCompleteListener<AuthResult>() // metoda FireBase de sign up
+            fbAuth.createUserWithEmailAndPassword(val_email, val_pass).addOnCompleteListener(new OnCompleteListener<AuthResult>() // metoda FireBase de sign up
             {
                 @Override
-                public void onComplete(@NonNull final Task<AuthResult> task)
-                {
-                    if(task.isSuccessful()) // daca se poate crea contul
+                public void onComplete(@NonNull final Task<AuthResult> task) {
+                    if (task.isSuccessful()) // daca se poate crea contul
                     {
-                        final FirebaseUser fbUser=fbAuth.getCurrentUser();
-                        if(fbUser!=null)
-                            fbUser.sendEmailVerification().addOnCompleteListener(new OnCompleteListener<Void>()
-                            {
+                        final FirebaseUser fbUser = fbAuth.getCurrentUser();
+                        if (fbUser != null)
+                            fbUser.sendEmailVerification().addOnCompleteListener(new OnCompleteListener<Void>() {
                                 @Override
-                                public void onComplete(@NonNull Task<Void> task)
-                                {
-                                    if(task.isSuccessful())
-                                    {
+                                public void onComplete(@NonNull Task<Void> task) {
+                                    if (task.isSuccessful()) {
                                         Toast.makeText(SignUp.this, "Please verify your email", Toast.LENGTH_SHORT).show();
                                         createPersonalInformationPath();
                                         createApplicationSettingsPath();
@@ -117,61 +106,52 @@ public class SignUp extends AppCompatActivity
                                     }
                                 }
                             });
-                    }
-                    else // daca nu se poate crea contul
+                    } else // daca nu se poate crea contul
                     {
                         incorrectSignup.setText(R.string.signup_error1); // afisam 'eroarea' ca email-ul deja exista
                         password.setText(""); // resetam parola
                     }
                 }
             });
-        }
-        else if(val_email.isEmpty() && val_pass.isEmpty()) // daca atat emailul, cat si parola nu contin niciun caracter
+        } else if (val_email.isEmpty() && val_pass.isEmpty()) // daca atat emailul, cat si parola nu contin niciun caracter
             incorrectSignup.setText(R.string.signup_error2); // afisam 'eroarea'
-        else if(val_email.isEmpty()) // daca doar emailul nu contine niciun caracter
+        else if (val_email.isEmpty()) // daca doar emailul nu contine niciun caracter
         {
             incorrectSignup.setText(R.string.signup_error3); // afisam 'eroarea'
             password.setText(""); // resetam parola
-        }
-        else if(val_pass.isEmpty()) // daca doar parola nu contine caractere
+        } else if (val_pass.isEmpty()) // daca doar parola nu contine caractere
             incorrectSignup.setText(R.string.signup_error4); // afisam 'eroarea'
-        else if(val_pass.length()<7 && !Patterns.EMAIL_ADDRESS.matcher(val_email).matches()) // daca parola este prea scurta si email-ul nu este valid
+        else if (val_pass.length() < 7 && !Patterns.EMAIL_ADDRESS.matcher(val_email).matches()) // daca parola este prea scurta si email-ul nu este valid
         {
             incorrectSignup.setText(R.string.signup_error5); // afisam 'eroarea'
             password.setText(""); // resetam parola
-        }
-        else if(!Patterns.EMAIL_ADDRESS.matcher(val_email).matches()) // daca email-ul nu este valid
+        } else if (!Patterns.EMAIL_ADDRESS.matcher(val_email).matches()) // daca email-ul nu este valid
         {
             incorrectSignup.setText(R.string.signup_error6); // afisam 'eroarea'
             password.setText(""); // resetam parola
-        }
-        else // daca parola este prea scurta
+        } else // daca parola este prea scurta
         {
             incorrectSignup.setText(R.string.signup_error7); // afisam 'eroarea'
             password.setText(""); // resetam parola
         }
     }
 
-    private void createPersonalInformationPath()
-    {
-        PersonalInformation information=new PersonalInformation("","","","","","","","","");
-        if(fbAuth.getUid()!=null)
+    private void createPersonalInformationPath() {
+        PersonalInformation information = new PersonalInformation("", "", "", "", "", "", new BirthDate(LocalDate.now()), "", "");
+        if (fbAuth.getUid() != null)
             myRef.child(fbAuth.getUid()).child("PersonalInformation").setValue(information);
     }
 
-    private void createApplicationSettingsPath()
-    {
-        ApplicationSettings settings=new ApplicationSettings(false, "GBP");
-        if(fbAuth.getUid()!=null)
+    private void createApplicationSettingsPath() {
+        ApplicationSettings settings = new ApplicationSettings("GBP");
+        if (fbAuth.getUid() != null)
             myRef.child(fbAuth.getUid()).child("ApplicationSettings").setValue(settings);
     }
 
-    private void closeTheKeyboard()
-    {
-        View v=this.getCurrentFocus();
-        if(v!=null)
-        {
-            InputMethodManager manager=(InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+    private void closeTheKeyboard() {
+        View v = this.getCurrentFocus();
+        if (v != null) {
+            InputMethodManager manager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
             manager.hideSoftInputFromWindow(v.getWindowToken(), 0);
         }
     }
