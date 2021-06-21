@@ -1,5 +1,9 @@
 package com.example.EconomyManager;
 
+import androidx.annotation.NonNull;
+
+import java.util.Objects;
+
 public class PersonalInformation {
     private String firstName;
     private String lastName;
@@ -10,6 +14,10 @@ public class PersonalInformation {
     private BirthDate birthDate;
     private String careerTitle;
     private String photoURL;
+
+    public PersonalInformation() {
+
+    }
 
     public PersonalInformation(String firstName, String lastName, String phoneNumber,
                                String website, String country, String gender, BirthDate birthDate,
@@ -95,5 +103,42 @@ public class PersonalInformation {
 
     public void setPhotoURL(String photoURL) {
         this.photoURL = photoURL;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        PersonalInformation that = (PersonalInformation) o;
+        return firstName.equals(that.firstName) &&
+                lastName.equals(that.lastName) &&
+                phoneNumber.equals(that.phoneNumber) &&
+                website.equals(that.website) &&
+                country.equals(that.country) &&
+                gender.equals(that.gender) &&
+                birthDate.equals(that.birthDate) &&
+                careerTitle.equals(that.careerTitle) &&
+                photoURL.equals(that.photoURL);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(firstName, lastName, phoneNumber, website, country, gender, birthDate, careerTitle, photoURL);
+    }
+
+    @NonNull
+    @Override
+    public String toString() {
+        return "PersonalInformation{" +
+                "firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", phoneNumber='" + phoneNumber + '\'' +
+                ", website='" + website + '\'' +
+                ", country='" + country + '\'' +
+                ", gender='" + gender + '\'' +
+                ", birthDate=" + birthDate +
+                ", careerTitle='" + careerTitle + '\'' +
+                ", photoURL='" + photoURL + '\'' +
+                '}';
     }
 }

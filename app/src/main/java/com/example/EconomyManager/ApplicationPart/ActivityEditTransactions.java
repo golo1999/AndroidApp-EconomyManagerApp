@@ -1,11 +1,11 @@
 package com.example.EconomyManager.ApplicationPart;
 
 import android.annotation.SuppressLint;
-import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
-import android.graphics.Typeface;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,7 +13,6 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -22,39 +21,46 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.EconomyManager.MoneyManager;
 import com.example.EconomyManager.Months;
 import com.example.EconomyManager.R;
+import com.example.EconomyManager.Transaction;
 import com.example.EconomyManager.Types;
+import com.example.EconomyManager.UserDetails;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.gson.Gson;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.Locale;
 
 public class ActivityEditTransactions extends AppCompatActivity {
+    private UserDetails userDetails;
+    private EditTransactionsViewModel viewModel;
     private ImageView goBack;
     private FirebaseAuth fbAuth = FirebaseAuth.getInstance();
     private TextView activityTitle;
     private TextView centerText;
-    private ListView listView;
+    private RecyclerView recyclerView;
     private DatabaseReference myRef = FirebaseDatabase.getInstance().getReference();
-    private ArrayList<MoneyManager> arrayList = new ArrayList<>();
+    private ArrayList<Transaction> arrayList = new ArrayList<>();
     private Spinner monthSpinner;
     private Spinner yearSpinner;
     private ConstraintLayout bottomLayout;
-    private CustomAdaptor adaptor;
+    //private CustomAdaptor adaptor;
+    private ArrayList<Transaction> transactionsList = new ArrayList<>();
+    private ActivityEditTransactionsRecyclerViewAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,10 +68,11 @@ public class ActivityEditTransactions extends AppCompatActivity {
         setContentView(R.layout.activity_edit_transactions);
         setTheme();
         setVariables();
+        setRecyclerView();
         setTitle();
         setBottomLayout();
         setOnClickListeners();
-        childListener();
+        //childListener();
     }
 
     @Override
@@ -76,15 +83,18 @@ public class ActivityEditTransactions extends AppCompatActivity {
     }
 
     private void setVariables() {
+        userDetails = retrieveUserDetailsFromSharedPreferences();
+        viewModel = new ViewModelProvider(this).get(EditTransactionsViewModel.class);
         goBack = findViewById(R.id.editTransactionsBack);
-        listView = findViewById(R.id.editTransactionsListView);
+        recyclerView = findViewById(R.id.editTransactionsRecyclerView);
         activityTitle = findViewById(R.id.editTransactionsTitle);
         monthSpinner = findViewById(R.id.editTransactionBottomLayoutMonthSpinner);
         yearSpinner = findViewById(R.id.editTransactionBottomLayoutYearSpinner);
         centerText = findViewById(R.id.editTransactionsCenterText);
         bottomLayout = findViewById(R.id.editTransactionBottomLayout);
-        adaptor = new CustomAdaptor();
-        listView.setAdapter(adaptor);
+        //adaptor = new CustomAdaptor();
+        adapter = new ActivityEditTransactionsRecyclerViewAdapter(viewModel, transactionsList,
+                this, userDetails);
     }
 
     private void setTitle() {
@@ -93,245 +103,513 @@ public class ActivityEditTransactions extends AppCompatActivity {
         activityTitle.setTextColor(Color.WHITE);
     }
 
+    private void setRecyclerView() {
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        //recyclerView.setAdapter(adaptor);
+        recyclerView.setAdapter(adapter);
+    }
+
     private void setOnClickListeners() {
         goBack.setOnClickListener(v -> onBackPressed());
     }
 
     private void setBottomLayout() {
         if (fbAuth.getUid() != null) {
-            myRef.child(fbAuth.getUid()).child("PersonalTransactions").addValueEventListener(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot snapshot) {
-                    if (snapshot.exists()) {
-                        if (snapshot.hasChildren()) {
-                            final ArrayList<String> yearList = new ArrayList<>();
+            myRef.child(fbAuth.getUid())
+                    .child("PersonalTransactions")
+                    .addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            if (snapshot.exists()) {
+                                if (snapshot.hasChildren()) {
+                                    final ArrayList<String> yearList = new ArrayList<>();
+                                    ArrayList<String> monthList = new ArrayList<>();
+                                    boolean yearAlreadyExists;
 
-                            for (DataSnapshot yearIterator : snapshot.getChildren())
-                                yearList.add(yearIterator.getKey());
-                            createYearSpinner(yearList);
+                                    for (DataSnapshot transaction : snapshot.getChildren()) {
+                                        Transaction transactionFromDatabase = transaction
+                                                .getValue(Transaction.class);
 
-                            yearSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                                @Override
-                                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                                    final String selectedYear = String.valueOf(yearSpinner.getItemAtPosition(position));
-                                    try {
-                                        ((TextView) parent.getChildAt(0)).setTextColor(Color.WHITE);
-                                        ((TextView) parent.getChildAt(0)).setGravity(Gravity.CENTER);
-                                    } catch (NullPointerException e) {
-                                        e.printStackTrace();
+                                        if (transactionFromDatabase != null &&
+                                                transactionFromDatabase.getTime() != null) {
+                                            if (yearList.isEmpty()) {
+                                                yearList.add(String.valueOf(transactionFromDatabase
+                                                        .getTime().getYear()));
+                                            } else {
+                                                yearAlreadyExists = false;
+
+                                                for (String year : yearList)
+                                                    if (year.equals(String.
+                                                            valueOf(transactionFromDatabase
+                                                                    .getTime().getYear()))) {
+                                                        yearAlreadyExists = true;
+                                                        break;
+                                                    }
+
+                                                if (!yearAlreadyExists)
+                                                    yearList.add(String
+                                                            .valueOf(transactionFromDatabase
+                                                                    .getTime().getYear()));
+                                            }
+
+                                            arrayList.add(transactionFromDatabase);
+                                        }
                                     }
 
-                                    myRef.child(fbAuth.getUid()).child("PersonalTransactions").child(selectedYear).addListenerForSingleValueEvent(new ValueEventListener() {
+//                                    for (DataSnapshot yearIterator : snapshot.getChildren())
+//                                        yearList.add(yearIterator.getKey());
+                                    createYearSpinner(yearList);
+
+                                    yearSpinner.setOnItemSelectedListener(new AdapterView
+                                            .OnItemSelectedListener() {
                                         @Override
-                                        public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                            if (snapshot.exists())
-                                                if (snapshot.hasChildren()) {
-                                                    ArrayList<String> monthList = new ArrayList<>();
+                                        public void onItemSelected(AdapterView<?> parent, View view,
+                                                                   int position, long id) {
+                                            final String selectedYear = String.valueOf(yearSpinner
+                                                    .getItemAtPosition(position));
+                                            boolean monthAlreadyExists;
 
-                                                    for (DataSnapshot monthIterator : snapshot.getChildren())
-                                                        monthList.add(monthIterator.getKey());
-                                                    createMonthSpinner(monthList, selectedYear);
+                                            try {
+                                                ((TextView) parent.getChildAt(0))
+                                                        .setTextColor(Color.WHITE);
+                                                ((TextView) parent.getChildAt(0))
+                                                        .setGravity(Gravity.CENTER);
+                                            } catch (NullPointerException e) {
+                                                e.printStackTrace();
+                                            }
 
-                                                    monthSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                                                        @Override
-                                                        public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                                                            String selectedMonth = String.valueOf(monthSpinner.getItemAtPosition(position));
-                                                            final String copyOfSelectedMonth = Months.getMonthInEnglish(ActivityEditTransactions.this, selectedMonth);
+                                            // noua varianta v2
 
-                                                            try {
-                                                                ((TextView) parent.getChildAt(0)).setTextColor(Color.WHITE);
-                                                                ((TextView) parent.getChildAt(0)).setGravity(Gravity.CENTER);
-                                                            } catch (NullPointerException e) {
-                                                                e.printStackTrace();
+                                            for (Transaction transaction : arrayList)
+                                                if (String.valueOf(transaction.getTime().getYear()).equals(selectedYear)) {
+                                                    String transactionMonthParsed = transaction.getTime().getMonthName().substring(0, 1) +
+                                                            transaction.getTime().getMonthName().substring(1).toLowerCase();
+                                                    if (monthList.isEmpty()) {
+                                                        monthList.add(transactionMonthParsed);
+                                                    } else {
+                                                        monthAlreadyExists = false;
+
+                                                        for (String month : monthList)
+                                                            if (month.equals(transactionMonthParsed)) {
+                                                                monthAlreadyExists = true;
+                                                                break;
                                                             }
-                                                            myRef.child(fbAuth.getUid()).child("PersonalTransactions").child(selectedYear).child(copyOfSelectedMonth).addListenerForSingleValueEvent(new ValueEventListener() {
-                                                                @Override
-                                                                public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                                                    if (snapshot.exists())
-                                                                        if (snapshot.hasChildren()) {
-                                                                            centerText.setText("");
-                                                                            listView.setEnabled(true);
-                                                                            listView.setVisibility(View.VISIBLE);
-                                                                            createListView(copyOfSelectedMonth, selectedYear);
-                                                                        }
-                                                                }
 
-                                                                @Override
-                                                                public void onCancelled(@NonNull DatabaseError error) {
-
-                                                                }
-                                                            });
-                                                        }
-
-                                                        @Override
-                                                        public void onNothingSelected(AdapterView<?> parent) {
-
-                                                        }
-                                                    });
+                                                        if (!monthAlreadyExists)
+                                                            monthList.add(transactionMonthParsed);
+                                                    }
                                                 }
+
+                                            createMonthSpinner(monthList, selectedYear);
+
+                                            monthSpinner.setOnItemSelectedListener(new AdapterView
+                                                    .OnItemSelectedListener() {
+                                                @Override
+                                                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                                                    String selectedMonth = String.valueOf(monthSpinner.getItemAtPosition(position));
+                                                    //final String copyOfSelectedMonth = Months.getMonthInEnglish(ActivityEditTransactions.this, selectedMonth);
+
+                                                    try {
+                                                        ((TextView) parent.getChildAt(0)).setTextColor(Color.WHITE);
+                                                        ((TextView) parent.getChildAt(0)).setGravity(Gravity.CENTER);
+                                                    } catch (NullPointerException e) {
+                                                        e.printStackTrace();
+                                                    }
+
+                                                    if (!monthList.isEmpty()) {
+                                                        centerText.setText("");
+                                                        recyclerView.setEnabled(true);
+                                                        recyclerView.setVisibility(View.VISIBLE);
+                                                        //createListView(copyOfSelectedMonth, selectedYear);
+
+//                                                        if (!transactionsList.isEmpty())
+//                                                            transactionsList.clear();
+
+                                                        populateRecyclerView(selectedYear, selectedMonth);
+
+//                                                        for (Transaction transaction : transactionsList) {
+//                                                            String transactionMonthParsed = transaction.getTime().getMonthName().substring(0, 1) +
+//                                                                    transaction.getTime().getMonthName().substring(1).toLowerCase();
+//
+//                                                            if (String.valueOf(transaction.getTime().getYear()).equals(selectedYear) &&
+//                                                                    transactionMonthParsed.equals(Months.getMonthInEnglish(ActivityEditTransactions.this, selectedMonth))) {
+//                                                                Toast.makeText(ActivityEditTransactions.this,
+//                                                                        String.valueOf(transaction.getCategory()),
+//                                                                        Toast.LENGTH_SHORT).show();
+//                                                                transactionsList.add(transaction);
+//                                                            }
+//                                                        }
+//
+//                                                        Collections.sort(arrayList, (o1, o2) -> Float
+//                                                                .compare(Float.parseFloat(o2.getValue()),
+//                                                                        Float.parseFloat(o1.getValue())));
+//                                                        //adaptor.notifyDataSetChanged();
+//                                                        adapter.notifyDataSetChanged();
+                                                    }
+                                                }
+
+                                                @Override
+                                                public void onNothingSelected(AdapterView<?> parent) {
+
+                                                }
+                                            });
+
+                                            // noua varianta
+
+//                                            myRef.child(fbAuth.getUid())
+//                                                    .child("PersonalTransactions")
+//                                                    .addListenerForSingleValueEvent(new ValueEventListener() {
+//                                                        @Override
+//                                                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+//                                                            if (snapshot.exists() &&
+//                                                                    snapshot.hasChildren()) {
+//                                                                ArrayList<String> monthList =
+//                                                                        new ArrayList<>();
+//                                                                boolean monthAlreadyExists;
+//
+//                                                                for (DataSnapshot transaction : snapshot.getChildren()) {
+//                                                                    Transaction transactionFromDatabase = transaction
+//                                                                            .getValue(Transaction.class);
+//
+//                                                                    if (transactionFromDatabase != null &&
+//                                                                            transactionFromDatabase.getTime() != null &&
+//                                                                            String.valueOf(transactionFromDatabase.getTime().getYear()).equals(selectedYear)) {
+//                                                                        String transactionMonthParsed = transactionFromDatabase.getTime().getMonthName().substring(0, 1) +
+//                                                                                transactionFromDatabase.getTime().getMonthName().substring(1).toLowerCase();
+//
+//                                                                        if (monthList.isEmpty()) {
+//                                                                            monthList.add(transactionMonthParsed);
+//                                                                        } else {
+//                                                                            monthAlreadyExists = false;
+//
+//                                                                            for (String month : monthList)
+//                                                                                if (month.equals(transactionMonthParsed)) {
+//                                                                                    monthAlreadyExists = true;
+//                                                                                    break;
+//                                                                                }
+//
+//                                                                            if (!monthAlreadyExists)
+//                                                                                monthList.add(transactionMonthParsed);
+//                                                                        }
+//                                                                    }
+//                                                                }
+//
+//
+//                                                                createMonthSpinner(monthList,
+//                                                                        selectedYear);
+//
+//                                                                monthSpinner.setOnItemSelectedListener(new AdapterView
+//                                                                        .OnItemSelectedListener() {
+//                                                                    @Override
+//                                                                    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+//                                                                        String selectedMonth = String.valueOf(monthSpinner.getItemAtPosition(position));
+//                                                                        final String copyOfSelectedMonth = Months.getMonthInEnglish(ActivityEditTransactions.this, selectedMonth);
+//
+//                                                                        try {
+//                                                                            ((TextView) parent.getChildAt(0)).setTextColor(Color.WHITE);
+//                                                                            ((TextView) parent.getChildAt(0)).setGravity(Gravity.CENTER);
+//                                                                        } catch (NullPointerException e) {
+//                                                                            e.printStackTrace();
+//                                                                        }
+//
+//                                                                        // aici trebuie modificat => ce e jos rezulta in urma selectarii unei anumite luni dintr-un anumit an
+//
+////                                                                        myRef.child(fbAuth.getUid())
+////                                                                                .child("PersonalTransactions")
+////                                                                                .child(selectedYear)
+////                                                                                .child(copyOfSelectedMonth)
+////                                                                                .addListenerForSingleValueEvent(new ValueEventListener() {
+////                                                                                    @Override
+////                                                                                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+////                                                                                        if (snapshot.exists())
+////                                                                                            if (snapshot.hasChildren()) {
+////                                                                                                centerText.setText("");
+////                                                                                                listView.setEnabled(true);
+////                                                                                                listView.setVisibility(View.VISIBLE);
+////                                                                                                createListView(copyOfSelectedMonth, selectedYear);
+////                                                                                            }
+////                                                                                    }
+////
+////                                                                                    @Override
+////                                                                                    public void onCancelled(@NonNull DatabaseError error) {
+////
+////                                                                                    }
+////                                                                                });
+//                                                                    }
+//
+//                                                                    @Override
+//                                                                    public void onNothingSelected(AdapterView<?> parent) {
+//
+//                                                                    }
+//                                                                });
+//                                                            }
+//                                                        }
+//
+//                                                        @Override
+//                                                        public void onCancelled(@NonNull DatabaseError error) {
+//
+//                                                        }
+//                                                    });
+
+                                            // vechea varianta
+
+//                                            myRef.child(fbAuth.getUid())
+//                                                    .child("PersonalTransactions")
+//                                                    .child(selectedYear)
+//                                                    .addListenerForSingleValueEvent(new ValueEventListener() {
+//                                                        @Override
+//                                                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+//                                                            if (snapshot.exists())
+//                                                                if (snapshot.hasChildren()) {
+//                                                                    ArrayList<String> monthList =
+//                                                                            new ArrayList<>();
+//
+//                                                                    for (DataSnapshot monthIterator :
+//                                                                            snapshot.getChildren())
+//                                                                        monthList.add(monthIterator
+//                                                                                .getKey());
+//                                                                    createMonthSpinner(monthList,
+//                                                                            selectedYear);
+//
+//                                                                    monthSpinner.setOnItemSelectedListener(new AdapterView
+//                                                                            .OnItemSelectedListener() {
+//                                                                        @Override
+//                                                                        public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+//                                                                            String selectedMonth = String.valueOf(monthSpinner.getItemAtPosition(position));
+//                                                                            final String copyOfSelectedMonth = Months.getMonthInEnglish(ActivityEditTransactions.this, selectedMonth);
+//
+//                                                                            try {
+//                                                                                ((TextView) parent.getChildAt(0)).setTextColor(Color.WHITE);
+//                                                                                ((TextView) parent.getChildAt(0)).setGravity(Gravity.CENTER);
+//                                                                            } catch (NullPointerException e) {
+//                                                                                e.printStackTrace();
+//                                                                            }
+//                                                                            myRef.child(fbAuth.getUid())
+//                                                                                    .child("PersonalTransactions")
+//                                                                                    .child(selectedYear)
+//                                                                                    .child(copyOfSelectedMonth)
+//                                                                                    .addListenerForSingleValueEvent(new ValueEventListener() {
+//                                                                                        @Override
+//                                                                                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+//                                                                                            if (snapshot.exists())
+//                                                                                                if (snapshot.hasChildren()) {
+//                                                                                                    centerText.setText("");
+//                                                                                                    listView.setEnabled(true);
+//                                                                                                    listView.setVisibility(View.VISIBLE);
+//                                                                                                    createListView(copyOfSelectedMonth, selectedYear);
+//                                                                                                }
+//                                                                                        }
+//
+//                                                                                        @Override
+//                                                                                        public void onCancelled(@NonNull DatabaseError error) {
+//
+//                                                                                        }
+//                                                                                    });
+//                                                                        }
+//
+//                                                                        @Override
+//                                                                        public void onNothingSelected(AdapterView<?> parent) {
+//
+//                                                                        }
+//                                                                    });
+//                                                                }
+//                                                        }
+//
+//                                                        @Override
+//                                                        public void onCancelled(@NonNull DatabaseError error) {
+//
+//                                                        }
+//                                                    });
                                         }
 
                                         @Override
-                                        public void onCancelled(@NonNull DatabaseError error) {
+                                        public void onNothingSelected(AdapterView<?> parent) {
 
                                         }
                                     });
                                 }
+                            } else {
+                                monthSpinner.setEnabled(false);
+                                yearSpinner.setEnabled(false);
+                                bottomLayout.setVisibility(View.GONE);
+                                monthSpinner.setVisibility(View.GONE);
+                                yearSpinner.setVisibility(View.GONE);
+                                centerText.setText(getResources().getString(R.string.edit_transactions_center_text_no_transactions).trim());
+                            }
 
-                                @Override
-                                public void onNothingSelected(AdapterView<?> parent) {
+                            if (fbAuth.getUid() != null)
+                                myRef.child(fbAuth.getUid()).child("ApplicationSettings").addListenerForSingleValueEvent(new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                        if (snapshot.hasChild("darkTheme")) {
+                                            boolean darkThemeEnabled = Boolean.parseBoolean(String.valueOf(snapshot.child("darkTheme").getValue()));
+                                            centerText.setTextColor(!darkThemeEnabled ?
+                                                    Color.parseColor("#195190") :
+                                                    Color.WHITE);
+                                        }
+                                    }
 
-                                }
-                            });
+                                    @Override
+                                    public void onCancelled(@NonNull DatabaseError error) {
+
+                                    }
+                                });
+
+                            centerText.setTextSize(20);
+                            recyclerView.setEnabled(false);
+                            recyclerView.setVisibility(View.GONE);
                         }
-                    } else {
-                        monthSpinner.setEnabled(false);
-                        yearSpinner.setEnabled(false);
-                        bottomLayout.setVisibility(View.GONE);
-                        monthSpinner.setVisibility(View.GONE);
-                        yearSpinner.setVisibility(View.GONE);
-                        centerText.setText(getResources().getString(R.string.edit_transactions_center_text_no_transactions).trim());
-                    }
 
-                    if (fbAuth.getUid() != null)
-                        myRef.child(fbAuth.getUid()).child("ApplicationSettings").addListenerForSingleValueEvent(new ValueEventListener() {
-                            @Override
-                            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                if (snapshot.hasChild("darkTheme")) {
-                                    boolean darkThemeEnabled = Boolean.parseBoolean(String.valueOf(snapshot.child("darkTheme").getValue()));
-                                    if (!darkThemeEnabled)
-                                        centerText.setTextColor(Color.parseColor("#195190"));
-                                    else centerText.setTextColor(Color.WHITE);
-                                }
-                            }
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
 
-                            @Override
-                            public void onCancelled(@NonNull DatabaseError error) {
-
-                            }
-                        });
-
-                    centerText.setTextSize(20);
-                    listView.setEnabled(false);
-                    listView.setVisibility(View.GONE);
-                }
-
-                @Override
-                public void onCancelled(@NonNull DatabaseError error) {
-
-                }
-            });
+                        }
+                    });
         }
     }
 
     private void createMonthSpinner(ArrayList<String> list, String selectedYear) {
-        String[] months = getResources().getStringArray(R.array.months); // setam vectorul ce contine lunile in engleza
-        int[] frequency = new int[13]; // vectorul de frecventa
+        // setam vectorul ce contine lunile in engleza
+        String[] months = getResources().getStringArray(R.array.months);
+        // vectorul de frecventa
+        int[] frequency = new int[13];
         Calendar currentTime = Calendar.getInstance();
         SimpleDateFormat monthFormat = new SimpleDateFormat("LLLL", Locale.ENGLISH);
         int positionOfCurrentMonth = -1;
 
-        Arrays.fill(frequency, 0); // initializam vectorul de luni cu 0 pentru toate elementele
+        // initializam vectorul de luni cu 0 pentru toate elementele
+        Arrays.fill(frequency, 0);
 
-        for (String listIterator : list) // cream vectorul de frecventa
-        {
+        // cream vectorul de frecventa
+        for (String listIterator : list) {
             int j = 0;
-            for (String monthsListIterator : months) // vedem care dintre luni se regasesc si in ArrayList-ul cu lunile din anul selectat
-            {
+            // vedem care dintre luni se regasesc si in ArrayList-ul cu lunile din anul selectat
+            for (String monthsListIterator : months) {
                 j++;
                 if (listIterator.equals(monthsListIterator))
                     frequency[j - 1] = 1;
             }
         }
 
-        list.clear(); // golim lista si vom adauga lunile in ordinea lor naturala
+        // golim lista si vom adauga lunile in ordinea lor naturala
+        list.clear();
 
         int j = 0;
 
-        for (int frequencyIterator : frequency) // daca luna are frecventa 1, o adaugam in lista
-        {
+        // daca luna are frecventa 1, o adaugam in lista
+        for (int frequencyIterator : frequency) {
             j++;
             if (frequencyIterator == 1)
-                if (!Locale.getDefault().getDisplayLanguage().equals("English")) // daca nu e in engleza
-                    list.add(Months.getTranslatedMonth(ActivityEditTransactions.this, months[j - 1])); // traducem numele lunii cu frecventa 1
-                else list.add(months[j - 1]); // daca e in engleza
+                // daca nu e in engleza
+                if (!Locale.getDefault().getDisplayLanguage().equals("English"))
+                    // traducem numele lunii cu frecventa 1
+                    list.add(Months.getTranslatedMonth(ActivityEditTransactions.this,
+                            months[j - 1]));
+                    // daca e in engleza
+                else list.add(months[j - 1]);
         }
 
         j = 0;
 
-        for (String listIterator : list) // daca gasim luna curenta in lista, ii salvam pozitia (pentru a seta Spinnerul pe luna curenta, in cazul in care exista tranzactii efectuate in ea)
-        {
+        // daca gasim luna curenta in lista, ii salvam pozitia
+        // (pentru a seta Spinnerul pe luna curenta, in cazul in care exista tranzactii
+        // efectuate in ea)
+        for (String listIterator : list) {
             j++;
-            if (Months.getMonthInEnglish(ActivityEditTransactions.this, listIterator).equals(monthFormat.format(currentTime.getTime())))
+            if (Months.getMonthInEnglish(ActivityEditTransactions.this, listIterator)
+                    .equals(monthFormat.format(currentTime.getTime())))
                 positionOfCurrentMonth = j - 1;
         }
 
-        ArrayAdapter<String> monthAdapter = new ArrayAdapter<String>(this, R.layout.custom_spinner_item, list) // cream adaptorul ce afiseaza pe ecran lunile din Spinner
-        {
+        // cream adaptorul ce afiseaza pe ecran lunile din Spinner
+        ArrayAdapter<String> monthAdapter = new ArrayAdapter<String>(this,
+                R.layout.custom_spinner_item, list) {
             @Override
-            public View getDropDownView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
+            public View getDropDownView(int position, @Nullable View convertView,
+                                        @NonNull ViewGroup parent) {
                 final View v = super.getDropDownView(position, convertView, parent);
-                ((TextView) v).setGravity(Gravity.CENTER); // toate elementele spinnerului sunt aliniate la centru
+                // toate elementele spinnerului sunt aliniate la centru
+                ((TextView) v).setGravity(Gravity.CENTER);
 
                 if (fbAuth.getUid() != null)
-                    myRef.child(fbAuth.getUid()).child("ApplicationSettings").addListenerForSingleValueEvent(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(@NonNull DataSnapshot snapshot) {
-                            if (snapshot.hasChild("darkTheme")) {
-                                boolean darkThemeEnabled = Boolean.parseBoolean(String.valueOf(snapshot.child("darkTheme").getValue()).trim());
-                                int itemsColor;
+                    myRef.child(fbAuth.getUid())
+                            .child("ApplicationSettings")
+                            .addListenerForSingleValueEvent(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                    if (snapshot.hasChild("darkTheme")) {
+                                        boolean darkThemeEnabled = Boolean
+                                                .parseBoolean(String.valueOf(snapshot
+                                                        .child("darkTheme").getValue()).trim());
+                                        int itemsColor;
 
-                                if (!darkThemeEnabled)
-                                    itemsColor = Color.WHITE;
-                                else itemsColor = Color.BLACK;
+                                        if (!darkThemeEnabled)
+                                            itemsColor = Color.WHITE;
+                                        else itemsColor = Color.BLACK;
 
-                                ((TextView) v).setTextColor(itemsColor); // setam culoarea textului elementelor in functie de tema selectata
-                            }
-                        }
+                                        // setam culoarea textului elementelor
+                                        // in functie de tema selectata
+                                        ((TextView) v).setTextColor(itemsColor);
+                                    }
+                                }
 
-                        @Override
-                        public void onCancelled(@NonNull DatabaseError error) {
+                                @Override
+                                public void onCancelled(@NonNull DatabaseError error) {
 
-                        }
-                    });
+                                }
+                            });
 
                 return v;
             }
         };
 
         monthSpinner.setAdapter(monthAdapter);
-        if (positionOfCurrentMonth >= 0 && selectedYear.equals(String.valueOf(currentTime.get(Calendar.YEAR)))) // daca luna curenta exista in lista si anul este cel curent
-            monthSpinner.setSelection(positionOfCurrentMonth); // o setam ca default atunci cand deschidem activitatea sau cand selectam anul curent
+
+        // daca luna curenta exista in lista si anul este cel curent
+        if (positionOfCurrentMonth >= 0 &&
+                selectedYear.equals(String.valueOf(currentTime.get(Calendar.YEAR)))) {
+            // o setam ca default atunci cand deschidem activitatea sau cand selectam anul curent
+            monthSpinner.setSelection(positionOfCurrentMonth);
+        }
     }
 
     private void createYearSpinner(ArrayList<String> list) {
-        ArrayAdapter<String> yearAdapter = new ArrayAdapter<String>(this, R.layout.custom_spinner_item, list) {
+        ArrayAdapter<String> yearAdapter = new ArrayAdapter<String>(this,
+                R.layout.custom_spinner_item, list) {
             @Override
-            public View getDropDownView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
+            public View getDropDownView(int position, @Nullable View convertView,
+                                        @NonNull ViewGroup parent) {
                 final View v = super.getDropDownView(position, convertView, parent);
-                ((TextView) v).setGravity(Gravity.CENTER); // toate elementele spinnerului sunt aliniate la centru
+                // toate elementele spinnerului sunt aliniate la centru
+                ((TextView) v).setGravity(Gravity.CENTER);
 
                 if (fbAuth.getUid() != null)
-                    myRef.child(fbAuth.getUid()).child("ApplicationSettings").addListenerForSingleValueEvent(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(@NonNull DataSnapshot snapshot) {
-                            if (snapshot.hasChild("darkTheme")) {
-                                boolean darkThemeEnabled = Boolean.parseBoolean(String.valueOf(snapshot.child("darkTheme").getValue()).trim());
-                                int itemsColor;
+                    myRef.child(fbAuth.getUid())
+                            .child("ApplicationSettings")
+                            .addListenerForSingleValueEvent(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                    if (snapshot.hasChild("darkTheme")) {
+                                        boolean darkThemeEnabled = Boolean.parseBoolean(String
+                                                .valueOf(snapshot.child("darkTheme").getValue())
+                                                .trim());
+                                        int itemsColor;
 
-                                if (!darkThemeEnabled)
-                                    itemsColor = Color.WHITE;
-                                else itemsColor = Color.BLACK;
+                                        if (!darkThemeEnabled)
+                                            itemsColor = Color.WHITE;
+                                        else itemsColor = Color.BLACK;
 
-                                ((TextView) v).setTextColor(itemsColor); // setam culoarea textului elementelor in functie de tema selectata
-                            }
-                        }
+                                        // setam culoarea textului elementelor
+                                        // in functie de tema selectata
+                                        ((TextView) v).setTextColor(itemsColor);
+                                    }
+                                }
 
-                        @Override
-                        public void onCancelled(@NonNull DatabaseError error) {
+                                @Override
+                                public void onCancelled(@NonNull DatabaseError error) {
 
-                        }
-                    });
+                                }
+                            });
 
                 return v;
             }
@@ -341,42 +619,175 @@ public class ActivityEditTransactions extends AppCompatActivity {
         Calendar currentTime = Calendar.getInstance();
         int positionOfCurrentYear = -1, j = -1;
 
-        for (String listIterator : list) // cautam in lista anul curent si, in cazul in care este gasit, ii memoram pozitia
-        {
+        // cautam in lista anul curent si, in cazul in care este gasit, ii memoram pozitia
+        for (String listIterator : list) {
             j++;
             if (listIterator.equals(String.valueOf(currentTime.get(Calendar.YEAR))))
                 positionOfCurrentYear = j;
         }
-        if (positionOfCurrentYear >= 0) // daca am gasit anul curent in lista, il setam ca default atunci deschidem activitatea
+
+        // daca am gasit anul curent in lista, il setam ca default atunci deschidem activitatea
+        if (positionOfCurrentYear >= 0)
             yearSpinner.setSelection(positionOfCurrentYear);
     }
 
-    private void createListView(String month, String year) {
-        if ((month != null && year != null))
-            if (!month.isEmpty() && !year.isEmpty())
-                if (fbAuth.getUid() != null) {
-                    myRef.child(fbAuth.getUid()).child("PersonalTransactions").child(year).child(month).addListenerForSingleValueEvent(new ValueEventListener() {
+    private void populateRecyclerView(String selectedYear, String selectedMonth) {
+        if (!transactionsList.isEmpty())
+            transactionsList.clear();
+
+        for (Transaction transaction : arrayList) {
+            String transactionMonthParsed = transaction.getTime().getMonthName().substring(0, 1) +
+                    transaction.getTime().getMonthName().substring(1).toLowerCase();
+
+            if (String.valueOf(transaction.getTime().getYear()).equals(selectedYear) &&
+                    transactionMonthParsed.equals(Months.getMonthInEnglish(ActivityEditTransactions.this, selectedMonth))) {
+//                Toast.makeText(ActivityEditTransactions.this,
+//                        String.valueOf(transaction.getCategory()),
+//                        Toast.LENGTH_SHORT).show();
+                //Toast.makeText(this, transaction.getValue(), Toast.LENGTH_SHORT).show();
+                transactionsList.add(transaction);
+            }
+        }
+
+        Collections.sort(transactionsList, (o1, o2) -> Float
+                .compare(Float.parseFloat(o2.getValue()),
+                        Float.parseFloat(o1.getValue())));
+        //adaptor.notifyDataSetChanged();
+        adapter.notifyDataSetChanged();
+    }
+
+//    private void createListView(String month, String year) {
+//        if ((month != null && year != null))
+//            if (!month.isEmpty() && !year.isEmpty())
+//                if (fbAuth.getUid() != null) {
+//                    myRef.child(fbAuth.getUid()).child("PersonalTransactions").child(year).child(month).addListenerForSingleValueEvent(new ValueEventListener() {
+//                        @Override
+//                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+//                            if (!arrayList.isEmpty())
+//                                arrayList.clear();
+//                            if (snapshot.hasChildren()) {
+//                                for (DataSnapshot monthChild : snapshot.getChildren())
+//                                    for (DataSnapshot monthGrandChild : monthChild.getChildren())
+//                                        if (!String.valueOf(monthGrandChild.getKey()).equals("Overall"))
+//                                            for (DataSnapshot monthGreatGrandChild :
+//                                                    monthGrandChild.getChildren()) {
+//                                                MoneyManager money =
+//                                                        new MoneyManager(String
+//                                                                .valueOf(monthGreatGrandChild
+//                                                                        .child("note").getValue()),
+//                                                                Float.parseFloat(String
+//                                                                        .valueOf(monthGreatGrandChild
+//                                                                                .child("value")
+//                                                                                .getValue())),
+//                                                                String.valueOf(monthGreatGrandChild
+//                                                                        .child("date").getValue()),
+//                                                                String.valueOf(monthGreatGrandChild
+//                                                                        .child("type").getValue()));
+//                                                arrayList.add(money);
+//                                            }
+//                                // sortare dupa valoare descendent
+//                                Collections.sort(arrayList, (o1, o2) -> Float
+//                                        .compare(o2.getValue(), o1.getValue()));
+//                                adaptor.notifyDataSetChanged();
+//                            }
+//                        }
+//
+//                        @Override
+//                        public void onCancelled(@NonNull DatabaseError error) {
+//
+//                        }
+//                    });
+//                }
+//    }
+
+//    private void childListener() {
+//        if (fbAuth.getUid() != null) {
+//            myRef.child(fbAuth.getUid())
+//                    .child("PersonalTransactions")
+//                    .child(String.valueOf(yearSpinner.getSelectedItem()))
+//                    .child(String.valueOf(monthSpinner.getSelectedItem()))
+//                    .addChildEventListener(new ChildEventListener() {
+//                        @Override
+//                        public void onChildAdded(@NonNull DataSnapshot snapshot,
+//                                                 @Nullable String previousChildName) {
+//                            String note = String.valueOf(snapshot.child("note").getValue());
+//                            String date = String.valueOf(snapshot.child("date").getValue());
+//                            String type = String.valueOf(snapshot.child("type").getValue());
+//                            Float value = Float
+//                                    .parseFloat(String.valueOf(snapshot.child("value").getValue()));
+//
+//                            MoneyManager money = new MoneyManager(note, value, date, type);
+//                            arrayList.add(money);
+//                            adaptor.notifyDataSetChanged();
+//                        }
+//
+//                        @Override
+//                        public void onChildChanged(@NonNull DataSnapshot snapshot,
+//                                                   @Nullable String previousChildName) {
+//
+//                        }
+//
+//                        @Override
+//                        public void onChildRemoved(@NonNull DataSnapshot snapshot) {
+//                            String date = String.valueOf(snapshot.child("date").getValue());
+//                            String note = String.valueOf(snapshot.child("note").getValue());
+//                            String type = String.valueOf(snapshot.child("type").getValue());
+//                            Float value = Float
+//                                    .parseFloat(String.valueOf(snapshot.child("value").getValue()));
+//
+//                            MoneyManager money = new MoneyManager(note, value, date, type);
+//                            arrayList.remove(money);
+//                            adaptor.notifyDataSetChanged();
+//                        }
+//
+//                        @Override
+//                        public void onChildMoved(@NonNull DataSnapshot snapshot,
+//                                                 @Nullable String previousChildName) {
+//
+//                        }
+//
+//                        @Override
+//                        public void onCancelled(@NonNull DatabaseError error) {
+//
+//                        }
+//                    });
+//        }
+//    }
+
+    private void setTheme() {
+        if (fbAuth.getUid() != null)
+            myRef.child(fbAuth.getUid())
+                    .child("ApplicationSettings")
+                    .addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot snapshot) {
-                            if (!arrayList.isEmpty())
-                                arrayList.clear();
-                            if (snapshot.hasChildren()) {
-                                for (DataSnapshot monthChild : snapshot.getChildren())
-                                    for (DataSnapshot monthGrandChild : monthChild.getChildren())
-                                        if (!String.valueOf(monthGrandChild.getKey()).equals("Overall"))
-                                            for (DataSnapshot monthGreatGrandChild : monthGrandChild.getChildren()) {
-                                                MoneyManager money = new MoneyManager(String.valueOf(monthGreatGrandChild.child("note").getValue()), Float.parseFloat(String.valueOf(monthGreatGrandChild.child("value").getValue())), String.valueOf(monthGreatGrandChild.child("date").getValue()), String.valueOf(monthGreatGrandChild.child("type").getValue()));
-                                                arrayList.add(money);
-                                            }
-                                Collections.sort(arrayList, new Comparator<MoneyManager>() // sortare dupa valoare descendent
-                                {
-                                    @Override
-                                    public int compare(MoneyManager o1, MoneyManager o2) {
-                                        return Float.compare(o2.getValue(), o1.getValue());
+                            if (snapshot.exists())
+                                if (snapshot.hasChild("darkTheme")) {
+                                    boolean darkThemeEnabled = Boolean
+                                            .parseBoolean(String.valueOf(snapshot
+                                                    .child("darkTheme").getValue()).trim());
+                                    int theme, dropDownTheme;
+
+                                    if (!darkThemeEnabled) {
+                                        theme = R.drawable.ic_white_gradient_tobacco_ad;
+                                        dropDownTheme = R.drawable.ic_blue_gradient_unloved_teen;
+                                    } else {
+                                        theme = R.drawable.ic_black_gradient_night_shift;
+                                        dropDownTheme = R.drawable.ic_white_gradient_tobacco_ad;
                                     }
-                                });
-                                adaptor.notifyDataSetChanged();
-                            }
+
+                                    // setam culoarea dropdown
+                                    getWindow().setBackgroundDrawableResource(theme);
+
+                                    // setam culoarea sagetii
+                                    monthSpinner.getBackground().setColorFilter(Color.WHITE,
+                                            PorterDuff.Mode.SRC_ATOP);
+                                    monthSpinner.setPopupBackgroundResource(dropDownTheme);
+                                    // setam culoarea elementelor
+                                    yearSpinner.getBackground().setColorFilter(Color.WHITE,
+                                            PorterDuff.Mode.SRC_ATOP);
+                                    yearSpinner.setPopupBackgroundResource(dropDownTheme);
+                                }
                         }
 
                         @Override
@@ -384,82 +795,15 @@ public class ActivityEditTransactions extends AppCompatActivity {
 
                         }
                     });
-                }
     }
 
-    private void childListener() {
-        if (fbAuth.getUid() != null) {
-            myRef.child(fbAuth.getUid()).child("PersonalTransactions").child(String.valueOf(yearSpinner.getSelectedItem())).child(String.valueOf(monthSpinner.getSelectedItem())).addChildEventListener(new ChildEventListener() {
-                @Override
-                public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-                    String note = String.valueOf(snapshot.child("note").getValue()), date = String.valueOf(snapshot.child("date").getValue()), type = String.valueOf(snapshot.child("type").getValue());
-                    Float value = Float.parseFloat(String.valueOf(snapshot.child("value").getValue()));
+    private UserDetails retrieveUserDetailsFromSharedPreferences() {
+        SharedPreferences preferences =
+                getSharedPreferences("ECONOMY_MANAGER_USER_DATA", MODE_PRIVATE);
+        Gson gson = new Gson();
+        String json = preferences.getString("currentUserDetails", "");
 
-                    MoneyManager money = new MoneyManager(note, value, date, type);
-                    arrayList.add(money);
-                    adaptor.notifyDataSetChanged();
-                }
-
-                @Override
-                public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-
-                }
-
-                @Override
-                public void onChildRemoved(@NonNull DataSnapshot snapshot) {
-                    String date = String.valueOf(snapshot.child("date").getValue()), note = String.valueOf(snapshot.child("note").getValue()), type = String.valueOf(snapshot.child("type").getValue());
-                    Float value = Float.parseFloat(String.valueOf(snapshot.child("value").getValue()));
-
-                    MoneyManager money = new MoneyManager(note, value, date, type);
-                    arrayList.remove(money);
-                    adaptor.notifyDataSetChanged();
-                }
-
-                @Override
-                public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-
-                }
-
-                @Override
-                public void onCancelled(@NonNull DatabaseError error) {
-
-                }
-            });
-        }
-    }
-
-    private void setTheme() {
-        if (fbAuth.getUid() != null)
-            myRef.child(fbAuth.getUid()).child("ApplicationSettings").addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot snapshot) {
-                    if (snapshot.exists())
-                        if (snapshot.hasChild("darkTheme")) {
-                            boolean darkThemeEnabled = Boolean.parseBoolean(String.valueOf(snapshot.child("darkTheme").getValue()).trim());
-                            int theme, dropDownTheme;
-
-                            if (!darkThemeEnabled) {
-                                theme = R.drawable.ic_white_gradient_tobacco_ad;
-                                dropDownTheme = R.drawable.ic_blue_gradient_unloved_teen;
-                            } else {
-                                theme = R.drawable.ic_black_gradient_night_shift;
-                                dropDownTheme = R.drawable.ic_white_gradient_tobacco_ad;
-                            }
-
-                            getWindow().setBackgroundDrawableResource(theme); // setam culoarea dropdown
-
-                            monthSpinner.getBackground().setColorFilter(Color.WHITE, PorterDuff.Mode.SRC_ATOP); // setam culoarea sagetii
-                            monthSpinner.setPopupBackgroundResource(dropDownTheme); // setam culoarea elementelor
-                            yearSpinner.getBackground().setColorFilter(Color.WHITE, PorterDuff.Mode.SRC_ATOP);
-                            yearSpinner.setPopupBackgroundResource(dropDownTheme);
-                        }
-                }
-
-                @Override
-                public void onCancelled(@NonNull DatabaseError error) {
-
-                }
-            });
+        return gson.fromJson(json, UserDetails.class);
     }
 
     class CustomAdaptor extends BaseAdapter {
@@ -478,86 +822,26 @@ public class ActivityEditTransactions extends AppCompatActivity {
             return 0;
         }
 
+        // cream fiecare element al listei sub forma unui cardview ce are
+        // o imagine, un titlu si o descriere
         @Override
-        public View getView(final int position, View convertView, ViewGroup parent) // cream fiecare element al listei sub forma unui cardview ce are o imagine, un titlu si o descriere
-        {
-            final MoneyManager money = arrayList.get(position);
+        public View getView(final int position, View convertView, ViewGroup parent) {
+            final Transaction transaction = arrayList.get(position);
 
-            @SuppressLint({"ViewHolder", "InflateParams"}) View view = getLayoutInflater().inflate(R.layout.cardview_transaction_layout, null);
-            final TextView transactionType = view.findViewById(R.id.transactionType);
+            @SuppressLint({"ViewHolder", "InflateParams"}) View view = getLayoutInflater()
+                    .inflate(R.layout.cardview_transaction_layout, null);
+            final TextView transactionCategory = view.findViewById(R.id.transactionCategory);
             final TextView transactionPrice = view.findViewById(R.id.transactionPrice);
             final TextView transactionNote = view.findViewById(R.id.transactionNote);
             ImageView transactionDelete = view.findViewById(R.id.transactionDelete);
             ImageView transactionEdit = view.findViewById(R.id.transactionEdit);
-            String translatedType = Types.getTranslatedType(ActivityEditTransactions.this, money.getType());
+            String translatedCategory = Types.getTranslatedType(ActivityEditTransactions.this,
+                    Transaction.getTypeFromIndexInEnglish(transaction.getType()));
             final ConstraintLayout mainLayout = view.findViewById(R.id.transactionLayout);
             ConstraintSet set = new ConstraintSet();
             set.clone(mainLayout);
 
-//            switch(money.getType())
-//            {
-//                case "Deposits":
-//                    translatedType=getResources().getString(R.string.add_money_deposits).trim();
-//                    break;
-//                case "IndependentSources":
-//                    translatedType=getResources().getString(R.string.add_money_independent_sources).trim();
-//                    break;
-//                case "Salary":
-//                    translatedType=getResources().getString(R.string.salary).trim();
-//                    break;
-//                case "Saving":
-//                    translatedType=getResources().getString(R.string.saving).trim();
-//                    break;
-//                case "Bills":
-//                    translatedType=getResources().getString(R.string.subtract_money_bills).trim();
-//                    break;
-//                case "Car":
-//                    translatedType=getResources().getString(R.string.subtract_money_car).trim();
-//                    break;
-//                case "Clothes":
-//                    translatedType=getResources().getString(R.string.subtract_money_clothes).trim();
-//                    break;
-//                case "Communications":
-//                    translatedType=getResources().getString(R.string.subtract_money_communications).trim();
-//                    break;
-//                case "EatingOut":
-//                    translatedType=getResources().getString(R.string.subtract_money_eating_out).trim();
-//                    break;
-//                case "Entertainment":
-//                    translatedType=getResources().getString(R.string.subtract_money_entertainment).trim();
-//                    break;
-//                case "Food":
-//                    translatedType=getResources().getString(R.string.subtract_money_food).trim();
-//                    break;
-//                case "Gifts":
-//                    translatedType=getResources().getString(R.string.subtract_money_gifts).trim();
-//                    break;
-//                case "Health":
-//                    translatedType=getResources().getString(R.string.subtract_money_health).trim();
-//                    break;
-//                case "House":
-//                    translatedType=getResources().getString(R.string.subtract_money_house).trim();
-//                    break;
-//                case "Pets":
-//                    translatedType=getResources().getString(R.string.subtract_money_pets).trim();
-//                    break;
-//                case "Sports":
-//                    translatedType=getResources().getString(R.string.subtract_money_sports).trim();
-//                    break;
-//                case "Taxi":
-//                    translatedType=getResources().getString(R.string.subtract_money_taxi).trim();
-//                    break;
-//                case "Toiletry":
-//                    translatedType=getResources().getString(R.string.subtract_money_toiletry).trim();
-//                    break;
-//                default:
-//                    translatedType=getResources().getString(R.string.subtract_money_transport).trim();
-//                    break;
-//            }
-
-            transactionType.setText(translatedType);
-            transactionType.setTextColor(Color.BLACK);
-            transactionType.setTextSize(18);
+            transactionCategory.setText(translatedCategory);
 
             if (fbAuth.getUid() != null)
                 myRef.child(fbAuth.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
@@ -568,17 +852,17 @@ public class ActivityEditTransactions extends AppCompatActivity {
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
                         if (snapshot.exists())
                             if (snapshot.hasChild("ApplicationSettings")) {
-                                currency = String.valueOf(snapshot.child("ApplicationSettings").child("currencySymbol").getValue());
-                                darkThemeEnabled = Boolean.parseBoolean(String.valueOf(snapshot.child("ApplicationSettings").child("darkTheme").getValue()));
-
-                                if (Locale.getDefault().getDisplayLanguage().equals("English"))
-                                    priceText = currency + money.getValue();
-                                else priceText = money.getValue() + " " + currency;
-
-                                if (!darkThemeEnabled)
-                                    mainLayout.setBackgroundResource(R.drawable.ic_yellow_gradient_soda);
-                                else
-                                    mainLayout.setBackgroundResource(R.drawable.ic_white_gradient_tobacco_ad);
+                                currency = String.valueOf(snapshot.child("ApplicationSettings")
+                                        .child("currencySymbol").getValue());
+                                darkThemeEnabled = Boolean.parseBoolean(String.valueOf(snapshot
+                                        .child("ApplicationSettings")
+                                        .child("darkTheme").getValue()));
+                                priceText = Locale.getDefault().getDisplayLanguage().equals("English") ?
+                                        currency + transaction.getValue() :
+                                        transaction.getValue() + " " + currency;
+                                mainLayout.setBackgroundResource(!darkThemeEnabled ?
+                                        R.drawable.ic_yellow_gradient_soda :
+                                        R.drawable.ic_white_gradient_tobacco_ad);
                                 transactionPrice.setText(priceText);
                             }
                     }
@@ -589,71 +873,93 @@ public class ActivityEditTransactions extends AppCompatActivity {
                     }
                 });
 
-            transactionPrice.setTextColor(Color.BLACK);
-            transactionPrice.setTextSize(18);
-            transactionNote.setText(String.valueOf(money.getNote()));
-            transactionNote.setTextColor(15);
+            transactionNote.setText(String.valueOf(transaction.getNote()));
 
             if (String.valueOf(transactionNote.getText()).trim().equals("")) {
                 mainLayout.removeView(transactionNote);
-                set.connect(transactionType.getId(), ConstraintSet.BOTTOM, mainLayout.getId(), ConstraintSet.BOTTOM);
+                set.connect(transactionPrice.getId(), ConstraintSet.BOTTOM, mainLayout.getId(), ConstraintSet.BOTTOM);
                 set.applyTo(mainLayout);
-            } else {
-                transactionNote.setTextColor(Color.BLACK);
-                transactionNote.setTypeface(Typeface.defaultFromStyle(Typeface.ITALIC));
             }
 
-            transactionDelete.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) // totul merge perfect, in afara de faptul ca nu se auto-actualizeaza lista la stergere si trebuie dat click din nou pe submit
-                {
-                    if (fbAuth.getUid() != null) {
-                        final String monthName;
-                        if (Locale.getDefault().getDisplayLanguage().equals("English")) // daca limba dispozitivului este engleza
-                            monthName = String.valueOf(monthSpinner.getSelectedItem());
-                        else
-                            monthName = Months.getMonthInEnglish(ActivityEditTransactions.this, String.valueOf(monthSpinner.getSelectedItem()));
+            // totul merge perfect, in afara de faptul ca nu se auto-actualizeaza lista la stergere si trebuie dat click din nou pe submit
+            transactionDelete.setOnClickListener(v -> {
+                if (fbAuth.getUid() != null) {
+                    // in cazul in care limba dispozitivului este engleza
+                    final String monthName = Locale.getDefault().getDisplayLanguage()
+                            .equals("English") ?
+                            String.valueOf(monthSpinner.getSelectedItem()) :
+                            Months.getMonthInEnglish(ActivityEditTransactions.this,
+                                    String.valueOf(monthSpinner.getSelectedItem()));
 
-                        myRef.child(fbAuth.getUid()).child("PersonalTransactions").child(String.valueOf(yearSpinner.getSelectedItem())).child(monthName).addListenerForSingleValueEvent(new ValueEventListener() {
-                            String incomeOrExpense = null;
+                    myRef.child(fbAuth.getUid())
+                            .child("PersonalTransactions")
+                            .child(String.valueOf(yearSpinner.getSelectedItem()))
+                            .child(monthName)
+                            .addListenerForSingleValueEvent(new ValueEventListener() {
+                                String incomeOrExpense = null;
 
-                            @Override
-                            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                if (money.getType().equals("Salary") || money.getType().equals("Saving") || money.getType().equals("Deposits") || money.getType().equals("IndependentSources"))
-                                    incomeOrExpense = "Incomes";
-                                else incomeOrExpense = "Expenses";
+                                @Override
+                                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                    incomeOrExpense = (transaction.getType() == 0 ||
+                                            transaction.getType() == 1 ||
+                                            transaction.getType() == 2 ||
+                                            transaction.getType() == 3) ?
+                                            "Incomes" : "Expenses";
 
-                                if (snapshot.exists())
-                                    if (snapshot.hasChild(incomeOrExpense)) {
-                                        if (snapshot.child(incomeOrExpense).hasChild("Overall")) {
-                                            float oldOverall = Float.parseFloat(String.valueOf(snapshot.child(incomeOrExpense).child("Overall").getValue()));
-                                            oldOverall -= money.getValue();
-                                            if (oldOverall <= 0f)
-                                                myRef.child(fbAuth.getUid()).child("PersonalTransactions").child(String.valueOf(yearSpinner.getSelectedItem())).child(monthName).child(incomeOrExpense).child("Overall").removeValue();
-                                            else
-                                                myRef.child(fbAuth.getUid()).child("PersonalTransactions").child(String.valueOf(yearSpinner.getSelectedItem())).child(monthName).child(incomeOrExpense).child("Overall").setValue(String.valueOf(oldOverall));
+                                    if (snapshot.exists())
+                                        if (snapshot.hasChild(incomeOrExpense)) {
+                                            if (snapshot.child(incomeOrExpense).hasChild("Overall")) {
+                                                float oldOverall = Float.parseFloat(String
+                                                        .valueOf(snapshot.child(incomeOrExpense)
+                                                                .child("Overall").getValue()));
+                                                oldOverall -= Float.parseFloat(transaction.getValue());
+                                                if (oldOverall <= 0f) {
+                                                    myRef.child(fbAuth.getUid())
+                                                            .child("PersonalTransactions")
+                                                            .child(String
+                                                                    .valueOf(yearSpinner.getSelectedItem()))
+                                                            .child(monthName)
+                                                            .child(incomeOrExpense)
+                                                            .child("Overall").removeValue();
+                                                } else {
+                                                    myRef.child(fbAuth.getUid())
+                                                            .child("PersonalTransactions")
+                                                            .child(String.valueOf(yearSpinner
+                                                                    .getSelectedItem()))
+                                                            .child(monthName)
+                                                            .child(incomeOrExpense)
+                                                            .child("Overall")
+                                                            .setValue(String.valueOf(oldOverall));
+                                                }
+                                            }
+//                                            myRef.child(fbAuth.getUid())
+//                                                    .child("PersonalTransactions")
+//                                                    .child(String.valueOf(yearSpinner.getSelectedItem()))
+//                                                    .child(monthName)
+//                                                    .child(incomeOrExpense)
+//                                                    .child(money.getType())
+//                                                    .child(money.getDate())
+//                                                    .removeValue();
                                         }
-                                        myRef.child(fbAuth.getUid()).child("PersonalTransactions").child(String.valueOf(yearSpinner.getSelectedItem())).child(monthName).child(incomeOrExpense).child(money.getType()).child(money.getDate()).removeValue();
-                                    }
-                            }
+                                }
 
-                            @Override
-                            public void onCancelled(@NonNull DatabaseError error) {
+                                @Override
+                                public void onCancelled(@NonNull DatabaseError error) {
 
-                            }
-                        });
-                    }
+                                }
+                            });
                 }
             });
 
-            transactionEdit.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent intent = new Intent(ActivityEditTransactions.this, ActivityEditSpecificTransaction.class);
-                    intent.putExtra("note", money.getNote()).putExtra("value", String.valueOf(money.getValue())).putExtra("date", money.getDate()).putExtra("type", money.getType());
-                    startActivity(intent);
-                    overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
-                }
+            transactionEdit.setOnClickListener(v -> {
+//                Intent intent = new Intent(ActivityEditTransactions.this,
+//                        ActivityEditSpecificTransaction.class);
+//                intent.putExtra("note", money.getNote())
+//                        .putExtra("value", String.valueOf(money.getValue()))
+//                        .putExtra("date", money.getDate())
+//                        .putExtra("type", money.getType());
+//                startActivity(intent);
+//                overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
             });
 
             return view;

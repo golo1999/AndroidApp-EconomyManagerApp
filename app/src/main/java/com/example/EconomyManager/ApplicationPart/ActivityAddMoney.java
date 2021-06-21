@@ -108,61 +108,6 @@ public class ActivityAddMoney extends AppCompatActivity {
             // daca a fost selectat vreun buton radio
             if (selectedID != -1 && fbAuth.getUid() != null) {
                 if (!String.valueOf(value.getText()).trim().equals("")) {
-//                    Calendar addTime = Calendar.getInstance();
-//                    SimpleDateFormat currentMonth = new SimpleDateFormat("LLLL", Locale.ENGLISH);
-//                    String addYear = String.valueOf(addTime.get(Calendar.YEAR)), addMonth = currentMonth.format(addTime.getTime()), addDay = String.valueOf(addTime.get(Calendar.DAY_OF_MONTH)), addHour = String.valueOf(addTime.get(Calendar.HOUR_OF_DAY)), addMinute = String.valueOf(addTime.get(Calendar.MINUTE)), addSecond = String.valueOf(addTime.get(Calendar.SECOND));
-//                    if (Integer.parseInt(addDay) < 10)
-//                        addDay = "0" + addDay;
-//                    if (Integer.parseInt(addHour) < 10)
-//                        addHour = "0" + addHour;
-//                    if (Integer.parseInt(addMinute) < 10)
-//                        addMinute = "0" + addMinute;
-//                    if (Integer.parseInt(addSecond) < 10)
-//                        addSecond = "0" + addSecond;
-//                    String addDate = addMonth + " " + addDay + ", " + addYear + " " + addHour + ":" + addMinute + ":" + addSecond;
-//                    radioButton = findViewById(selectedID);
-//
-//                    String textOfCheckedRadioButton = String.valueOf(radioButton.getText()), expenseToBeAddedToTheDatabase;
-//                    if (textOfCheckedRadioButton.equals(getResources().getString(R.string.add_money_deposits).trim()))
-//                        expenseToBeAddedToTheDatabase = "Deposits";
-//                    else if (textOfCheckedRadioButton.equals(getResources().getString(R.string.add_money_independent_sources).trim()))
-//                        expenseToBeAddedToTheDatabase = "IndependentSources";
-//                    else if (textOfCheckedRadioButton.equals(getResources().getString(R.string.salary).trim()))
-//                        expenseToBeAddedToTheDatabase = "Salary";
-//                    else expenseToBeAddedToTheDatabase = "Saving";
-//
-//                    final MoneyManager addMoney = new MoneyManager(String.valueOf(note.getText()), Float.valueOf(String.valueOf(value.getText())), addDate, expenseToBeAddedToTheDatabase);
-//
-//                    myRef.child(fbAuth.getUid()).child("PersonalTransactions").child(addYear).child(addMonth).child("Incomes").child(expenseToBeAddedToTheDatabase).child(addMoney.getDate()).setValue(addMoney);
-//                    myRef.child(fbAuth.getUid()).child("PersonalTransactions").child(addYear).child(addMonth).child("Incomes").addListenerForSingleValueEvent(new ValueEventListener() {
-//                        @Override
-//                        public void onDataChange(@NonNull DataSnapshot snapshot) {
-//
-//                            Calendar addTime1 = Calendar.getInstance();
-//                            SimpleDateFormat currentMonth1 = new SimpleDateFormat("LLLL", Locale.ENGLISH);
-//
-//                            if (snapshot.hasChild("Overall")) // daca exista un nod cu numele Overall
-//                            {
-//                                String oldOverall;
-//                                if (!String.valueOf(snapshot.child("Overall").getValue()).trim().equals("")) // daca acest nod are o valoare
-//                                {
-//                                    oldOverall = String.valueOf(snapshot.child("Overall").getValue());
-//                                    oldOverall = String.valueOf(Float.parseFloat(oldOverall) + addMoney.getValue());
-//                                    myRef.child(fbAuth.getUid()).child("PersonalTransactions").child(String.valueOf(addTime1.get(Calendar.YEAR))).child(currentMonth1.format(addTime1.getTime())).child("Incomes").child("Overall").setValue(oldOverall);
-//                                }
-//                            } else
-//                                myRef.child(fbAuth.getUid()).child("PersonalTransactions").child(String.valueOf(addTime1.get(Calendar.YEAR))).child(currentMonth1.format(addTime1.getTime())).child("Incomes").child("Overall").setValue(String.valueOf(addMoney.getValue()));
-//                        }
-//
-//                        @Override
-//                        public void onCancelled(@NonNull DatabaseError error) {
-//
-//                        }
-//                    });
-//                    Toast.makeText(ActivityAddMoney.this, getResources().getString(R.string.income) + " " + getResources().getString(R.string.add_money_added_successfully), Toast.LENGTH_SHORT).show();
-//                    finish();
-//                    overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
-
                     if (fbAuth.getUid() != null) {
                         radioButton = findViewById(selectedID);
 

@@ -130,154 +130,69 @@ public class ActivitySubtractMoney extends AppCompatActivity {
     }
 
     private void setOnClickListeners() {
-        saveChanges.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                int selectedID = radioGroup.getCheckedRadioButtonId();
+        saveChanges.setOnClickListener(v -> {
+            int selectedID = radioGroup.getCheckedRadioButtonId();
 
-                closeTheKeyboard();
-                if (selectedID != -1 && fbAuth.getUid() != null) // daca a fost selectat vreun buton radio
-                {
-                    if (!String.valueOf(value.getText()).trim().equals("")) {
-//                        Calendar addTime=Calendar.getInstance();
-//                        SimpleDateFormat currentMonth=new SimpleDateFormat("LLLL", Locale.ENGLISH);
-//                        String addYear=String.valueOf(addTime.get(Calendar.YEAR)), addMonth=currentMonth.format(addTime.getTime()), addDay=String.valueOf(addTime.get(Calendar.DAY_OF_MONTH)), addHour=String.valueOf(addTime.get(Calendar.HOUR_OF_DAY)), addMinute=String.valueOf(addTime.get(Calendar.MINUTE)), addSecond=String.valueOf(addTime.get(Calendar.SECOND));
-//                        if(Integer.parseInt(addDay)<10)
-//                            addDay="0"+addDay;
-//                        if(Integer.parseInt(addHour)<10)
-//                            addHour="0"+addHour;
-//                        if(Integer.parseInt(addMinute)<10)
-//                            addMinute="0"+addMinute;
-//                        if(Integer.parseInt(addSecond)<10)
-//                            addSecond="0"+addSecond;
-//                        String addDate=addMonth+" "+addDay+", "+addYear+" "+addHour+":"+addMinute+":"+addSecond;
-//                        radioButton=findViewById(selectedID);
-//
-//                        String textOfCheckedRadioButton=String.valueOf(radioButton.getText()), expenseToBeAddedToTheDatabase;
-//                        if(textOfCheckedRadioButton.equals(getResources().getString(R.string.subtract_money_bills).trim()))
-//                            expenseToBeAddedToTheDatabase="Bills";
-//                        else if(textOfCheckedRadioButton.equals(getResources().getString(R.string.subtract_money_car).trim()))
-//                            expenseToBeAddedToTheDatabase="Car";
-//                        else if(textOfCheckedRadioButton.equals(getResources().getString(R.string.subtract_money_clothes).trim()))
-//                            expenseToBeAddedToTheDatabase="Clothes";
-//                        else if(textOfCheckedRadioButton.equals(getResources().getString(R.string.subtract_money_communications).trim()))
-//                            expenseToBeAddedToTheDatabase="Communications";
-//                        else if(textOfCheckedRadioButton.equals(getResources().getString(R.string.subtract_money_eating_out).trim()))
-//                            expenseToBeAddedToTheDatabase="EatingOut";
-//                        else if(textOfCheckedRadioButton.equals(getResources().getString(R.string.subtract_money_entertainment).trim()))
-//                            expenseToBeAddedToTheDatabase="Entertainment";
-//                        else if(textOfCheckedRadioButton.equals(getResources().getString(R.string.subtract_money_food).trim()))
-//                            expenseToBeAddedToTheDatabase="Food";
-//                        else if(textOfCheckedRadioButton.equals(getResources().getString(R.string.subtract_money_gifts).trim()))
-//                            expenseToBeAddedToTheDatabase="Gifts";
-//                        else if(textOfCheckedRadioButton.equals(getResources().getString(R.string.subtract_money_health).trim()))
-//                            expenseToBeAddedToTheDatabase="Health";
-//                        else if(textOfCheckedRadioButton.equals(getResources().getString(R.string.subtract_money_house).trim()))
-//                            expenseToBeAddedToTheDatabase="House";
-//                        else if(textOfCheckedRadioButton.equals(getResources().getString(R.string.subtract_money_pets).trim()))
-//                            expenseToBeAddedToTheDatabase="Pets";
-//                        else if(textOfCheckedRadioButton.equals(getResources().getString(R.string.subtract_money_sports).trim()))
-//                            expenseToBeAddedToTheDatabase="Sports";
-//                        else if(textOfCheckedRadioButton.equals(getResources().getString(R.string.subtract_money_taxi).trim()))
-//                            expenseToBeAddedToTheDatabase="Taxi";
-//                        else if(textOfCheckedRadioButton.equals(getResources().getString(R.string.subtract_money_toiletry).trim()))
-//                            expenseToBeAddedToTheDatabase="Toiletry";
-//                        else expenseToBeAddedToTheDatabase="Transport";
-//                        final MoneyManager addMoney=new MoneyManager(String.valueOf(note.getText()), Float.valueOf(String.valueOf(value.getText())), addDate, expenseToBeAddedToTheDatabase);
-//
-//                        myRef.child(fbAuth.getUid()).child("PersonalTransactions").child(addYear).child(addMonth).child("Expenses").child(expenseToBeAddedToTheDatabase).child(addMoney.getDate()).setValue(addMoney);
-//                        myRef.child(fbAuth.getUid()).child("PersonalTransactions").child(addYear).child(addMonth).child("Expenses").addListenerForSingleValueEvent(new ValueEventListener()
-//                        {
-//                            @Override
-//                            public void onDataChange(@NonNull DataSnapshot snapshot)
-//                            {
-//
-//                                Calendar addTime1=Calendar.getInstance();
-//                                SimpleDateFormat currentMonth1=new SimpleDateFormat("LLLL", Locale.ENGLISH);
-//
-//                                if(snapshot.hasChild("Overall")) // daca exista un nod cu numele Overall
-//                                {
-//                                    String oldOverall;
-//                                    if(!String.valueOf(snapshot.child("Overall").getValue()).trim().equals("")) // daca acest nod are o valoare
-//                                    {
-//                                        oldOverall=String.valueOf(snapshot.child("Overall").getValue());
-//                                        oldOverall=String.valueOf(Float.parseFloat(oldOverall)+addMoney.getValue());
-//                                        myRef.child(fbAuth.getUid()).child("PersonalTransactions").child(String.valueOf(addTime1.get(Calendar.YEAR))).child(currentMonth1.format(addTime1.getTime())).child("Expenses").child("Overall").setValue(oldOverall);
-//                                    }
-//                                }
-//                                else myRef.child(fbAuth.getUid()).child("PersonalTransactions").child(String.valueOf(addTime1.get(Calendar.YEAR))).child(currentMonth1.format(addTime1.getTime())).child("Expenses").child("Overall").setValue(String.valueOf(addMoney.getValue()));
-//                            }
-//
-//                            @Override
-//                            public void onCancelled(@NonNull DatabaseError error)
-//                            {
-//
-//                            }
-//                        });
-//                        Toast.makeText(ActivitySubtractMoney.this, getResources().getString(R.string.expense)+" "+getResources().getString(R.string.add_money_added_successfully), Toast.LENGTH_SHORT).show();
-//                        finish();
-//                        overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
+            closeTheKeyboard();
 
-                        if (fbAuth.getUid() != null) {
-                            radioButton = findViewById(selectedID);
+            // daca a fost selectat vreun buton radio
+            if (selectedID != -1 && fbAuth.getUid() != null) {
+                if (!String.valueOf(value.getText()).trim().equals("")) {
+                    if (fbAuth.getUid() != null) {
+                        radioButton = findViewById(selectedID);
 
-                            Transaction newTransaction;
-                            int transactionCategoryIndex = Transaction.getIndexFromCategory(Types.
-                                    getTypeInEnglish(ActivitySubtractMoney.this,
-                                            String.valueOf(radioButton.getText()).trim()));
+                        Transaction newTransaction;
+                        int transactionCategoryIndex = Transaction.getIndexFromCategory(Types.
+                                getTypeInEnglish(ActivitySubtractMoney.this,
+                                        String.valueOf(radioButton.getText()).trim()));
 
-                            if (!String.valueOf(note.getText()).trim().equals("")) {
-                                newTransaction = new Transaction(transactionCategoryIndex,
-                                        0,
-                                        String.valueOf(note.getText()).trim(),
-                                        String.valueOf(value.getText()).trim());
-                            } else {
-                                newTransaction = new Transaction(transactionCategoryIndex,
-                                        0,
-                                        String.valueOf(value.getText()).trim());
-                            }
-
-                            myRef.child(fbAuth.getUid())
-                                    .child("PersonalTransactions")
-                                    .child(newTransaction.getId())
-                                    .setValue(newTransaction)
-                                    .addOnSuccessListener(aVoid -> {
-                                        Toast.makeText(ActivitySubtractMoney.this,
-                                                getResources().getString(R.string.expense) + " " +
-                                                        getResources().getString(R.
-                                                                string.add_money_added_successfully),
-                                                Toast.LENGTH_SHORT).show();
-                                        finish();
-                                        overridePendingTransition(R.anim.slide_in_left,
-                                                R.anim.slide_out_right);
-                                    })
-                                    .addOnFailureListener(e -> {
-                                        myRef.child(fbAuth.getUid())
-                                                .child("PersonalTransactions")
-                                                .child(newTransaction.getId())
-                                                .removeValue();
-                                        Toast.makeText(ActivitySubtractMoney.this,
-                                                "Try again",
-                                                Toast.LENGTH_SHORT).show();
-                                    });
+                        if (!String.valueOf(note.getText()).trim().equals("")) {
+                            newTransaction = new Transaction(transactionCategoryIndex,
+                                    0,
+                                    String.valueOf(note.getText()).trim(),
+                                    String.valueOf(value.getText()).trim());
+                        } else {
+                            newTransaction = new Transaction(transactionCategoryIndex,
+                                    0,
+                                    String.valueOf(value.getText()).trim());
                         }
-                    } else error.setText(R.string.money_error4);
-                } else error.setText(R.string.money_error1);
-            }
+
+                        myRef.child(fbAuth.getUid())
+                                .child("PersonalTransactions")
+                                .child(newTransaction.getId())
+                                .setValue(newTransaction)
+                                .addOnSuccessListener(aVoid -> {
+                                    Toast.makeText(ActivitySubtractMoney.this,
+                                            getResources().getString(R.string.expense) + " " +
+                                                    getResources().getString(R.
+                                                            string.add_money_added_successfully),
+                                            Toast.LENGTH_SHORT).show();
+                                    finish();
+                                    overridePendingTransition(R.anim.slide_in_left,
+                                            R.anim.slide_out_right);
+                                })
+                                .addOnFailureListener(e -> {
+                                    myRef.child(fbAuth.getUid())
+                                            .child("PersonalTransactions")
+                                            .child(newTransaction.getId())
+                                            .removeValue();
+                                    Toast.makeText(ActivitySubtractMoney.this,
+                                            "Try again",
+                                            Toast.LENGTH_SHORT).show();
+                                });
+                    }
+                } else error.setText(R.string.money_error4);
+            } else error.setText(R.string.money_error1);
         });
 
-        cancel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onBackPressed();
-            }
-        });
+        cancel.setOnClickListener(v -> onBackPressed());
     }
 
     private void closeTheKeyboard() {
         View v = this.getCurrentFocus();
         if (v != null) {
-            InputMethodManager manager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+            InputMethodManager manager =
+                    (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
             manager.hideSoftInputFromWindow(v.getWindowToken(), 0);
         }
     }
@@ -293,18 +208,29 @@ public class ActivitySubtractMoney extends AppCompatActivity {
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 int positionOfComma, textLength = String.valueOf(s).length();
                 if (String.valueOf(s).contains(".")) {
-                    positionOfComma = String.valueOf(s).indexOf("."); // salvam pozitia punctului ce desparte partea intreaga a numarului de partea zecimala a sa
+                    // salvam pozitia punctului ce desparte partea intreaga a numarului
+                    // de partea zecimala a sa
+                    positionOfComma = String.valueOf(s).indexOf(".");
 
-                    if (positionOfComma == 0 && textLength == 1) // daca adaugam prima data punctul (ex: .5)
-                    {
+                    // daca adaugam prima data punctul (ex: .5)
+                    if (positionOfComma == 0 && textLength == 1) {
                         String text = "0" + value.getText();
-                        value.setText(text); // adaugam un 0 in fata numarului
-                        value.setSelection(String.valueOf(value.getText()).length()); // punem cursorul pe ultima pozitie (cursorul sare pe prima pozitie dupa instructiunea de mai sus)
+                        // adaugam un 0 in fata numarului
+                        value.setText(text);
+                        // punem cursorul pe ultima pozitie
+                        // (cursorul sare pe prima pozitie dupa instructiunea de mai sus)
+                        value.setSelection(String.valueOf(value.getText()).length());
                     }
-                    if (textLength - 1 - positionOfComma > 2) // daca adaugam mai mult de 2 zecimale
-                    {
-                        value.setText(String.valueOf(value.getText()).substring(0, positionOfComma + 3)); // punem doar primele 2 zecimale (ca si cum nu ne mai lasa sa adaugam caractere dupa ce am depasit cele 2 zecimale)
-                        value.setSelection(String.valueOf(value.getText()).length()); // punem cursorul pe ultima pozitie (cursorul sare pe prima pozitie dupa instructiunea de mai sus)
+
+                    // daca adaugam mai mult de 2 zecimale
+                    if (textLength - 1 - positionOfComma > 2) {
+                        // punem doar primele 2 zecimale (ca si cum nu ne mai lasa sa adaugam
+                        // caractere dupa ce am depasit cele 2 zecimale)
+                        value.setText(String.valueOf(value.getText())
+                                .substring(0, positionOfComma + 3));
+                        // punem cursorul pe ultima pozitie
+                        // (cursorul sare pe prima pozitie dupa instructiunea de mai sus)
+                        value.setSelection(String.valueOf(value.getText()).length());
                     }
                 }
             }
