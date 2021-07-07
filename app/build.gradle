@@ -6,7 +6,7 @@ android {
     buildToolsVersion "30.0.3"
 
     defaultConfig {
-        applicationId "com.example.EconomyManager"
+        applicationId "com.example.economy_manager"
         minSdkVersion 26
         targetSdkVersion 30
         versionCode 1

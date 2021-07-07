@@ -6,7 +6,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".LoginPart.LogIn"
+    tools:context=".login_part.LogIn"
     android:background="@drawable/ic_blue_gradient_jack_dorseys_stock">
 
     <TextView

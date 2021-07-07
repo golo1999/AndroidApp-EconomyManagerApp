@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".ApplicationPart.FragmentBudgetReview"
+    tools:context=".application_part.FragmentBudgetReview"
     app:cardCornerRadius="20dp"
     app:cardElevation="0dp">
 

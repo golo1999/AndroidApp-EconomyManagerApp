@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".ApplicationPart.ActivityAddMoney"
+    tools:context=".application_part.ActivityAddMoney"
     android:background="@drawable/ic_red_gradient_slow_internet">
 
     <androidx.constraintlayout.widget.ConstraintLayout

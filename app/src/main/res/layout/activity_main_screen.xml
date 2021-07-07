@@ -7,7 +7,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    tools:context=".ApplicationPart.ActivityMainScreen"
+    tools:context=".application_part.ActivityMainScreen"
     android:orientation="vertical">
 
     <androidx.constraintlayout.widget.ConstraintLayout

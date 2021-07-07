@@ -10,7 +10,7 @@
       "client_info": {
         "mobilesdk_app_id": "1:236665611938:android:9e858d94f212959b8a99fb",
         "android_client_info": {
-          "package_name": "com.example.EconomyManager"
+          "package_name": "com.example.economy_manager"
         }
       },
       "oauth_client": [
