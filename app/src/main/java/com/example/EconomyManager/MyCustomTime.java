@@ -3,8 +3,9 @@ package com.example.EconomyManager;
 import androidx.annotation.NonNull;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 
-public class MyCustomTime implements Serializable {
+public class MyCustomTime implements Serializable, Comparable<MyCustomTime> {
     private int year;
     private int month;
     private String monthName;
@@ -107,5 +108,18 @@ public class MyCustomTime implements Serializable {
                 ", minute=" + minute +
                 ", second=" + second +
                 '}';
+    }
+
+    @Override
+    public int compareTo(MyCustomTime myCustomTime) {
+        final LocalDateTime localDateTime1 =
+                LocalDateTime.of(getYear(), getMonth(), getDay(), getHour(), getMinute(), getSecond());
+        final LocalDateTime localDateTime2 =
+                LocalDateTime.of(myCustomTime.getYear(), myCustomTime.getMonth(), myCustomTime.getDay(),
+                        myCustomTime.getHour(), myCustomTime.getMinute(), myCustomTime.getSecond());
+
+        return localDateTime1.isBefore(localDateTime2) ?
+                -1 : localDateTime1.isEqual(localDateTime2) ?
+                0 : 1;
     }
 }

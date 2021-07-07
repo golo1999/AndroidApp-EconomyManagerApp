@@ -22,15 +22,15 @@ import java.util.Locale;
 public class ActivityEditTransactionsRecyclerViewAdapter extends RecyclerView
         .Adapter<ActivityEditTransactionsRecyclerViewAdapter
         .ActivityEditTransactionsRecyclerViewAdapterViewHolder> {
-    private EditTransactionsViewModel viewModel;
-    private ArrayList<Transaction> transactionsList;
-    private Context context;
+    private final EditTransactionsViewModel viewModel;
+    private final ArrayList<Transaction> transactionsList;
+    private final Context context;
     private Transaction transaction;
-    private UserDetails userDetails;
+    private final UserDetails userDetails;
 
-    public ActivityEditTransactionsRecyclerViewAdapter(EditTransactionsViewModel viewModel,
-                                                       ArrayList<Transaction> transactionsList,
-                                                       Context context, UserDetails userDetails/*, Transaction transaction */) {
+    public ActivityEditTransactionsRecyclerViewAdapter(final EditTransactionsViewModel viewModel,
+                                                       final ArrayList<Transaction> transactionsList,
+                                                       final Context context, final UserDetails userDetails/*, Transaction transaction */) {
         this.viewModel = viewModel;
         this.transactionsList = transactionsList;
         this.context = context;
@@ -40,9 +40,9 @@ public class ActivityEditTransactionsRecyclerViewAdapter extends RecyclerView
 
     @NonNull
     @Override
-    public ActivityEditTransactionsRecyclerViewAdapterViewHolder onCreateViewHolder(@NonNull ViewGroup parent,
-                                                                                    int viewType) {
-        View view = LayoutInflater.from(context)
+    public ActivityEditTransactionsRecyclerViewAdapterViewHolder onCreateViewHolder(final @NonNull ViewGroup parent,
+                                                                                    final int viewType) {
+        final View view = LayoutInflater.from(context)
                 .inflate(R.layout.cardview_transaction_layout, parent, false);
 
         return new ActivityEditTransactionsRecyclerViewAdapterViewHolder(view, viewModel, context,
@@ -50,19 +50,16 @@ public class ActivityEditTransactionsRecyclerViewAdapter extends RecyclerView
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ActivityEditTransactionsRecyclerViewAdapterViewHolder holder,
-                                 int position) {
+    public void onBindViewHolder(final @NonNull ActivityEditTransactionsRecyclerViewAdapterViewHolder holder,
+                                 final int position) {
         transaction = transactionsList.get(position);
-        String translatedCategory = Types.getTranslatedType(context,
+        final String translatedCategory = Types.getTranslatedType(context,
                 String.valueOf(Transaction.getTypeFromIndexInEnglish(transaction.getCategory())));
-        String currencySymbol;
-        boolean darkThemeEnabled;
-        String transactionPriceText;
 
         if (userDetails != null) {
-            currencySymbol = userDetails.getApplicationSettings().getCurrencySymbol();
-            darkThemeEnabled = userDetails.getApplicationSettings().getDarkTheme();
-            transactionPriceText = Locale.getDefault().getDisplayLanguage().equals("English") ?
+            final String currencySymbol = userDetails.getApplicationSettings().getCurrencySymbol();
+            final boolean darkThemeEnabled = userDetails.getApplicationSettings().getDarkTheme();
+            final String transactionPriceText = Locale.getDefault().getDisplayLanguage().equals("English") ?
                     currencySymbol + transaction.getValue() :
                     transaction.getValue() + " " + currencySymbol;
 
@@ -86,8 +83,7 @@ public class ActivityEditTransactionsRecyclerViewAdapter extends RecyclerView
         return transactionsList.size();
     }
 
-    public static class ActivityEditTransactionsRecyclerViewAdapterViewHolder
-            extends RecyclerView.ViewHolder {
+    public static class ActivityEditTransactionsRecyclerViewAdapterViewHolder extends RecyclerView.ViewHolder {
         private TextView transactionCategory;
         private TextView transactionPrice;
         private TextView transactionNote;
@@ -99,10 +95,10 @@ public class ActivityEditTransactionsRecyclerViewAdapter extends RecyclerView
         private ArrayList<Transaction> transactionsList;
         private ConstraintLayout mainLayout;
 
-        public ActivityEditTransactionsRecyclerViewAdapterViewHolder(@NonNull View itemView,
-                                                                     EditTransactionsViewModel viewModel,
-                                                                     Context context,
-                                                                     ArrayList<Transaction> transactionsList) {
+        public ActivityEditTransactionsRecyclerViewAdapterViewHolder(final @NonNull View itemView,
+                                                                     final EditTransactionsViewModel viewModel,
+                                                                     final Context context,
+                                                                     final ArrayList<Transaction> transactionsList) {
             super(itemView);
 
             this.viewModel = viewModel;
@@ -113,7 +109,7 @@ public class ActivityEditTransactionsRecyclerViewAdapter extends RecyclerView
             setOnClickListeners();
         }
 
-        private void setVariables(View v) {
+        private void setVariables(final View v) {
             transactionCategory = v.findViewById(R.id.transactionCategory);
             transactionPrice = v.findViewById(R.id.transactionPrice);
             transactionNote = v.findViewById(R.id.transactionNote);

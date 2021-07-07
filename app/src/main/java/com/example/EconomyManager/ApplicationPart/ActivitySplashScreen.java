@@ -1,47 +1,45 @@
 package com.example.EconomyManager.ApplicationPart;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.EconomyManager.ApplicationSettings;
 import com.example.EconomyManager.LoginPart.LogIn;
+import com.example.EconomyManager.MyCustomVariables;
 import com.example.EconomyManager.PersonalInformation;
 import com.example.EconomyManager.R;
 import com.example.EconomyManager.UserDetails;
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.gson.Gson;
 
 public class ActivitySplashScreen extends AppCompatActivity {
+    private final LogoLauncher launcher = new LogoLauncher();
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash_screen);
-        LogoLauncher launcher = new LogoLauncher();
+        startSplashScreen();
+    }
+
+    private void startSplashScreen() {
         launcher.start();
     }
 
     public class LogoLauncher extends Thread {
-        private SharedPreferences preferences =
-                getSharedPreferences("ECONOMY_MANAGER_USER_DATA", MODE_PRIVATE);
+        private SharedPreferences preferences;
 
         public void run() {
-            DatabaseReference myRef = FirebaseDatabase.getInstance().getReference();
-            FirebaseAuth fbAuth = FirebaseAuth.getInstance();
-            Intent intent = fbAuth.getCurrentUser() != null ?
-                    new Intent(ActivitySplashScreen.this,
-                            ActivityMainScreen.class) :
-                    new Intent(ActivitySplashScreen.this, LogIn.class);
+            preferences = getSharedPreferences(MyCustomVariables.getSharedPreferencesFileName(), MODE_PRIVATE);
+            final Intent intent = new Intent(ActivitySplashScreen.this,
+                    MyCustomVariables.getFirebaseAuth().getCurrentUser() != null ?
+                            ActivityMainScreen.class : LogIn.class);
 
             try {
                 sleep(2000);
@@ -49,24 +47,25 @@ public class ActivitySplashScreen extends AppCompatActivity {
                 e.printStackTrace();
             }
 
-            if (fbAuth.getCurrentUser() != null && fbAuth.getUid() != null) {
-                myRef.child(fbAuth.getUid())
+            if (MyCustomVariables.getFirebaseAuth().getCurrentUser() != null &&
+                    MyCustomVariables.getFirebaseAuth().getUid() != null) {
+                MyCustomVariables.getDatabaseReference().child(MyCustomVariables.getFirebaseAuth().getUid())
                         .addListenerForSingleValueEvent(new ValueEventListener() {
                             @Override
-                            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            public void onDataChange(final @NonNull DataSnapshot snapshot) {
                                 if (snapshot.exists() &&
                                         snapshot.hasChild("ApplicationSettings") &&
                                         snapshot.hasChild("PersonalInformation")) {
-                                    ApplicationSettings applicationSettings = snapshot
+                                    final ApplicationSettings applicationSettings = snapshot
                                             .child("ApplicationSettings")
                                             .getValue(ApplicationSettings.class);
-                                    PersonalInformation personalInformation = snapshot
+                                    final PersonalInformation personalInformation = snapshot
                                             .child("PersonalInformation")
                                             .getValue(PersonalInformation.class);
 
                                     if (applicationSettings != null &&
                                             personalInformation != null) {
-                                        UserDetails details = new UserDetails(applicationSettings,
+                                        final UserDetails details = new UserDetails(applicationSettings,
                                                 personalInformation);
 
                                         if (!checkIfUserDetailsAlreadyExistInSharedPreferences(details)) {
@@ -77,7 +76,7 @@ public class ActivitySplashScreen extends AppCompatActivity {
                             }
 
                             @Override
-                            public void onCancelled(@NonNull DatabaseError error) {
+                            public void onCancelled(final @NonNull DatabaseError error) {
 
                             }
                         });
@@ -87,7 +86,7 @@ public class ActivitySplashScreen extends AppCompatActivity {
             finish();
         }
 
-        private void saveUserDetailsToSharedPreferences(UserDetails details) {
+        private void saveUserDetailsToSharedPreferences(final UserDetails details) {
             SharedPreferences.Editor editor = preferences.edit();
             Gson gson = new Gson();
             String json = gson.toJson(details);
@@ -98,14 +97,14 @@ public class ActivitySplashScreen extends AppCompatActivity {
 
         private UserDetails retrieveUserDetailsFromSharedPreferences() {
             SharedPreferences preferences =
-                    getSharedPreferences("ECONOMY_MANAGER_USER_DATA", MODE_PRIVATE);
+                    getSharedPreferences(MyCustomVariables.getSharedPreferencesFileName(), MODE_PRIVATE);
             Gson gson = new Gson();
             String json = preferences.getString("currentUserDetails", "");
 
             return gson.fromJson(json, UserDetails.class);
         }
 
-        private boolean checkIfUserDetailsAlreadyExistInSharedPreferences(UserDetails details) {
+        private boolean checkIfUserDetailsAlreadyExistInSharedPreferences(final UserDetails details) {
             UserDetails userDetailsFromSharedPreferences = retrieveUserDetailsFromSharedPreferences();
 
 //            Log.d("userDetailsAreEqual", String.valueOf(details.equals(userDetailsFromSharedPreferences)));

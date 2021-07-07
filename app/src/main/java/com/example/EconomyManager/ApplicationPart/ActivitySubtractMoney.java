@@ -1,16 +1,11 @@
 package com.example.EconomyManager.ApplicationPart;
 
-import androidx.appcompat.app.AppCompatActivity;
-
-import android.content.Context;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.view.View;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioButton;
@@ -18,29 +13,28 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatActivity;
+
+import com.example.EconomyManager.MyCustomMethods;
+import com.example.EconomyManager.MyCustomVariables;
 import com.example.EconomyManager.R;
 import com.example.EconomyManager.Transaction;
 import com.example.EconomyManager.Types;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
 import java.util.Collections;
 
 public class ActivitySubtractMoney extends AppCompatActivity {
-
-    private Button saveChanges, cancel;
-    private FirebaseAuth fbAuth;
-    private DatabaseReference myRef;
+    private Button saveChanges;
+    private Button cancel;
     private RadioGroup radioGroup;
-    private EditText note, value;
-    private RadioButton radioButton;
+    private EditText note;
+    private EditText value;
     private TextView error;
-    private RadioButton[] radioButton1;
+    private final RadioButton[] radioButton1 = new RadioButton[15];
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_subtract_money);
         setVariables();
@@ -58,19 +52,16 @@ public class ActivitySubtractMoney extends AppCompatActivity {
 
     private void setVariables() {
         saveChanges = findViewById(R.id.subtractMoneySaveButton);
-        fbAuth = FirebaseAuth.getInstance();
-        myRef = FirebaseDatabase.getInstance().getReference();
         radioGroup = findViewById(R.id.subtractMoneyRadioGroup);
         note = findViewById(R.id.subtractMoneyNote);
         value = findViewById(R.id.subtractMoneyValue);
         error = findViewById(R.id.subtractMoneyError);
         cancel = findViewById(R.id.subtractMoneyCancelButton);
-        radioButton1 = new RadioButton[15];
     }
 
     private void createRadioButtons() {
-        ArrayList<String> buttonTextArray = new ArrayList<>();
-        int ID;
+        final ArrayList<String> buttonTextArray = new ArrayList<>();
+
         buttonTextArray.add(getResources().getString(R.string.subtract_money_bills).trim());
         buttonTextArray.add(getResources().getString(R.string.subtract_money_car).trim());
         buttonTextArray.add(getResources().getString(R.string.subtract_money_clothes).trim());
@@ -87,36 +78,37 @@ public class ActivitySubtractMoney extends AppCompatActivity {
         buttonTextArray.add(getResources().getString(R.string.subtract_money_toiletry).trim());
         buttonTextArray.add(getResources().getString(R.string.subtract_money_transport).trim());
         Collections.sort(buttonTextArray);
+
         for (int i = 0; i < buttonTextArray.size(); i++) {
-            if (buttonTextArray.get(i).equals(getResources().getString(R.string.subtract_money_bills).trim()))
-                ID = R.id.subtractMoneyRadioButtonBills;
-            else if (buttonTextArray.get(i).equals(getResources().getString(R.string.subtract_money_car).trim()))
-                ID = R.id.subtractMoneyRadioButtonCar;
-            else if (buttonTextArray.get(i).equals(getResources().getString(R.string.subtract_money_clothes).trim()))
-                ID = R.id.subtractMoneyRadioButtonClothes;
-            else if (buttonTextArray.get(i).equals(getResources().getString(R.string.subtract_money_communications).trim()))
-                ID = R.id.subtractMoneyRadioButtonCommunications;
-            else if (buttonTextArray.get(i).equals(getResources().getString(R.string.subtract_money_eating_out).trim()))
-                ID = R.id.subtractMoneyRadioButtonEatingOut;
-            else if (buttonTextArray.get(i).equals(getResources().getString(R.string.subtract_money_entertainment).trim()))
-                ID = R.id.subtractMoneyRadioButtonEntertainment;
-            else if (buttonTextArray.get(i).equals(getResources().getString(R.string.subtract_money_food).trim()))
-                ID = R.id.subtractMoneyRadioButtonFood;
-            else if (buttonTextArray.get(i).equals(getResources().getString(R.string.subtract_money_gifts).trim()))
-                ID = R.id.subtractMoneyRadioButtonGifts;
-            else if (buttonTextArray.get(i).equals(getResources().getString(R.string.subtract_money_health).trim()))
-                ID = R.id.subtractMoneyRadioButtonHealth;
-            else if (buttonTextArray.get(i).equals(getResources().getString(R.string.subtract_money_house).trim()))
-                ID = R.id.subtractMoneyRadioButtonHouse;
-            else if (buttonTextArray.get(i).equals(getResources().getString(R.string.subtract_money_pets).trim()))
-                ID = R.id.subtractMoneyRadioButtonPets;
-            else if (buttonTextArray.get(i).equals(getResources().getString(R.string.subtract_money_sports).trim()))
-                ID = R.id.subtractMoneyRadioButtonSports;
-            else if (buttonTextArray.get(i).equals(getResources().getString(R.string.subtract_money_taxi).trim()))
-                ID = R.id.subtractMoneyRadioButtonTaxi;
-            else if (buttonTextArray.get(i).equals(getResources().getString(R.string.subtract_money_toiletry).trim()))
-                ID = R.id.subtractMoneyRadioButtonToiletry;
-            else ID = R.id.subtractMoneyRadioButtonTransport;
+            final int ID = buttonTextArray.get(i)
+                    .equals(getResources().getString(R.string.subtract_money_bills).trim()) ?
+                    R.id.subtractMoneyRadioButtonBills : buttonTextArray.get(i)
+                    .equals(getResources().getString(R.string.subtract_money_car).trim()) ?
+                    R.id.subtractMoneyRadioButtonCar : buttonTextArray.get(i)
+                    .equals(getResources().getString(R.string.subtract_money_clothes).trim()) ?
+                    R.id.subtractMoneyRadioButtonClothes : buttonTextArray.get(i)
+                    .equals(getResources().getString(R.string.subtract_money_communications).trim()) ?
+                    R.id.subtractMoneyRadioButtonCommunications : buttonTextArray.get(i)
+                    .equals(getResources().getString(R.string.subtract_money_eating_out).trim()) ?
+                    R.id.subtractMoneyRadioButtonEatingOut : buttonTextArray.get(i)
+                    .equals(getResources().getString(R.string.subtract_money_entertainment).trim()) ?
+                    R.id.subtractMoneyRadioButtonEntertainment : buttonTextArray.get(i)
+                    .equals(getResources().getString(R.string.subtract_money_food).trim()) ?
+                    R.id.subtractMoneyRadioButtonFood : buttonTextArray.get(i)
+                    .equals(getResources().getString(R.string.subtract_money_gifts).trim()) ?
+                    R.id.subtractMoneyRadioButtonGifts : buttonTextArray.get(i)
+                    .equals(getResources().getString(R.string.subtract_money_health).trim()) ?
+                    R.id.subtractMoneyRadioButtonHealth : buttonTextArray.get(i)
+                    .equals(getResources().getString(R.string.subtract_money_house).trim()) ?
+                    R.id.subtractMoneyRadioButtonHouse : buttonTextArray.get(i)
+                    .equals(getResources().getString(R.string.subtract_money_pets).trim()) ?
+                    R.id.subtractMoneyRadioButtonPets : buttonTextArray.get(i)
+                    .equals(getResources().getString(R.string.subtract_money_sports).trim()) ?
+                    R.id.subtractMoneyRadioButtonSports : buttonTextArray.get(i)
+                    .equals(getResources().getString(R.string.subtract_money_taxi).trim()) ?
+                    R.id.subtractMoneyRadioButtonTaxi : buttonTextArray.get(i)
+                    .equals(getResources().getString(R.string.subtract_money_toiletry).trim()) ?
+                    R.id.subtractMoneyRadioButtonToiletry : R.id.subtractMoneyRadioButtonTransport;
 
             radioButton1[i] = new RadioButton(this);
             radioButton1[i].setText(buttonTextArray.get(i));
@@ -131,33 +123,31 @@ public class ActivitySubtractMoney extends AppCompatActivity {
 
     private void setOnClickListeners() {
         saveChanges.setOnClickListener(v -> {
-            int selectedID = radioGroup.getCheckedRadioButtonId();
+            final int selectedID = radioGroup.getCheckedRadioButtonId();
 
-            closeTheKeyboard();
+            MyCustomMethods.closeTheKeyboard(ActivitySubtractMoney.this);
 
             // daca a fost selectat vreun buton radio
-            if (selectedID != -1 && fbAuth.getUid() != null) {
+            if (selectedID != -1 && MyCustomVariables.getFirebaseAuth().getUid() != null) {
                 if (!String.valueOf(value.getText()).trim().equals("")) {
-                    if (fbAuth.getUid() != null) {
-                        radioButton = findViewById(selectedID);
+                    if (MyCustomVariables.getFirebaseAuth().getUid() != null) {
+                        final RadioButton radioButton = findViewById(selectedID);
 
-                        Transaction newTransaction;
-                        int transactionCategoryIndex = Transaction.getIndexFromCategory(Types.
+                        final int transactionCategoryIndex = Transaction.getIndexFromCategory(Types.
                                 getTypeInEnglish(ActivitySubtractMoney.this,
                                         String.valueOf(radioButton.getText()).trim()));
 
-                        if (!String.valueOf(note.getText()).trim().equals("")) {
-                            newTransaction = new Transaction(transactionCategoryIndex,
-                                    0,
-                                    String.valueOf(note.getText()).trim(),
-                                    String.valueOf(value.getText()).trim());
-                        } else {
-                            newTransaction = new Transaction(transactionCategoryIndex,
-                                    0,
-                                    String.valueOf(value.getText()).trim());
-                        }
+                        final Transaction newTransaction = !String.valueOf(note.getText()).trim().equals("") ?
+                                new Transaction(transactionCategoryIndex,
+                                        0,
+                                        String.valueOf(note.getText()).trim(),
+                                        String.valueOf(value.getText()).trim()) :
+                                new Transaction(transactionCategoryIndex,
+                                        0,
+                                        String.valueOf(value.getText()).trim());
 
-                        myRef.child(fbAuth.getUid())
+                        MyCustomVariables.getDatabaseReference()
+                                .child(MyCustomVariables.getFirebaseAuth().getUid())
                                 .child("PersonalTransactions")
                                 .child(newTransaction.getId())
                                 .setValue(newTransaction)
@@ -172,7 +162,8 @@ public class ActivitySubtractMoney extends AppCompatActivity {
                                             R.anim.slide_out_right);
                                 })
                                 .addOnFailureListener(e -> {
-                                    myRef.child(fbAuth.getUid())
+                                    MyCustomVariables.getDatabaseReference()
+                                            .child(MyCustomVariables.getFirebaseAuth().getUid())
                                             .child("PersonalTransactions")
                                             .child(newTransaction.getId())
                                             .removeValue();
@@ -181,40 +172,34 @@ public class ActivitySubtractMoney extends AppCompatActivity {
                                             Toast.LENGTH_SHORT).show();
                                 });
                     }
-                } else error.setText(R.string.money_error4);
-            } else error.setText(R.string.money_error1);
+                } else {
+                    error.setText(R.string.money_error4);
+                }
+            } else {
+                error.setText(R.string.money_error1);
+            }
         });
 
         cancel.setOnClickListener(v -> onBackPressed());
     }
 
-    private void closeTheKeyboard() {
-        View v = this.getCurrentFocus();
-        if (v != null) {
-            InputMethodManager manager =
-                    (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-            manager.hideSoftInputFromWindow(v.getWindowToken(), 0);
-        }
-    }
-
     private void limitTwoDecimals() {
         value.addTextChangedListener(new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            public void beforeTextChanged(final CharSequence s, final int start, final int count, final int after) {
 
             }
 
             @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                int positionOfComma, textLength = String.valueOf(s).length();
+            public void onTextChanged(final CharSequence s, final int start, final int before, final int count) {
+                final int textLength = String.valueOf(s).length();
                 if (String.valueOf(s).contains(".")) {
-                    // salvam pozitia punctului ce desparte partea intreaga a numarului
-                    // de partea zecimala a sa
-                    positionOfComma = String.valueOf(s).indexOf(".");
+                    // salvam pozitia punctului ce desparte partea intreaga a numarului de partea zecimala a sa
+                    final int positionOfComma = String.valueOf(s).indexOf(".");
 
                     // daca adaugam prima data punctul (ex: .5)
                     if (positionOfComma == 0 && textLength == 1) {
-                        String text = "0" + value.getText();
+                        final String text = "0" + value.getText();
                         // adaugam un 0 in fata numarului
                         value.setText(text);
                         // punem cursorul pe ultima pozitie
@@ -236,7 +221,7 @@ public class ActivitySubtractMoney extends AppCompatActivity {
             }
 
             @Override
-            public void afterTextChanged(Editable s) {
+            public void afterTextChanged(final Editable s) {
 
             }
         });

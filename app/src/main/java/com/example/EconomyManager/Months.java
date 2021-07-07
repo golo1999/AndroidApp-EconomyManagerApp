@@ -3,62 +3,35 @@ package com.example.EconomyManager;
 import android.content.Context;
 
 public class Months {
-    public static String getTranslatedMonth(Context context, String monthName) {
-        switch (monthName) {
-            case "January":
-                return context.getString(R.string.month_january);
-            case "February":
-                return context.getString(R.string.month_february);
-            case "March":
-                return context.getString(R.string.month_march);
-            case "April":
-                return context.getString(R.string.month_april);
-            case "May":
-                return context.getString(R.string.month_may);
-            case "June":
-                return context.getString(R.string.month_june);
-            case "July":
-                return context.getString(R.string.month_july);
-            case "August":
-                return context.getString(R.string.month_august);
-            case "September":
-                return context.getString(R.string.month_september);
-            case "October":
-                return context.getString(R.string.month_october);
-            case "November":
-                return context.getString(R.string.month_november);
-            case "December":
-                return context.getString(R.string.month_december);
-            default:
-                return "";
-        }
+    public static String getTranslatedMonth(final Context context, final String monthName) {
+        return monthName.equals("January") ?
+                context.getString(R.string.month_january) : monthName.equals("February") ?
+                context.getString(R.string.month_february) : monthName.equals("March") ?
+                context.getString(R.string.month_march) : monthName.equals("April") ?
+                context.getString(R.string.month_april) : monthName.equals("May") ?
+                context.getString(R.string.month_may) : monthName.equals("June") ?
+                context.getString(R.string.month_june) : monthName.equals("July") ?
+                context.getString(R.string.month_july) : monthName.equals("August") ?
+                context.getString(R.string.month_august) : monthName.equals("September") ?
+                context.getString(R.string.month_september) : monthName.equals("October") ?
+                context.getString(R.string.month_october) : monthName.equals("November") ?
+                context.getString(R.string.month_november) : monthName.equals("December") ?
+                context.getString(R.string.month_december) : "";
     }
 
-    public static String getMonthInEnglish(Context context, String monthName) {
-        if (monthName.trim().equals(context.getString(R.string.month_january)))
-            return "January";
-        else if (monthName.trim().equals(context.getString(R.string.month_february)))
-            return "February";
-        else if (monthName.trim().equals(context.getString(R.string.month_march)))
-            return "March";
-        else if (monthName.trim().equals(context.getString(R.string.month_april)))
-            return "April";
-        else if (monthName.trim().equals(context.getString(R.string.month_may)))
-            return "May";
-        else if (monthName.trim().equals(context.getString(R.string.month_june)))
-            return "June";
-        else if (monthName.trim().equals(context.getString(R.string.month_july)))
-            return "July";
-        else if (monthName.trim().equals(context.getString(R.string.month_august)))
-            return "August";
-        else if (monthName.trim().equals(context.getString(R.string.month_september)))
-            return "September";
-        else if (monthName.trim().equals(context.getString(R.string.month_october)))
-            return "October";
-        else if (monthName.trim().equals(context.getString(R.string.month_november)))
-            return "November";
-        else if (monthName.trim().equals(context.getString(R.string.month_december)))
-            return "December";
-        else return "";
+    public static String getMonthInEnglish(final Context context, final String monthName) {
+        return monthName.trim().equals(context.getString(R.string.month_january)) ?
+                "January" : monthName.trim().equals(context.getString(R.string.month_february)) ?
+                "February" : monthName.trim().equals(context.getString(R.string.month_march)) ?
+                "March" : monthName.trim().equals(context.getString(R.string.month_april)) ?
+                "April" : monthName.trim().equals(context.getString(R.string.month_may)) ?
+                "May" : monthName.trim().equals(context.getString(R.string.month_june)) ?
+                "June" : monthName.trim().equals(context.getString(R.string.month_july)) ?
+                "July" : monthName.trim().equals(context.getString(R.string.month_august)) ?
+                "August" : monthName.trim().equals(context.getString(R.string.month_september)) ?
+                "September" : monthName.trim().equals(context.getString(R.string.month_october)) ?
+                "October" : monthName.trim().equals(context.getString(R.string.month_november)) ?
+                "November" : monthName.trim().equals(context.getString(R.string.month_december)) ?
+                "December" : "";
     }
 }

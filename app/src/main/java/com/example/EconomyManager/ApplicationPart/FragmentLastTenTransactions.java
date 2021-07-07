@@ -12,39 +12,31 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.lifecycle.ViewModelStoreOwner;
 
-import com.example.EconomyManager.MoneyManager;
+import com.example.EconomyManager.MyCustomMethods;
+import com.example.EconomyManager.MyCustomVariables;
 import com.example.EconomyManager.R;
+import com.example.EconomyManager.Transaction;
 import com.example.EconomyManager.Types;
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.Locale;
+import java.util.stream.Collectors;
 
-public class FragmentLastTenTransactions extends Fragment
-{
-    private DatabaseReference myRef;
-    private FirebaseAuth fbAuth;
-    private Integer numberOfChildren=0;
-    private Calendar currentTime;
+public class FragmentLastTenTransactions extends Fragment {
+    private MainScreenViewModel viewModel;
     private LinearLayout mainLayout;
 
-    public FragmentLastTenTransactions()
-    {
+    public FragmentLastTenTransactions() {
         // Required empty public constructor
     }
 
-    public static FragmentLastTenTransactions newInstance()
-    {
+    public static FragmentLastTenTransactions newInstance() {
         FragmentLastTenTransactions fragment = new FragmentLastTenTransactions();
         Bundle args = new Bundle();
         fragment.setArguments(args);
@@ -52,224 +44,142 @@ public class FragmentLastTenTransactions extends Fragment
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
-    {
-        View v=inflater.inflate(R.layout.fragment_last_ten_transactions, container, false);
+    public View onCreateView(final LayoutInflater inflater, final ViewGroup container,
+                             final Bundle savedInstanceState) {
+        final View v = inflater.inflate(R.layout.fragment_last_ten_transactions, container, false);
+
         setVariables(v);
+
         return v;
     }
 
     @Override
-    public void onStart()
-    {
+    public void onStart() {
         super.onStart();
         createAndSetList();
     }
 
-    private void setVariables(View v)
-    {
-        fbAuth=FirebaseAuth.getInstance();
-        myRef=FirebaseDatabase.getInstance().getReference();
-        currentTime=Calendar.getInstance();
-        mainLayout=v.findViewById(R.id.fragmentLastTenTransactionsMainLayout);
+    private void setVariables(final View v) {
+        viewModel = new ViewModelProvider((ViewModelStoreOwner) requireContext()).get(MainScreenViewModel.class);
+        mainLayout = v.findViewById(R.id.fragmentLastTenTransactionsMainLayout);
     }
 
-    private void createAndSetList()
-    {
-        if(fbAuth.getUid()!=null)
-            myRef.child(fbAuth.getUid()).addValueEventListener(new ValueEventListener()
-            {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot snapshot)
-                {
-                    ArrayList<MoneyManager> transactionsList=new ArrayList<>();
-                    SimpleDateFormat monthFormat=new SimpleDateFormat("LLLL", Locale.ENGLISH);
-                    String currency=String.valueOf(snapshot.child("ApplicationSettings").child("currencySymbol").getValue());
-                    LinearLayout childLayout;
+    // method for setting the transactions list and displaying it on the screen
+    private void createAndSetList() {
+        if (MyCustomVariables.getFirebaseAuth().getUid() != null) {
+            MyCustomVariables.getDatabaseReference()
+                    .child(MyCustomVariables.getFirebaseAuth().getUid())
+                    .addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            final ArrayList<Transaction> transactionsList = new ArrayList<>();
+                            final String currencySymbol = viewModel.getUserDetails() != null ?
+                                    viewModel.getUserDetails().getApplicationSettings().getCurrencySymbol() :
+                                    MyCustomMethods.getCurrencySymbol();
 
-                    if(!transactionsList.isEmpty())
-                        transactionsList.clear();
-                    if(numberOfChildren>0)
-                        numberOfChildren=0;
+                            if (snapshot.exists() && snapshot.hasChild("PersonalTransactions") &&
+                                    snapshot.child("PersonalTransactions").hasChildren()) {
+                                for (DataSnapshot transactionIterator :
+                                        snapshot.child("PersonalTransactions").getChildren()) {
+                                    final Transaction transaction = transactionIterator.getValue(Transaction.class);
 
-                    if(snapshot.hasChild("PersonalTransactions"))
-                        if(snapshot.child("PersonalTransactions").hasChildren())
-                            for(DataSnapshot yearIterator:snapshot.child("PersonalTransactions").getChildren())
-                                if(String.valueOf(yearIterator.getKey()).equals(String.valueOf(currentTime.get(Calendar.YEAR)))) // daca a fost gasit anul curent
-                                    for(DataSnapshot monthIterator:yearIterator.getChildren())
-                                        if(String.valueOf(monthIterator.getKey()).equals(monthFormat.format(currentTime.getTime()))) // daca a fost gasita luna curenta
-                                            for(DataSnapshot monthChild:monthIterator.getChildren())
-                                                for(DataSnapshot monthGrandChild:monthChild.getChildren())
-                                                    if(!String.valueOf(monthGrandChild.getKey()).equals("Overall")) // daca fiul nu este 'Overall'
-                                                        for(DataSnapshot monthGreatGrandChild:monthGrandChild.getChildren())
-                                                            addTransactionToTheList(monthGreatGrandChild, transactionsList);
-
-                    mainLayout.removeAllViews();
-
-                    try
-                    {
-                        if(numberOfChildren==0)
-                        {
-                            TextView noTransactions=new TextView(getContext()); // aici apare exceptia java.lang.NullPointerException: Attempt to invoke virtual method 'android.content.res.Resources android.content.Context.getResources()' on a null object referencejava.lang.NullPointerException: Attempt to invoke virtual method 'android.content.res.Resources android.content.Context.getResources()' on a null object reference
-                            LinearLayout.LayoutParams params=new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-                            params.setMargins(0, 20, 0, 20);
-
-                            noTransactions.setText(getResources().getString(R.string.no_transactions_this_month));
-                            noTransactions.setTextColor(Color.parseColor("#FAEBEF"));
-                            noTransactions.setTypeface(null, Typeface.BOLD);
-                            noTransactions.setTextSize(20);
-                            noTransactions.setGravity(Gravity.CENTER);
-                            noTransactions.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
-                            noTransactions.setLayoutParams(params);
-                            mainLayout.addView(noTransactions);
-                        }
-                        else
-                        {
-                            Collections.sort(transactionsList, new Comparator<MoneyManager>()
-                            {
-                                @Override
-                                public int compare(MoneyManager o1, MoneyManager o2)
-                                {
-                                    return o2.getDate().compareToIgnoreCase(o1.getDate());
-                                }
-                            });
-
-                            try
-                            {
-                                if(transactionsList.size()>10)
-                                    for(int x=0; x<10; x++)
-                                    {
-                                        childLayout=(LinearLayout)getLayoutInflater().inflate(R.layout.linearlayout_last_ten_transactions, mainLayout, false);
-                                        TextView typeFromChildLayout=childLayout.findViewById(R.id.lastTenTransactionsRelativeLayoutTitle), valueFromChildLayout=childLayout.findViewById(R.id.lastTenTransactionsRelativeLayoutPrice);
-                                        String valueWithCurrency;
-                                        float value=transactionsList.get(x).getValue();
-
-                                        if(transactionsList.get(x).getType().equals("Deposits") || transactionsList.get(x).getType().equals("IndependentSources") || transactionsList.get(x).getType().equals("Salary") || transactionsList.get(x).getType().equals("Saving"))
-                                            valueFromChildLayout.setTextColor(Color.GREEN);
-                                        else valueFromChildLayout.setTextColor(Color.RED);
-
-                                        if(String.valueOf(value).contains("."))
-                                            if(String.valueOf(value).length()-1-String.valueOf(value).indexOf(".")>2)
-                                                value=Float.parseFloat(String.format(Locale.getDefault(), "%.2f", value));
-
-                                        if(Locale.getDefault().getDisplayLanguage().equals("English"))
-                                            valueWithCurrency=currency+value;
-                                        else valueWithCurrency=value+" "+currency;
-
-                                        typeFromChildLayout.setText(Types.getTranslatedType(getContext(), transactionsList.get(x).getType()));
-                                        valueFromChildLayout.setText(valueWithCurrency);
-                                        typeFromChildLayout.setTextColor(Color.WHITE);
-                                        typeFromChildLayout.setTextSize(18);
-                                        valueFromChildLayout.setTextSize(18);
-                                        mainLayout.addView(childLayout);
+                                    if (transaction != null) {
+                                        transactionsList.add(transaction);
                                     }
-                                else for(int x=0; x<transactionsList.size(); x++)
-                                {
-                                    childLayout=(LinearLayout)getLayoutInflater().inflate(R.layout.linearlayout_last_ten_transactions, mainLayout, false); // aici apare exceptia java.lang.IllegalStateException: onGetLayoutInflater() cannot be executed until the Fragment is attached to the FragmentManager.
-                                    TextView typeFromChildLayout=childLayout.findViewById(R.id.lastTenTransactionsRelativeLayoutTitle), valueFromChildLayout=childLayout.findViewById(R.id.lastTenTransactionsRelativeLayoutPrice);
-                                    String valueWithCurrency;
-                                    float value=transactionsList.get(x).getValue();
-
-                                    if(transactionsList.get(x).getType().equals("Deposits") || transactionsList.get(x).getType().equals("IndependentSources") || transactionsList.get(x).getType().equals("Salary") || transactionsList.get(x).getType().equals("Saving"))
-                                        valueFromChildLayout.setTextColor(Color.GREEN);
-                                    else valueFromChildLayout.setTextColor(Color.RED);
-
-                                    if(String.valueOf(value).contains("."))
-                                        if(String.valueOf(value).length()-1-String.valueOf(value).indexOf(".")>2)
-                                            value=Float.parseFloat(String.format(Locale.getDefault(), "%.2f", value));
-
-                                    if(Locale.getDefault().getDisplayLanguage().equals("English"))
-                                        valueWithCurrency=currency+value;
-                                    else valueWithCurrency=value+" "+currency;
-
-                                    typeFromChildLayout.setText(Types.getTranslatedType(getContext(), transactionsList.get(x).getType()));
-                                    valueFromChildLayout.setText(valueWithCurrency);
-                                    typeFromChildLayout.setTextColor(Color.WHITE);
-                                    typeFromChildLayout.setTextSize(18);
-                                    valueFromChildLayout.setTextSize(18);
-                                    mainLayout.addView(childLayout);
                                 }
                             }
-                            catch(IllegalStateException e)
-                            {
-                                e.printStackTrace();
-                            }
+
+                            // displaying the list on the screen
+                            showLastTransactions(mainLayout, transactionsList, currencySymbol);
                         }
-                    }
-                    catch(NullPointerException e)
-                    {
-                        e.printStackTrace();
-                    }
-                }
 
-                @Override
-                public void onCancelled(@NonNull DatabaseError error)
-                {
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
 
-                }
-            });
+                        }
+                    });
+        } else {
+            showNoTransactionsLayout(mainLayout, getResources().getString(R.string.no_transactions_yet));
+        }
     }
 
-    private void addTransactionToTheList(DataSnapshot iterator, ArrayList<MoneyManager> list)
-    {
-        String note, date, type;
-        float value;
-        MoneyManager money;
+    // method for displaying the list on the screen
+    private void showLastTransactions(final LinearLayout mainLayout, final ArrayList<Transaction> transactionsList,
+                                      final String currencySymbol) {
+        // removing all the existing views from the main layout
+        mainLayout.removeAllViews();
 
-        numberOfChildren++;
-        note=String.valueOf(iterator.child("note").getValue());
-        date=String.valueOf(iterator.child("date").getValue());
-        type=String.valueOf(iterator.child("type").getValue());
-        value=Float.parseFloat(String.valueOf(iterator.child("value").getValue()));
+        try {
+            if (transactionsList.size() == 0) {
+                showNoTransactionsLayout(mainLayout, getResources().getString(R.string.no_transactions_this_month));
+            }
+            // if the transactions list isn't empty
+            else {
+                ArrayList<Transaction> limitedTransactionsList = null;
 
-        money=new MoneyManager(note, value, date, type);
-        list.add(money);
+                // sorting the list by date descending
+                transactionsList.sort((transaction1, transaction2) ->
+                        transaction2.getTime().compareTo(transaction1.getTime()));
+
+                // creating a new list from the first 10 transactions only if there are more than 10
+                if (transactionsList.size() > 10) {
+                    limitedTransactionsList = (ArrayList<Transaction>) transactionsList.stream()
+                            .limit(10).collect(Collectors.toList());
+                }
+
+                // iterating through the new list only if there are more than 10 transactions,
+                // otherwise iterating through the old list
+                for (final Transaction transaction :
+                        (limitedTransactionsList != null ? limitedTransactionsList : transactionsList)) {
+                    final LinearLayout childLayout = (LinearLayout) getLayoutInflater()
+                            .inflate(R.layout.linearlayout_last_ten_transactions, mainLayout, false);
+                    final TextView typeFromChildLayout =
+                            childLayout.findViewById(R.id.lastTenTransactionsRelativeLayoutTitle);
+                    final TextView valueFromChildLayout =
+                            childLayout.findViewById(R.id.lastTenTransactionsRelativeLayoutPrice);
+                    final String valueWithCurrency = Locale.getDefault().getDisplayLanguage().equals("English") ?
+                            currencySymbol + transaction.getValue() :
+                            transaction.getValue() + " " + currencySymbol;
+                    final String translatedType = Types.getTranslatedType(requireContext(),
+                            String.valueOf(Transaction.getTypeFromIndexInEnglish(transaction.getCategory())));
+
+                    valueFromChildLayout.setTextColor(transaction.getCategory() > 0 &&
+                            transaction.getCategory() < 4 ?
+                            Color.GREEN : Color.RED);
+
+                    // displaying the views on the screen if the type was successfully translated
+                    if (translatedType != null) {
+                        typeFromChildLayout.setText(Types.getTranslatedType(getContext(), translatedType));
+                        valueFromChildLayout.setText(valueWithCurrency);
+                        typeFromChildLayout.setTextColor(Color.WHITE);
+                        typeFromChildLayout.setTextSize(18);
+                        valueFromChildLayout.setTextSize(18);
+
+                        mainLayout.addView(childLayout);
+                    }
+                }
+            }
+        } catch (NullPointerException e) {
+            e.printStackTrace();
+        }
     }
 
-//    private String getTranslatedTransactionType(String transactionTypeInEnglish)
-//    {
-//        switch(transactionTypeInEnglish)
-//        {
-//            case "Deposits":
-//                return getResources().getString(R.string.add_money_deposits);
-//            case "IndependentSources":
-//                return getResources().getString(R.string.add_money_independent_sources);
-//            case "Salary":
-//                return getResources().getString(R.string.salary);
-//            case "Saving":
-//                return getResources().getString(R.string.saving);
-//            case "Bills":
-//                return getResources().getString(R.string.subtract_money_bills);
-//            case "Car":
-//                return getResources().getString(R.string.subtract_money_car);
-//            case "Clothes":
-//                return getResources().getString(R.string.subtract_money_clothes);
-//            case "Communications":
-//                return getResources().getString(R.string.subtract_money_communications);
-//            case "EatingOut":
-//                return getResources().getString(R.string.subtract_money_eating_out);
-//            case "Entertainment":
-//                return getResources().getString(R.string.subtract_money_entertainment);
-//            case "Food":
-//                return getResources().getString(R.string.subtract_money_food);
-//            case "Gifts":
-//                return getResources().getString(R.string.subtract_money_gifts);
-//            case "Health":
-//                return getResources().getString(R.string.subtract_money_health);
-//            case "House":
-//                return getResources().getString(R.string.subtract_money_house);
-//            case "Pets":
-//                return getResources().getString(R.string.subtract_money_pets);
-//            case "Sports":
-//                return getResources().getString(R.string.subtract_money_sports);
-//            case "Taxi":
-//                return getResources().getString(R.string.subtract_money_taxi);
-//            case "Toiletry":
-//                return getResources().getString(R.string.subtract_money_toiletry);
-//            case "Transport":
-//                return getResources().getString(R.string.subtract_money_transport);
-//            default:
-//                return null;
-//        }
-//    }
+    private void showNoTransactionsLayout(final LinearLayout mainLayout, final String message) {
+        final TextView noTransactions = new TextView(getContext());
+        final LinearLayout.LayoutParams params =
+                new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
+                        ViewGroup.LayoutParams.WRAP_CONTENT);
+
+        params.setMargins(0, 20, 0, 20);
+
+        noTransactions.setText(message);
+        noTransactions.setTextColor(Color.parseColor("#FAEBEF"));
+        noTransactions.setTypeface(null, Typeface.BOLD);
+        noTransactions.setTextSize(20);
+        noTransactions.setGravity(Gravity.CENTER);
+        noTransactions.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+        noTransactions.setLayoutParams(params);
+
+        mainLayout.addView(noTransactions);
+    }
 }

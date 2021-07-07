@@ -1,23 +1,21 @@
 package com.example.EconomyManager.LoginPart;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Patterns;
-import android.view.View;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.example.EconomyManager.ApplicationPart.ActivityMainScreen;
 import com.example.EconomyManager.ApplicationSettings;
 import com.example.EconomyManager.BirthDate;
+import com.example.EconomyManager.MyCustomMethods;
+import com.example.EconomyManager.MyCustomVariables;
 import com.example.EconomyManager.PersonalInformation;
 import com.example.EconomyManager.R;
 import com.facebook.AccessToken;
@@ -34,29 +32,24 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.ApiException;
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
-import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FacebookAuthProvider;
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.GoogleAuthProvider;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 
 import java.time.LocalDate;
 import java.util.Arrays;
 
 public class LogIn extends AppCompatActivity {
-
-    private TextView signUp, forgotPassword, incorrectLogin;
+    private TextView signUp;
+    private TextView forgotPassword;
+    private TextView incorrectLogin;
     private Button logIn;
     private LoginButton facebookLogIn;
     private SignInButton googleLogIn;
-    private EditText email, password;
-    private FirebaseAuth fbAuth = FirebaseAuth.getInstance();
+    private EditText emailField;
+    private EditText passwordField;
     private CallbackManager manager;
-    private DatabaseReference myRef = FirebaseDatabase.getInstance().getReference();
     private GoogleSignInClient mGoogleSignInClient;
     private static final int RC_SIGN_IN = 27;
     private int googleOrFacebookInsideOnActivityResult = 0; // 0 pentru facebook, 1 pentru google
@@ -82,100 +75,86 @@ public class LogIn extends AppCompatActivity {
         signUp = findViewById(R.id.login_create_account);
         forgotPassword = findViewById(R.id.login_forgot_password);
         logIn = findViewById(R.id.login_button);
-        email = findViewById(R.id.login_email);
-        password = findViewById(R.id.login_password);
+        emailField = findViewById(R.id.login_email);
+        passwordField = findViewById(R.id.login_password);
         incorrectLogin = findViewById(R.id.login_incorrect_login);
         facebookLogIn = findViewById(R.id.login_button_facebook);
         googleLogIn = findViewById(R.id.login_button_google);
     }
 
     private void setOnClickListeners() {
-        signUp.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(LogIn.this, SignUp.class);
-                startActivity(intent);
-                overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left); // slide dinspre dreapta spre stanga
-            }
+        signUp.setOnClickListener(v -> {
+            Intent intent = new Intent(LogIn.this, SignUp.class);
+            startActivity(intent);
+            overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left); // slide dinspre dreapta spre stanga
         });
 
-        facebookLogIn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                buttonClickLoginFacebook();
-            }
+        facebookLogIn.setOnClickListener(v -> buttonClickLoginFacebook());
+
+        forgotPassword.setOnClickListener(v -> {
+            Intent intent = new Intent(LogIn.this, ForgotPassword.class);
+            startActivity(intent);
+            overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
         });
 
-        forgotPassword.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(LogIn.this, ForgotPassword.class);
-                startActivity(intent);
-                overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
-            }
+        googleLogIn.setOnClickListener(v -> {
+            googleOrFacebookInsideOnActivityResult = 1;
+            googleSignIn();
         });
 
-        googleLogIn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                googleOrFacebookInsideOnActivityResult = 1;
-                googleSignIn();
-            }
-        });
-
-        logIn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                validation(email.getText().toString().trim(), password.getText().toString());
-            }
-        });
+        logIn.setOnClickListener(v -> validation(String.valueOf(emailField.getText()).trim(),
+                String.valueOf(passwordField.getText())));
     }
 
     private void validation(final String _email, final String _password) {
-        if (Patterns.EMAIL_ADDRESS.matcher(_email).matches() && _password.length() >= 7) // in cazul in care email-ul este valid si parola are cel putin 7 caractere, incercam sa facem log in
-        {
-            fbAuth.signInWithEmailAndPassword(_email, _password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                @Override
-                public void onComplete(@NonNull Task<AuthResult> task) {
-                    closeTheKeyboard();
-                    if (task.isSuccessful()) // daca atat email-ul, cat si parola corespund, se face verifica daca emailul este verificat
-                    {
-                        if (fbAuth.getCurrentUser() != null)
-                            if (fbAuth.getCurrentUser().isEmailVerified())
-                                goToTheMainScreen();
-                            else {
-                                Toast.makeText(LogIn.this, getResources().getString(R.string.login_verify_email), Toast.LENGTH_SHORT).show();
-                                password.setText("");
-                            }
-                    } else {
-                        incorrectLogin.setText(R.string.login_incorrect_username_password); // in cazul in care atat email-ul, cat si parola sunt valide, dar nu corespund informatiilor din baza de date Firebase
-                        password.setText(""); // stergem parola
+        // in cazul in care email-ul este valid si parola are cel putin 7 caractere, incercam sa facem log in
+        if (Patterns.EMAIL_ADDRESS.matcher(_email).matches() && _password.length() >= 7) {
+            MyCustomVariables.getFirebaseAuth()
+                    .signInWithEmailAndPassword(_email, _password).addOnCompleteListener(task -> {
+                MyCustomMethods.closeTheKeyboard(this);
+                // daca atat email-ul, cat si parola corespund, se face verifica daca emailul este verificat
+                if (task.isSuccessful()) {
+                    if (MyCustomVariables.getFirebaseAuth().getCurrentUser() != null) {
+                        if (MyCustomVariables.getFirebaseAuth().getCurrentUser().isEmailVerified()) {
+                            goToTheMainScreen();
+                        } else {
+                            Toast.makeText(LogIn.this, getResources().getString(R.string.login_verify_email),
+                                    Toast.LENGTH_SHORT).show();
+                            passwordField.setText("");
+                        }
                     }
+                } else {
+                    // in cazul in care atat email-ul, cat si parola sunt valide,
+                    // dar nu corespund informatiilor din baza de date Firebase
+                    incorrectLogin.setText(R.string.login_incorrect_username_password);
+                    passwordField.setText(""); // stergem parola
                 }
             });
-        } else // in cazul in care nu se respecta conditia de log in
-        {
-            closeTheKeyboard();
-            if (_email.isEmpty() && _password.isEmpty()) // daca atat email-ul, cat si parola nu contin niciun caracter
+        }
+        // in cazul in care nu se respecta conditia de log in
+        else {
+            MyCustomMethods.closeTheKeyboard(this);
+            // daca atat email-ul, cat si parola nu contin niciun caracter
+            if (_email.isEmpty() && _password.isEmpty())
                 incorrectLogin.setText(R.string.signup_error2);
             else if (_email.isEmpty()) // daca email-ul nu contine niciun caracter
             {
                 incorrectLogin.setText(R.string.signup_error3);
-                password.setText("");
+                passwordField.setText("");
             } else if (_password.isEmpty()) // daca parola nu contine niciun caracter
                 incorrectLogin.setText(R.string.signup_error4);
             else if (!Patterns.EMAIL_ADDRESS.matcher(_email).matches() && _password.length() < 4) // daca email-ul nu are forma valida si parola este prea scurta
             {
                 incorrectLogin.setText(R.string.signup_error5);
-                password.setText("");
+                passwordField.setText("");
             } else if (!Patterns.EMAIL_ADDRESS.matcher(_email).matches()) // daca email-ul nu are forma valida, dar parola este in regula
             {
                 incorrectLogin.setText(R.string.login_email_not_valid);
-                password.setText("");
+                passwordField.setText("");
             } else // daca parola este prea scurta, dar email-ul este in regula
             {
                 incorrectLogin.setText(R.string.signup_error7);
-                password.setText("");
+                passwordField.setText("");
             }
         }
     }
@@ -201,14 +180,6 @@ public class LogIn extends AppCompatActivity {
                 //e.printStackTrace();
                 //Toast.makeText(LogIn.this, e.getMessage(), Toast.LENGTH_SHORT).show();
             }
-        }
-    }
-
-    private void closeTheKeyboard() {
-        View v = this.getCurrentFocus();
-        if (v != null) {
-            InputMethodManager manager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-            manager.hideSoftInputFromWindow(v.getWindowToken(), 0);
         }
     }
 
@@ -239,17 +210,16 @@ public class LogIn extends AppCompatActivity {
 
     private void handleFacebookToken(AccessToken accessToken) {
         AuthCredential credential = FacebookAuthProvider.getCredential(accessToken.getToken());
-        fbAuth.signInWithCredential(credential).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-            @Override
-            public void onComplete(@NonNull Task<AuthResult> task) {
-                if (task.isSuccessful()) {
-                    if (fbAuth.getCurrentUser() != null) {
-                        createPersonalInformationPath();
-                        createApplicationSettingsPath();
-                        goToTheMainScreen();
-                    }
-                } else
-                    Toast.makeText(getApplicationContext(), "Facebook authentication failed", Toast.LENGTH_SHORT).show();
+        MyCustomVariables.getFirebaseAuth().signInWithCredential(credential).addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                if (MyCustomVariables.getFirebaseAuth().getCurrentUser() != null) {
+                    createPersonalInformationPath();
+                    createApplicationSettingsPath();
+                    goToTheMainScreen();
+                }
+            } else {
+                Toast.makeText(getApplicationContext(), "Facebook authentication failed",
+                        Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -259,7 +229,8 @@ public class LogIn extends AppCompatActivity {
     }
 
     private void setGoogleRequest() {
-        GoogleSignInOptions signInOptions = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestIdToken(getString(R.string.default_web_client_id)).requestEmail().build();
+        GoogleSignInOptions signInOptions = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(getString(R.string.default_web_client_id)).requestEmail().build();
         mGoogleSignInClient = GoogleSignIn.getClient(this, signInOptions);
     }
 
@@ -270,31 +241,37 @@ public class LogIn extends AppCompatActivity {
 
     private void firebaseAuthWithGoogle(GoogleSignInAccount account) {
         AuthCredential credential = GoogleAuthProvider.getCredential(account.getIdToken(), null);
-        fbAuth.signInWithCredential(credential).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-            @Override
-            public void onComplete(@NonNull Task<AuthResult> task) {
-                if (task.isSuccessful()) {
-                    if (fbAuth.getCurrentUser() != null) {
-                        createPersonalInformationPath();
-                        createApplicationSettingsPath();
-                        goToTheMainScreen();
-                    }
-                } else
-                    Toast.makeText(getApplicationContext(), "Google authentication failed", Toast.LENGTH_SHORT).show();
-            }
+        MyCustomVariables.getFirebaseAuth().signInWithCredential(credential).addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                if (MyCustomVariables.getFirebaseAuth().getCurrentUser() != null) {
+                    createPersonalInformationPath();
+                    createApplicationSettingsPath();
+                    goToTheMainScreen();
+                }
+            } else
+                Toast.makeText(getApplicationContext(), "Google authentication failed", Toast.LENGTH_SHORT).show();
         });
     }
 
     private void createPersonalInformationPath() {
-        PersonalInformation information = new PersonalInformation("", "", "", "", "", "", new BirthDate(LocalDate.now()), "", "");
-        if (fbAuth.getUid() != null)
-            myRef.child(fbAuth.getUid()).child("PersonalInformation").setValue(information);
+        PersonalInformation information = new PersonalInformation("", "", "", "",
+                "", "", new BirthDate(LocalDate.now()), "", "");
+        if (MyCustomVariables.getFirebaseAuth().getUid() != null) {
+            MyCustomVariables.getDatabaseReference()
+                    .child(MyCustomVariables.getFirebaseAuth().getUid())
+                    .child("PersonalInformation")
+                    .setValue(information);
+        }
     }
 
     private void createApplicationSettingsPath() {
         ApplicationSettings settings = new ApplicationSettings("GBP");
-        if (fbAuth.getUid() != null)
-            myRef.child(fbAuth.getUid()).child("ApplicationSettings").setValue(settings);
+        if (MyCustomVariables.getFirebaseAuth().getUid() != null) {
+            MyCustomVariables.getDatabaseReference()
+                    .child(MyCustomVariables.getFirebaseAuth().getUid())
+                    .child("ApplicationSettings")
+                    .setValue(settings);
+        }
     }
 
     private void goToTheMainScreen() {

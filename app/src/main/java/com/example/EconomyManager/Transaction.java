@@ -1,10 +1,14 @@
 package com.example.EconomyManager;
 
+import android.util.Log;
+
+import androidx.annotation.NonNull;
+
 import java.time.LocalDateTime;
 import java.util.UUID;
 
 public class Transaction {
-    private static String[] categoryList = new String[]{"Deposits", "Independent sources", "Salary",
+    private static final String[] categoryList = new String[]{"Deposits", "Independent sources", "Salary",
             "Saving", "Bills", "Car", "Clothes", "Communications", "Eating out", "Entertainment",
             "Food", "Gifts", "Health", "House", "Pets", "Sports", "Taxi", "Toiletry", "Transport"};
     private String id;
@@ -61,6 +65,8 @@ public class Transaction {
 
             if (category.equals(categoryName.trim()))
                 break;
+
+            Log.d("category123", categoryName + " " + category + " " + index);
         }
 
         return index;
@@ -116,5 +122,18 @@ public class Transaction {
 
     public void setValue(String value) {
         this.value = value;
+    }
+
+    @NonNull
+    @Override
+    public String toString() {
+        return "Transaction{" +
+                "id='" + id + '\'' +
+                ", category=" + category +
+                ", time=" + time +
+                ", type=" + type +
+                ", note='" + note + '\'' +
+                ", value='" + value + '\'' +
+                '}';
     }
 }

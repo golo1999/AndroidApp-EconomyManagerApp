@@ -2,95 +2,50 @@ package com.example.EconomyManager;
 
 import android.content.Context;
 
-public class Types
-{
-    public static String getTranslatedType(Context context, String typeInEnglish)
-    {
-        switch(typeInEnglish)
-        {
-            case "Deposits":
-                return context.getString(R.string.add_money_deposits);
-            case "IndependentSources":
-                return context.getString(R.string.add_money_independent_sources);
-            case "Salary":
-                return context.getString(R.string.salary);
-            case "Saving":
-                return context.getString(R.string.saving);
-            case "Bills":
-                return context.getString(R.string.subtract_money_bills);
-            case "Car":
-                return context.getString(R.string.subtract_money_car);
-            case "Clothes":
-                return context.getString(R.string.subtract_money_clothes);
-            case "Communications":
-                return context.getString(R.string.subtract_money_communications);
-            case "EatingOut":
-                return context.getString(R.string.subtract_money_eating_out);
-            case "Entertainment":
-                return context.getString(R.string.subtract_money_entertainment);
-            case "Food":
-                return context.getString(R.string.subtract_money_food);
-            case "Gifts":
-                return context.getString(R.string.subtract_money_gifts);
-            case "Health":
-                return context.getString(R.string.subtract_money_health);
-            case "House":
-                return context.getString(R.string.subtract_money_house);
-            case "Pets":
-                return context.getString(R.string.subtract_money_pets);
-            case "Sports":
-                return context.getString(R.string.subtract_money_sports);
-            case "Taxi":
-                return context.getString(R.string.subtract_money_taxi);
-            case "Toiletry":
-                return context.getString(R.string.subtract_money_toiletry);
-            case "Transport":
-                return context.getString(R.string.subtract_money_transport);
-            default:
-                return "";
-        }
+public class Types {
+    public static String getTranslatedType(final Context context, final String typeInEnglish) {
+        return typeInEnglish.equals("Deposits") ?
+                context.getString(R.string.add_money_deposits) : typeInEnglish.equals("Independent sources") ?
+                context.getString(R.string.add_money_independent_sources) : typeInEnglish.equals("Salary") ?
+                context.getString(R.string.salary) : typeInEnglish.equals("Saving") ?
+                context.getString(R.string.saving) : typeInEnglish.equals("Bills") ?
+                context.getString(R.string.subtract_money_bills) : typeInEnglish.equals("Car") ?
+                context.getString(R.string.subtract_money_car) : typeInEnglish.equals("Clothes") ?
+                context.getString(R.string.subtract_money_clothes) : typeInEnglish.equals("Communications") ?
+                context.getString(R.string.subtract_money_communications) : typeInEnglish.equals("Eating out") ?
+                context.getString(R.string.subtract_money_eating_out) : typeInEnglish.equals("Entertainment") ?
+                context.getString(R.string.subtract_money_entertainment) : typeInEnglish.equals("Food") ?
+                context.getString(R.string.subtract_money_food) : typeInEnglish.equals("Gifts") ?
+                context.getString(R.string.subtract_money_gifts) : typeInEnglish.equals("Health") ?
+                context.getString(R.string.subtract_money_health) : typeInEnglish.equals("House") ?
+                context.getString(R.string.subtract_money_house) : typeInEnglish.equals("Pets") ?
+                context.getString(R.string.subtract_money_pets) : typeInEnglish.equals("Sports") ?
+                context.getString(R.string.subtract_money_sports) : typeInEnglish.equals("Taxi") ?
+                context.getString(R.string.subtract_money_taxi) : typeInEnglish.equals("Toiletry") ?
+                context.getString(R.string.subtract_money_toiletry) : typeInEnglish.equals("Transport") ?
+                context.getString(R.string.subtract_money_transport) : null;
     }
 
-    public static String getTypeInEnglish(Context context, String translatedType)
-    {
-        if(translatedType.equals(context.getString(R.string.add_money_deposits)))
-            return "Deposits";
-        else if(translatedType.equals(context.getString(R.string.add_money_independent_sources)))
-            return "IndependentSources";
-        else if(translatedType.equals(context.getString(R.string.saving)))
-            return "Saving";
-        else if(translatedType.equals(context.getString(R.string.salary)))
-            return "Salary";
-        else if(translatedType.equals(context.getString(R.string.subtract_money_bills)))
-            return "Bills";
-        else if(translatedType.equals(context.getString(R.string.subtract_money_car)))
-            return "Car";
-        else if(translatedType.equals(context.getString(R.string.subtract_money_clothes)))
-            return "Clothes";
-        else if(translatedType.equals(context.getString(R.string.subtract_money_communications)))
-            return "Communications";
-        else if(translatedType.equals(context.getString(R.string.subtract_money_eating_out)))
-            return "EatingOut";
-        else if(translatedType.equals(context.getString(R.string.subtract_money_entertainment)))
-            return "Entertainment";
-        else if(translatedType.equals(context.getString(R.string.subtract_money_food)))
-            return "Food";
-        else if(translatedType.equals(context.getString(R.string.subtract_money_gifts)))
-            return "Gifts";
-        else if(translatedType.equals(context.getString(R.string.subtract_money_health)))
-            return "Health";
-        else if(translatedType.equals(context.getString(R.string.subtract_money_house)))
-            return "House";
-        else if(translatedType.equals(context.getString(R.string.subtract_money_pets)))
-            return "Pets";
-        else if(translatedType.equals(context.getString(R.string.subtract_money_sports)))
-            return "Sports";
-        else if(translatedType.equals(context.getString(R.string.subtract_money_taxi)))
-            return "Taxi";
-        else if(translatedType.equals(context.getString(R.string.subtract_money_toiletry)))
-            return "Toiletry";
-        else if(translatedType.equals(context.getString(R.string.subtract_money_transport)))
-            return "Transport";
-        else return null;
+    public static String getTypeInEnglish(final Context context, final String translatedType) {
+        return translatedType.equals(context.getString(R.string.add_money_deposits)) ?
+                "Deposits" : translatedType.equals(context.getString(R.string.add_money_independent_sources)) ?
+                "Independent sources" : translatedType.equals(context.getString(R.string.saving)) ?
+                "Saving" : translatedType.equals(context.getString(R.string.salary)) ?
+                "Salary" : translatedType.equals(context.getString(R.string.subtract_money_bills)) ?
+                "Bills" : translatedType.equals(context.getString(R.string.subtract_money_car)) ?
+                "Car" : translatedType.equals(context.getString(R.string.subtract_money_clothes)) ?
+                "Clothes" : translatedType.equals(context.getString(R.string.subtract_money_communications)) ?
+                "Communications" : translatedType.equals(context.getString(R.string.subtract_money_eating_out)) ?
+                "Eating out" : translatedType.equals(context.getString(R.string.subtract_money_entertainment)) ?
+                "Entertainment" : translatedType.equals(context.getString(R.string.subtract_money_food)) ?
+                "Food" : translatedType.equals(context.getString(R.string.subtract_money_gifts)) ?
+                "Gifts" : translatedType.equals(context.getString(R.string.subtract_money_health)) ?
+                "Health" : translatedType.equals(context.getString(R.string.subtract_money_house)) ?
+                "House" : translatedType.equals(context.getString(R.string.subtract_money_pets)) ?
+                "Pets" : translatedType.equals(context.getString(R.string.subtract_money_sports)) ?
+                "Sports" : translatedType.equals(context.getString(R.string.subtract_money_taxi)) ?
+                "Taxi" : translatedType.equals(context.getString(R.string.subtract_money_toiletry)) ?
+                "Toiletry" : translatedType.equals(context.getString(R.string.subtract_money_transport)) ?
+                "Transport" : null;
     }
 }

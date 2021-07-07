@@ -1,14 +1,11 @@
 package com.example.EconomyManager.ApplicationPart;
 
-import android.content.Context;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.view.View;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioButton;
@@ -18,30 +15,26 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.EconomyManager.MyCustomMethods;
+import com.example.EconomyManager.MyCustomVariables;
 import com.example.EconomyManager.R;
 import com.example.EconomyManager.Transaction;
 import com.example.EconomyManager.Types;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
 import java.util.Collections;
 
 public class ActivityAddMoney extends AppCompatActivity {
-    private Button saveChanges;
-    private Button cancel;
-    private FirebaseAuth fbAuth;
-    private DatabaseReference myRef;
+    private Button saveChangesButton;
+    private Button cancelButton;
     private RadioGroup radioGroup;
-    private EditText note;
-    private EditText value;
-    private RadioButton radioButton;
+    private EditText noteField;
+    private EditText valueField;
     private TextView error;
-    private RadioButton[] radioButton1;
+    private final RadioButton[] radioButton1 = new RadioButton[4];
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_money);
         setVariables();
@@ -58,35 +51,32 @@ public class ActivityAddMoney extends AppCompatActivity {
     }
 
     private void setVariables() {
-        saveChanges = findViewById(R.id.addMoneySaveButton);
-        fbAuth = FirebaseAuth.getInstance();
-        myRef = FirebaseDatabase.getInstance().getReference();
+        saveChangesButton = findViewById(R.id.addMoneySaveButton);
         radioGroup = findViewById(R.id.addMoneyRadioGroup);
-        note = findViewById(R.id.addMoneyNote);
-        value = findViewById(R.id.addMoneyValue);
+        noteField = findViewById(R.id.addMoneyNote);
+        valueField = findViewById(R.id.addMoneyValue);
         error = findViewById(R.id.addMoneyError);
-        cancel = findViewById(R.id.addMoneyCancelButton);
-        radioButton1 = new RadioButton[4];
+        cancelButton = findViewById(R.id.addMoneyCancelButton);
     }
 
     private void createRadioButtons() {
-        ArrayList<String> buttonTextArray = new ArrayList<>();
-        int ID;
+        final ArrayList<String> buttonTextArray = new ArrayList<>();
 
         buttonTextArray.add(getResources().getString(R.string.add_money_deposits).trim());
         buttonTextArray.add(getResources().getString(R.string.add_money_independent_sources).trim());
         buttonTextArray.add(getResources().getString(R.string.salary).trim());
         buttonTextArray.add(getResources().getString(R.string.saving).trim());
+
         Collections.sort(buttonTextArray);
 
         for (int i = 0; i < buttonTextArray.size(); i++) {
-            if (buttonTextArray.get(i).equals(getResources().getString(R.string.add_money_deposits).trim()))
-                ID = R.id.addMoneyRadioButtonDeposits;
-            else if (buttonTextArray.get(i).equals(getResources().getString(R.string.add_money_independent_sources).trim()))
-                ID = R.id.addMoneyRadioButtonIndependentSources;
-            else if (buttonTextArray.get(i).equals(getResources().getString(R.string.salary).trim()))
-                ID = R.id.addMoneyRadioButtonSalary;
-            else ID = R.id.addMoneyRadioButtonSaving;
+            final int ID = buttonTextArray.get(i)
+                    .equals(getResources().getString(R.string.add_money_deposits).trim()) ?
+                    R.id.addMoneyRadioButtonDeposits : buttonTextArray.get(i)
+                    .equals(getResources().getString(R.string.add_money_independent_sources).trim()) ?
+                    R.id.addMoneyRadioButtonIndependentSources : buttonTextArray.get(i)
+                    .equals(getResources().getString(R.string.salary).trim()) ?
+                    R.id.addMoneyRadioButtonSalary : R.id.addMoneyRadioButtonSaving;
 
             radioButton1[i] = new RadioButton(this);
             radioButton1[i].setText(buttonTextArray.get(i));
@@ -100,34 +90,32 @@ public class ActivityAddMoney extends AppCompatActivity {
     }
 
     private void setOnClickListeners() {
-        saveChanges.setOnClickListener(v -> {
-            int selectedID = radioGroup.getCheckedRadioButtonId();
+        saveChangesButton.setOnClickListener(v -> {
+            final int selectedID = radioGroup.getCheckedRadioButtonId();
 
-            closeTheKeyboard();
+            MyCustomMethods.closeTheKeyboard(ActivityAddMoney.this);
 
-            // daca a fost selectat vreun buton radio
-            if (selectedID != -1 && fbAuth.getUid() != null) {
-                if (!String.valueOf(value.getText()).trim().equals("")) {
-                    if (fbAuth.getUid() != null) {
-                        radioButton = findViewById(selectedID);
+            // if there was a radio button checked
+            if (selectedID != -1 && MyCustomVariables.getFirebaseAuth().getUid() != null) {
+                if (!String.valueOf(valueField.getText()).trim().equals("")) {
+                    if (MyCustomVariables.getFirebaseAuth().getUid() != null) {
+                        final RadioButton radioButton = findViewById(selectedID);
 
-                        Transaction newTransaction;
-                        int transactionCategoryIndex = Transaction.getIndexFromCategory(Types.
+                        final int transactionCategoryIndex = Transaction.getIndexFromCategory(Types.
                                 getTypeInEnglish(this,
                                         String.valueOf(radioButton.getText()).trim()));
 
-                        if (!String.valueOf(note.getText()).trim().equals("")) {
-                            newTransaction = new Transaction(transactionCategoryIndex,
-                                    1,
-                                    String.valueOf(note.getText()).trim(),
-                                    String.valueOf(value.getText()).trim());
-                        } else {
-                            newTransaction = new Transaction(transactionCategoryIndex,
-                                    1,
-                                    String.valueOf(value.getText()).trim());
-                        }
+                        final Transaction newTransaction = !String.valueOf(noteField.getText()).trim().equals("") ?
+                                new Transaction(transactionCategoryIndex,
+                                        1,
+                                        String.valueOf(noteField.getText()).trim(),
+                                        String.valueOf(valueField.getText()).trim()) :
+                                new Transaction(transactionCategoryIndex,
+                                        1,
+                                        String.valueOf(valueField.getText()).trim());
 
-                        myRef.child(fbAuth.getUid())
+                        MyCustomVariables.getDatabaseReference()
+                                .child(MyCustomVariables.getFirebaseAuth().getUid())
                                 .child("PersonalTransactions")
                                 .child(newTransaction.getId())
                                 .setValue(newTransaction)
@@ -137,75 +125,74 @@ public class ActivityAddMoney extends AppCompatActivity {
                                                     getResources().getString(R.
                                                             string.add_money_added_successfully),
                                             Toast.LENGTH_SHORT).show();
+
                                     finish();
                                     overridePendingTransition(R.anim.slide_in_left,
                                             R.anim.slide_out_right);
                                 })
                                 .addOnFailureListener(e -> {
-                                    myRef.child(fbAuth.getUid())
+                                    MyCustomVariables.getDatabaseReference()
+                                            .child(MyCustomVariables.getFirebaseAuth().getUid())
                                             .child("PersonalTransactions")
                                             .child(newTransaction.getId())
                                             .removeValue();
+
                                     Toast.makeText(ActivityAddMoney.this,
                                             "Try again",
                                             Toast.LENGTH_SHORT).show();
                                 });
                     }
-                } else error.setText(R.string.money_error4);
-            } else error.setText(R.string.money_error1);
+                } else {
+                    error.setText(R.string.money_error4);
+                }
+            }
+            // if there wasn't a radio button checked
+            else {
+                error.setText(R.string.money_error1);
+            }
         });
 
-        cancel.setOnClickListener(v -> onBackPressed());
+        cancelButton.setOnClickListener(v -> onBackPressed());
     }
 
-    private void closeTheKeyboard() {
-        View v = this.getCurrentFocus();
-        if (v != null) {
-            InputMethodManager manager =
-                    (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-            manager.hideSoftInputFromWindow(v.getWindowToken(), 0);
-        }
-    }
-
+    // method for limiting the number to only two decimals
     private void limitTwoDecimals() {
-        value.addTextChangedListener(new TextWatcher() {
+        valueField.addTextChangedListener(new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            public void beforeTextChanged(final CharSequence s, final int start, final int count, final int after) {
 
             }
 
             @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                int positionOfComma, textLength = String.valueOf(s).length();
-                if (String.valueOf(s).contains(".")) {
-                    // salvam pozitia punctului ce desparte partea intreaga a numarului
-                    // de partea zecimala a sa
-                    positionOfComma = String.valueOf(s).indexOf(".");
+            public void onTextChanged(final CharSequence s, final int start, final int before, final int count) {
+                final int textLength = String.valueOf(s).length();
 
-                    // daca adaugam prima data punctul, adaugam un zero in fata (ex: .5)
+                // if the number is decimal (contains comma)
+                if (String.valueOf(s).contains(".")) {
+                    // saving comma's position
+                    final int positionOfComma = String.valueOf(s).indexOf(".");
+
+                    // adding a zero before if the first character is a dot (i.e: .5 => 0.5)
                     if (positionOfComma == 0 && textLength == 1) {
-                        String text = "0" + value.getText();
-                        value.setText(text);
-                        // punem cursorul pe ultima pozitie
-                        // (cursorul sare pe prima pozitie dupa instructiunea de mai sus)
-                        value.setSelection(String.valueOf(value.getText()).length());
+                        final String text = "0" + valueField.getText();
+                        valueField.setText(text);
+                        // putting the cursor at the end
+                        valueField.setSelection(String.valueOf(valueField.getText()).length());
                     }
 
-                    // daca adaugam mai mult de 2 zecimale
-                    if (textLength - 1 - positionOfComma > 2) {
-                        // punem doar primele 2 zecimale (ca si cum nu ne mai lasa sa adaugam
-                        // caractere dupa ce am depasit cele 2 zecimale)
-                        value.setText(String.valueOf(value.getText())
+                    // if we add more than two decimals
+                    if (textLength - positionOfComma > 3) {
+                        // putting only the first two decimals
+                        valueField.setText(String.valueOf(valueField.getText())
                                 .substring(0, positionOfComma + 3));
-                        // punem cursorul pe ultima pozitie (cursorul sare pe prima pozitie
-                        // dupa instructiunea de mai sus)
-                        value.setSelection(String.valueOf(value.getText()).length());
+                        // putting the cursor at the end
+                        valueField.setSelection(String.valueOf(valueField.getText()).length());
                     }
                 }
             }
 
             @Override
-            public void afterTextChanged(Editable s) {
+            public void afterTextChanged(final Editable s) {
 
             }
         });
