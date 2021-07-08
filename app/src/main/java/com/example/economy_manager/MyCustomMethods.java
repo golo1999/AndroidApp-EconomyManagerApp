@@ -2,6 +2,7 @@ package com.example.economy_manager;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 
@@ -30,5 +31,15 @@ public class MyCustomMethods {
                 displayLanguage.equals("português") ?
                 "€" : displayLanguage.equals("română") ?
                 "RON" : "£";
+    }
+
+    // direction : 0 -> left, 1 -> right
+    public static void goToActivityInDirection(final @NonNull Activity currentActivity,
+                                               final @NonNull Class<? extends Activity> nextActivity,
+                                               final int direction) {
+        currentActivity.startActivity(new Intent(currentActivity, nextActivity));
+        currentActivity.overridePendingTransition(direction == 0 ?
+                R.anim.slide_in_left : R.anim.slide_in_right, direction == 0 ?
+                R.anim.slide_out_right : R.anim.slide_out_left);
     }
 }

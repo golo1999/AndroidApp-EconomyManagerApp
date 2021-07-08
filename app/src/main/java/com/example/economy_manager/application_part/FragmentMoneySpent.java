@@ -30,21 +30,23 @@ public class FragmentMoneySpent extends Fragment {
     }
 
     public static FragmentMoneySpent newInstance() {
-        FragmentMoneySpent fragment = new FragmentMoneySpent();
-        Bundle args = new Bundle();
+        final FragmentMoneySpent fragment = new FragmentMoneySpent();
+        final Bundle args = new Bundle();
+
         fragment.setArguments(args);
+
         return fragment;
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    public void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.fragment_money_spent, container, false);
+    public View onCreateView(final LayoutInflater inflater, final ViewGroup container,
+                             final Bundle savedInstanceState) {
+        final View v = inflater.inflate(R.layout.fragment_money_spent, container, false);
         setVariables(v);
         return v;
     }
@@ -55,7 +57,7 @@ public class FragmentMoneySpent extends Fragment {
         setLastWeekExpenses();
     }
 
-    private void setVariables(View v) {
+    private void setVariables(final View v) {
         moneySpent = v.findViewById(R.id.money_spent_week);
     }
 

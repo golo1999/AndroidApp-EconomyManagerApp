@@ -172,14 +172,14 @@
                 app:layout_constraintTop_toBottomOf="@id/greetingLayout"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintBottom_toTopOf="@id/scroll_container0"
+                app:layout_constraintBottom_toTopOf="@id/fragment_show_savings_container"
                 android:textStyle="bold"
                 android:textSize="20sp"
                 android:textColor="#FFFFFF"
                 app:layout_constraintWidth_percent=".9"/>
 
             <FrameLayout
-                android:id="@+id/scroll_container0"
+                android:id="@+id/fragment_show_savings_container"
                 android:layout_width="0dp"
                 app:layout_constraintWidth_percent=".9"
                 android:layout_height="wrap_content"
@@ -195,17 +195,17 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:text="@string/monthly_balance"
-                app:layout_constraintTop_toBottomOf="@id/scroll_container0"
+                app:layout_constraintTop_toBottomOf="@id/fragment_show_savings_container"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintBottom_toTopOf="@id/scroll_container1"
+                app:layout_constraintBottom_toTopOf="@id/fragment_bugdet_review_container"
                 android:textStyle="bold"
                 android:textSize="20sp"
                 android:textColor="#FFFFFF"
                 app:layout_constraintWidth_percent=".9"/>
 
             <FrameLayout
-                android:id="@+id/scroll_container1"
+                android:id="@+id/fragment_bugdet_review_container"
                 android:layout_width="0dp"
                 app:layout_constraintWidth_percent=".9"
                 android:layout_height="wrap_content"
@@ -221,17 +221,17 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:text="@string/last_week_expenses"
-                app:layout_constraintTop_toBottomOf="@id/scroll_container1"
+                app:layout_constraintTop_toBottomOf="@id/fragment_bugdet_review_container"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintBottom_toTopOf="@id/scroll_container2"
+                app:layout_constraintBottom_toTopOf="@id/fragment_money_spent_container"
                 android:textStyle="bold"
                 android:textSize="20sp"
                 android:textColor="#FFFFFF"
                 app:layout_constraintWidth_percent=".9"/>
 
             <FrameLayout
-                android:id="@+id/scroll_container2"
+                android:id="@+id/fragment_money_spent_container"
                 android:layout_width="0dp"
                 app:layout_constraintWidth_percent=".9"
                 android:layout_height="wrap_content"
@@ -247,17 +247,17 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:text="@string/last_10_transactions"
-                app:layout_constraintTop_toBottomOf="@id/scroll_container2"
+                app:layout_constraintTop_toBottomOf="@id/fragment_money_spent_container"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintBottom_toTopOf="@id/scroll_container3"
+                app:layout_constraintBottom_toTopOf="@id/fragment_last_ten_transactions_container"
                 android:textStyle="bold"
                 android:textSize="20sp"
                 android:textColor="#FFFFFF"
                 app:layout_constraintWidth_percent=".9"/>
 
             <FrameLayout
-                android:id="@+id/scroll_container3"
+                android:id="@+id/fragment_last_ten_transactions_container"
                 android:layout_width="0dp"
                 app:layout_constraintWidth_percent=".9"
                 android:layout_height="wrap_content"
@@ -273,17 +273,17 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:text="@string/top_5_expenses"
-                app:layout_constraintTop_toBottomOf="@id/scroll_container3"
+                app:layout_constraintTop_toBottomOf="@id/fragment_last_ten_transactions_container"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintBottom_toTopOf="@id/scroll_container4"
+                app:layout_constraintBottom_toTopOf="@id/fragment_top_five_expenses_container"
                 android:textStyle="bold"
                 android:textSize="20sp"
                 android:textColor="#FFFFFF"
                 app:layout_constraintWidth_percent=".9"/>
 
             <FrameLayout
-                android:id="@+id/scroll_container4"
+                android:id="@+id/fragment_top_five_expenses_container"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 app:layout_constraintWidth_percent=".9"
@@ -299,17 +299,17 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:text="123"
-                app:layout_constraintTop_toBottomOf="@id/scroll_container4"
+                app:layout_constraintTop_toBottomOf="@id/fragment_top_five_expenses_container"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintBottom_toTopOf="@id/scroll_container5"
+                app:layout_constraintBottom_toTopOf="@id/fragment_money_spent_percentage_container"
                 android:textStyle="bold"
                 android:textSize="20sp"
                 android:textColor="#FFFFFF"
                 app:layout_constraintWidth_percent=".9"/>
 
             <FrameLayout
-                android:id="@+id/scroll_container5"
+                android:id="@+id/fragment_money_spent_percentage_container"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:layout_marginTop="10dp"
@@ -328,7 +328,7 @@
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/scroll_container5"
+                app:layout_constraintTop_toBottomOf="@id/fragment_money_spent_percentage_container"
                 android:layout_marginBottom="20dp"
                 android:clipChildren="false">
 

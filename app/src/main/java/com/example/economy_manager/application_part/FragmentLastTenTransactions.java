@@ -37,8 +37,10 @@ public class FragmentLastTenTransactions extends Fragment {
     }
 
     public static FragmentLastTenTransactions newInstance() {
-        FragmentLastTenTransactions fragment = new FragmentLastTenTransactions();
-        Bundle args = new Bundle();
+        final FragmentLastTenTransactions fragment = new FragmentLastTenTransactions();
+        final Bundle args = new Bundle();
+
+
         fragment.setArguments(args);
         return fragment;
     }
@@ -121,7 +123,7 @@ public class FragmentLastTenTransactions extends Fragment {
                 transactionsList.sort((transaction1, transaction2) ->
                         transaction2.getTime().compareTo(transaction1.getTime()));
 
-                // creating a new list from the first 10 transactions only if there are more than 10
+                // creating a new list from the first 10 transactions only if there are more than that
                 if (transactionsList.size() > 10) {
                     limitedTransactionsList = (ArrayList<Transaction>) transactionsList.stream()
                             .limit(10).collect(Collectors.toList());

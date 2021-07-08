@@ -107,11 +107,6 @@ public class ActivitySplashScreen extends AppCompatActivity {
         private boolean checkIfUserDetailsAlreadyExistInSharedPreferences(final UserDetails details) {
             UserDetails userDetailsFromSharedPreferences = retrieveUserDetailsFromSharedPreferences();
 
-//            Log.d("userDetailsAreEqual", String.valueOf(details.equals(userDetailsFromSharedPreferences)));
-//
-//            Log.d("userDetails1", details.toString());
-//            Log.d("userDetails2", userDetailsFromSharedPreferences.toString());
-
             return details.equals(userDetailsFromSharedPreferences);
         }
     }

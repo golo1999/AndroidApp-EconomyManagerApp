@@ -13,6 +13,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.example.economy_manager.MyCustomMethods;
 import com.example.economy_manager.MyCustomSharedPreferences;
 import com.example.economy_manager.MyCustomVariables;
 import com.example.economy_manager.R;
@@ -25,32 +26,29 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
 
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
-import java.util.Calendar;
-import java.util.Locale;
 import java.util.Timer;
 import java.util.TimerTask;
 
 public class ActivityMainScreen extends AppCompatActivity {
     private MainScreenViewModel viewModel;
+    private ConstraintLayout firebaseDatabaseLoadingProgressBarLayout;
+    private ProgressBar firebaseDatabaseLoadingProgressBar;
     private TextView greeting;
     private TextView date;
-    private TextView moneySpentPercentage;
-    private TextView remainingMonthlyIncomeText;
-    private TextView monthlyBalanceText;
-    private TextView lastWeekExpensesText;
-    private TextView lastTenTransactionsText;
-    private TextView topFiveExpensesText;
     private FloatingActionButton addButton;
     private FloatingActionButton subtractButton;
     private ImageView signOut;
     private ImageView edit;
     private ImageView balance;
+    private TextView moneySpentPercentage;
     private ImageView account;
     private ImageView settings;
-    private ConstraintLayout firebaseDatabaseLoadingProgressBarLayout;
-    private ProgressBar firebaseDatabaseLoadingProgressBar;
+    private TextView remainingMonthlyIncomeText;
+    private TextView monthlyBalanceText;
+    private TextView lastWeekExpensesText;
+    private TextView lastTenTransactionsText;
+    private TextView topFiveExpensesText;
     private int timerCounter = 0;
 
     @Override
@@ -58,8 +56,8 @@ public class ActivityMainScreen extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setTimer();
         setContentView(R.layout.activity_main_screen);
-        setFragments();
         setVariables();
+        setFragments();
         setOnClickListeners();
     }
 
@@ -95,47 +93,23 @@ public class ActivityMainScreen extends AppCompatActivity {
     }
 
     private void setOnClickListeners() {
-        account.setOnClickListener(v -> {
-            final Intent intent = new Intent(ActivityMainScreen.this, ActivityEditAccount.class);
+        account.setOnClickListener(v -> MyCustomMethods.goToActivityInDirection(ActivityMainScreen.this,
+                ActivityEditAccount.class, 1));
 
-            startActivity(intent);
-            overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
-        });
+        addButton.setOnClickListener(v -> MyCustomMethods.goToActivityInDirection(ActivityMainScreen.this,
+                ActivityAddMoney.class, 1));
 
-        addButton.setOnClickListener(v -> {
-            final Intent intent = new Intent(ActivityMainScreen.this, ActivityAddMoney.class);
+        balance.setOnClickListener(v -> MyCustomMethods.goToActivityInDirection(ActivityMainScreen.this,
+                ActivityMonthlyBalance.class, 0));
 
-            startActivity(intent);
-            overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
-        });
+        edit.setOnClickListener(v -> MyCustomMethods.goToActivityInDirection(ActivityMainScreen.this,
+                ActivityEditTransactions.class, 0));
 
-        balance.setOnClickListener(v -> {
-            final Intent intent = new Intent(ActivityMainScreen.this, ActivityMonthlyBalance.class);
+        settings.setOnClickListener(v -> MyCustomMethods.goToActivityInDirection(ActivityMainScreen.this,
+                ActivitySettings.class, 1));
 
-            startActivity(intent);
-            overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
-        });
-
-        edit.setOnClickListener(v -> {
-            final Intent intent = new Intent(ActivityMainScreen.this, ActivityEditTransactions.class);
-
-            startActivity(intent);
-            overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
-        });
-
-        settings.setOnClickListener(v -> {
-            final Intent intent = new Intent(ActivityMainScreen.this, ActivitySettings.class);
-
-            startActivity(intent);
-            overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
-        });
-
-        subtractButton.setOnClickListener(v -> {
-            final Intent intent = new Intent(ActivityMainScreen.this, ActivitySubtractMoney.class);
-
-            startActivity(intent);
-            overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
-        });
+        subtractButton.setOnClickListener(v -> MyCustomMethods.goToActivityInDirection(ActivityMainScreen.this,
+                ActivitySubtractMoney.class, 1));
 
         signOut.setOnClickListener(v -> {
             final Intent intent = new Intent(ActivityMainScreen.this, LogIn.class);
@@ -149,22 +123,14 @@ public class ActivityMainScreen extends AppCompatActivity {
     }
 
     private void setFragments() {
-        final FragmentBudgetReview budgetReview = FragmentBudgetReview.newInstance();
-        final FragmentMoneySpent moneySpent = FragmentMoneySpent.newInstance();
-        final FragmentLastTenTransactions lastTenTransactions = FragmentLastTenTransactions.newInstance();
-        final FragmentShowSavings savings = FragmentShowSavings.newInstance();
-        final FragmentTopFiveExpenses expenses = FragmentTopFiveExpenses.newInstance();
-        final FragmentMoneySpentPercentage moneySpentPercentage =
-                FragmentMoneySpentPercentage.newInstance();
-
         getSupportFragmentManager()
                 .beginTransaction()
-                .replace(R.id.scroll_container0, savings)
-                .replace(R.id.scroll_container1, budgetReview)
-                .replace(R.id.scroll_container2, moneySpent)
-                .replace(R.id.scroll_container3, lastTenTransactions)
-                .replace(R.id.scroll_container4, expenses)
-                .replace(R.id.scroll_container5, moneySpentPercentage)
+                .replace(R.id.fragment_show_savings_container, viewModel.getFragmentShowSavings())
+                .replace(R.id.fragment_bugdet_review_container, viewModel.getFragmentBudgetReview())
+                .replace(R.id.fragment_money_spent_container, viewModel.getFragmentMoneySpent())
+                .replace(R.id.fragment_last_ten_transactions_container, viewModel.getFragmentLastTenTransactions())
+                .replace(R.id.fragment_top_five_expenses_container, viewModel.getFragmentTopFiveExpenses())
+                .replace(R.id.fragment_money_spent_percentage_container, viewModel.getFragmentMoneySpentPercentage())
                 .commit();
     }
 
@@ -192,7 +158,7 @@ public class ActivityMainScreen extends AppCompatActivity {
                 runOnUiThread(() -> {
                     ++timerCounter;
 
-                    // oprim timerul dupa o secunda
+                    // stopping the timer after one second
                     if (timerCounter == 1) {
                         timer.cancel();
                     }
@@ -202,75 +168,8 @@ public class ActivityMainScreen extends AppCompatActivity {
     }
 
     private void setDates() {
-        final Calendar currentTime = Calendar.getInstance();
-        int currentHour = currentTime.get(Calendar.HOUR_OF_DAY);
-        final String greetingMessage = currentHour < 12 ?
-                getResources().getString(R.string.greet_good_morning) : currentHour < 18 ?
-                getResources().getString(R.string.greet_good_afternoon) : getResources().getString(R.string.greet_good_evening);
-        String currentDate;
-        String datePrefix;
-        SimpleDateFormat monthFormat;
-
-//        Toast.makeText(ActivityMainScreen.this,
-//                Locale.getDefault().getDisplayLanguage(),
-//                Toast.LENGTH_SHORT).show(); // -> afiseaza limba curenta a dispozitivului
-
-        switch (Locale.getDefault().getDisplayLanguage()) {
-            case "Deutsch":
-                datePrefix = "der";
-                monthFormat = new SimpleDateFormat("LLLL", Locale.GERMAN);
-                currentDate = datePrefix + " " + currentTime.get(Calendar.DAY_OF_MONTH) + " " +
-                        monthFormat.format(currentTime.getTime()) + " " +
-                        currentTime.get(Calendar.YEAR);
-                break;
-            case "español":
-                final String separator = "de";
-
-                monthFormat = new SimpleDateFormat("LLLL", Locale.forLanguageTag("es-ES"));
-                currentDate = currentTime.get(Calendar.DAY_OF_MONTH) + " " + separator + " " +
-                        monthFormat.format(currentTime.getTime()) + " " + separator + " " +
-                        currentTime.get(Calendar.YEAR);
-                break;
-            case "français":
-                monthFormat = new SimpleDateFormat("LLLL", Locale.FRENCH);
-                currentDate = currentTime.get(Calendar.DAY_OF_MONTH) + " " +
-                        monthFormat.format(currentTime.getTime()) + " " +
-                        currentTime.get(Calendar.YEAR);
-                break;
-            case "italiano":
-                datePrefix = "il";
-                monthFormat = new SimpleDateFormat("LLLL", Locale.ITALIAN);
-                currentDate = datePrefix + " " + currentTime.get(Calendar.DAY_OF_MONTH) + " " +
-                        monthFormat.format(currentTime.getTime()) + " " +
-                        currentTime.get(Calendar.YEAR);
-                break;
-            case "português":
-                datePrefix = "de";
-                monthFormat = new SimpleDateFormat("LLLL", Locale.forLanguageTag("pt-PT"));
-                currentDate = currentTime.get(Calendar.DAY_OF_MONTH) + " " + datePrefix + " " +
-                        monthFormat.format(currentTime.getTime()) + " " + datePrefix + " " +
-                        currentTime.get(Calendar.YEAR);
-                break;
-            case "română":
-                monthFormat = new SimpleDateFormat("LLLL", Locale.forLanguageTag("ro-RO"));
-                currentDate = currentTime.get(Calendar.DAY_OF_MONTH) + " " +
-                        monthFormat.format(currentTime.getTime()) + " " +
-                        currentTime.get(Calendar.YEAR);
-                break;
-            default:
-                final String daySuffix = currentTime.get(Calendar.DAY_OF_MONTH) % 10 == 1 ?
-                        "st" : currentTime.get(Calendar.DAY_OF_MONTH) % 10 == 2 ?
-                        "nd" : currentTime.get(Calendar.DAY_OF_MONTH) % 10 == 3 ?
-                        "rd" : "th";
-                monthFormat = new SimpleDateFormat("LLLL", Locale.ENGLISH);
-                currentDate = monthFormat.format(currentTime.getTime()) + " " +
-                        currentTime.get(Calendar.DAY_OF_MONTH) + daySuffix + ", " +
-                        currentTime.get(Calendar.YEAR);
-                break;
-        }
-
-        date.setText(currentDate);
-        greeting.setText(greetingMessage.trim());
+        greeting.setText(viewModel.getGreetingMessage(this));
+        date.setText(viewModel.getCurrentDateTranslated());
     }
 
     private void setMoneySpentPercentage() {

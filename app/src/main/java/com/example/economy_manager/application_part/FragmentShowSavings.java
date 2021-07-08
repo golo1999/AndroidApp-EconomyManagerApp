@@ -8,13 +8,13 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.lifecycle.ViewModelStoreOwner;
 
 import com.example.economy_manager.MyCustomMethods;
-import com.example.economy_manager.MyCustomSharedPreferences;
 import com.example.economy_manager.MyCustomVariables;
 import com.example.economy_manager.R;
 import com.example.economy_manager.Transaction;
-import com.example.economy_manager.UserDetails;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
@@ -22,7 +22,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.Locale;
 
 public class FragmentShowSavings extends Fragment {
-    private UserDetails userDetails;
+    private MainScreenViewModel viewModel;
     private TextView savingsText;
 
     public FragmentShowSavings() {
@@ -55,16 +55,12 @@ public class FragmentShowSavings extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
-        setUserDetails();
         setSavings();
     }
 
     private void setVariables(final View v) {
+        viewModel = new ViewModelProvider((ViewModelStoreOwner) requireContext()).get(MainScreenViewModel.class);
         savingsText = v.findViewById(R.id.fragment2Savings);
-    }
-
-    public void setUserDetails() {
-        userDetails = MyCustomSharedPreferences.retrieveUserDetailsFromSharedPreferences(requireContext());
     }
 
     private void setSavings() {
@@ -73,8 +69,8 @@ public class FragmentShowSavings extends Fragment {
                     .child(MyCustomVariables.getFirebaseAuth().getUid()).addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(final @NonNull DataSnapshot snapshot) {
-                    final String currencySymbol = userDetails != null ?
-                            userDetails.getApplicationSettings().getCurrencySymbol() :
+                    final String currencySymbol = viewModel.getUserDetails() != null ?
+                            viewModel.getUserDetails().getApplicationSettings().getCurrencySymbol() :
                             MyCustomMethods.getCurrencySymbol();
                     float totalMonthlyIncomes = 0f;
                     float totalMonthlyExpenses = 0f;
@@ -110,8 +106,9 @@ public class FragmentShowSavings extends Fragment {
                 }
             });
         } else {
-            final String currencySymbol = userDetails != null ?
-                    userDetails.getApplicationSettings().getCurrencySymbol() : MyCustomMethods.getCurrencySymbol();
+            final String currencySymbol = viewModel.getUserDetails() != null ?
+                    viewModel.getUserDetails().getApplicationSettings().getCurrencySymbol() :
+                    MyCustomMethods.getCurrencySymbol();
             final float totalMonthlyIncomes = 0f;
             final float totalMonthlyExpenses = 0f;
             final float totalMonthlySavings = totalMonthlyIncomes - totalMonthlyExpenses;
