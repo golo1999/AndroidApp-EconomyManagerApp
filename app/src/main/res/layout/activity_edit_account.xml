@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".application_part.ActivityEditAccount">
+    tools:context=".main_part.view.activity.ActivityEditAccount">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/editAccountTopLayout"

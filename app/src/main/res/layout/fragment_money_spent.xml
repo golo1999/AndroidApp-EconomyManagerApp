@@ -1,15 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<androidx.cardview.widget.CardView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".application_part.FragmentMoneySpent"
     app:cardBackgroundColor="@color/lime"
     app:cardCornerRadius="20dp"
-    app:cardElevation="0dp">
+    app:cardElevation="0dp"
+    tools:context=".main_part.view.fragment.FragmentMoneySpent">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -17,29 +16,30 @@
 
         <TextView
             android:id="@+id/money_spent_week"
-            android:layout_width="wrap_content"
+            android:layout_width="0sp"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toTopOf="@id/money_spent_image"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintLeft_toLeftOf="parent"
+            android:layout_marginTop="10dp"
+            android:paddingHorizontal="10sp"
+            android:textAlignment="center"
+            android:textColor="@color/blue"
             android:textSize="20sp"
             android:textStyle="bold"
-            android:layout_marginTop="10dp"
-            android:textColor="@color/blue"
-            android:textAlignment="center"/>
+            app:layout_constraintBottom_toTopOf="@id/money_spent_image"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <ImageView
             android:id="@+id/money_spent_image"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_balance_yellow"
-            app:layout_constraintTop_toBottomOf="@id/money_spent_week"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintLeft_toLeftOf="parent"
             android:layout_marginTop="10dp"
-            android:layout_marginBottom="10dp"/>
+            android:layout_marginBottom="10dp"
+            android:src="@drawable/ic_balance_yellow"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/money_spent_week" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

@@ -1,413 +1,310 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".application_part.ActivityAddMoney"
-    android:background="@drawable/ic_green_gradient_presentation_excitement">
+    android:background="@drawable/ic_green_gradient_presentation_excitement"
+    tools:context=".main_part.view.activity.ActivityAddMoney">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/addMoneyTopLayout"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            app:layout_constraintWidth_percent=".8"
-            app:layout_constraintHeight_percent=".3"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent">
-
-                <TextView
-                    android:id="@+id/addMoneyTitle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/add_money_title"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintBottom_toTopOf="@id/addMoneyLayout"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintRight_toRightOf="parent"
-                    android:textColor="@color/SecondColor"
-                    android:textStyle="bold"
-                    android:textSize="30sp"
-                    android:textAlignment="center"/>
-
-                <TextView
-                    android:id="@+id/addMoneyError"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/red"
-                    android:textStyle="bold"
-                    app:layout_constraintBottom_toTopOf="@id/addMoneyLayout"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintRight_toRightOf="parent"
-                    android:textSize="18sp"/>
-
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/addMoneyLayout"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintRight_toRightOf="parent">
-
-                        <EditText
-                            android:id="@+id/addMoneyValue"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:inputType="numberDecimal"
-                            android:hint="@string/value"
-                            android:textColor="#FFFFFF"
-                            android:textColorHint="#FFFFFF"
-                            app:layout_constraintTop_toTopOf="parent"
-                            app:layout_constraintLeft_toLeftOf="parent"
-                            app:layout_constraintRight_toRightOf="parent"
-                            android:paddingStart="10dp"
-                            android:paddingEnd="10dp"/>
-
-                        <EditText
-                            android:id="@+id/addMoneyNote"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:inputType="text"
-                            android:hint="@string/note"
-                            android:textColor="#FFFFFF"
-                            android:textColorHint="#FFFFFF"
-                            android:maxLength="20"
-                            app:layout_constraintTop_toBottomOf="@+id/addMoneyValue"
-                            app:layout_constraintLeft_toLeftOf="parent"
-                            app:layout_constraintRight_toRightOf="parent"
-                            android:paddingStart="10dp"
-                            android:paddingEnd="10dp"/>
-
-                </androidx.constraintlayout.widget.ConstraintLayout>
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-        <ScrollView
-            android:id="@+id/addMoneyScrollView"
-            android:layout_width="0dp"
-            app:layout_constraintWidth_percent=".8"
-            android:layout_height="0dp"
-            app:layout_constraintBottom_toTopOf="@id/addMoneyBottomLayout"
-            app:layout_constraintTop_toBottomOf="@id/addMoneyTopLayout"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintLeft_toLeftOf="parent"
-            android:layout_marginTop="20dp"
-            android:layout_marginBottom="10dp">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-
-                        <RadioGroup
-                            android:id="@+id/addMoneyRadioGroup"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            app:layout_constraintTop_toBottomOf="@id/subtractMoneyValue"
-                            app:layout_constraintLeft_toLeftOf="parent"
-                            app:layout_constraintRight_toRightOf="parent"
-                            android:orientation="vertical"/>
-
-                </LinearLayout>
-
-        </ScrollView>
+    <ScrollView
+        android:id="@+id/add_money_scroll_view"
+        android:layout_width="0dp"
+        android:layout_height="0sp"
+        android:fillViewport="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <LinearLayout
-            android:id="@+id/addMoneyBottomLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent">
+            android:orientation="vertical">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/add_money_top_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="20sp"
+                android:focusable="true"
+                android:focusableInTouchMode="true">
+
+                <TextView
+                    android:id="@+id/add_money_title"
+                    android:layout_width="0sp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10sp"
+                    android:text="@string/add_money_title"
+                    android:textAlignment="center"
+                    android:textColor="@color/SecondColor"
+                    android:textSize="30sp"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toTopOf="@id/add_money_value_field"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <EditText
+                    android:id="@+id/add_money_value_field"
+                    android:layout_width="0sp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginVertical="10sp"
+                    android:background="@drawable/button_white_border"
+                    android:hint="@string/value"
+                    android:importantForAutofill="no"
+                    android:inputType="numberDecimal"
+                    android:padding="10sp"
+                    android:textColor="@color/white"
+                    android:textColorHint="@color/white"
+                    android:textCursorDrawable="@color/white"
+                    android:textSize="20sp"
+                    app:layout_constraintBottom_toTopOf="@id/add_money_note_field"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/add_money_title" />
+
+                <EditText
+                    android:id="@+id/add_money_note_field"
+                    android:layout_width="0sp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10sp"
+                    android:background="@drawable/button_white_border"
+                    android:hint="@string/note"
+                    android:importantForAutofill="no"
+                    android:inputType="text"
+                    android:maxLength="20"
+                    android:padding="10sp"
+                    android:textColor="@color/white"
+                    android:textColorHint="@color/white"
+                    android:textCursorDrawable="@color/white"
+                    android:textSize="20sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/add_money_value_field" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <RadioGroup
+                android:id="@+id/add_money_radio_group"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="20sp"
+                android:orientation="vertical" />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/add_money_bottom_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="20sp">
 
                 <Button
-                    android:id="@+id/addMoneyCancelButton"
-                    android:layout_width="wrap_content"
+                    android:id="@+id/add_money_cancel_button"
+                    android:layout_width="0sp"
                     android:layout_height="wrap_content"
+                    android:layout_marginEnd="10sp"
+                    android:background="@drawable/button_white_border"
+                    android:paddingVertical="20sp"
                     android:text="@string/cancel"
-                    android:textColor="#000000"
-                    android:textStyle="bold"
-                    android:background="@drawable/ic_button_round_corners"
-                    android:paddingTop="20dp"
-                    android:paddingBottom="20dp"
+                    android:textColor="@color/white"
                     android:textSize="15sp"
-                    android:layout_weight="1"
-                    android:layout_margin="5dp"/>
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@id/add_money_save_button"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <Button
-                    android:id="@+id/addMoneySaveButton"
-                    android:layout_width="wrap_content"
+                    android:id="@+id/add_money_save_button"
+                    android:layout_width="0sp"
                     android:layout_height="wrap_content"
+                    android:layout_marginStart="10sp"
+                    android:background="@drawable/button_white_border"
+                    android:paddingVertical="20sp"
                     android:text="@string/save"
-                    android:textColor="#000000"
-                    android:textStyle="bold"
-                    android:background="@drawable/ic_button_round_corners"
-                    android:paddingTop="20dp"
-                    android:paddingBottom="20dp"
+                    android:textColor="@color/white"
                     android:textSize="15sp"
-                    android:layout_weight="1"
-                    android:layout_margin="5dp"/>
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/add_money_cancel_button"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
         </LinearLayout>
+
+    </ScrollView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 
     <!--
 
-    <ScrollView
+    <?xml version="1.0" encoding="utf-8"?>
+
+    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/ic_green_gradient_presentation_excitement"
+        tools:context=".main_part.ActivityAddMoney">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/add_money_top_layout"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintWidth_percent=".9">
+
+            <TextView
+                android:id="@+id/add_money_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/add_money_title"
+                android:textAlignment="center"
+                android:textColor="@color/SecondColor"
+                android:textSize="30sp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toTopOf="@id/addMoneyLayout"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/addMoneyError"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/red"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toTopOf="@id/addMoneyLayout"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/addMoneyLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent">
+
+                <EditText
+                    android:id="@+id/add_money_value_field"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginVertical="10sp"
+                    android:background="@drawable/button_white_border"
+                    android:hint="@string/value"
+                    android:importantForAutofill="no"
+                    android:inputType="numberDecimal"
+                    android:padding="10sp"
+                    android:textColor="#FFFFFF"
+                    android:textColorHint="#FFFFFF"
+                    android:textSize="20sp"
+                    app:layout_constraintBottom_toTopOf="@id/add_money_note_field"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <EditText
+                    android:id="@+id/add_money_note_field"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10sp"
+                    android:background="@drawable/button_white_border"
+                    android:hint="@string/note"
+                    android:importantForAutofill="no"
+                    android:inputType="text"
+                    android:maxLength="20"
+                    android:padding="10sp"
+                    android:textColor="#FFFFFF"
+                    android:textColorHint="#FFFFFF"
+                    android:textSize="20sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/add_money_value_field" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <ScrollView
+            android:id="@+id/add_money_scroll_view"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            app:layout_constraintWidth_percent=".8"
-            app:layout_constraintBottom_toTopOf="@+id/subtractMoneyBottomLayout"
-            app:layout_constraintTop_toBottomOf="@+id/subtractMoneyLayout"
+            android:layout_marginVertical="10sp"
+            android:fillViewport="true"
+            app:layout_constraintBottom_toTopOf="@id/add_money_bottom_layout"
+            app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintLeft_toLeftOf="parent">
+            app:layout_constraintTop_toBottomOf="@id/add_money_top_layout"
+            app:layout_constraintWidth_percent=".9">
 
-            <RelativeLayout
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
                 <RadioGroup
+                    android:id="@+id/add_money_radio_group"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical" />
 
-                    <GridLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:rowCount="5"
-                        android:columnCount="3">
-
-                        <RadioButton
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"/>
-
-                        <RadioButton
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"/>
-
-                        <RadioButton
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"/>
-
-                        <RadioButton
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"/>
-
-                        <RadioButton
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"/>
-
-                        <RadioButton
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"/>
-
-                        <RadioButton
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"/>
-
-                        <RadioButton
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"/>
-
-                        <RadioButton
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"/>
-
-                        <RadioButton
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"/>
-
-                        <RadioButton
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"/>
-
-                        <RadioButton
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"/>
-
-                        <RadioButton
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"/>
-
-                        <RadioButton
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"/>
-
-                        <RadioButton
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"/>
-
-                    </GridLayout>
-
-                </RadioGroup>
-
-            </RelativeLayout>
+            </LinearLayout>
 
         </ScrollView>
 
-    -->
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/add_money_bottom_layout"
+            android:layout_width="0sp"
+            android:layout_height="wrap_content"
+            android:layout_marginVertical="10sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintWidth_percent=".9">
 
-
-
-
-    <!--
-
-    <RadioGroup
-                android:id="@+id/substractMoneyRadioGroup"
-                android:layout_width="match_parent"
+            <Button
+                android:id="@+id/add_money_cancel_button"
+                android:layout_width="0sp"
                 android:layout_height="wrap_content"
-                app:layout_constraintTop_toBottomOf="@id/subtractMoneyValue"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                android:orientation="vertical"
-                android:layout_marginTop="15dp">
+                android:layout_marginEnd="10sp"
+                android:background="@drawable/button_white_border"
+                android:paddingVertical="20sp"
+                android:text="@string/cancel"
+                android:textColor="@color/white"
+                android:textSize="15sp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/add_money_save_button"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
-                <GridLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:rowCount="5"
-                    android:columnCount="3">
+            <Button
+                android:id="@+id/add_money_save_button"
+                android:layout_width="0sp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10sp"
+                android:background="@drawable/button_white_border"
+                android:paddingVertical="20sp"
+                android:text="@string/save"
+                android:textColor="@color/white"
+                android:textSize="15sp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/add_money_cancel_button"
+                app:layout_constraintTop_toTopOf="parent" />
 
-                    <RadioButton
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/subtract_money_bills"
-                        android:textColor="@color/SecondColor"
-                        android:textStyle="bold"
-                        android:textSize="18sp"
-                        android:buttonTint="@color/SecondColor"/>
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
-                    <RadioButton
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/subtract_money_car"
-                        android:textColor="@color/SecondColor"
-                        android:textStyle="bold"
-                        android:textSize="18sp"
-                        android:buttonTint="@color/SecondColor"/>
-
-                    <RadioButton
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/subtract_money_clothes"
-                        android:textColor="@color/SecondColor"
-                        android:textStyle="bold"
-                        android:textSize="18sp"
-                        android:buttonTint="@color/SecondColor"/>
-
-                    <RadioButton
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/subtract_money_communications"
-                        android:textColor="@color/SecondColor"
-                        android:textStyle="bold"
-                        android:textSize="18sp"
-                        android:buttonTint="@color/SecondColor"/>
-
-                    <RadioButton
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/subtract_money_eating_out"
-                        android:textColor="@color/SecondColor"
-                        android:textStyle="bold"
-                        android:textSize="18sp"
-                        android:buttonTint="@color/SecondColor"/>
-
-                    <RadioButton
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/subtract_money_entertainment"
-                        android:textColor="@color/SecondColor"
-                        android:textStyle="bold"
-                        android:textSize="18sp"
-                        android:buttonTint="@color/SecondColor"/>
-
-                    <RadioButton
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/subtract_money_food"
-                        android:textColor="@color/SecondColor"
-                        android:textStyle="bold"
-                        android:textSize="18sp"
-                        android:buttonTint="@color/SecondColor"/>
-
-                    <RadioButton
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/subtract_money_gifts"
-                        android:textColor="@color/SecondColor"
-                        android:textStyle="bold"
-                        android:textSize="18sp"
-                        android:buttonTint="@color/SecondColor"/>
-
-                    <RadioButton
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/subtract_money_health"
-                        android:textColor="@color/SecondColor"
-                        android:textStyle="bold"
-                        android:textSize="18sp"
-                        android:buttonTint="@color/SecondColor"/>
-
-                    <RadioButton
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/subtract_money_house"
-                        android:textColor="@color/SecondColor"
-                        android:textStyle="bold"
-                        android:textSize="18sp"
-                        android:buttonTint="@color/SecondColor"/>
-
-                    <RadioButton
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/subtract_money_pets"
-                        android:textColor="@color/SecondColor"
-                        android:textStyle="bold"
-                        android:textSize="18sp"
-                        android:buttonTint="@color/SecondColor"/>
-
-                    <RadioButton
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/subtract_money_sports"
-                        android:textColor="@color/SecondColor"
-                        android:textStyle="bold"
-                        android:textSize="18sp"
-                        android:buttonTint="@color/SecondColor"/>
-
-                    <RadioButton
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/subtract_money_taxi"
-                        android:textColor="@color/SecondColor"
-                        android:textStyle="bold"
-                        android:textSize="18sp"
-                        android:buttonTint="@color/SecondColor"/>
-
-                    <RadioButton
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/subtract_money_toiletry"
-                        android:textColor="@color/SecondColor"
-                        android:textStyle="bold"
-                        android:textSize="18sp"
-                        android:buttonTint="@color/SecondColor"/>
-
-                    <RadioButton
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/subtract_money_transport"
-                        android:textColor="@color/SecondColor"
-                        android:textStyle="bold"
-                        android:textSize="18sp"
-                        android:buttonTint="@color/SecondColor"/>
-
-                </GridLayout>
-
-            </RadioGroup>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     -->
