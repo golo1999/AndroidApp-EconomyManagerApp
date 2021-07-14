@@ -98,16 +98,13 @@ public class MyCustomTime implements Serializable, Comparable<MyCustomTime> {
     @NonNull
     @Override
     public String toString() {
-        return "MyTime{" +
-                "year=" + year +
-                ", month=" + month +
-                ", monthName='" + monthName + '\'' +
-                ", day=" + day +
-                ", dayName='" + dayName + '\'' +
-                ", hour=" + hour +
-                ", minute=" + minute +
-                ", second=" + second +
-                '}';
+        final String monthParsed = month < 10 ? "0" + month : String.valueOf(month);
+        final String dayParsed = day < 10 ? "0" + day : String.valueOf(day);
+        final String hourParsed = hour < 10 ? "0" + hour : String.valueOf(hour);
+        final String minuteParsed = minute < 10 ? "0" + minute : String.valueOf(minute);
+        final String secondParsed = second < 10 ? "0" + second : String.valueOf(second);
+
+        return year + "-" + monthParsed + "-" + dayParsed + " " + hourParsed + ":" + minuteParsed + ":" + secondParsed;
     }
 
     @Override

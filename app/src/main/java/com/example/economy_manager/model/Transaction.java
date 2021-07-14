@@ -59,7 +59,7 @@ public class Transaction {
         this.value = value;
     }
 
-    public static int getIndexFromCategory(String categoryName) {
+    public static int getIndexFromCategory(final String categoryName) {
         int index = -1;
 
         for (String category : categoryList) {

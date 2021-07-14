@@ -25,15 +25,15 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.economy_manager.R;
+import com.example.economy_manager.main_part.adapter.EditTransactionsRecyclerViewAdapter;
+import com.example.economy_manager.main_part.viewmodel.EditTransactionsViewModel;
+import com.example.economy_manager.model.Transaction;
+import com.example.economy_manager.model.UserDetails;
 import com.example.economy_manager.utility.Months;
 import com.example.economy_manager.utility.MyCustomSharedPreferences;
 import com.example.economy_manager.utility.MyCustomVariables;
-import com.example.economy_manager.R;
-import com.example.economy_manager.model.Transaction;
 import com.example.economy_manager.utility.Types;
-import com.example.economy_manager.main_part.adapter.EditTransactionsRecyclerViewAdapter;
-import com.example.economy_manager.model.UserDetails;
-import com.example.economy_manager.main_part.viewmodel.EditTransactionsViewModel;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
@@ -91,8 +91,8 @@ public class ActivityEditTransactions extends AppCompatActivity {
         yearSpinner = findViewById(R.id.editTransactionBottomLayoutYearSpinner);
         centerText = findViewById(R.id.editTransactionsCenterText);
         bottomLayout = findViewById(R.id.editTransactionBottomLayout);
-        adapter = new EditTransactionsRecyclerViewAdapter(viewModel, transactionsList,
-                this, userDetails);
+        adapter = new EditTransactionsRecyclerViewAdapter(viewModel, transactionsList, this, userDetails,
+                recyclerView);
     }
 
     private void setTitle() {
@@ -120,7 +120,7 @@ public class ActivityEditTransactions extends AppCompatActivity {
                             if (snapshot.exists()) {
                                 if (snapshot.hasChildren()) {
                                     final ArrayList<String> yearList = new ArrayList<>();
-                                    ArrayList<String> monthList = new ArrayList<>();
+                                    final ArrayList<String> monthList = new ArrayList<>();
                                     boolean yearAlreadyExists;
 
                                     for (DataSnapshot transaction : snapshot.getChildren()) {
