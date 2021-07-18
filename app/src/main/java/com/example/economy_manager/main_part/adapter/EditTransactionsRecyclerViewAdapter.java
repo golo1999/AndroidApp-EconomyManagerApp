@@ -14,7 +14,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.economy_manager.R;
-import com.example.economy_manager.main_part.view.activity.ActivityEditSpecificTransaction;
+import com.example.economy_manager.main_part.view.activity.EditSpecificTransactionActivity;
 import com.example.economy_manager.main_part.viewmodel.EditTransactionsViewModel;
 import com.example.economy_manager.model.Transaction;
 import com.example.economy_manager.model.UserDetails;
@@ -52,7 +52,7 @@ public class EditTransactionsRecyclerViewAdapter extends RecyclerView
     @Override
     public EditTransactionsViewHolder onCreateViewHolder(final @NonNull ViewGroup parent, final int viewType) {
         final View view =
-                LayoutInflater.from(context).inflate(R.layout.cardview_transaction_layout, parent, false);
+                LayoutInflater.from(context).inflate(R.layout.transaction_layout_cardview, parent, false);
 
         return new EditTransactionsViewHolder(view, viewModel, context, transactionsList, recyclerView);
     }
@@ -133,7 +133,7 @@ public class EditTransactionsRecyclerViewAdapter extends RecyclerView
                     MyCustomSharedPreferences.saveTransactionToSharedPreferences(preferences, selectedTransaction);
 
                     // redirecting to the edit specific transaction activity
-                    context.startActivity(new Intent(context, ActivityEditSpecificTransaction.class));
+                    context.startActivity(new Intent(context, EditSpecificTransactionActivity.class));
                     //overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
                 }
             });

@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 public class MyCustomTime implements Serializable, Comparable<MyCustomTime> {
     private int year;
@@ -26,6 +27,15 @@ public class MyCustomTime implements Serializable, Comparable<MyCustomTime> {
         this.monthName = monthName;
         this.day = day;
         this.dayName = dayName;
+        this.hour = hour;
+        this.minute = minute;
+        this.second = second;
+    }
+
+    public MyCustomTime(int year, int month, int day, int hour, int minute, int second) {
+        this.year = year;
+        this.month = month;
+        this.day = day;
         this.hour = hour;
         this.minute = minute;
         this.second = second;
@@ -93,6 +103,26 @@ public class MyCustomTime implements Serializable, Comparable<MyCustomTime> {
 
     public void setSecond(int second) {
         this.second = second;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        MyCustomTime that = (MyCustomTime) o;
+        return year == that.year &&
+                month == that.month &&
+                day == that.day &&
+                hour == that.hour &&
+                minute == that.minute &&
+                second == that.second &&
+                monthName.equals(that.monthName) &&
+                dayName.equals(that.dayName);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(year, month, monthName, day, dayName, hour, minute, second);
     }
 
     @NonNull

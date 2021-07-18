@@ -7,6 +7,7 @@ import androidx.annotation.NonNull;
 import com.example.economy_manager.model.MyCustomTime;
 
 import java.time.LocalDateTime;
+import java.util.Objects;
 import java.util.UUID;
 
 public class Transaction {
@@ -22,6 +23,15 @@ public class Transaction {
 
     public Transaction() {
         // Required empty public constructor
+    }
+
+    public Transaction(String id, int category, MyCustomTime time, int type, String note, String value) {
+        this.id = id;
+        this.category = category;
+        this.time = time;
+        this.type = type;
+        this.note = note;
+        this.value = value;
     }
 
     public Transaction(int category, int type, String note, String value) {
@@ -124,6 +134,25 @@ public class Transaction {
 
     public void setValue(String value) {
         this.value = value;
+    }
+
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Transaction that = (Transaction) o;
+        return category == that.category &&
+                type == that.type &&
+                id.equals(that.id) &&
+                time.equals(that.time) &&
+                Objects.equals(note, that.note) &&
+                value.equals(that.value);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, category, time, type, note, value);
     }
 
     @NonNull

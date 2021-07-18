@@ -6,12 +6,12 @@ import androidx.lifecycle.ViewModel;
 
 import com.example.economy_manager.R;
 import com.example.economy_manager.model.UserDetails;
-import com.example.economy_manager.main_part.view.fragment.FragmentBudgetReview;
-import com.example.economy_manager.main_part.view.fragment.FragmentLastTenTransactions;
-import com.example.economy_manager.main_part.view.fragment.FragmentMoneySpent;
-import com.example.economy_manager.main_part.view.fragment.FragmentMoneySpentPercentage;
-import com.example.economy_manager.main_part.view.fragment.FragmentShowSavings;
-import com.example.economy_manager.main_part.view.fragment.FragmentTopFiveExpenses;
+import com.example.economy_manager.main_part.view.fragment.BudgetReviewFragment;
+import com.example.economy_manager.main_part.view.fragment.LastTenTransactionsFragment;
+import com.example.economy_manager.main_part.view.fragment.MoneySpentFragment;
+import com.example.economy_manager.main_part.view.fragment.MoneySpentPercentageFragment;
+import com.example.economy_manager.main_part.view.fragment.ShowSavingsFragment;
+import com.example.economy_manager.main_part.view.fragment.TopFiveExpensesFragment;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -19,12 +19,12 @@ import java.util.Locale;
 
 public class MainScreenViewModel extends ViewModel {
     private UserDetails userDetails;
-    private final FragmentShowSavings fragmentShowSavings = FragmentShowSavings.newInstance();
-    private final FragmentBudgetReview fragmentBudgetReview = FragmentBudgetReview.newInstance();
-    private final FragmentMoneySpent fragmentMoneySpent = FragmentMoneySpent.newInstance();
-    private final FragmentLastTenTransactions fragmentLastTenTransactions = FragmentLastTenTransactions.newInstance();
-    private final FragmentTopFiveExpenses fragmentTopFiveExpenses = FragmentTopFiveExpenses.newInstance();
-    private final FragmentMoneySpentPercentage fragmentMoneySpentPercentage = FragmentMoneySpentPercentage.newInstance();
+    private final ShowSavingsFragment showSavingsFragment = ShowSavingsFragment.newInstance();
+    private final BudgetReviewFragment budgetReviewFragment = BudgetReviewFragment.newInstance();
+    private final MoneySpentFragment moneySpentFragment = MoneySpentFragment.newInstance();
+    private final LastTenTransactionsFragment lastTenTransactionsFragment = LastTenTransactionsFragment.newInstance();
+    private final TopFiveExpensesFragment topFiveExpensesFragment = TopFiveExpensesFragment.newInstance();
+    private final MoneySpentPercentageFragment moneySpentPercentageFragment = MoneySpentPercentageFragment.newInstance();
     private final Calendar currentTime = Calendar.getInstance();
     private final int currentHour = currentTime.get(Calendar.HOUR_OF_DAY);
     private final String datePrefix = Locale.getDefault().getDisplayLanguage().equals("Deutsch") ?
@@ -104,28 +104,28 @@ public class MainScreenViewModel extends ViewModel {
         this.userDetails = userDetails;
     }
 
-    public FragmentShowSavings getFragmentShowSavings() {
-        return fragmentShowSavings;
+    public ShowSavingsFragment getFragmentShowSavings() {
+        return showSavingsFragment;
     }
 
-    public FragmentBudgetReview getFragmentBudgetReview() {
-        return fragmentBudgetReview;
+    public BudgetReviewFragment getFragmentBudgetReview() {
+        return budgetReviewFragment;
     }
 
-    public FragmentMoneySpent getFragmentMoneySpent() {
-        return fragmentMoneySpent;
+    public MoneySpentFragment getFragmentMoneySpent() {
+        return moneySpentFragment;
     }
 
-    public FragmentLastTenTransactions getFragmentLastTenTransactions() {
-        return fragmentLastTenTransactions;
+    public LastTenTransactionsFragment getFragmentLastTenTransactions() {
+        return lastTenTransactionsFragment;
     }
 
-    public FragmentTopFiveExpenses getFragmentTopFiveExpenses() {
-        return fragmentTopFiveExpenses;
+    public TopFiveExpensesFragment getFragmentTopFiveExpenses() {
+        return topFiveExpensesFragment;
     }
 
-    public FragmentMoneySpentPercentage getFragmentMoneySpentPercentage() {
-        return fragmentMoneySpentPercentage;
+    public MoneySpentPercentageFragment getFragmentMoneySpentPercentage() {
+        return moneySpentPercentageFragment;
     }
 
     public Calendar getCurrentTime() {
