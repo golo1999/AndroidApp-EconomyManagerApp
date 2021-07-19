@@ -427,8 +427,7 @@ public class SettingsActivity extends AppCompatActivity
     private void setTexts() {
         if (userDetails != null) {
             final boolean checked = userDetails.getApplicationSettings().getDarkTheme();
-            final int color = !checked ?
-                    Color.parseColor("#195190") : Color.WHITE;
+            final int color = !checked ? Color.parseColor("#195190") : Color.WHITE;
 
             themeText.setTextColor(color);
             currencyText.setTextColor(color);
@@ -441,8 +440,7 @@ public class SettingsActivity extends AppCompatActivity
         final ArrayAdapter<String> currencyAdapter = new ArrayAdapter<String>(this,
                 R.layout.custom_spinner_item, currencyList) {
             @Override
-            public View getDropDownView(int position, @Nullable View convertView,
-                                        @NonNull ViewGroup parent) {
+            public View getDropDownView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
                 final View v = super.getDropDownView(position, convertView, parent);
 
                 ((TextView) v).setGravity(Gravity.CENTER);

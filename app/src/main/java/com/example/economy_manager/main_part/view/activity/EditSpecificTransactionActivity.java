@@ -1,7 +1,5 @@
 package com.example.economy_manager.main_part.view.activity;
 
-import android.app.Activity;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
@@ -11,14 +9,15 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.TimePicker;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -37,6 +36,8 @@ import com.example.economy_manager.utility.MyCustomSharedPreferences;
 import com.example.economy_manager.utility.MyCustomVariables;
 import com.example.economy_manager.utility.Types;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -52,7 +53,8 @@ public class EditSpecificTransactionActivity extends AppCompatActivity {
     private TextView typeText;
     private EditText noteField;
     private EditText valueField;
-    private EditText dateField;
+    private DatePicker datePicker;
+    private TimePicker timePicker;
     private Spinner typeSpinner;
     private ImageView goBack;
     private Button saveChangesButton;
@@ -68,6 +70,8 @@ public class EditSpecificTransactionActivity extends AppCompatActivity {
         setUserDetails();
         setTheme();
         setTransactionDetails();
+        setDatePicker(viewModel.getSelectedTransaction());
+        setTimePicker(viewModel.getSelectedTransaction());
         setOnClickListeners();
         setOnFocusChangeListener();
         setTitle();
@@ -90,7 +94,8 @@ public class EditSpecificTransactionActivity extends AppCompatActivity {
         titleText = findViewById(R.id.editSpecificTransactionTitle);
         noteField = findViewById(R.id.editSpecificTransactionNoteEdit);
         valueField = findViewById(R.id.editSpecificTransactionValueEdit);
-        dateField = findViewById(R.id.editSpecificTransactionDateEdit);
+        datePicker = findViewById(R.id.editSpecificTransactionDateEdit);
+        timePicker = findViewById(R.id.editSpecificTransactionTimeEdit);
         typeSpinner = findViewById(R.id.editSpecificTransactionTypeSpinner);
         saveChangesButton = findViewById(R.id.editSpecificTransactionSave);
         dateText = findViewById(R.id.editSpecificTransactionDateText);
@@ -103,32 +108,22 @@ public class EditSpecificTransactionActivity extends AppCompatActivity {
     private void setUserDetails() {
         final UserDetails userDetails = MyCustomSharedPreferences.retrieveUserDetailsFromSharedPreferences(this);
 
-        viewModel.setUserDetails(userDetails);
+        if (userDetails != null) {
+            viewModel.setUserDetails(userDetails);
+        }
     }
 
     private void setTransactionDetails() {
         final Transaction selectedTransaction =
                 MyCustomSharedPreferences.retrieveTransactionFromSharedPreferences(this);
 
-        viewModel.setSelectedTransaction(selectedTransaction);
+        if (selectedTransaction != null) {
+            viewModel.setSelectedTransaction(selectedTransaction);
+        }
     }
 
     private void setOnClickListeners() {
         goBack.setOnClickListener(v -> onBackPressed());
-
-        dateField.setOnClickListener(v -> {
-            final Intent intent = new Intent(EditSpecificTransactionActivity.this,
-                    TimeAndDatePickerActivity.class);
-
-            getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
-
-            if (extras != null) {
-                intent.putExtra("initialDate", String.valueOf(extras.getString("time")));
-            }
-
-            startActivityForResult(intent, REQUEST_CODE);
-            overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
-        });
 
         saveChangesButton.setOnClickListener(v -> {
             MyCustomMethods.closeTheKeyboard(EditSpecificTransactionActivity.this);
@@ -137,19 +132,41 @@ public class EditSpecificTransactionActivity extends AppCompatActivity {
                 final Transaction selectedTransaction = viewModel.getSelectedTransaction();
 
                 if (selectedTransaction != null) {
-                    final String editedNote = String.valueOf(noteField.getText());
-                    final String editedValue = String.valueOf(valueField.getText());
-                    final int editedCategoryIndex = Transaction.getIndexFromCategory(Types.
+                    final String editedNote = !String.valueOf(noteField.getText()).trim().isEmpty() ?
+                            String.valueOf(noteField.getText()).trim() : selectedTransaction.getNote();
+                    final String editedValue = !String.valueOf(valueField.getText()).trim().isEmpty() ?
+                            String.valueOf(valueField.getText()).trim() : selectedTransaction.getValue();
+                    final int parsedCategoryIndex = Transaction.getIndexFromCategory(Types.
                             getTypeInEnglish(this, String.valueOf(typeSpinner.getSelectedItem()).trim()));
-                    final String editedTimeString = String.valueOf(dateField.getText());
-                    //final MyCustomTime editedTime = getTimeFromString(editedTimeString);
+                    final int editedCategoryIndex = parsedCategoryIndex >= 0 && parsedCategoryIndex <= 18 &&
+                            parsedCategoryIndex != selectedTransaction.getCategory() ?
+                            parsedCategoryIndex : selectedTransaction.getCategory();
+                    final int datePickerSelectedYear = datePicker.getYear();
+                    final int datePickerSelectedMonth = datePicker.getMonth();
+                    final int datePickerSelectedDay = datePicker.getDayOfMonth();
+                    final int timePickerSelectedHour = timePicker.getHour();
+                    final int timePickerSelectedMinute = timePicker.getMinute();
+                    final int timePickerSelectedSecond =
+                            (datePickerSelectedYear != selectedTransaction.getTime().getYear() &&
+                                    datePickerSelectedMonth != selectedTransaction.getTime().getMonth() &&
+                                    datePickerSelectedDay != selectedTransaction.getTime().getDay() &&
+                                    timePickerSelectedHour != selectedTransaction.getTime().getHour() &&
+                                    timePickerSelectedMinute != selectedTransaction.getTime().getMinute()) ?
+                                    LocalDateTime.now().getSecond() : selectedTransaction.getTime().getSecond();
+                    final MyCustomTime editedTime = new MyCustomTime(datePickerSelectedYear, datePickerSelectedMonth,
+                            datePickerSelectedDay, timePickerSelectedHour, timePickerSelectedMinute,
+                            timePickerSelectedSecond);
                     final int editedCategoryType = (editedCategoryIndex >= 0 && editedCategoryIndex <= 3) ? 1 : 0;
-//                    final Transaction editedTransaction = new Transaction(selectedTransaction.getId(),
-//                            editedCategoryIndex, editedTime, editedCategoryType, editedNote, editedValue);
+                    final Transaction editedTransaction = new Transaction(selectedTransaction.getId(),
+                            editedCategoryIndex, editedTime, editedCategoryType, editedNote, editedValue);
 
-                    final Transaction editedTransaction = new Transaction("0ccf5d61-7a54-4132-a847-d9c4b762d2a1",
-                            11, new MyCustomTime(2021, 7, "JULY", 7,
-                            "WEDNESDAY", 17, 21, 9), 1, null, "33333");
+//                    final Transaction editedTransaction = new Transaction("0ccf5d61-7a54-4132-a847-d9c4b762d2a1",
+//                            11, new MyCustomTime(2021, 7, "JULY", 7,
+//                            "WEDNESDAY", 17, 21, 9), 1, null, "33333");
+
+                    if (!selectedTransaction.equals(editedTransaction)) {
+
+                    }
 
                     Log.d("selectedTransaction", selectedTransaction.toString());
 
@@ -158,6 +175,8 @@ public class EditSpecificTransactionActivity extends AppCompatActivity {
                     Toast.makeText(EditSpecificTransactionActivity.this, String.valueOf(selectedTransaction.equals(editedTransaction)), Toast.LENGTH_SHORT).show();
                 }
             }
+
+            onBackPressed();
 
 //            if (extras != null) {
 //                final String noteHint = String.valueOf(extras.getString("note"));
@@ -211,31 +230,30 @@ public class EditSpecificTransactionActivity extends AppCompatActivity {
         //type.setOnItemSelectedListener(listener);
     }
 
-    @Override
-    protected void onActivityResult(final int requestCode, final int resultCode, final @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        if (requestCode == REQUEST_CODE && resultCode == Activity.RESULT_OK) {
-            if (data != null) {
-                final Bundle extras = data.getExtras();
-
-                if (extras != null) {
-                    final String modifiedDate = extras.getString("modifiedDate");
-
-                    if (modifiedDate != null &&
-                            !getTranslatedDate(modifiedDate).equals(String.valueOf(dateField.getHint()))) {
-                        dateField.setHint(!Locale.getDefault().getDisplayLanguage().equals("English") ?
-                                getTranslatedDate(modifiedDate) : modifiedDate);
-                    }
-                }
-            }
-        }
-    }
+//    @Override
+//    protected void onActivityResult(final int requestCode, final int resultCode, final @Nullable Intent data) {
+//        super.onActivityResult(requestCode, resultCode, data);
+//
+//        if (requestCode == REQUEST_CODE && resultCode == Activity.RESULT_OK) {
+//            if (data != null) {
+//                final Bundle extras = data.getExtras();
+//
+//                if (extras != null) {
+//                    final String modifiedDate = extras.getString("modifiedDate");
+//
+//                    if (modifiedDate != null &&
+//                            !getTranslatedDate(modifiedDate).equals(String.valueOf(datePicker.getHint()))) {
+//                        datePicker.setHint(!Locale.getDefault().getDisplayLanguage().equals("English") ?
+//                                getTranslatedDate(modifiedDate) : modifiedDate);
+//                    }
+//                }
+//            }
+//        }
+//    }
 
     private void setTitle() {
-        if (viewModel.getActivityTitle() == null ||
-                !viewModel.getActivityTitle()
-                        .equals(getResources().getString(R.string.edit_specific_transaction_title).trim())) {
+        if ((viewModel.getActivityTitle() == null) || (!viewModel.getActivityTitle()
+                .equals(getResources().getString(R.string.edit_specific_transaction_title).trim()))) {
             viewModel.setActivityTitle(getResources().getString(R.string.edit_specific_transaction_title).trim());
         }
 
@@ -255,9 +273,9 @@ public class EditSpecificTransactionActivity extends AppCompatActivity {
             noteField.setHint(selectedTransaction.getNote() != null ? selectedTransaction.getNote() : "");
             valueField.setHint(selectedTransaction.getValue());
 
-            if (selectedTransaction.getTime() != null) {
-                dateField.setHint(selectedTransaction.getTime().toString());
-            }
+//            if (selectedTransaction.getTime() != null) {
+//                datePicker.setHint(selectedTransaction.getTime().toString());
+//            }
 
             populateTransactionTypesList(transactionTypesList);
 
@@ -387,7 +405,7 @@ public class EditSpecificTransactionActivity extends AppCompatActivity {
 
             setTextStyleEditText(noteField, color);
             setTextStyleEditText(valueField, color);
-            setTextStyleEditText(dateField, color);
+//            setTextStyleEditText(datePicker, color);
 
             getWindow().setBackgroundDrawableResource(backgroundTheme);
 
@@ -423,24 +441,29 @@ public class EditSpecificTransactionActivity extends AppCompatActivity {
         switch (deviceLanguage) {
             case "Deutsch":
                 prefix = "der";
-                translatedDate = prefix + " " + day + ". " + month + " " + year + ", " + hour + ":" + minute + ":" + second;
+                translatedDate = prefix + " " + day + ". " + month + " " + year + ", " + hour + ":" + minute
+                        + ":" + second;
                 break;
             case "español":
                 prefix = "el";
                 String prefix2 = "de";
-                translatedDate = prefix + " " + day + " " + prefix2 + " " + month.toLowerCase() + " " + prefix2 + " " + year + ", " + hour + ":" + minute + ":" + second;
+                translatedDate = prefix + " " + day + " " + prefix2 + " " + month.toLowerCase() + " " + prefix2
+                        + " " + year + ", " + hour + ":" + minute + ":" + second;
                 break;
             case "italiano":
                 prefix = "il";
-                translatedDate = prefix + " " + day + " " + month.toLowerCase() + " " + year + ", " + hour + ":" + minute + ":" + second;
+                translatedDate = prefix + " " + day + " " + month.toLowerCase() + " " + year + ", " + hour
+                        + ":" + minute + ":" + second;
                 break;
             case "português":
                 prefix = "de";
-                translatedDate = day + " " + prefix + " " + month.toLowerCase() + " " + prefix + " " + year + ", " + hour + ":" + minute + ":" + second;
+                translatedDate = day + " " + prefix + " " + month.toLowerCase() + " " + prefix + " " + year
+                        + ", " + hour + ":" + minute + ":" + second;
                 break;
             case "français":
             case "română":
-                translatedDate = day + " " + month.toLowerCase() + " " + year + ", " + hour + ":" + minute + ":" + second;
+                translatedDate = day + " " + month.toLowerCase() + " " + year + ", " + hour + ":" + minute
+                        + ":" + second;
                 break;
             default:
                 translatedDate = "";
@@ -508,11 +531,12 @@ public class EditSpecificTransactionActivity extends AppCompatActivity {
     }
 
     private void setOnFocusChangeListener() {
-        final View.OnFocusChangeListener listener = (v, hasFocus) -> {
+        final View.OnFocusChangeListener listener = (final View v, final boolean hasFocus) -> {
             if (hasFocus) {
                 ((EditText) v).setText(((EditText) v).getHint());
             }
         };
+
         noteField.setOnFocusChangeListener(listener);
     }
 
@@ -526,5 +550,21 @@ public class EditSpecificTransactionActivity extends AppCompatActivity {
         final int second = Integer.parseInt(timeStringParsed[5]);
 
         return new MyCustomTime(year, month, day, hour, minute, second);
+    }
+
+    private void setDatePicker(final @Nullable Transaction selectedTransaction) {
+        datePicker.updateDate(selectedTransaction != null && selectedTransaction.getTime() != null ?
+                        viewModel.getSelectedTransaction().getTime().getYear() : LocalDate.now().getYear(),
+                selectedTransaction != null && selectedTransaction.getTime() != null ?
+                        viewModel.getSelectedTransaction().getTime().getMonth() - 1 : LocalDate.now().getMonthValue() - 1,
+                selectedTransaction != null && selectedTransaction.getTime() != null ?
+                        viewModel.getSelectedTransaction().getTime().getDay() : LocalDate.now().getDayOfMonth());
+    }
+
+    private void setTimePicker(final @Nullable Transaction selectedTransaction) {
+        timePicker.setHour(selectedTransaction != null && selectedTransaction.getTime() != null ?
+                selectedTransaction.getTime().getHour() : LocalDateTime.now().getHour());
+        timePicker.setMinute(selectedTransaction != null && selectedTransaction.getTime() != null ?
+                selectedTransaction.getTime().getMinute() : LocalDateTime.now().getMinute());
     }
 }

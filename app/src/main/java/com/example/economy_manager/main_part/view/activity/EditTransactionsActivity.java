@@ -397,17 +397,16 @@ public class EditTransactionsActivity extends AppCompatActivity {
             yearSpinner.setSelection(positionOfCurrentYear);
     }
 
-    private void populateRecyclerView(String selectedYear, String selectedMonth) {
+    private void populateRecyclerView(final String selectedYear, final String selectedMonth) {
         if (!transactionsList.isEmpty())
             transactionsList.clear();
 
-        for (Transaction transaction : arrayList) {
-            String transactionMonthParsed = transaction.getTime().getMonthName().charAt(0) +
+        for (final Transaction transaction : arrayList) {
+            final String transactionMonthParsed = transaction.getTime().getMonthName().charAt(0) +
                     transaction.getTime().getMonthName().substring(1).toLowerCase();
 
             if (String.valueOf(transaction.getTime().getYear()).equals(selectedYear) &&
-                    transactionMonthParsed.equals(Months
-                            .getMonthInEnglish(EditTransactionsActivity.this,
+                    transactionMonthParsed.equals(Months.getMonthInEnglish(EditTransactionsActivity.this,
                                     selectedMonth))) {
                 transactionsList.add(transaction);
             }

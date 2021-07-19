@@ -68,11 +68,11 @@ public class DeleteAccountCustomDialog extends AppCompatDialogFragment {
     }
 
     public interface CustomDialogListener {
-        void getTypedPasswordAndDeleteTheAccount(final String pass);
+        void getTypedPasswordAndDeleteTheAccount(final String password);
 
         void deleteAccount();
 
-        void getTypedPasswordAndResetTheDatabase(final String pass);
+        void getTypedPasswordAndResetTheDatabase(final String password);
 
         void resetDatabase();
     }

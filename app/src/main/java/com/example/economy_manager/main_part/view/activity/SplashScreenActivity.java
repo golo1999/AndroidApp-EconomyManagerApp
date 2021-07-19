@@ -45,45 +45,45 @@ public class SplashScreenActivity extends AppCompatActivity {
                 sleep(2000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
-            }
+            } finally {
+                if (MyCustomVariables.getFirebaseAuth().getCurrentUser() != null &&
+                        MyCustomVariables.getFirebaseAuth().getUid() != null) {
+                    MyCustomVariables.getDatabaseReference().child(MyCustomVariables.getFirebaseAuth().getUid())
+                            .addListenerForSingleValueEvent(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(final @NonNull DataSnapshot snapshot) {
+                                    if (snapshot.exists() &&
+                                            snapshot.hasChild("ApplicationSettings") &&
+                                            snapshot.hasChild("PersonalInformation")) {
+                                        final ApplicationSettings applicationSettings = snapshot
+                                                .child("ApplicationSettings")
+                                                .getValue(ApplicationSettings.class);
+                                        final PersonalInformation personalInformation = snapshot
+                                                .child("PersonalInformation")
+                                                .getValue(PersonalInformation.class);
 
-            if (MyCustomVariables.getFirebaseAuth().getCurrentUser() != null &&
-                    MyCustomVariables.getFirebaseAuth().getUid() != null) {
-                MyCustomVariables.getDatabaseReference().child(MyCustomVariables.getFirebaseAuth().getUid())
-                        .addListenerForSingleValueEvent(new ValueEventListener() {
-                            @Override
-                            public void onDataChange(final @NonNull DataSnapshot snapshot) {
-                                if (snapshot.exists() &&
-                                        snapshot.hasChild("ApplicationSettings") &&
-                                        snapshot.hasChild("PersonalInformation")) {
-                                    final ApplicationSettings applicationSettings = snapshot
-                                            .child("ApplicationSettings")
-                                            .getValue(ApplicationSettings.class);
-                                    final PersonalInformation personalInformation = snapshot
-                                            .child("PersonalInformation")
-                                            .getValue(PersonalInformation.class);
+                                        if (applicationSettings != null &&
+                                                personalInformation != null) {
+                                            final UserDetails details = new UserDetails(applicationSettings,
+                                                    personalInformation);
 
-                                    if (applicationSettings != null &&
-                                            personalInformation != null) {
-                                        final UserDetails details = new UserDetails(applicationSettings,
-                                                personalInformation);
-
-                                        if (!checkIfUserDetailsAlreadyExistInSharedPreferences(details)) {
-                                            saveUserDetailsToSharedPreferences(details);
+                                            if (!checkIfUserDetailsAlreadyExistInSharedPreferences(details)) {
+                                                saveUserDetailsToSharedPreferences(details);
+                                            }
                                         }
                                     }
                                 }
-                            }
 
-                            @Override
-                            public void onCancelled(final @NonNull DatabaseError error) {
+                                @Override
+                                public void onCancelled(final @NonNull DatabaseError error) {
 
-                            }
-                        });
+                                }
+                            });
+                }
+
+                startActivity(intent);
+                finish();
             }
-
-            startActivity(intent);
-            finish();
         }
 
         private void saveUserDetailsToSharedPreferences(final UserDetails details) {
