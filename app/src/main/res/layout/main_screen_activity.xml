@@ -7,7 +7,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:layoutDescription="@xml/activity_main_screen_scene"
-    tools:context=".main_part.view.activity.MainScreenActivity">
+    tools:context=".main_part.views.activities.MainScreenActivity">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/main_screen_progress_bar_layout"

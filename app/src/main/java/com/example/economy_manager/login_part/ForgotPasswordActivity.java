@@ -11,8 +11,8 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.economy_manager.utility.MyCustomMethods;
-import com.example.economy_manager.utility.MyCustomVariables;
+import com.example.economy_manager.utilities.MyCustomMethods;
+import com.example.economy_manager.utilities.MyCustomVariables;
 import com.example.economy_manager.R;
 
 public class ForgotPasswordActivity extends AppCompatActivity implements View.OnClickListener {

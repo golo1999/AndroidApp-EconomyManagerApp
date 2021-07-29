@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".main_part.view.activity.SettingsActivity">
+    tools:context=".main_part.views.activities.SettingsActivity">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/settings_top_layout"

@@ -11,12 +11,12 @@ import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.economy_manager.main_part.view.activity.MainScreenActivity;
-import com.example.economy_manager.model.ApplicationSettings;
-import com.example.economy_manager.model.BirthDate;
-import com.example.economy_manager.utility.MyCustomMethods;
-import com.example.economy_manager.utility.MyCustomVariables;
-import com.example.economy_manager.model.PersonalInformation;
+import com.example.economy_manager.main_part.views.activities.MainScreenActivity;
+import com.example.economy_manager.models.ApplicationSettings;
+import com.example.economy_manager.models.BirthDate;
+import com.example.economy_manager.utilities.MyCustomMethods;
+import com.example.economy_manager.utilities.MyCustomVariables;
+import com.example.economy_manager.models.PersonalInformation;
 import com.example.economy_manager.R;
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;

@@ -11,14 +11,14 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.economy_manager.model.ApplicationSettings;
-import com.example.economy_manager.model.BirthDate;
-import com.example.economy_manager.utility.MyCustomMethods;
-import com.example.economy_manager.utility.MyCustomSharedPreferences;
-import com.example.economy_manager.utility.MyCustomVariables;
-import com.example.economy_manager.model.PersonalInformation;
+import com.example.economy_manager.models.ApplicationSettings;
+import com.example.economy_manager.models.BirthDate;
+import com.example.economy_manager.utilities.MyCustomMethods;
+import com.example.economy_manager.utilities.MyCustomSharedPreferences;
+import com.example.economy_manager.utilities.MyCustomVariables;
+import com.example.economy_manager.models.PersonalInformation;
 import com.example.economy_manager.R;
-import com.example.economy_manager.model.UserDetails;
+import com.example.economy_manager.models.UserDetails;
 import com.google.firebase.auth.FirebaseUser;
 
 import java.time.LocalDate;

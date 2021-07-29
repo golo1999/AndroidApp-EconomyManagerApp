@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/ic_green_gradient_presentation_excitement"
-    tools:context=".main_part.view.activity.AddMoneyActivity">
+    tools:context=".main_part.views.activities.AddMoneyActivity">
 
     <ScrollView
         android:id="@+id/add_money_scroll_view"

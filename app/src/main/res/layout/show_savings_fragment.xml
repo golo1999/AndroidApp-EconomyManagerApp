@@ -8,14 +8,14 @@
     app:cardBackgroundColor="#FFA500"
     app:cardCornerRadius="20dp"
     app:cardElevation="0dp"
-    tools:context=".main_part.view.fragment.ShowSavingsFragment">
+    tools:context=".main_part.views.fragments.ShowSavingsFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="20dp"
         android:layout_marginBottom="20dp"
-        tools:context=".main_part.view.fragment.ShowSavingsFragment">
+        tools:context=".main_part.views.fragments.ShowSavingsFragment">
 
         <TextView
             android:id="@+id/fragment2Savings"
