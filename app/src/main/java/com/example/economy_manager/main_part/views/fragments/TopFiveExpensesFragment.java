@@ -15,16 +15,17 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelStoreOwner;
 
+import com.example.economy_manager.R;
+import com.example.economy_manager.main_part.viewmodels.MainScreenViewModel;
+import com.example.economy_manager.models.Transaction;
 import com.example.economy_manager.utilities.MyCustomMethods;
 import com.example.economy_manager.utilities.MyCustomVariables;
-import com.example.economy_manager.R;
-import com.example.economy_manager.models.Transaction;
 import com.example.economy_manager.utilities.Types;
-import com.example.economy_manager.main_part.viewmodels.MainScreenViewModel;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Locale;
 import java.util.stream.Collectors;
@@ -85,7 +86,9 @@ public class TopFiveExpensesFragment extends Fragment {
                                         snapshot.child("PersonalTransactions").getChildren()) {
                                     final Transaction transaction = transactionIterator.getValue(Transaction.class);
 
-                                    if (transaction != null && transaction.getType() == 0) {
+                                    if (transaction != null && transaction.getTime() != null &&
+                                            transaction.getTime().getMonth() == LocalDate.now().getMonthValue() &&
+                                            transaction.getType() == 0) {
                                         expensesList.add(transaction);
                                     }
                                 }
@@ -110,15 +113,14 @@ public class TopFiveExpensesFragment extends Fragment {
 
         try {
             if (expensesList.size() == 0) {
-                showNoExpensesLayout(mainLayout,
-                        getResources().getString(R.string.top_5_expenses_no_expenses_this_month));
+                showNoExpensesLayout(mainLayout, getResources().getString(R.string.top_5_expenses_no_expenses_this_month));
             }
             // if the expenses list isn't empty
             else {
                 ArrayList<Transaction> limitedExpensesList = null;
 
                 // sorting the list by value descending
-                expensesList.sort((Transaction transaction1, Transaction transaction2) ->
+                expensesList.sort((final Transaction transaction1, final Transaction transaction2) ->
                         Float.compare(Float.parseFloat(transaction2.getValue()),
                                 Float.parseFloat(transaction1.getValue())));
 
@@ -134,13 +136,16 @@ public class TopFiveExpensesFragment extends Fragment {
                         (limitedExpensesList != null ? limitedExpensesList : expensesList)) {
                     final LinearLayout childLayout = (LinearLayout) getLayoutInflater()
                             .inflate(R.layout.top_five_expenses_linearlayout, mainLayout, false);
+
                     final TextView typeFromChildLayout =
                             childLayout.findViewById(R.id.topFiveExpensesRelativeLayoutType);
+
                     final TextView valueFromChildLayout =
                             childLayout.findViewById(R.id.topFiveExpensesRelativeLayoutValue);
+
                     final String valueWithCurrency = Locale.getDefault().getDisplayLanguage().equals("English") ?
-                            currencySymbol + transaction.getValue() :
-                            transaction.getValue() + " " + currencySymbol;
+                            currencySymbol + transaction.getValue() : transaction.getValue() + " " + currencySymbol;
+
                     final String translatedType = Types.getTranslatedType(requireContext(),
                             String.valueOf(Transaction.getTypeFromIndexInEnglish(transaction.getCategory())));
 
@@ -164,9 +169,8 @@ public class TopFiveExpensesFragment extends Fragment {
 
     private void showNoExpensesLayout(final LinearLayout mainLayout, final String message) {
         final TextView noExpenses = new TextView(getContext());
-        final LinearLayout.LayoutParams params =
-                new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
-                        ViewGroup.LayoutParams.WRAP_CONTENT);
+        final LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT);
 
         params.setMargins(0, 20, 0, 20);
 

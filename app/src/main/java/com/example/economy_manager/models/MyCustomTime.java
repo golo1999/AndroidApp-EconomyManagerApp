@@ -115,9 +115,9 @@ public class MyCustomTime implements Serializable, Comparable<MyCustomTime> {
                 day == that.day &&
                 hour == that.hour &&
                 minute == that.minute &&
-                second == that.second; //&&
-//                monthName.equals(that.monthName) &&
-//                dayName.equals(that.dayName);
+                second == that.second &&
+                monthName.equals(that.monthName) &&
+                dayName.equals(that.dayName);
     }
 
     @Override

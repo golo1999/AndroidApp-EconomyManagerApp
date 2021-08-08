@@ -67,7 +67,7 @@ public class EditSpecificTransactionFragment extends Fragment {
         setDatePicker(viewModel.getSelectedTransaction());
         setTimePicker(viewModel.getSelectedTransaction());
         setOnClickListeners();
-        //setOnFocusChangeListener();
+        setOnFocusChangeListener(viewModel.getSelectedTransaction());
         setTitle();
         createTransactionTypesSpinner();
         setHints();
@@ -116,20 +116,17 @@ public class EditSpecificTransactionFragment extends Fragment {
                                     timePickerSelectedHour != selectedTransaction.getTime().getHour() &&
                                     timePickerSelectedMinute != selectedTransaction.getTime().getMinute()) ?
                                     LocalDateTime.now().getSecond() : selectedTransaction.getTime().getSecond();
+                    final LocalDate selectedLocalDate =
+                            LocalDate.of(datePickerSelectedYear, datePickerSelectedMonth, datePickerSelectedDay);
                     final MyCustomTime editedTime = new MyCustomTime(datePickerSelectedYear, datePickerSelectedMonth,
-                            datePickerSelectedDay, timePickerSelectedHour, timePickerSelectedMinute,
-                            timePickerSelectedSecond);
+                            String.valueOf(selectedLocalDate.getMonth()), datePickerSelectedDay,
+                            String.valueOf(selectedLocalDate.getDayOfWeek()), timePickerSelectedHour,
+                            timePickerSelectedMinute, timePickerSelectedSecond);
                     final int editedCategoryType = (editedCategoryIndex >= 0 && editedCategoryIndex <= 3) ? 1 : 0;
                     final Transaction editedTransaction = new Transaction(selectedTransaction.getId(),
                             editedCategoryIndex, editedTime, editedCategoryType, editedNote, editedValue);
 
                     Log.d("editedInitialTransaction", transactionHasBeenModified(selectedTransaction).toString());
-
-//                    final Transaction editedTransaction = new Transaction("0ccf5d61-7a54-4132-a847-d9c4b762d2a1",
-//                            11, new MyCustomTime(2021, 7, "JULY", 7,
-//                            "WEDNESDAY", 17, 21, 9), 1, null, "33333");
-
-                    //Toast.makeText(requireContext(), String.valueOf(transactionHasBeenModified(selectedTransaction)), Toast.LENGTH_SHORT).show();
 
                     Log.d("selectedTransaction", selectedTransaction.toString());
 
@@ -325,17 +322,23 @@ public class EditSpecificTransactionFragment extends Fragment {
         editText.setBackgroundTintList(ColorStateList.valueOf(color));
     }
 
-    private void setOnFocusChangeListener() {
+    private void setOnFocusChangeListener(final Transaction selectedTransaction) {
         final View.OnFocusChangeListener listener = (final View v, final boolean hasFocus) -> {
             if (hasFocus) {
-                ((EditText) v).setText(((EditText) v).getHint());
+                final String noteFieldText = selectedTransaction.getNote() != null ?
+                        String.valueOf(((EditText) v).getHint()).trim() : "";
+
+                ((EditText) v).setText(noteFieldText);
             }
         };
 
         noteField.setOnFocusChangeListener(listener);
     }
 
+    // apare eroare cand schimbam luna tranzactiei sau in spinner selectam alta luna
+    // totul e ok cand modificam timpul in cadrul lunii curente
     private Transaction transactionHasBeenModified(@NonNull final Transaction initialTransaction) {
+        final int initialMonthIndex = initialTransaction.getTime().getMonth();
         final int datePickerSelectedYear = datePicker.getYear();
         final int datePickerSelectedMonth = datePicker.getMonth() + 1;
         final int datePickerSelectedDay = datePicker.getDayOfMonth();
@@ -348,9 +351,13 @@ public class EditSpecificTransactionFragment extends Fragment {
                         timePickerSelectedHour != initialTransaction.getTime().getHour() &&
                         timePickerSelectedMinute != initialTransaction.getTime().getMinute()) ?
                         LocalDateTime.now().getSecond() : initialTransaction.getTime().getSecond();
+        final LocalDate selectedTimeLocalDate =
+                LocalDate.of(datePickerSelectedYear, datePickerSelectedMonth, datePickerSelectedDay);
         final MyCustomTime editedTime = new MyCustomTime(datePickerSelectedYear, datePickerSelectedMonth,
-                datePickerSelectedDay, timePickerSelectedHour, timePickerSelectedMinute,
+                String.valueOf(selectedTimeLocalDate.getMonth()), datePickerSelectedDay,
+                String.valueOf(selectedTimeLocalDate.getDayOfWeek()), timePickerSelectedHour, timePickerSelectedMinute,
                 timePickerSelectedSecond);
+        boolean hasBeenModified = false;
 
         if ((initialTransaction.getNote() != null &&
                 !String.valueOf(noteField.getText()).trim().equals(initialTransaction.getNote().trim())) ||
@@ -358,9 +365,12 @@ public class EditSpecificTransactionFragment extends Fragment {
             Log.d("initialNote", initialTransaction.getNote() != null ? initialTransaction.getNote() : "null");
             Log.d("editedNote", String.valueOf(noteField.getText()).trim());
 
-            final String editedNote = String.valueOf(noteField.getText()).trim();
+            final String editedNote = !String.valueOf(noteField.getText()).trim().isEmpty() ?
+                    String.valueOf(noteField.getText()).trim() : null;
 
             initialTransaction.setNote(editedNote);
+
+            hasBeenModified = true;
         }
 
         if (!String.valueOf(valueField.getText()).trim().equals(String.valueOf(valueField.getHint()).trim()) &&
@@ -371,14 +381,21 @@ public class EditSpecificTransactionFragment extends Fragment {
             final String editedValue = String.valueOf(valueField.getText()).trim();
 
             initialTransaction.setValue(editedValue);
-        }
 
+            if (!hasBeenModified) {
+                hasBeenModified = true;
+            }
+        }
 
         if (!editedTime.equals(initialTransaction.getTime())) {
             Log.d("initialTime", initialTransaction.getTime().toString());
             Log.d("editedTime", editedTime.toString());
 
             initialTransaction.setTime(editedTime);
+
+            if (!hasBeenModified) {
+                hasBeenModified = true;
+            }
         }
 
         final String initialCategoryName = Types.getTranslatedType(requireContext(),
@@ -398,6 +415,25 @@ public class EditSpecificTransactionFragment extends Fragment {
             if (editedType != initialTransaction.getType()) {
                 initialTransaction.setType(editedType);
             }
+
+            if (!hasBeenModified) {
+                hasBeenModified = true;
+            }
+        }
+
+        // updating the transaction in the Firebase database
+        if (hasBeenModified && MyCustomVariables.getFirebaseAuth().getUid() != null) {
+            MyCustomVariables.getDatabaseReference()
+                    .child(MyCustomVariables.getFirebaseAuth().getUid())
+                    .child("PersonalTransactions")
+                    .child(initialTransaction.getId())
+                    .setValue(initialTransaction);
+
+//            if (initialTransaction.getTime().getMonth() != initialMonthIndex &&
+//                    viewModel.getEditTransactionsRecyclerViewAdapter() != null) {
+//                viewModel.getEditTransactionsRecyclerViewAdapter()
+//                        .notifyItemRemoved(viewModel.getSelectedTransactionListPosition());
+//            }
         }
 
         return initialTransaction;
@@ -419,3 +455,101 @@ public class EditSpecificTransactionFragment extends Fragment {
                 selectedTransaction.getTime().getMinute() : LocalDateTime.now().getMinute());
     }
 }
+
+/*
+
+0ccf5d61-7a54-4132-a847-d9c4b762d2a1
+category:
+8
+id:
+"0ccf5d61-7a54-4132-a847-d9c4b762d2a1"
+time
+day:
+7
+dayName:
+"WEDNESDAY"
+hour:
+17
+minute:
+21
+month:
+7
+monthName:
+"JULY"
+second:
+9
+year:
+2021
+type:
+0
+value:
+"44444"
+
+ */
+
+/*
+
+// atunci cand apasam pe o alta luna din spinner in afara de cea curenta
+
+2021-07-30 19:12:04.631 22750-22750/com.example.economy_manager E/AndroidRuntime: FATAL EXCEPTION: main
+    Process: com.example.economy_manager, PID: 22750
+    java.lang.IndexOutOfBoundsException: Inconsistency detected. Invalid view holder adapter positionEditTransactionsViewHolder{4b19 position=1 id=-1, oldPos=1, pLpos:-1 scrap [attachedScrap] tmpDetached no parent} androidx.recyclerview.widget.RecyclerView{2cf7ef8 VFED..... .F....I. 0,157-1080,1590 #7f0a0112 app:id/editTransactionsRecyclerView}, adapter:com.example.economy_manager.main_part.adapters.EditTransactionsRecyclerViewAdapter@6d8cfd1, layout:androidx.recyclerview.widget.LinearLayoutManager@6485a36, context:com.example.economy_manager.main_part.views.activities.EditTransactionsActivity@57eb182
+        at androidx.recyclerview.widget.RecyclerView$Recycler.validateViewHolderForOffsetPosition(RecyclerView.java:6156)
+        at androidx.recyclerview.widget.RecyclerView$Recycler.tryGetViewHolderForPositionByDeadline(RecyclerView.java:6339)
+        at androidx.recyclerview.widget.RecyclerView$Recycler.getViewForPosition(RecyclerView.java:6300)
+        at androidx.recyclerview.widget.RecyclerView$Recycler.getViewForPosition(RecyclerView.java:6296)
+        at androidx.recyclerview.widget.LinearLayoutManager$LayoutState.next(LinearLayoutManager.java:2330)
+        at androidx.recyclerview.widget.LinearLayoutManager.layoutChunk(LinearLayoutManager.java:1631)
+        at androidx.recyclerview.widget.LinearLayoutManager.fill(LinearLayoutManager.java:1591)
+        at androidx.recyclerview.widget.LinearLayoutManager.onLayoutChildren(LinearLayoutManager.java:668)
+        at androidx.recyclerview.widget.RecyclerView.dispatchLayoutStep1(RecyclerView.java:4255)
+        at androidx.recyclerview.widget.RecyclerView.dispatchLayout(RecyclerView.java:4010)
+        at androidx.recyclerview.widget.RecyclerView.onLayout(RecyclerView.java:4578)
+        at android.view.View.layout(View.java:19590)
+        at android.view.ViewGroup.layout(ViewGroup.java:6053)
+        at androidx.constraintlayout.widget.ConstraintLayout.onLayout(ConstraintLayout.java:1855)
+        at android.view.View.layout(View.java:19590)
+        at android.view.ViewGroup.layout(ViewGroup.java:6053)
+        at androidx.constraintlayout.widget.ConstraintLayout.onLayout(ConstraintLayout.java:1855)
+        at android.view.View.layout(View.java:19590)
+        at android.view.ViewGroup.layout(ViewGroup.java:6053)
+        at android.widget.FrameLayout.layoutChildren(FrameLayout.java:323)
+        at android.widget.FrameLayout.onLayout(FrameLayout.java:261)
+        at android.view.View.layout(View.java:19590)
+        at android.view.ViewGroup.layout(ViewGroup.java:6053)
+        at android.widget.LinearLayout.setChildFrame(LinearLayout.java:1791)
+        at android.widget.LinearLayout.layoutVertical(LinearLayout.java:1635)
+        at android.widget.LinearLayout.onLayout(LinearLayout.java:1544)
+        at android.view.View.layout(View.java:19590)
+        at android.view.ViewGroup.layout(ViewGroup.java:6053)
+        at android.widget.FrameLayout.layoutChildren(FrameLayout.java:323)
+        at android.widget.FrameLayout.onLayout(FrameLayout.java:261)
+        at android.view.View.layout(View.java:19590)
+        at android.view.ViewGroup.layout(ViewGroup.java:6053)
+        at android.widget.LinearLayout.setChildFrame(LinearLayout.java:1791)
+        at android.widget.LinearLayout.layoutVertical(LinearLayout.java:1635)
+        at android.widget.LinearLayout.onLayout(LinearLayout.java:1544)
+        at android.view.View.layout(View.java:19590)
+        at android.view.ViewGroup.layout(ViewGroup.java:6053)
+        at android.widget.FrameLayout.layoutChildren(FrameLayout.java:323)
+        at android.widget.FrameLayout.onLayout(FrameLayout.java:261)
+        at com.android.internal.policy.DecorView.onLayout(DecorView.java:758)
+        at android.view.View.layout(View.java:19590)
+        at android.view.ViewGroup.layout(ViewGroup.java:6053)
+        at android.view.ViewRootImpl.performLayout(ViewRootImpl.java:2484)
+        at android.view.ViewRootImpl.performTraversals(ViewRootImpl.java:2200)
+        at android.view.ViewRootImpl.doTraversal(ViewRootImpl.java:1386)
+        at android.view.ViewRootImpl$TraversalRunnable.run(ViewRootImpl.java:6733)
+        at android.view.Choreographer$CallbackRecord.run(Choreographer.java:911)
+2021-07-30 19:12:04.631 22750-22750/com.example.economy_manager E/AndroidRuntime:     at android.view.Choreographer.doCallbacks(Choreographer.java:723)
+        at android.view.Choreographer.doFrame(Choreographer.java:658)
+        at android.view.Choreographer$FrameDisplayEventReceiver.run(Choreographer.java:897)
+        at android.os.Handler.handleCallback(Handler.java:789)
+        at android.os.Handler.dispatchMessage(Handler.java:98)
+        at android.os.Looper.loop(Looper.java:164)
+        at android.app.ActivityThread.main(ActivityThread.java:6541)
+        at java.lang.reflect.Method.invoke(Native Method)
+        at com.android.internal.os.Zygote$MethodAndArgsCaller.run(Zygote.java:240)
+        at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:767)
+
+ */

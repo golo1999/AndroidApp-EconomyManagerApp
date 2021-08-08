@@ -12,15 +12,16 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelStoreOwner;
 
+import com.example.economy_manager.R;
+import com.example.economy_manager.main_part.viewmodels.MainScreenViewModel;
+import com.example.economy_manager.models.Transaction;
 import com.example.economy_manager.utilities.MyCustomMethods;
 import com.example.economy_manager.utilities.MyCustomVariables;
-import com.example.economy_manager.R;
-import com.example.economy_manager.models.Transaction;
-import com.example.economy_manager.main_part.viewmodels.MainScreenViewModel;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
 
+import java.time.LocalDate;
 import java.util.Locale;
 
 public class ShowSavingsFragment extends Fragment {
@@ -67,8 +68,7 @@ public class ShowSavingsFragment extends Fragment {
 
     private void setSavings() {
         if (MyCustomVariables.getFirebaseAuth().getUid() != null) {
-            MyCustomVariables.getDatabaseReference()
-                    .child(MyCustomVariables.getFirebaseAuth().getUid())
+            MyCustomVariables.getDatabaseReference().child(MyCustomVariables.getFirebaseAuth().getUid())
                     .addValueEventListener(new ValueEventListener() {
                         @Override
                         public void onDataChange(final @NonNull DataSnapshot snapshot) {
@@ -84,7 +84,8 @@ public class ShowSavingsFragment extends Fragment {
                                         snapshot.child("PersonalTransactions").getChildren()) {
                                     final Transaction transaction = databaseTransaction.getValue(Transaction.class);
 
-                                    if (transaction != null) {
+                                    if (transaction != null && transaction.getTime() != null &&
+                                            transaction.getTime().getMonth() == LocalDate.now().getMonthValue()) {
                                         if (transaction.getType() == 1) {
                                             totalMonthlyIncomes += Float.parseFloat(transaction.getValue());
                                         } else {
@@ -101,7 +102,8 @@ public class ShowSavingsFragment extends Fragment {
                                     "-" + currencySymbol + Math.abs(totalMonthlySavings) :
                                     currencySymbol + totalMonthlySavings);
 
-                            savingsText.setTextColor(totalMonthlySavings > 0f ? Color.GREEN : Color.RED);
+                            savingsText.setTextColor(totalMonthlySavings > 0f ?
+                                    Color.GREEN : totalMonthlySavings == 0f ? Color.BLUE : Color.RED);
                         }
 
                         @Override

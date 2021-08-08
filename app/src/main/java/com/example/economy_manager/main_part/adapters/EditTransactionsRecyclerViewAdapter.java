@@ -175,7 +175,7 @@ public class EditTransactionsRecyclerViewAdapter
 
                 if (adapter != null && positionInList > -1) {
                     transactionsList.remove(positionInList);
-                    adapter.notifyDataSetChanged();
+                    adapter.notifyItemRemoved(positionInList);
                 }
             });
         }

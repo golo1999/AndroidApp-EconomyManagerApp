@@ -9,16 +9,17 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
-import com.example.economy_manager.utilities.MyCustomMethods;
-import com.example.economy_manager.utilities.MyCustomSharedPreferences;
-import com.example.economy_manager.utilities.MyCustomVariables;
 import com.example.economy_manager.R;
 import com.example.economy_manager.models.Transaction;
 import com.example.economy_manager.models.UserDetails;
+import com.example.economy_manager.utilities.MyCustomMethods;
+import com.example.economy_manager.utilities.MyCustomSharedPreferences;
+import com.example.economy_manager.utilities.MyCustomVariables;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
 
+import java.time.LocalDate;
 import java.util.Locale;
 
 public class BudgetReviewFragment extends Fragment {
@@ -84,7 +85,8 @@ public class BudgetReviewFragment extends Fragment {
                                         snapshot.child("PersonalTransactions").getChildren()) {
                                     final Transaction transaction = databaseTransaction.getValue(Transaction.class);
 
-                                    if (transaction != null) {
+                                    if (transaction != null && transaction.getTime() != null &&
+                                            transaction.getTime().getMonth() == LocalDate.now().getMonthValue()) {
                                         if (transaction.getType() == 1) {
                                             totalMonthlyIncomes += Float.parseFloat(transaction.getValue());
                                         } else {
@@ -94,14 +96,10 @@ public class BudgetReviewFragment extends Fragment {
                                 }
                             }
 
-                            incomesText.setText(Locale.getDefault()
-                                    .getDisplayLanguage().equals("English") ?
-                                    currencySymbol + totalMonthlyIncomes :
-                                    totalMonthlyIncomes + " " + currencySymbol);
-                            expensesText.setText(Locale.getDefault()
-                                    .getDisplayLanguage().equals("English") ?
-                                    currencySymbol + totalMonthlyExpenses :
-                                    totalMonthlyExpenses + " " + currencySymbol);
+                            incomesText.setText(Locale.getDefault().getDisplayLanguage().equals("English") ?
+                                    currencySymbol + totalMonthlyIncomes : totalMonthlyIncomes + " " + currencySymbol);
+                            expensesText.setText(Locale.getDefault().getDisplayLanguage().equals("English") ?
+                                    currencySymbol + totalMonthlyExpenses : totalMonthlyExpenses + " " + currencySymbol);
 
                         }
 
@@ -116,14 +114,10 @@ public class BudgetReviewFragment extends Fragment {
             final float totalMonthlyIncomes = 0f;
             final float totalMonthlyExpenses = 0f;
 
-            incomesText.setText(Locale.getDefault()
-                    .getDisplayLanguage().equals("English") ?
-                    currencySymbol + totalMonthlyIncomes :
-                    totalMonthlyIncomes + " " + currencySymbol);
-            expensesText.setText(Locale.getDefault()
-                    .getDisplayLanguage().equals("English") ?
-                    currencySymbol + totalMonthlyExpenses :
-                    totalMonthlyExpenses + " " + currencySymbol);
+            incomesText.setText(Locale.getDefault().getDisplayLanguage().equals("English") ?
+                    currencySymbol + totalMonthlyIncomes : totalMonthlyIncomes + " " + currencySymbol);
+            expensesText.setText(Locale.getDefault().getDisplayLanguage().equals("English") ?
+                    currencySymbol + totalMonthlyExpenses : totalMonthlyExpenses + " " + currencySymbol);
         }
     }
 }

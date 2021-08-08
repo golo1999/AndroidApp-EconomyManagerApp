@@ -104,7 +104,8 @@ public class MonthlyBalanceActivity extends AppCompatActivity {
                                         snapshot.child("PersonalTransactions").getChildren()) {
                                     final Transaction transaction = databaseTransaction.getValue(Transaction.class);
 
-                                    if (transaction != null) {
+                                    if (transaction != null && transaction.getTime() != null &&
+                                            transaction.getTime().getMonth() == LocalDate.now().getMonthValue()) {
                                         transactionsList.add(transaction);
 
                                         if (checkIfDayCanBeAddedToList(daysList, transaction.getTime().getDay())) {
@@ -114,7 +115,7 @@ public class MonthlyBalanceActivity extends AppCompatActivity {
                                 }
 
                                 // sorting the list by value descending
-                                transactionsList.sort((transaction1, transaction2) ->
+                                transactionsList.sort((final Transaction transaction1, final Transaction transaction2) ->
                                         Float.compare(Float.parseFloat(String.valueOf(transaction2.getValue())),
                                                 Float.parseFloat(String.valueOf(transaction1.getValue()))));
                                 daysList.sort(Collections.reverseOrder());
@@ -213,8 +214,7 @@ public class MonthlyBalanceActivity extends AppCompatActivity {
 
     private void setTitle() {
         final int year = viewModel.getCurrentYear();
-        final String month = Months
-                .getTranslatedMonth(MonthlyBalanceActivity.this, viewModel.getCurrentMonthName());
+        final String month = Months.getTranslatedMonth(MonthlyBalanceActivity.this, viewModel.getCurrentMonthName());
         final String currentMonthYear = month.trim() + " " + year;
 
         activityTitle.setText(currentMonthYear);
@@ -232,8 +232,7 @@ public class MonthlyBalanceActivity extends AppCompatActivity {
                     .addValueEventListener(new ValueEventListener() {
                         @Override
                         public void onDataChange(final @NonNull DataSnapshot snapshot) {
-                            if (snapshot.exists() &&
-                                    snapshot.hasChild("PersonalTransactions") &&
+                            if (snapshot.exists() && snapshot.hasChild("PersonalTransactions") &&
                                     snapshot.child("PersonalTransactions").hasChildren()) {
                                 int numberOfCurrentMonthTransactions = 0;
 
@@ -241,8 +240,7 @@ public class MonthlyBalanceActivity extends AppCompatActivity {
                                         snapshot.child("PersonalTransactions").getChildren()) {
                                     final Transaction databaseTransaction = transaction.getValue(Transaction.class);
 
-                                    if (databaseTransaction != null &&
-                                            databaseTransaction.getTime() != null &&
+                                    if (databaseTransaction != null && databaseTransaction.getTime() != null &&
                                             databaseTransaction.getTime().getMonth() == LocalDate.now().getMonthValue()) {
                                         ++numberOfCurrentMonthTransactions;
                                         break;

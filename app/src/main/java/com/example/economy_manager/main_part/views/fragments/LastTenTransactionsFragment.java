@@ -15,16 +15,17 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelStoreOwner;
 
+import com.example.economy_manager.R;
+import com.example.economy_manager.main_part.viewmodels.MainScreenViewModel;
+import com.example.economy_manager.models.Transaction;
 import com.example.economy_manager.utilities.MyCustomMethods;
 import com.example.economy_manager.utilities.MyCustomVariables;
-import com.example.economy_manager.R;
-import com.example.economy_manager.models.Transaction;
 import com.example.economy_manager.utilities.Types;
-import com.example.economy_manager.main_part.viewmodels.MainScreenViewModel;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Locale;
 import java.util.stream.Collectors;
@@ -70,8 +71,7 @@ public class LastTenTransactionsFragment extends Fragment {
     // method for setting the transactions list and displaying it on the screen
     private void createAndSetList() {
         if (MyCustomVariables.getFirebaseAuth().getUid() != null) {
-            MyCustomVariables.getDatabaseReference()
-                    .child(MyCustomVariables.getFirebaseAuth().getUid())
+            MyCustomVariables.getDatabaseReference().child(MyCustomVariables.getFirebaseAuth().getUid())
                     .addValueEventListener(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -86,7 +86,8 @@ public class LastTenTransactionsFragment extends Fragment {
                                         snapshot.child("PersonalTransactions").getChildren()) {
                                     final Transaction transaction = transactionIterator.getValue(Transaction.class);
 
-                                    if (transaction != null) {
+                                    if (transaction != null && transaction.getTime() != null &&
+                                            transaction.getTime().getMonth() == LocalDate.now().getMonthValue()) {
                                         transactionsList.add(transaction);
                                     }
                                 }
@@ -136,18 +137,20 @@ public class LastTenTransactionsFragment extends Fragment {
                         (limitedTransactionsList != null ? limitedTransactionsList : transactionsList)) {
                     final LinearLayout childLayout = (LinearLayout) getLayoutInflater()
                             .inflate(R.layout.last_ten_transactions_linearlayout, mainLayout, false);
+
                     final TextView typeFromChildLayout =
                             childLayout.findViewById(R.id.lastTenTransactionsRelativeLayoutTitle);
+
                     final TextView valueFromChildLayout =
                             childLayout.findViewById(R.id.lastTenTransactionsRelativeLayoutPrice);
+
                     final String valueWithCurrency = Locale.getDefault().getDisplayLanguage().equals("English") ?
-                            currencySymbol + transaction.getValue() :
-                            transaction.getValue() + " " + currencySymbol;
+                            currencySymbol + transaction.getValue() : transaction.getValue() + " " + currencySymbol;
+
                     final String translatedType = Types.getTranslatedType(requireContext(),
                             String.valueOf(Transaction.getTypeFromIndexInEnglish(transaction.getCategory())));
 
-                    valueFromChildLayout.setTextColor(transaction.getType() == 1 ?
-                            Color.GREEN : Color.RED);
+                    valueFromChildLayout.setTextColor(transaction.getType() == 1 ? Color.GREEN : Color.RED);
 
                     // displaying the views on the screen if the type was successfully translated
                     if (translatedType != null) {
@@ -168,9 +171,8 @@ public class LastTenTransactionsFragment extends Fragment {
 
     private void showNoTransactionsLayout(final LinearLayout mainLayout, final String message) {
         final TextView noTransactions = new TextView(getContext());
-        final LinearLayout.LayoutParams params =
-                new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
-                        ViewGroup.LayoutParams.WRAP_CONTENT);
+        final LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT);
 
         params.setMargins(0, 20, 0, 20);
 

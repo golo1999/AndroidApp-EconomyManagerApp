@@ -70,11 +70,12 @@ public class Transaction {
     public static int getIndexFromCategory(final String categoryName) {
         int index = -1;
 
-        for (String category : categoryList) {
+        for (final String category : categoryList) {
             ++index;
 
-            if (category.equals(categoryName.trim()))
+            if (category.equals(categoryName.trim())) {
                 break;
+            }
 
             Log.d("category123", categoryName + " " + category + " " + index);
         }
@@ -82,7 +83,7 @@ public class Transaction {
         return index;
     }
 
-    public static String getTypeFromIndexInEnglish(int index) {
+    public static String getTypeFromIndexInEnglish(final int index) {
         return index <= categoryList.length ? categoryList[index] : "";
     }
 
