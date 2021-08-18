@@ -18,8 +18,9 @@
     <string name="date">Date</string>
     <string name="day">Day</string>
     <string name="debt">Debt</string>
-    <string name="delete_error">The deletion could not be performed</string>
     <string name="delete_account">Delete account</string>
+    <string name="delete_error">The deletion could not be performed</string>
+    <string name="delete_transaction">Are you sure you want to delete the transaction?</string>
     <string name="edit_account">Edit account</string>
     <string name="edit_account_first_name">First name</string>
     <string name="edit_account_last_name">Last name</string>
@@ -138,6 +139,7 @@
     <string name="no_transactions_this_year">No transactions made this year</string>
     <string name="no_transactions_yet">No transactions made yet</string>
     <string name="note">Note</string>
+    <string name="ok" translatable="false">OK</string>
     <string name="password">Password</string>
     <string name="proceed"> Proceed </string>
     <string name="rate_app">Rate the app</string>

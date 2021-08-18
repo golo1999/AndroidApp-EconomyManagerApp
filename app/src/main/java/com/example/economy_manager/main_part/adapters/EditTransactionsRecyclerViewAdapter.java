@@ -1,8 +1,9 @@
 package com.example.economy_manager.main_part.adapters;
 
+import static android.content.Context.MODE_PRIVATE;
+
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,11 +12,13 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.economy_manager.R;
-import com.example.economy_manager.main_part.views.activities.EditTransactionsActivity;
+import com.example.economy_manager.main_part.dialogs.DeleteTransactionCustomDialog;
 import com.example.economy_manager.main_part.viewmodels.EditTransactionsViewModel;
+import com.example.economy_manager.main_part.views.activities.EditTransactionsActivity;
 import com.example.economy_manager.models.Transaction;
 import com.example.economy_manager.models.UserDetails;
 import com.example.economy_manager.utilities.MyCustomMethods;
@@ -25,8 +28,6 @@ import com.example.economy_manager.utilities.Types;
 import java.util.ArrayList;
 import java.util.Locale;
 
-import static android.content.Context.MODE_PRIVATE;
-
 public class EditTransactionsRecyclerViewAdapter
         extends RecyclerView.Adapter<EditTransactionsRecyclerViewAdapter.EditTransactionsViewHolder> {
     private final EditTransactionsViewModel viewModel;
@@ -35,16 +36,19 @@ public class EditTransactionsRecyclerViewAdapter
     private Transaction transaction;
     private final UserDetails userDetails;
     private final RecyclerView recyclerView;
+    private final FragmentManager fragmentManager;
 
     public EditTransactionsRecyclerViewAdapter(final EditTransactionsViewModel viewModel,
                                                final ArrayList<Transaction> transactionsList,
                                                final Context context, final UserDetails userDetails,
-                                               final RecyclerView recyclerView/*, Transaction transaction */) {
+                                               final RecyclerView recyclerView,
+                                               final FragmentManager fragmentManager/*, Transaction transaction */) {
         this.viewModel = viewModel;
         this.transactionsList = transactionsList;
         this.context = context;
         this.userDetails = userDetails;
         this.recyclerView = recyclerView;
+        this.fragmentManager = fragmentManager;
         //this.transaction = transaction;
     }
 
@@ -54,7 +58,7 @@ public class EditTransactionsRecyclerViewAdapter
         final View view =
                 LayoutInflater.from(context).inflate(R.layout.transaction_layout_cardview, parent, false);
 
-        return new EditTransactionsViewHolder(view, viewModel, context, transactionsList, recyclerView);
+        return new EditTransactionsViewHolder(view, viewModel, context, transactionsList, recyclerView, fragmentManager);
     }
 
     @Override
@@ -97,18 +101,21 @@ public class EditTransactionsRecyclerViewAdapter
         private Transaction selectedTransaction;
         private ConstraintLayout mainLayout;
         private SharedPreferences preferences;
+        private FragmentManager fragmentManager;
 
         public EditTransactionsViewHolder(final @NonNull View itemView,
                                           final EditTransactionsViewModel viewModel,
                                           final Context context,
                                           final ArrayList<Transaction> transactionsList,
-                                          final RecyclerView recyclerView) {
+                                          final RecyclerView recyclerView,
+                                          final FragmentManager fragmentManager) {
             super(itemView);
 
             this.viewModel = viewModel;
             this.context = context;
             this.transactionsList = transactionsList;
             this.recyclerView = recyclerView;
+            this.fragmentManager = fragmentManager;
 
             setVariables(itemView);
             setOnClickListeners();
@@ -130,8 +137,6 @@ public class EditTransactionsRecyclerViewAdapter
                     // retrieving the selected transaction from the list
                     selectedTransaction = transactionsList.get(getBindingAdapterPosition());
 
-                    Log.d("transactionClicked", selectedTransaction.toString());
-
                     if (selectedTransaction != null) {
                         viewModel.setSelectedTransaction(selectedTransaction);
                         viewModel.setSelectedTransactionListPosition(getBindingAdapterPosition());
@@ -144,27 +149,8 @@ public class EditTransactionsRecyclerViewAdapter
                             viewModel.setEditTransactionsRecyclerViewAdapter(adapter);
                         }
 
-//                        viewModel.getSelectedTransaction().setValue("1500");
-//
-////                        selectedTransaction.setValue("1500");
-//
-//                        Log.d("positionClicked", String.valueOf(getBindingAdapterPosition()));
-//
-//
-//                        if (viewModel.getEditTransactionsRecyclerViewAdapter() != null) {
-//                            viewModel.getEditTransactionsRecyclerViewAdapter().notifyItemChanged(getBindingAdapterPosition());
-//                        }
-
-
                         ((EditTransactionsActivity) context).setEditSpecificTransactionFragment();
                     }
-
-                    // saving it to SharedPreferences
-//                    MyCustomSharedPreferences.saveTransactionToSharedPreferences(preferences, selectedTransaction);
-
-                    // redirecting to the edit specific transaction activity
-//                    context.startActivity(new Intent(context, EditSpecificTransactionActivity.class));
-                    //overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
                 }
             });
 
@@ -174,10 +160,21 @@ public class EditTransactionsRecyclerViewAdapter
                 final int positionInList = getBindingAdapterPosition();
 
                 if (adapter != null && positionInList > -1) {
-                    transactionsList.remove(positionInList);
-                    adapter.notifyItemRemoved(positionInList);
+                    showTransactionDeleteDialog(transactionsList, adapter, positionInList);
+
+//                    transactionsList.remove(positionInList);
+//                    adapter.notifyItemRemoved(positionInList);
                 }
             });
+        }
+
+        private void showTransactionDeleteDialog(final ArrayList<Transaction> transactionsList,
+                                                 final EditTransactionsRecyclerViewAdapter adapter,
+                                                 final int positionInList) {
+            DeleteTransactionCustomDialog deleteTransactionCustomDialog =
+                    new DeleteTransactionCustomDialog(transactionsList, adapter, positionInList);
+
+            deleteTransactionCustomDialog.show(fragmentManager, "deleteDialogFragment");
         }
     }
 }

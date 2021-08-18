@@ -15,18 +15,21 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
+import androidx.fragment.app.DialogFragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.economy_manager.R;
 import com.example.economy_manager.main_part.adapters.EditTransactionsRecyclerViewAdapter;
+import com.example.economy_manager.main_part.dialogs.DeleteTransactionCustomDialog;
 import com.example.economy_manager.main_part.viewmodels.EditTransactionsViewModel;
 import com.example.economy_manager.main_part.views.fragments.EditSpecificTransactionFragment;
 import com.example.economy_manager.models.Transaction;
@@ -45,7 +48,8 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Locale;
 
-public class EditTransactionsActivity extends AppCompatActivity {
+public class EditTransactionsActivity extends AppCompatActivity
+        implements DeleteTransactionCustomDialog.DeleteDialogListener {
     private UserDetails userDetails;
     private EditTransactionsViewModel viewModel;
     private ConstraintLayout activityLayout;
@@ -108,7 +112,7 @@ public class EditTransactionsActivity extends AppCompatActivity {
         centerText = findViewById(R.id.editTransactionsCenterText);
         bottomLayout = findViewById(R.id.editTransactionBottomLayout);
         recyclerViewAdapter = new EditTransactionsRecyclerViewAdapter(viewModel, transactionsList, this,
-                userDetails, recyclerView);
+                userDetails, recyclerView, getSupportFragmentManager());
     }
 
     public void setUserDetailsInViewModel(final UserDetails details) {
@@ -141,7 +145,6 @@ public class EditTransactionsActivity extends AppCompatActivity {
                             if (snapshot.exists() && snapshot.hasChildren()) {
                                 final ArrayList<String> yearsList = new ArrayList<>();
                                 final ArrayList<String> monthsList = new ArrayList<>();
-                                boolean yearAlreadyExists;
 
                                 if (!allTransactionsList.isEmpty()) {
                                     allTransactionsList.clear();
@@ -157,7 +160,7 @@ public class EditTransactionsActivity extends AppCompatActivity {
                                         if (yearsList.isEmpty()) {
                                             yearsList.add(transactionYear);
                                         } else {
-                                            yearAlreadyExists = false;
+                                            boolean yearAlreadyExists = false;
 
                                             for (final String year : yearsList)
                                                 if (year.equals(transactionYear)) {
@@ -182,7 +185,6 @@ public class EditTransactionsActivity extends AppCompatActivity {
                                                                final int position, final long id) {
                                         final String selectedYear =
                                                 String.valueOf(yearSpinner.getItemAtPosition(position));
-                                        boolean monthAlreadyExists;
 
                                         try {
                                             ((TextView) parent.getChildAt(0)).setTextColor(Color.WHITE);
@@ -205,7 +207,7 @@ public class EditTransactionsActivity extends AppCompatActivity {
                                                 if (monthsList.isEmpty()) {
                                                     monthsList.add(transactionMonthParsed);
                                                 } else {
-                                                    monthAlreadyExists = false;
+                                                    boolean monthAlreadyExists = false;
 
                                                     for (final String month : monthsList)
                                                         if (month.equals(transactionMonthParsed)) {
@@ -269,7 +271,8 @@ public class EditTransactionsActivity extends AppCompatActivity {
                             if (userDetails != null) {
                                 final boolean darkThemeEnabled = userDetails.getApplicationSettings().getDarkTheme();
 
-                                centerText.setTextColor(!darkThemeEnabled ? Color.parseColor("#195190") : Color.WHITE);
+                                centerText.setTextColor(!darkThemeEnabled ?
+                                        Color.parseColor("#195190") : Color.WHITE);
                             }
 
                             centerText.setTextSize(20);
@@ -299,13 +302,13 @@ public class EditTransactionsActivity extends AppCompatActivity {
 
         // creating the frequency array
         for (final String listIterator : list) {
-            int j = 0;
+            int counter = 0;
             // finding out which months are also found into the selected year's months list
             for (String monthsListIterator : months) {
-                j++;
+                counter++;
 
                 if (listIterator.equals(monthsListIterator)) {
-                    frequency[j - 1] = 1;
+                    frequency[counter - 1] = 1;
                 }
             }
         }
@@ -313,54 +316,54 @@ public class EditTransactionsActivity extends AppCompatActivity {
         // clearing the list and adding the months in their natural order
         list.clear();
 
-        int j = 0;
+        int counter = 0;
 
         // adding the month to the list if its frequency is 1
         for (final int frequencyIterator : frequency) {
-            j++;
+            counter++;
 
             if (frequencyIterator == 1) {
                 // translating the month name if it's not in english
                 list.add(!Locale.getDefault().getDisplayLanguage().equals("English") ?
-                        Months.getTranslatedMonth(EditTransactionsActivity.this, months[j - 1]) : months[j - 1]);
+                        Months.getTranslatedMonth(EditTransactionsActivity.this, months[counter - 1]) :
+                        months[counter - 1]);
             }
         }
 
-        j = 0;
+        counter = 0;
 
         // saving current month's position if it has been found => for setting the default month spinner's selected
         // item as the current month
         for (String listIterator : list) {
-            j++;
+            counter++;
 
             if (Months.getMonthInEnglish(EditTransactionsActivity.this, listIterator)
                     .equals(monthFormat.format(currentTime.getTime()))) {
-                positionOfCurrentMonth = j - 1;
+                positionOfCurrentMonth = counter - 1;
                 break;
             }
         }
 
         // creating and setting the month spinner adapter's styling
-        final ArrayAdapter<String> monthAdapter =
-                new ArrayAdapter<String>(this, R.layout.custom_spinner_item, list) {
-                    @Override
-                    public View getDropDownView(final int position, final @Nullable View convertView,
-                                                final @NonNull ViewGroup parent) {
-                        final View v = super.getDropDownView(position, convertView, parent);
-                        // all spinner elements are aligned to center
-                        ((TextView) v).setGravity(Gravity.CENTER);
+        final ArrayAdapter<String> monthAdapter = new ArrayAdapter<String>(this, R.layout.custom_spinner_item, list) {
+            @Override
+            public View getDropDownView(final int position, final @Nullable View convertView,
+                                        final @NonNull ViewGroup parent) {
+                final View v = super.getDropDownView(position, convertView, parent);
+                // all spinner elements are aligned to center
+                ((TextView) v).setGravity(Gravity.CENTER);
 
-                        if (userDetails != null) {
-                            final boolean darkThemeEnabled = userDetails.getApplicationSettings().getDarkTheme();
-                            final int itemsColor = !darkThemeEnabled ? Color.WHITE : Color.BLACK;
+                if (userDetails != null) {
+                    final boolean darkThemeEnabled = userDetails.getApplicationSettings().getDarkTheme();
+                    final int itemsColor = !darkThemeEnabled ? Color.WHITE : Color.BLACK;
 
-                            // setting text color based on the selected theme
-                            ((TextView) v).setTextColor(itemsColor);
-                        }
+                    // setting text color based on the selected theme
+                    ((TextView) v).setTextColor(itemsColor);
+                }
 
-                        return v;
-                    }
-                };
+                return v;
+            }
+        };
 
         monthSpinner.setAdapter(monthAdapter);
 
@@ -373,26 +376,25 @@ public class EditTransactionsActivity extends AppCompatActivity {
 
     private void createYearSpinner(final ArrayList<String> list) {
         // creating and setting the year spinner adapter's styling
-        final ArrayAdapter<String> yearAdapter =
-                new ArrayAdapter<String>(this, R.layout.custom_spinner_item, list) {
-                    @Override
-                    public View getDropDownView(final int position, final @Nullable View convertView,
-                                                final @NonNull ViewGroup parent) {
-                        final View v = super.getDropDownView(position, convertView, parent);
-                        // all spinner elements are aligned to center
-                        ((TextView) v).setGravity(Gravity.CENTER);
+        final ArrayAdapter<String> yearAdapter = new ArrayAdapter<String>(this, R.layout.custom_spinner_item, list) {
+            @Override
+            public View getDropDownView(final int position, final @Nullable View convertView,
+                                        final @NonNull ViewGroup parent) {
+                final View v = super.getDropDownView(position, convertView, parent);
+                // all spinner elements are aligned to center
+                ((TextView) v).setGravity(Gravity.CENTER);
 
-                        if (userDetails != null) {
-                            final boolean darkThemeEnabled = userDetails.getApplicationSettings().getDarkTheme();
-                            final int itemsColor = !darkThemeEnabled ? Color.WHITE : Color.BLACK;
+                if (userDetails != null) {
+                    final boolean darkThemeEnabled = userDetails.getApplicationSettings().getDarkTheme();
+                    final int itemsColor = !darkThemeEnabled ? Color.WHITE : Color.BLACK;
 
-                            // setting text color based on the selected theme
-                            ((TextView) v).setTextColor(itemsColor);
-                        }
+                    // setting text color based on the selected theme
+                    ((TextView) v).setTextColor(itemsColor);
+                }
 
-                        return v;
-                    }
-                };
+                return v;
+            }
+        };
 
         yearSpinner.setAdapter(yearAdapter);
 
@@ -445,7 +447,6 @@ public class EditTransactionsActivity extends AppCompatActivity {
     private void setTheme() {
         Log.d("userDetailsInSetTheme", userDetails.toString());
         if (userDetails != null) {
-
             final boolean darkThemeEnabled = userDetails.getApplicationSettings().getDarkTheme();
             final int theme = !darkThemeEnabled ?
                     R.drawable.ic_white_gradient_tobacco_ad : R.drawable.ic_black_gradient_night_shift;
@@ -456,12 +457,12 @@ public class EditTransactionsActivity extends AppCompatActivity {
             getWindow().setBackgroundDrawableResource(theme);
 
             // setam culoarea sagetii
-            monthSpinner.getBackground().setColorFilter(Color.WHITE,
-                    PorterDuff.Mode.SRC_ATOP);
+            monthSpinner.getBackground().setColorFilter(Color.WHITE, PorterDuff.Mode.SRC_ATOP);
+
             monthSpinner.setPopupBackgroundResource(dropDownTheme);
             // setam culoarea elementelor
-            yearSpinner.getBackground().setColorFilter(Color.WHITE,
-                    PorterDuff.Mode.SRC_ATOP);
+            yearSpinner.getBackground().setColorFilter(Color.WHITE, PorterDuff.Mode.SRC_ATOP);
+
             yearSpinner.setPopupBackgroundResource(dropDownTheme);
         }
     }
@@ -488,6 +489,20 @@ public class EditTransactionsActivity extends AppCompatActivity {
 
         fragmentLayout.setVisibility(View.INVISIBLE);
         activityLayout.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void onDialogPositiveClick(final DialogFragment dialog, final ArrayList<Transaction> transactionsList,
+                                      final EditTransactionsRecyclerViewAdapter adapter, final int positionInList) {
+        Toast.makeText(this, "removing position " + positionInList, Toast.LENGTH_SHORT).show();
+
+        transactionsList.remove(positionInList);
+        adapter.notifyItemRemoved(positionInList);
+    }
+
+    @Override
+    public void onDialogNegativeClick(final DialogFragment dialog) {
+        Toast.makeText(this, "negative", Toast.LENGTH_SHORT).show();
     }
 
     class CustomAdaptor extends BaseAdapter {
