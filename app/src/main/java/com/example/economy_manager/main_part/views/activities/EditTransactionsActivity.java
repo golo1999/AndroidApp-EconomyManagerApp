@@ -140,9 +140,7 @@ public class EditTransactionsActivity extends AppCompatActivity {
                         public void onDataChange(final @NonNull DataSnapshot snapshot) {
                             if (snapshot.exists() && snapshot.hasChildren()) {
                                 final ArrayList<String> yearsList = new ArrayList<>();
-
                                 final ArrayList<String> monthsList = new ArrayList<>();
-
                                 boolean yearAlreadyExists;
 
                                 if (!allTransactionsList.isEmpty()) {
@@ -193,10 +191,16 @@ public class EditTransactionsActivity extends AppCompatActivity {
                                             e.printStackTrace();
                                         }
 
+                                        if (!monthsList.isEmpty()) {
+                                            monthsList.clear();
+                                        }
+
                                         for (final Transaction transaction : allTransactionsList) {
                                             if (String.valueOf(transaction.getTime().getYear()).equals(selectedYear)) {
-                                                String transactionMonthParsed = transaction.getTime().getMonthName().charAt(0) +
-                                                        transaction.getTime().getMonthName().substring(1).toLowerCase();
+                                                final String transactionMonthParsed =
+                                                        transaction.getTime().getMonthName().charAt(0) +
+                                                                transaction.getTime().getMonthName().substring(1)
+                                                                        .toLowerCase();
 
                                                 if (monthsList.isEmpty()) {
                                                     monthsList.add(transactionMonthParsed);
@@ -393,14 +397,15 @@ public class EditTransactionsActivity extends AppCompatActivity {
         yearSpinner.setAdapter(yearAdapter);
 
         final Calendar currentTime = Calendar.getInstance();
-        int positionOfCurrentYear = -1, j = -1;
+        int positionOfCurrentYear = -1;
+        int secondCounter = -1;
 
         // searching the current year into the years list and saving its position if it has been found
         for (final String listIterator : list) {
-            j++;
+            secondCounter++;
 
             if (listIterator.equals(String.valueOf(currentTime.get(Calendar.YEAR)))) {
-                positionOfCurrentYear = j;
+                positionOfCurrentYear = secondCounter;
                 break;
             }
         }
@@ -412,9 +417,13 @@ public class EditTransactionsActivity extends AppCompatActivity {
     }
 
     private void populateRecyclerView(final String selectedYear, final String selectedMonth) {
+        final int currentNumberOfTransactions = recyclerViewAdapter.getItemCount();
+
         if (!transactionsList.isEmpty()) {
             transactionsList.clear();
         }
+
+        recyclerViewAdapter.notifyItemRangeRemoved(0, currentNumberOfTransactions);
 
         for (final Transaction transaction : allTransactionsList) {
             final String transactionMonthParsed = transaction.getTime().getMonthName().charAt(0) +
