@@ -490,15 +490,23 @@ public class EditTransactionsActivity extends AppCompatActivity
                                       final ArrayList<Transaction> transactionsList,
                                       final EditTransactionsRecyclerViewAdapter adapter,
                                       final int positionInList) {
-        Toast.makeText(this, "removing position " + positionInList, Toast.LENGTH_SHORT).show();
+        final Transaction transactionToDelete = transactionsList.get(positionInList);
 
         transactionsList.remove(positionInList);
         adapter.notifyItemRemoved(positionInList);
+
+        if (MyCustomVariables.getFirebaseAuth().getUid() != null) {
+            MyCustomVariables.getDatabaseReference()
+                    .child(MyCustomVariables.getFirebaseAuth().getUid())
+                    .child("PersonalTransactions")
+                    .child(transactionToDelete.getId())
+                    .removeValue();
+        }
     }
 
     @Override
     public void onDialogNegativeClick(final DialogFragment dialog) {
-        Toast.makeText(this, "negative", Toast.LENGTH_SHORT).show();
+
     }
 
     class CustomAdaptor extends BaseAdapter {
