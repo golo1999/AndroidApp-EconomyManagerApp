@@ -54,7 +54,8 @@ public class EditTransactionsRecyclerViewAdapter
 
     @NonNull
     @Override
-    public EditTransactionsViewHolder onCreateViewHolder(final @NonNull ViewGroup parent, final int viewType) {
+    public EditTransactionsViewHolder onCreateViewHolder(final @NonNull ViewGroup parent,
+                                                         final int viewType) {
         final View view =
                 LayoutInflater.from(context).inflate(R.layout.transaction_layout_cardview, parent, false);
 
@@ -62,7 +63,8 @@ public class EditTransactionsRecyclerViewAdapter
     }
 
     @Override
-    public void onBindViewHolder(final @NonNull EditTransactionsViewHolder holder, final int position) {
+    public void onBindViewHolder(final @NonNull EditTransactionsViewHolder holder,
+                                 final int position) {
         transaction = transactionsList.get(position);
 
         final String translatedCategory = Types.getTranslatedType(context,
@@ -101,7 +103,7 @@ public class EditTransactionsRecyclerViewAdapter
         private Transaction selectedTransaction;
         private ConstraintLayout mainLayout;
         private SharedPreferences preferences;
-        private FragmentManager fragmentManager;
+        private final FragmentManager fragmentManager;
 
         public EditTransactionsViewHolder(final @NonNull View itemView,
                                           final EditTransactionsViewModel viewModel,
@@ -145,7 +147,6 @@ public class EditTransactionsRecyclerViewAdapter
                             final EditTransactionsRecyclerViewAdapter adapter =
                                     (EditTransactionsRecyclerViewAdapter) recyclerView.getAdapter();
 
-
                             viewModel.setEditTransactionsRecyclerViewAdapter(adapter);
                         }
 
@@ -161,9 +162,6 @@ public class EditTransactionsRecyclerViewAdapter
 
                 if (adapter != null && positionInList > -1) {
                     showTransactionDeleteDialog(transactionsList, adapter, positionInList);
-
-//                    transactionsList.remove(positionInList);
-//                    adapter.notifyItemRemoved(positionInList);
                 }
             });
         }

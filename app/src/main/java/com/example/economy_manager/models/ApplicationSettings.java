@@ -2,18 +2,21 @@ package com.example.economy_manager.models;
 
 import androidx.annotation.NonNull;
 
+import com.example.economy_manager.utilities.MyCustomVariables;
+
 import java.util.Objects;
 
 public class ApplicationSettings {
     private String currency;
-    private String currencySymbol;
+    private final String currencySymbol;
     private boolean darkTheme;
 
     public ApplicationSettings() {
         // Required empty public constructor
+        this(MyCustomVariables.getDefaultCurrency());
     }
 
-    public ApplicationSettings(String currency) {
+    public ApplicationSettings(final String currency) {
         this.darkTheme = false;
         this.currency = currency;
 

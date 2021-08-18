@@ -17,11 +17,19 @@ public class PersonalInformation {
 
     public PersonalInformation() {
         // Required empty public constructor
+        this("", "", "", "", "", "", new BirthDate(), "",
+                "");
     }
 
-    public PersonalInformation(String firstName, String lastName, String phoneNumber,
-                               String website, String country, String gender, BirthDate birthDate,
-                               String careerTitle, String photoURL) {
+    public PersonalInformation(final String firstName,
+                               final String lastName,
+                               final String phoneNumber,
+                               final String website,
+                               final String country,
+                               final String gender,
+                               final BirthDate birthDate,
+                               final String careerTitle,
+                               final String photoURL) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.phoneNumber = phoneNumber;

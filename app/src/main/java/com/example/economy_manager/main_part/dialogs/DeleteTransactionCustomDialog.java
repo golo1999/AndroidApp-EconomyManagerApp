@@ -20,15 +20,18 @@ public class DeleteTransactionCustomDialog extends DialogFragment {
     private final int positionInList;
 
     public DeleteTransactionCustomDialog(final ArrayList<Transaction> transactionsList,
-                                         final EditTransactionsRecyclerViewAdapter adapter, final int positionInList) {
+                                         final EditTransactionsRecyclerViewAdapter adapter,
+                                         final int positionInList) {
         this.transactionsList = transactionsList;
         this.adapter = adapter;
         this.positionInList = positionInList;
     }
 
     public interface DeleteDialogListener {
-        void onDialogPositiveClick(final DialogFragment dialog, final ArrayList<Transaction> transactionsList,
-                                   final EditTransactionsRecyclerViewAdapter adapter, final int positionInList);
+        void onDialogPositiveClick(final DialogFragment dialog,
+                                   final ArrayList<Transaction> transactionsList,
+                                   final EditTransactionsRecyclerViewAdapter adapter,
+                                   final int positionInList);
 
         void onDialogNegativeClick(final DialogFragment dialog);
     }
@@ -37,7 +40,7 @@ public class DeleteTransactionCustomDialog extends DialogFragment {
 
     @NonNull
     @Override
-    public Dialog onCreateDialog(Bundle savedInstanceState) {
+    public Dialog onCreateDialog(final Bundle savedInstanceState) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
         builder.setMessage(R.string.delete_transaction)
@@ -51,14 +54,12 @@ public class DeleteTransactionCustomDialog extends DialogFragment {
     }
 
     @Override
-    public void onAttach(@NonNull Context context) {
+    public void onAttach(final @NonNull Context context) {
         super.onAttach(context);
 
         try {
-            // Instantiate the NoticeDialogListener so we can send events to the host
             listener = (DeleteDialogListener) context;
         } catch (ClassCastException e) {
-            // The activity doesn't implement the interface, throw exception
             throw new ClassCastException(context.toString() + " must implement NoticeDialogListener");
         }
     }

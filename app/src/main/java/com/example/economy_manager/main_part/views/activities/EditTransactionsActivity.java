@@ -4,7 +4,6 @@ import android.annotation.SuppressLint;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -74,18 +73,12 @@ public class EditTransactionsActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.edit_transactions_activity);
         setVariables();
-
-        if (userDetails != null) {
-            setUserDetailsInViewModel(userDetails);
-        }
-
+        setUserDetailsInViewModel(userDetails != null ? userDetails : MyCustomVariables.getDefaultUserDetails());
         setTheme();
         setRecyclerView();
         setTitle();
         setBottomLayout();
         setOnClickListeners();
-
-        Log.d("userDetails", userDetails.toString());
     }
 
     @Override
@@ -288,7 +281,8 @@ public class EditTransactionsActivity extends AppCompatActivity
         }
     }
 
-    private void createMonthSpinner(final ArrayList<String> list, final String selectedYear) {
+    private void createMonthSpinner(final ArrayList<String> list,
+                                    final String selectedYear) {
         // setting the array which contains the months translated in english
         final String[] months = getResources().getStringArray(R.array.months);
         // frequency array
@@ -418,7 +412,8 @@ public class EditTransactionsActivity extends AppCompatActivity
         }
     }
 
-    private void populateRecyclerView(final String selectedYear, final String selectedMonth) {
+    private void populateRecyclerView(final String selectedYear,
+                                      final String selectedMonth) {
         final int currentNumberOfTransactions = recyclerViewAdapter.getItemCount();
 
         if (!transactionsList.isEmpty()) {
@@ -445,7 +440,6 @@ public class EditTransactionsActivity extends AppCompatActivity
     }
 
     private void setTheme() {
-        Log.d("userDetailsInSetTheme", userDetails.toString());
         if (userDetails != null) {
             final boolean darkThemeEnabled = userDetails.getApplicationSettings().getDarkTheme();
             final int theme = !darkThemeEnabled ?
@@ -492,8 +486,10 @@ public class EditTransactionsActivity extends AppCompatActivity
     }
 
     @Override
-    public void onDialogPositiveClick(final DialogFragment dialog, final ArrayList<Transaction> transactionsList,
-                                      final EditTransactionsRecyclerViewAdapter adapter, final int positionInList) {
+    public void onDialogPositiveClick(final DialogFragment dialog,
+                                      final ArrayList<Transaction> transactionsList,
+                                      final EditTransactionsRecyclerViewAdapter adapter,
+                                      final int positionInList) {
         Toast.makeText(this, "removing position " + positionInList, Toast.LENGTH_SHORT).show();
 
         transactionsList.remove(positionInList);
