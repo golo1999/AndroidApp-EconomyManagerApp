@@ -453,34 +453,3 @@ public class EditSpecificTransactionFragment extends Fragment {
                 selectedTransaction.getTime().getMinute() : LocalDateTime.now().getMinute());
     }
 }
-
-/*
-
-0ccf5d61-7a54-4132-a847-d9c4b762d2a1
-category:
-8
-id:
-"0ccf5d61-7a54-4132-a847-d9c4b762d2a1"
-time
-day:
-7
-dayName:
-"WEDNESDAY"
-hour:
-17
-minute:
-21
-month:
-7
-monthName:
-"JULY"
-second:
-9
-year:
-2021
-type:
-0
-value:
-"44444"
-
- */

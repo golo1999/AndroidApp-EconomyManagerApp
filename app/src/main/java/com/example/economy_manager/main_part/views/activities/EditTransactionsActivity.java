@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,7 +15,6 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -286,7 +286,7 @@ public class EditTransactionsActivity extends AppCompatActivity
         // setting the array which contains the months translated in english
         final String[] months = getResources().getStringArray(R.array.months);
         // frequency array
-        final int[] frequency = new int[13];
+        final int[] frequency = new int[12];
         final Calendar currentTime = Calendar.getInstance();
         final SimpleDateFormat monthFormat = new SimpleDateFormat("LLLL", Locale.ENGLISH);
         int positionOfCurrentMonth = -1;
@@ -296,7 +296,7 @@ public class EditTransactionsActivity extends AppCompatActivity
 
         // creating the frequency array
         for (final String listIterator : list) {
-            int counter = 0;
+            int counter = -1;
             // finding out which months are also found into the selected year's months list
             for (String monthsListIterator : months) {
                 counter++;
@@ -319,12 +319,12 @@ public class EditTransactionsActivity extends AppCompatActivity
             if (frequencyIterator == 1) {
                 // translating the month name if it's not in english
                 list.add(!Locale.getDefault().getDisplayLanguage().equals("English") ?
-                        Months.getTranslatedMonth(EditTransactionsActivity.this, months[counter - 1]) :
-                        months[counter - 1]);
+                        Months.getTranslatedMonth(EditTransactionsActivity.this, months[counter]) :
+                        months[counter]);
             }
         }
 
-        counter = 0;
+        counter = -1;
 
         // saving current month's position if it has been found => for setting the default month spinner's selected
         // item as the current month
@@ -333,7 +333,7 @@ public class EditTransactionsActivity extends AppCompatActivity
 
             if (Months.getMonthInEnglish(EditTransactionsActivity.this, listIterator)
                     .equals(monthFormat.format(currentTime.getTime()))) {
-                positionOfCurrentMonth = counter - 1;
+                positionOfCurrentMonth = counter;
                 break;
             }
         }
@@ -365,6 +365,43 @@ public class EditTransactionsActivity extends AppCompatActivity
         if (positionOfCurrentMonth >= 0 && selectedYear.equals(String.valueOf(currentTime.get(Calendar.YEAR)))) {
             // setting the current month as default when opening the activity or when selecting the current year
             monthSpinner.setSelection(positionOfCurrentMonth);
+        } else {
+            Log.d("frequencyArray", Arrays.toString(frequency) + " " + positionOfCurrentMonth);
+
+            // nu merge
+
+//            final int currentMonthIndex = LocalDate.now().getMonthValue();
+//            boolean nearbyMonthFound = false;
+//
+//            // if the current month is at least February
+//            if (currentMonthIndex > 1) {
+//                for (int monthCounter = currentMonthIndex - 2; monthCounter >= 0; --monthCounter) {
+//                    if (frequency[monthCounter] == 1) {
+//                        nearbyMonthFound = true;
+//                        monthSpinner.setSelection(monthCounter);
+//                        break;
+//                    }
+//                }
+//
+//                if (!nearbyMonthFound) {
+//                    for (int monthCounter = currentMonthIndex - 1; monthCounter < months.length; ++monthCounter) {
+//                        if (frequency[monthCounter] == 1) {
+//                            monthSpinner.setSelection(monthCounter);
+//                            break;
+//                        }
+//                    }
+//                }
+//            }
+//
+//            // if the current month is January
+//            else {
+//                for (int monthCounter = currentMonthIndex; monthCounter < months.length; ++monthCounter) {
+//                    if (frequency[monthCounter] == 1) {
+//                        monthSpinner.setSelection(monthCounter);
+//                        break;
+//                    }
+//                }
+//            }
         }
     }
 
@@ -414,13 +451,12 @@ public class EditTransactionsActivity extends AppCompatActivity
 
     private void populateRecyclerView(final String selectedYear,
                                       final String selectedMonth) {
-        final int currentNumberOfTransactions = recyclerViewAdapter.getItemCount();
-
         if (!transactionsList.isEmpty()) {
-            transactionsList.clear();
-        }
+            final int currentNumberOfTransactions = recyclerViewAdapter.getItemCount();
 
-        recyclerViewAdapter.notifyItemRangeRemoved(0, currentNumberOfTransactions);
+            transactionsList.clear();
+            recyclerViewAdapter.notifyItemRangeRemoved(0, currentNumberOfTransactions);
+        }
 
         for (final Transaction transaction : allTransactionsList) {
             final String transactionMonthParsed = transaction.getTime().getMonthName().charAt(0) +

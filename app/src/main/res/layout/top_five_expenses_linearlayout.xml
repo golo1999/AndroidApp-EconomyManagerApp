@@ -1,33 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <RelativeLayout
-        android:id="@+id/topFiveExpensesRelativeLayout"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/topFiveExpensesConstraintLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
         <TextView
-            android:id="@+id/topFiveExpensesRelativeLayoutType"
-            android:layout_width="wrap_content"
+            android:id="@+id/topFiveExpensesConstraintLayoutType"
+            android:layout_width="0sp"
             android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:textStyle="bold"
-            android:textSize="18sp"
-            android:textColor="#101820"/>
-
-        <TextView
-            android:id="@+id/topFiveExpensesRelativeLayoutValue"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textStyle="bold"
+            android:layout_marginEnd="5sp"
             android:textColor="#101820"
             android:textSize="18sp"
-            android:layout_alignParentEnd="true"/>
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/topFiveExpensesConstraintLayoutValue"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-    </RelativeLayout>
+        <TextView
+            android:id="@+id/topFiveExpensesConstraintLayoutValue"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="5sp"
+            android:textColor="#101820"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/topFiveExpensesConstraintLayoutType"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </LinearLayout>

@@ -139,10 +139,10 @@ public class LastTenTransactionsFragment extends Fragment {
                             .inflate(R.layout.last_ten_transactions_linearlayout, mainLayout, false);
 
                     final TextView typeFromChildLayout =
-                            childLayout.findViewById(R.id.lastTenTransactionsRelativeLayoutTitle);
+                            childLayout.findViewById(R.id.lastTenTransactionsConstraintLayoutTitle);
 
                     final TextView valueFromChildLayout =
-                            childLayout.findViewById(R.id.lastTenTransactionsRelativeLayoutPrice);
+                            childLayout.findViewById(R.id.lastTenTransactionsConstraintLayoutPrice);
 
                     final String valueWithCurrency = Locale.getDefault().getDisplayLanguage().equals("English") ?
                             currencySymbol + transaction.getValue() : transaction.getValue() + " " + currencySymbol;

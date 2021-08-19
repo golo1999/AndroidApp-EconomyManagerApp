@@ -33,6 +33,7 @@ import java.util.stream.Collectors;
 public class TopFiveExpensesFragment extends Fragment {
     private MainScreenViewModel viewModel;
     private LinearLayout mainLayout;
+    private TextView centerText;
 
     public TopFiveExpensesFragment() {
         // Required empty public constructor
@@ -66,6 +67,7 @@ public class TopFiveExpensesFragment extends Fragment {
     private void setVariables(final View v) {
         viewModel = new ViewModelProvider((ViewModelStoreOwner) requireContext()).get(MainScreenViewModel.class);
         mainLayout = v.findViewById(R.id.topFiveExpensesMainLayout);
+        centerText = v.findViewById(R.id.topFiveExpensesCenterText);
     }
 
     private void createAndSetList() {
@@ -103,7 +105,9 @@ public class TopFiveExpensesFragment extends Fragment {
                         }
                     });
         } else {
-            showNoExpensesLayout(mainLayout, getResources().getString(R.string.top_5_expenses_no_expenses_yet));
+            centerText.setText(getResources().getString(R.string.top_5_expenses_no_expenses_yet));
+            centerText.setVisibility(View.VISIBLE);
+            //showNoExpensesLayout(mainLayout, getResources().getString(R.string.top_5_expenses_no_expenses_yet));
         }
     }
 
@@ -113,11 +117,16 @@ public class TopFiveExpensesFragment extends Fragment {
 
         try {
             if (expensesList.size() == 0) {
-                showNoExpensesLayout(mainLayout, getResources().getString(R.string.top_5_expenses_no_expenses_this_month));
+                centerText.setText(getResources().getString(R.string.top_5_expenses_no_expenses_this_month));
+                centerText.setVisibility(View.VISIBLE);
+                //showNoExpensesLayout(mainLayout, getResources().getString(R.string.top_5_expenses_no_expenses_this_month));
             }
             // if the expenses list isn't empty
             else {
                 ArrayList<Transaction> limitedExpensesList = null;
+
+                centerText.setText("");
+                centerText.setVisibility(View.GONE);
 
                 // sorting the list by value descending
                 expensesList.sort((final Transaction transaction1, final Transaction transaction2) ->
@@ -138,10 +147,10 @@ public class TopFiveExpensesFragment extends Fragment {
                             .inflate(R.layout.top_five_expenses_linearlayout, mainLayout, false);
 
                     final TextView typeFromChildLayout =
-                            childLayout.findViewById(R.id.topFiveExpensesRelativeLayoutType);
+                            childLayout.findViewById(R.id.topFiveExpensesConstraintLayoutType);
 
                     final TextView valueFromChildLayout =
-                            childLayout.findViewById(R.id.topFiveExpensesRelativeLayoutValue);
+                            childLayout.findViewById(R.id.topFiveExpensesConstraintLayoutValue);
 
                     final String valueWithCurrency = Locale.getDefault().getDisplayLanguage().equals("English") ?
                             currencySymbol + transaction.getValue() : transaction.getValue() + " " + currencySymbol;
