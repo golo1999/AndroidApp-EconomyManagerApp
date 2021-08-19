@@ -205,4 +205,5 @@
     <string name="time_date_month_28_days">&#32;deve ter no máximo 28 dias</string>
     <string name="proceed">Prosseguir</string>
     <string name="delete_error">A exclusão não pôde ser realizada</string>
+    <string name="delete_transaction">Tem certeza de que deseja excluir esta transação?</string>
 </resources>

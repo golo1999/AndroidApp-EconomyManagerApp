@@ -48,7 +48,8 @@ public class LastTenTransactionsFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(final LayoutInflater inflater, final ViewGroup container,
+    public View onCreateView(final LayoutInflater inflater,
+                             final ViewGroup container,
                              final Bundle savedInstanceState) {
         final View v = inflater.inflate(R.layout.last_ten_transactions_fragment, container, false);
 
@@ -108,7 +109,8 @@ public class LastTenTransactionsFragment extends Fragment {
     }
 
     // method for displaying the list on the screen
-    private void showLastTransactions(final LinearLayout mainLayout, final ArrayList<Transaction> transactionsList,
+    private void showLastTransactions(final LinearLayout mainLayout,
+                                      final ArrayList<Transaction> transactionsList,
                                       final String currencySymbol) {
         // removing all the existing views from the main layout
         mainLayout.removeAllViews();
@@ -169,7 +171,8 @@ public class LastTenTransactionsFragment extends Fragment {
         }
     }
 
-    private void showNoTransactionsLayout(final LinearLayout mainLayout, final String message) {
+    private void showNoTransactionsLayout(final LinearLayout mainLayout,
+                                          final String message) {
         final TextView noTransactions = new TextView(getContext());
         final LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
                 ViewGroup.LayoutParams.WRAP_CONTENT);

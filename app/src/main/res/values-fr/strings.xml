@@ -205,4 +205,5 @@
     <string name="time_date_month_30_days">&#32;devrait avoir un maximum de 30 jours</string>
     <string name="proceed">Procéder</string>
     <string name="delete_error">La suppression n’a pas pu être effectuée</string>
+    <string name="delete_transaction">Êtes-vous sûr de vouloir supprimer cette transaction ?</string>
 </resources>

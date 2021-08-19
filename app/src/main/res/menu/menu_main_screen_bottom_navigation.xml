@@ -3,15 +3,15 @@
     <item
         android:id="@+id/bottomNavigationMainScreenEdit"
         android:icon="@drawable/ic_edit"
-        android:title="@string/bottom_nav_main_screen_edit"/>
+        android:title="@string/bottom_nav_main_screen_edit" />
     <item
         android:id="@+id/bottomNavigationMainScreenBalance"
         android:icon="@drawable/ic_balance"
-        android:title="@string/bottom_nav_main_screen_balance"/>
+        android:title="@string/bottom_nav_main_screen_balance" />
     <item
         android:id="@+id/bottomNavigationMainScreenAccount"
         android:icon="@drawable/ic_account"
-        android:title="@string/bottom_nav_main_screen_account"/>
+        android:title="@string/bottom_nav_main_screen_account" />
     <!--<item
         android:id="@+id/bottomNavigationMainScreenSignOut"
         android:icon="@drawable/ic_sign_out"

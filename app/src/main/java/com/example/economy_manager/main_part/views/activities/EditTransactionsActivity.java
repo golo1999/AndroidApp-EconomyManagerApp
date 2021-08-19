@@ -1,6 +1,5 @@
 package com.example.economy_manager.main_part.views.activities;
 
-import android.annotation.SuppressLint;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
@@ -10,7 +9,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.BaseAdapter;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.Spinner;
@@ -20,7 +18,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.fragment.app.DialogFragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -36,7 +33,6 @@ import com.example.economy_manager.models.UserDetails;
 import com.example.economy_manager.utilities.Months;
 import com.example.economy_manager.utilities.MyCustomSharedPreferences;
 import com.example.economy_manager.utilities.MyCustomVariables;
-import com.example.economy_manager.utilities.Types;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
@@ -50,18 +46,31 @@ import java.util.Locale;
 public class EditTransactionsActivity extends AppCompatActivity
         implements DeleteTransactionCustomDialog.DeleteDialogListener {
     private UserDetails userDetails;
+
     private EditTransactionsViewModel viewModel;
+
     private ConstraintLayout activityLayout;
+
     private FrameLayout fragmentLayout;
+
     private ImageView goBack;
+
     private TextView activityTitle;
+
     private TextView centerText;
+
     private RecyclerView recyclerView;
+
     private Spinner monthSpinner;
+
     private Spinner yearSpinner;
+
     private ConstraintLayout bottomLayout;
+
     private final ArrayList<Transaction> allTransactionsList = new ArrayList<>();
+
     private final ArrayList<Transaction> transactionsList = new ArrayList<>();
+
     private EditTransactionsRecyclerViewAdapter recyclerViewAdapter;
 
     public EditTransactionsViewModel getViewModel() {
@@ -104,8 +113,12 @@ public class EditTransactionsActivity extends AppCompatActivity
         yearSpinner = findViewById(R.id.editTransactionBottomLayoutYearSpinner);
         centerText = findViewById(R.id.editTransactionsCenterText);
         bottomLayout = findViewById(R.id.editTransactionBottomLayout);
-        recyclerViewAdapter = new EditTransactionsRecyclerViewAdapter(viewModel, transactionsList, this,
-                userDetails, recyclerView, getSupportFragmentManager());
+        recyclerViewAdapter = new EditTransactionsRecyclerViewAdapter(viewModel,
+                transactionsList,
+                this,
+                userDetails,
+                recyclerView,
+                getSupportFragmentManager());
     }
 
     public void setUserDetailsInViewModel(final UserDetails details) {
@@ -137,6 +150,7 @@ public class EditTransactionsActivity extends AppCompatActivity
                         public void onDataChange(final @NonNull DataSnapshot snapshot) {
                             if (snapshot.exists() && snapshot.hasChildren()) {
                                 final ArrayList<String> yearsList = new ArrayList<>();
+
                                 final ArrayList<String> monthsList = new ArrayList<>();
 
                                 if (!allTransactionsList.isEmpty()) {
@@ -174,8 +188,10 @@ public class EditTransactionsActivity extends AppCompatActivity
 
                                 yearSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                                     @Override
-                                    public void onItemSelected(final AdapterView<?> parent, final View view,
-                                                               final int position, final long id) {
+                                    public void onItemSelected(final AdapterView<?> parent,
+                                                               final View view,
+                                                               final int position,
+                                                               final long id) {
                                         final String selectedYear =
                                                 String.valueOf(yearSpinner.getItemAtPosition(position));
 
@@ -219,8 +235,10 @@ public class EditTransactionsActivity extends AppCompatActivity
 
                                         monthSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                                             @Override
-                                            public void onItemSelected(final AdapterView<?> parent, final View view,
-                                                                       final int position, final long id) {
+                                            public void onItemSelected(final AdapterView<?> parent,
+                                                                       final View view,
+                                                                       final int position,
+                                                                       final long id) {
                                                 final String selectedMonth =
                                                         String.valueOf(monthSpinner.getItemAtPosition(position));
 
@@ -287,8 +305,11 @@ public class EditTransactionsActivity extends AppCompatActivity
         final String[] months = getResources().getStringArray(R.array.months);
         // frequency array
         final int[] frequency = new int[12];
+
         final Calendar currentTime = Calendar.getInstance();
+
         final SimpleDateFormat monthFormat = new SimpleDateFormat("LLLL", Locale.ENGLISH);
+
         int positionOfCurrentMonth = -1;
 
         // initializing array's elements with 0
@@ -329,10 +350,14 @@ public class EditTransactionsActivity extends AppCompatActivity
         // saving current month's position if it has been found => for setting the default month spinner's selected
         // item as the current month
         for (String listIterator : list) {
+            final String listIteratorInEnglish =
+                    Months.getMonthInEnglish(EditTransactionsActivity.this, listIterator);
+
+            final String currentMonthNameFormatted = monthFormat.format(currentTime.getTime());
+
             counter++;
 
-            if (Months.getMonthInEnglish(EditTransactionsActivity.this, listIterator)
-                    .equals(monthFormat.format(currentTime.getTime()))) {
+            if (listIteratorInEnglish.equals(currentMonthNameFormatted)) {
                 positionOfCurrentMonth = counter;
                 break;
             }
@@ -341,7 +366,8 @@ public class EditTransactionsActivity extends AppCompatActivity
         // creating and setting the month spinner adapter's styling
         final ArrayAdapter<String> monthAdapter = new ArrayAdapter<String>(this, R.layout.custom_spinner_item, list) {
             @Override
-            public View getDropDownView(final int position, final @Nullable View convertView,
+            public View getDropDownView(final int position,
+                                        final @Nullable View convertView,
                                         final @NonNull ViewGroup parent) {
                 final View v = super.getDropDownView(position, convertView, parent);
                 // all spinner elements are aligned to center
@@ -349,6 +375,7 @@ public class EditTransactionsActivity extends AppCompatActivity
 
                 if (userDetails != null) {
                     final boolean darkThemeEnabled = userDetails.getApplicationSettings().getDarkTheme();
+
                     final int itemsColor = !darkThemeEnabled ? Color.WHITE : Color.BLACK;
 
                     // setting text color based on the selected theme
@@ -409,7 +436,8 @@ public class EditTransactionsActivity extends AppCompatActivity
         // creating and setting the year spinner adapter's styling
         final ArrayAdapter<String> yearAdapter = new ArrayAdapter<String>(this, R.layout.custom_spinner_item, list) {
             @Override
-            public View getDropDownView(final int position, final @Nullable View convertView,
+            public View getDropDownView(final int position,
+                                        final @Nullable View convertView,
                                         final @NonNull ViewGroup parent) {
                 final View v = super.getDropDownView(position, convertView, parent);
                 // all spinner elements are aligned to center
@@ -430,7 +458,9 @@ public class EditTransactionsActivity extends AppCompatActivity
         yearSpinner.setAdapter(yearAdapter);
 
         final Calendar currentTime = Calendar.getInstance();
+
         int positionOfCurrentYear = -1;
+
         int secondCounter = -1;
 
         // searching the current year into the years list and saving its position if it has been found
@@ -462,9 +492,12 @@ public class EditTransactionsActivity extends AppCompatActivity
             final String transactionMonthParsed = transaction.getTime().getMonthName().charAt(0) +
                     transaction.getTime().getMonthName().substring(1).toLowerCase();
 
-            if (String.valueOf(transaction.getTime().getYear()).equals(selectedYear) &&
-                    transactionMonthParsed.equals(Months.getMonthInEnglish(EditTransactionsActivity.this,
-                            selectedMonth))) {
+            final String transactionYear = String.valueOf(transaction.getTime().getYear());
+
+            final String selectedMonthNameInEnglish = Months.getMonthInEnglish(this, selectedMonth);
+
+            if (transactionYear.equals(selectedYear) &&
+                    transactionMonthParsed.equals(selectedMonthNameInEnglish)) {
                 transactionsList.add(transaction);
             }
         }
@@ -476,25 +509,27 @@ public class EditTransactionsActivity extends AppCompatActivity
     }
 
     private void setTheme() {
-        if (userDetails != null) {
-            final boolean darkThemeEnabled = userDetails.getApplicationSettings().getDarkTheme();
-            final int theme = !darkThemeEnabled ?
-                    R.drawable.ic_white_gradient_tobacco_ad : R.drawable.ic_black_gradient_night_shift;
-            final int dropDownTheme = !darkThemeEnabled ?
-                    R.drawable.ic_blue_gradient_unloved_teen : R.drawable.ic_white_gradient_tobacco_ad;
+        final boolean darkThemeEnabled = userDetails != null ?
+                userDetails.getApplicationSettings().getDarkTheme() :
+                MyCustomVariables.getDefaultUserDetails().getApplicationSettings().getDarkTheme();
 
-            // setam culoarea dropdown
-            getWindow().setBackgroundDrawableResource(theme);
+        final int theme = !darkThemeEnabled ?
+                R.drawable.ic_white_gradient_tobacco_ad : R.drawable.ic_black_gradient_night_shift;
 
-            // setam culoarea sagetii
-            monthSpinner.getBackground().setColorFilter(Color.WHITE, PorterDuff.Mode.SRC_ATOP);
+        final int dropDownTheme = !darkThemeEnabled ?
+                R.drawable.ic_blue_gradient_unloved_teen : R.drawable.ic_white_gradient_tobacco_ad;
 
-            monthSpinner.setPopupBackgroundResource(dropDownTheme);
-            // setam culoarea elementelor
-            yearSpinner.getBackground().setColorFilter(Color.WHITE, PorterDuff.Mode.SRC_ATOP);
+        // setting dropdown color
+        getWindow().setBackgroundDrawableResource(theme);
 
-            yearSpinner.setPopupBackgroundResource(dropDownTheme);
-        }
+        // setting arrow color
+        monthSpinner.getBackground().setColorFilter(Color.WHITE, PorterDuff.Mode.SRC_ATOP);
+
+        monthSpinner.setPopupBackgroundResource(dropDownTheme);
+        // setting elements' color
+        yearSpinner.getBackground().setColorFilter(Color.WHITE, PorterDuff.Mode.SRC_ATOP);
+
+        yearSpinner.setPopupBackgroundResource(dropDownTheme);
     }
 
     public void setEditSpecificTransactionFragment() {
@@ -543,173 +578,5 @@ public class EditTransactionsActivity extends AppCompatActivity
     @Override
     public void onDialogNegativeClick(final DialogFragment dialog) {
 
-    }
-
-    class CustomAdaptor extends BaseAdapter {
-        @Override
-        public int getCount() {
-            return allTransactionsList.size();
-        }
-
-        @Override
-        public Object getItem(int position) {
-            return null;
-        }
-
-        @Override
-        public long getItemId(int position) {
-            return 0;
-        }
-
-        // cream fiecare element al listei sub forma unui cardview ce are
-        // o imagine, un titlu si o descriere
-        @Override
-        public View getView(final int position, View convertView, ViewGroup parent) {
-            final Transaction transaction = allTransactionsList.get(position);
-
-            @SuppressLint({"ViewHolder", "InflateParams"}) View view = getLayoutInflater()
-                    .inflate(R.layout.transaction_layout_cardview, null);
-            final TextView transactionCategory = view.findViewById(R.id.transactionCategory);
-            final TextView transactionPrice = view.findViewById(R.id.transactionPrice);
-            final TextView transactionNote = view.findViewById(R.id.transactionNote);
-            ImageView transactionDelete = view.findViewById(R.id.transactionDelete);
-            ImageView transactionEdit = view.findViewById(R.id.transactionEdit);
-            String translatedCategory = Types.getTranslatedType(EditTransactionsActivity.this,
-                    Transaction.getTypeFromIndexInEnglish(transaction.getType()));
-            final ConstraintLayout mainLayout = view.findViewById(R.id.transactionLayout);
-            ConstraintSet set = new ConstraintSet();
-            set.clone(mainLayout);
-
-            transactionCategory.setText(translatedCategory);
-
-            if (MyCustomVariables.getFirebaseAuth().getUid() != null) {
-                MyCustomVariables.getDatabaseReference().child(MyCustomVariables.getFirebaseAuth().getUid())
-                        .addListenerForSingleValueEvent(new ValueEventListener() {
-                            String currency, priceText;
-                            boolean darkThemeEnabled;
-
-                            @Override
-                            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                if (snapshot.exists())
-                                    if (snapshot.hasChild("ApplicationSettings")) {
-                                        currency = String.valueOf(snapshot.child("ApplicationSettings")
-                                                .child("currencySymbol").getValue());
-
-                                        darkThemeEnabled = Boolean.parseBoolean(String.valueOf(snapshot
-                                                .child("ApplicationSettings")
-                                                .child("darkTheme").getValue()));
-
-                                        priceText = Locale.getDefault().getDisplayLanguage().equals("English") ?
-                                                currency + transaction.getValue() :
-                                                transaction.getValue() + " " + currency;
-
-                                        mainLayout.setBackgroundResource(!darkThemeEnabled ?
-                                                R.drawable.ic_yellow_gradient_soda :
-                                                R.drawable.ic_white_gradient_tobacco_ad);
-
-                                        transactionPrice.setText(priceText);
-                                    }
-                            }
-
-                            @Override
-                            public void onCancelled(@NonNull DatabaseError error) {
-
-                            }
-                        });
-            }
-
-            transactionNote.setText(String.valueOf(transaction.getNote()));
-
-            if (String.valueOf(transactionNote.getText()).trim().equals("")) {
-                mainLayout.removeView(transactionNote);
-                set.connect(transactionPrice.getId(), ConstraintSet.BOTTOM, mainLayout.getId(), ConstraintSet.BOTTOM);
-                set.applyTo(mainLayout);
-            }
-
-            // totul merge perfect, in afara de faptul ca nu se auto-actualizeaza lista la stergere si trebuie dat click din nou pe submit
-            transactionDelete.setOnClickListener(v -> {
-                if (MyCustomVariables.getFirebaseAuth().getUid() != null) {
-                    // translating the month if its name isn't in english
-                    final String monthName = Locale.getDefault().getDisplayLanguage().equals("English") ?
-                            String.valueOf(monthSpinner.getSelectedItem()) :
-                            Months.getMonthInEnglish(EditTransactionsActivity.this,
-                                    String.valueOf(monthSpinner.getSelectedItem()));
-
-                    MyCustomVariables.getDatabaseReference()
-                            .child(MyCustomVariables.getFirebaseAuth().getUid())
-                            .child("PersonalTransactions")
-                            .child(String.valueOf(yearSpinner.getSelectedItem()))
-                            .child(monthName)
-                            .addListenerForSingleValueEvent(new ValueEventListener() {
-                                String incomeOrExpense = null;
-
-                                @Override
-                                public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                    incomeOrExpense = (transaction.getType() == 0 ||
-                                            transaction.getType() == 1 ||
-                                            transaction.getType() == 2 ||
-                                            transaction.getType() == 3) ?
-                                            "Incomes" : "Expenses";
-
-                                    if (snapshot.exists() && snapshot.hasChild(incomeOrExpense)) {
-                                        if (snapshot.child(incomeOrExpense).hasChild("Overall")) {
-                                            float oldOverall = Float.parseFloat(String
-                                                    .valueOf(snapshot.child(incomeOrExpense)
-                                                            .child("Overall").getValue()));
-                                            oldOverall -= Float.parseFloat(transaction.getValue());
-
-                                            if (oldOverall <= 0f) {
-                                                MyCustomVariables.getDatabaseReference()
-                                                        .child(MyCustomVariables.getFirebaseAuth().getUid())
-                                                        .child("PersonalTransactions")
-                                                        .child(String
-                                                                .valueOf(yearSpinner.getSelectedItem()))
-                                                        .child(monthName)
-                                                        .child(incomeOrExpense)
-                                                        .child("Overall").removeValue();
-                                            } else {
-                                                MyCustomVariables.getDatabaseReference()
-                                                        .child(MyCustomVariables.getFirebaseAuth().getUid())
-                                                        .child("PersonalTransactions")
-                                                        .child(String.valueOf(yearSpinner
-                                                                .getSelectedItem()))
-                                                        .child(monthName)
-                                                        .child(incomeOrExpense)
-                                                        .child("Overall")
-                                                        .setValue(String.valueOf(oldOverall));
-                                            }
-                                        }
-//                                            myRef.child(fbAuth.getUid())
-//                                                    .child("PersonalTransactions")
-//                                                    .child(String.valueOf(yearSpinner.getSelectedItem()))
-//                                                    .child(monthName)
-//                                                    .child(incomeOrExpense)
-//                                                    .child(money.getType())
-//                                                    .child(money.getDate())
-//                                                    .removeValue();
-                                    }
-                                }
-
-                                @Override
-                                public void onCancelled(@NonNull DatabaseError error) {
-
-                                }
-                            });
-                }
-            });
-
-            transactionEdit.setOnClickListener(v -> {
-//                Intent intent = new Intent(ActivityEditTransactions.this,
-//                        ActivityEditSpecificTransaction.class);
-//                intent.putExtra("note", money.getNote())
-//                        .putExtra("value", String.valueOf(money.getValue()))
-//                        .putExtra("date", money.getDate())
-//                        .putExtra("type", money.getType());
-//                startActivity(intent);
-//                overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
-            });
-
-            return view;
-        }
     }
 }

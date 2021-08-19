@@ -19,6 +19,16 @@ public class DeleteAccountCustomDialog extends AppCompatDialogFragment {
     private CustomDialogListener listener;
     private final int choice;
 
+    public interface CustomDialogListener {
+        void getTypedPasswordAndDeleteTheAccount(final String password);
+
+        void deleteAccount();
+
+        void getTypedPasswordAndResetTheDatabase(final String password);
+
+        void resetDatabase();
+    }
+
     public DeleteAccountCustomDialog(final int choice) {
         this.choice = choice;
     }
@@ -30,20 +40,23 @@ public class DeleteAccountCustomDialog extends AppCompatDialogFragment {
 
         if (getActivity() != null) {
             final LayoutInflater inflater = getActivity().getLayoutInflater();
+
             final View view = inflater.inflate(R.layout.custom_dialog_linearlayout, null);
 
             if (choice == 0 || choice == 1) {
-                builder.setView(view).setPositiveButton(getResources().getString(R.string.proceed), (dialog, which) -> {
-                    final String typedPassword = String.valueOf(password.getText());
+                builder.setView(view)
+                        .setPositiveButton(getResources().getString(R.string.proceed), (dialog, which) -> {
+                            final String typedPassword = String.valueOf(password.getText());
 
-                    if (choice == 0) {
-                        listener.getTypedPasswordAndDeleteTheAccount(typedPassword);
-                    } else {
-                        listener.getTypedPasswordAndResetTheDatabase(typedPassword);
-                    }
-                }).setNegativeButton(getResources().getString(R.string.cancel), (dialog, which) -> {
+                            if (choice == 0) {
+                                listener.getTypedPasswordAndDeleteTheAccount(typedPassword);
+                            } else {
+                                listener.getTypedPasswordAndResetTheDatabase(typedPassword);
+                            }
+                        })
+                        .setNegativeButton(getResources().getString(R.string.cancel), (dialog, which) -> {
 
-                });
+                        });
             } else if (choice == 2) {
                 listener.deleteAccount();
             } else if (choice == 3) {
@@ -65,15 +78,5 @@ public class DeleteAccountCustomDialog extends AppCompatDialogFragment {
         } catch (ClassCastException e) {
             throw new ClassCastException(context.toString() + " must implement the listener");
         }
-    }
-
-    public interface CustomDialogListener {
-        void getTypedPasswordAndDeleteTheAccount(final String password);
-
-        void deleteAccount();
-
-        void getTypedPasswordAndResetTheDatabase(final String password);
-
-        void resetDatabase();
     }
 }

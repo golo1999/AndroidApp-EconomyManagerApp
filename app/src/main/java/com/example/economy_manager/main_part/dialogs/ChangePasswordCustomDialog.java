@@ -28,14 +28,16 @@ public class ChangePasswordCustomDialog extends AppCompatDialogFragment {
             final LayoutInflater inflater = getActivity().getLayoutInflater();
             final View view = inflater.inflate(R.layout.type_new_password_custom_dialog_linearlayout, null);
 
-            builder.setView(view).setPositiveButton(getResources().getString(R.string.proceed), (dialog, which) -> {
-                final String typedOldPassword = String.valueOf(oldPasswordField.getText());
-                final String typedNewPassword = String.valueOf(newPasswordField.getText());
+            builder.setView(view)
+                    .setPositiveButton(getResources().getString(R.string.proceed), (dialog, which) -> {
+                        final String typedOldPassword = String.valueOf(oldPasswordField.getText());
+                        final String typedNewPassword = String.valueOf(newPasswordField.getText());
 
-                listener.changePassword(typedOldPassword, typedNewPassword);
-            }).setNegativeButton(getResources().getString(R.string.cancel), (dialog, which) -> {
+                        listener.changePassword(typedOldPassword, typedNewPassword);
+                    })
+                    .setNegativeButton(getResources().getString(R.string.cancel), (dialog, which) -> {
 
-            });
+                    });
 
             oldPasswordField = view.findViewById(R.id.changePasswordOldPassword);
             newPasswordField = view.findViewById(R.id.changePasswordNewPassword);

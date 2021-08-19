@@ -41,7 +41,8 @@ public class BudgetReviewFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(final LayoutInflater inflater, final ViewGroup container,
+    public View onCreateView(final LayoutInflater inflater,
+                             final ViewGroup container,
                              final Bundle savedInstanceState) {
         final View v = inflater.inflate(R.layout.budget_review_cardview, container, false);
 

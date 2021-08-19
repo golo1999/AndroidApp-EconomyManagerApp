@@ -17,36 +17,36 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.economy_manager.R;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
+import com.example.economy_manager.utilities.MyCustomVariables;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.UploadTask;
 import com.squareup.picasso.Picasso;
 
-public class EditPhotoActivity extends AppCompatActivity
-{
-    private ImageView goBack, uploadedFile;
+public class EditPhotoActivity extends AppCompatActivity {
+    private ImageView goBack;
+
+    private ImageView uploadedFile;
+
     private TextView text;
+
     private ProgressBar progressBar;
+
     private Uri imageUri;
-    private Button chooseFile, uploadFile;
-    private DatabaseReference myRef;
-    private StorageReference myStorage;
-    private FirebaseAuth fbAuth;
-    private static final int PICK_IMAGE_REQUEST=2;
+
+    private Button chooseFileButton;
+
+    private Button uploadFileButton;
+
+    private StorageReference storageReference;
+
+    private static final int PICK_IMAGE_REQUEST = 2;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState)
-    {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.edit_photo_activity);
         setVariables();
@@ -58,166 +58,138 @@ public class EditPhotoActivity extends AppCompatActivity
     }
 
     @Override
-    public void onBackPressed()
-    {
+    public void onBackPressed() {
         super.onBackPressed();
         finish();
         overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
     }
 
-    private void setVariables()
-    {
-        goBack=findViewById(R.id.editPhotoBack);
-        text=findViewById(R.id.editPhotoText);
-        progressBar=findViewById(R.id.editPhotoProgressBar);
-        chooseFile=findViewById(R.id.editPhotoChooseFile);
-        uploadFile=findViewById(R.id.editPhotoUploadFile);
-        uploadedFile=findViewById(R.id.editPhotoFileUploaded);
-        fbAuth=FirebaseAuth.getInstance();
-        myRef= FirebaseDatabase.getInstance().getReference();
-        myStorage= FirebaseStorage.getInstance().getReference();
+    private void setVariables() {
+        goBack = findViewById(R.id.editPhotoBack);
+        text = findViewById(R.id.editPhotoText);
+        progressBar = findViewById(R.id.editPhotoProgressBar);
+        chooseFileButton = findViewById(R.id.editPhotoChooseFile);
+        uploadFileButton = findViewById(R.id.editPhotoUploadFile);
+        uploadedFile = findViewById(R.id.editPhotoFileUploaded);
+        storageReference = FirebaseStorage.getInstance().getReference();
     }
 
-    private void setOnClickListeners()
-    {
-        goBack.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View v)
-            {
-                onBackPressed();
-            }
-        });
+    private void setOnClickListeners() {
+        goBack.setOnClickListener(v -> onBackPressed());
 
-        chooseFile.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View v)
-            {
-                openFileChooser();
-            }
-        });
+        chooseFileButton.setOnClickListener(v -> openFileChooser());
 
-        uploadFile.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View v)
-            {
-                uploadFile();
-            }
-        });
+        uploadFileButton.setOnClickListener(v -> uploadFile());
     }
 
-    private void setText()
-    {
-        String textToBeShown=getResources().getString(R.string.edit_photo_title).trim();
+    private void setText() {
+        String textToBeShown = getResources().getString(R.string.edit_photo_title).trim();
         text.setText(textToBeShown);
         text.setTextSize(20);
         text.setTextColor(Color.WHITE);
     }
 
-    private void setInitialProgressBar()
-    {
+    private void setInitialProgressBar() {
         progressBar.setVisibility(View.INVISIBLE);
     }
 
-    private void openFileChooser()
-    {
-        Intent intent=new Intent();
+    private void openFileChooser() {
+        Intent intent = new Intent();
         intent.setType("image/*");
         intent.setAction(Intent.ACTION_GET_CONTENT);
         startActivityForResult(intent, PICK_IMAGE_REQUEST);
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data)
-    {
+    protected void onActivityResult(final int requestCode, final int resultCode, final @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode==PICK_IMAGE_REQUEST && data!=null && data.getData()!=null)
-        {
-            imageUri=data.getData();
+
+        if (requestCode == PICK_IMAGE_REQUEST &&
+                data != null &&
+                data.getData() != null) {
+            imageUri = data.getData();
             uploadedFile.setImageURI(imageUri);
-            uploadedFile.getLayoutParams().width=(int)(0.75*getResources().getDisplayMetrics().widthPixels);
+            uploadedFile.getLayoutParams().width = (int) (0.75 * getResources().getDisplayMetrics().widthPixels);
         }
     }
 
-    private void uploadFile()
-    {
-        if(imageUri!=null)
-        {
-            if(fbAuth.getUid()!=null)
-            {
+    private void uploadFile() {
+        if (imageUri != null) {
+            if (MyCustomVariables.getFirebaseAuth().getUid() != null) {
                 progressBar.setVisibility(View.VISIBLE);
-                myStorage.child(fbAuth.getUid()).putFile(imageUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>()
-                {
-                    @Override
-                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot)
-                    {
-                        Handler handler=new Handler();
-                        handler.postDelayed(new Runnable()
-                        {
-                            @Override
-                            public void run()
-                            {
+
+                storageReference.child(MyCustomVariables.getFirebaseAuth().getUid())
+                        .putFile(imageUri)
+                        .addOnSuccessListener(taskSnapshot -> {
+                            Handler handler = new Handler();
+                            handler.postDelayed(() -> {
                                 progressBar.setProgress(0);
                                 progressBar.setVisibility(View.INVISIBLE);
-                            }
-                        }, 500);
-                        Toast.makeText(EditPhotoActivity.this, getResources().getString(R.string.edit_photo_upload_successful), Toast.LENGTH_SHORT).show();
-                        Task<Uri> uriTask=taskSnapshot.getStorage().getDownloadUrl();
-                        while(!uriTask.isComplete());
-                        Uri url=uriTask.getResult();
-                        myRef.child(fbAuth.getUid()).child("PersonalInformation").child("photoURL").setValue(String.valueOf(url));
-                    }
-                }).addOnFailureListener(new OnFailureListener()
-                {
-                    @Override
-                    public void onFailure(@NonNull Exception e)
-                    {
-                        Toast.makeText(EditPhotoActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
-                    }
-                }).addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>()
-                {
-                    @Override
-                    public void onProgress(@NonNull UploadTask.TaskSnapshot taskSnapshot)
-                    {
-                        float progress=100*taskSnapshot.getBytesTransferred()/(float)taskSnapshot.getTotalByteCount();
-                        progressBar.setProgress((int)progress);
-                    }
-                });
+                            }, 500);
+                            Toast.makeText(EditPhotoActivity.this,
+                                    getResources().getString(R.string.edit_photo_upload_successful),
+                                    Toast.LENGTH_SHORT).show();
+
+                            final Task<Uri> uriTask = taskSnapshot.getStorage().getDownloadUrl();
+
+                            while (!uriTask.isComplete()) ;
+
+                            final Uri url = uriTask.getResult();
+
+                            MyCustomVariables.getDatabaseReference()
+                                    .child(MyCustomVariables.getFirebaseAuth().getUid())
+                                    .child("PersonalInformation")
+                                    .child("photoURL")
+                                    .setValue(String.valueOf(url));
+                        })
+                        .addOnFailureListener(e -> Toast.makeText(EditPhotoActivity.this,
+                                e.getMessage(),
+                                Toast.LENGTH_SHORT).show())
+                        .addOnProgressListener(taskSnapshot -> {
+                            final float progress =
+                                    100 * taskSnapshot.getBytesTransferred() / (float) taskSnapshot.getTotalByteCount();
+
+                            progressBar.setProgress((int) progress);
+                        });
             }
+        } else
+            Toast.makeText(this, getResources().getString(R.string.edit_photo_select_file), Toast.LENGTH_SHORT).show();
+    }
+
+    private void setPhoto() {
+        if (MyCustomVariables.getFirebaseAuth().getUid() != null) {
+            MyCustomVariables.getDatabaseReference()
+                    .child(MyCustomVariables.getFirebaseAuth().getUid())
+                    .child("PersonalInformation")
+                    .addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(final @NonNull DataSnapshot snapshot) {
+                            if (snapshot.hasChild("photoURL")) {
+                                final String URL = String.valueOf(snapshot.child("photoURL").getValue());
+
+                                if (!URL.trim().isEmpty()) {
+                                    Picasso.get()
+                                            .load(URL)
+                                            .placeholder(R.drawable.ic_add_photo)
+                                            .fit()
+                                            .into(uploadedFile);
+                                } else {
+                                    uploadedFile.setImageResource(R.drawable.ic_add_photo);
+                                }
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
+
+                        }
+                    });
         }
-        else Toast.makeText(this, getResources().getString(R.string.edit_photo_select_file), Toast.LENGTH_SHORT).show();
     }
 
-    private void setPhoto()
-    {
-        if(fbAuth.getUid()!=null)
-            myRef.child(fbAuth.getUid()).child("PersonalInformation").addListenerForSingleValueEvent(new ValueEventListener()
-            {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot snapshot)
-                {
-                    if(snapshot.hasChild("photoURL"))
-                    {
-                        String URL=String.valueOf(snapshot.child("photoURL").getValue());
-                        if(!URL.trim().equals(""))
-                            Picasso.get().load(URL).placeholder(R.drawable.ic_add_photo).fit().into(uploadedFile);
-                        else uploadedFile.setImageResource(R.drawable.ic_add_photo);
-                    }
-                }
+    private void setTheme() {
+        final int theme = R.drawable.ic_yellow_gradient_soda;
 
-                @Override
-                public void onCancelled(@NonNull DatabaseError error)
-                {
-
-                }
-            });
-    }
-
-    private void setTheme()
-    {
-        int theme=R.drawable.ic_yellow_gradient_soda;
         getWindow().setBackgroundDrawableResource(theme);
     }
 }

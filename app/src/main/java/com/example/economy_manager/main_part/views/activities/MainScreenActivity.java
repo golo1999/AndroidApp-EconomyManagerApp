@@ -13,14 +13,14 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.example.economy_manager.R;
+import com.example.economy_manager.login_part.LogInActivity;
+import com.example.economy_manager.main_part.viewmodels.MainScreenViewModel;
+import com.example.economy_manager.models.Transaction;
+import com.example.economy_manager.models.UserDetails;
 import com.example.economy_manager.utilities.MyCustomMethods;
 import com.example.economy_manager.utilities.MyCustomSharedPreferences;
 import com.example.economy_manager.utilities.MyCustomVariables;
-import com.example.economy_manager.R;
-import com.example.economy_manager.models.Transaction;
-import com.example.economy_manager.models.UserDetails;
-import com.example.economy_manager.login_part.LogInActivity;
-import com.example.economy_manager.main_part.viewmodels.MainScreenViewModel;
 import com.facebook.login.LoginManager;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.database.DataSnapshot;
@@ -33,23 +33,41 @@ import java.util.TimerTask;
 
 public class MainScreenActivity extends AppCompatActivity {
     private MainScreenViewModel viewModel;
+
     private ConstraintLayout firebaseDatabaseLoadingProgressBarLayout;
+
     private ProgressBar firebaseDatabaseLoadingProgressBar;
+
     private TextView greeting;
+
     private TextView date;
+
     private FloatingActionButton addButton;
+
     private FloatingActionButton subtractButton;
+
     private ImageView signOut;
+
     private ImageView edit;
+
     private ImageView balance;
+
     private TextView moneySpentPercentage;
+
     private ImageView account;
+
     private ImageView settings;
+
     private TextView remainingMonthlyIncomeText;
+
     private TextView monthlyBalanceText;
+
     private TextView lastWeekExpensesText;
+
     private TextView lastTenTransactionsText;
+
     private TextView topFiveExpensesText;
+
     private int timerCounter = 0;
 
     @Override
@@ -234,6 +252,7 @@ public class MainScreenActivity extends AppCompatActivity {
     private void setTextsBetweenFragments() {
         if (viewModel.getUserDetails() != null) {
             final boolean darkThemeEnabled = viewModel.getUserDetails().getApplicationSettings().getDarkTheme();
+
             final int color = !darkThemeEnabled ? Color.parseColor("#195190") : Color.WHITE;
 
             remainingMonthlyIncomeText.setTextColor(color);

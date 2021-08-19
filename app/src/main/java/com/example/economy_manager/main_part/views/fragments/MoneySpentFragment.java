@@ -47,7 +47,8 @@ public class MoneySpentFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(final LayoutInflater inflater, final ViewGroup container,
+    public View onCreateView(final LayoutInflater inflater,
+                             final ViewGroup container,
                              final Bundle savedInstanceState) {
         final View v = inflater.inflate(R.layout.money_spent_fragment, container, false);
 

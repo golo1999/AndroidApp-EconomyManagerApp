@@ -1,9 +1,7 @@
 package com.example.economy_manager.main_part.views.fragments;
 
 import android.graphics.Color;
-import android.graphics.Typeface;
 import android.os.Bundle;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -49,7 +47,8 @@ public class TopFiveExpensesFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(final LayoutInflater inflater, final ViewGroup container,
+    public View onCreateView(final LayoutInflater inflater,
+                             final ViewGroup container,
                              final Bundle savedInstanceState) {
         final View v = inflater.inflate(R.layout.top_five_expenses_fragment, container, false);
 
@@ -107,11 +106,11 @@ public class TopFiveExpensesFragment extends Fragment {
         } else {
             centerText.setText(getResources().getString(R.string.top_5_expenses_no_expenses_yet));
             centerText.setVisibility(View.VISIBLE);
-            //showNoExpensesLayout(mainLayout, getResources().getString(R.string.top_5_expenses_no_expenses_yet));
         }
     }
 
-    private void showTopExpenses(final LinearLayout mainLayout, final ArrayList<Transaction> expensesList,
+    private void showTopExpenses(final LinearLayout mainLayout,
+                                 final ArrayList<Transaction> expensesList,
                                  final String currencySymbol) {
         mainLayout.removeAllViews();
 
@@ -119,7 +118,6 @@ public class TopFiveExpensesFragment extends Fragment {
             if (expensesList.size() == 0) {
                 centerText.setText(getResources().getString(R.string.top_5_expenses_no_expenses_this_month));
                 centerText.setVisibility(View.VISIBLE);
-                //showNoExpensesLayout(mainLayout, getResources().getString(R.string.top_5_expenses_no_expenses_this_month));
             }
             // if the expenses list isn't empty
             else {
@@ -174,23 +172,5 @@ public class TopFiveExpensesFragment extends Fragment {
         } catch (NullPointerException e) {
             e.printStackTrace();
         }
-    }
-
-    private void showNoExpensesLayout(final LinearLayout mainLayout, final String message) {
-        final TextView noExpenses = new TextView(getContext());
-        final LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
-                ViewGroup.LayoutParams.WRAP_CONTENT);
-
-        params.setMargins(0, 20, 0, 20);
-
-        noExpenses.setText(message);
-        noExpenses.setTextColor(Color.BLACK);
-        noExpenses.setTypeface(null, Typeface.BOLD);
-        noExpenses.setTextSize(20);
-        noExpenses.setGravity(Gravity.CENTER);
-        noExpenses.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
-        noExpenses.setLayoutParams(params);
-
-        mainLayout.addView(noExpenses);
     }
 }

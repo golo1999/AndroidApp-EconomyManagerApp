@@ -31,13 +31,17 @@ import java.util.Locale;
 
 public class MonthlyBalanceActivity extends AppCompatActivity {
     private MonthlyBalanceViewModel viewModel;
+
     private ImageView goBack;
+
     private TextView activityTitle;
+
     private TextView centerText;
+
     private LinearLayout mainLayout;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.monthly_balance_activity);
         setVariables();
@@ -77,6 +81,7 @@ public class MonthlyBalanceActivity extends AppCompatActivity {
     private void setActivityTheme() {
         if (viewModel.getUserDetails() != null) {
             final boolean checked = viewModel.getUserDetails().getApplicationSettings().getDarkTheme();
+
             final int theme = !checked ?
                     R.drawable.ic_white_gradient_tobacco_ad : R.drawable.ic_black_gradient_night_shift;
 
@@ -90,11 +95,12 @@ public class MonthlyBalanceActivity extends AppCompatActivity {
                     .child(MyCustomVariables.getFirebaseAuth().getUid())
                     .addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
-                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        public void onDataChange(final @NonNull DataSnapshot snapshot) {
                             final String currencySymbol = viewModel.getUserDetails() != null ?
                                     viewModel.getUserDetails().getApplicationSettings().getCurrencySymbol() :
                                     MyCustomMethods.getCurrencySymbol();
                             final ArrayList<Transaction> transactionsList = new ArrayList<>();
+
                             final ArrayList<Integer> daysList = new ArrayList<>();
 
 
@@ -124,14 +130,19 @@ public class MonthlyBalanceActivity extends AppCompatActivity {
                                 for (final int dayFromDaysList : daysList) {
                                     // calculating the total incomes and expenses for each day
                                     float dateTotalIncome = 0f;
+
                                     float dateTotalExpense = 0f;
+
                                     final String dateTranslated = viewModel
                                             .getDateTranslated(MonthlyBalanceActivity.this, dayFromDaysList);
+
                                     final LinearLayout dayAndSumLayout =
                                             (LinearLayout) View.inflate(MonthlyBalanceActivity.this,
                                                     R.layout.monthly_balance_title_linearlayout, null);
+
                                     final TextView dayText = dayAndSumLayout
                                             .findViewById(R.id.monthlyBalanceRelativeLayoutDay);
+
                                     final TextView totalSumText = dayAndSumLayout
                                             .findViewById(R.id.monthlyBalanceRelativeLayoutDayTotalSum);
 
@@ -158,6 +169,7 @@ public class MonthlyBalanceActivity extends AppCompatActivity {
                                                             null);
                                             final TextView typeText = transactionLayout
                                                     .findViewById(R.id.monthlyBalanceRelativeLayoutType);
+
                                             final TextView valueText = transactionLayout
                                                     .findViewById(R.id.monthlyBalanceRelativeLayoutValue);
 
@@ -266,7 +278,8 @@ public class MonthlyBalanceActivity extends AppCompatActivity {
         }
     }
 
-    private boolean checkIfDayCanBeAddedToList(final ArrayList<Integer> daysList, final int dayToBeAdded) {
+    private boolean checkIfDayCanBeAddedToList(final ArrayList<Integer> daysList,
+                                               final int dayToBeAdded) {
         if (!daysList.isEmpty()) {
             for (final int dayFromList : daysList) {
                 if (dayFromList == dayToBeAdded) {

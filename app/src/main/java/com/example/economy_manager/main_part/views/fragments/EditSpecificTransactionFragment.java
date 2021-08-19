@@ -27,7 +27,6 @@ import androidx.lifecycle.ViewModelStoreOwner;
 
 import com.example.economy_manager.R;
 import com.example.economy_manager.main_part.viewmodels.EditTransactionsViewModel;
-import com.example.economy_manager.main_part.views.activities.EditTransactionsActivity;
 import com.example.economy_manager.models.MyCustomTime;
 import com.example.economy_manager.models.Transaction;
 import com.example.economy_manager.utilities.MyCustomMethods;
@@ -55,7 +54,8 @@ public class EditSpecificTransactionFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(@NonNull final LayoutInflater inflater, final ViewGroup container,
+    public View onCreateView(@NonNull final LayoutInflater inflater,
+                             final ViewGroup container,
                              final Bundle savedInstanceState) {
         return inflater.inflate(R.layout.edit_specific_transaction_fragment, container, false);
     }
@@ -134,26 +134,10 @@ public class EditSpecificTransactionFragment extends Fragment {
 
                     //Toast.makeText(requireContext(), String.valueOf(selectedTransaction.equals(editedTransaction)), Toast.LENGTH_SHORT).show();
 
-                    if (!selectedTransaction.equals(editedTransaction)) {
-                        // nu e null => e ok
-//                        Toast.makeText(requireContext(), String.valueOf(viewModel.getEditTransactionsRecyclerViewAdapter() == null), Toast.LENGTH_SHORT).show();
-
-
-                        // nu merge
-//                        selectedTransaction = editedTransaction;
-//                        viewModel.getEditTransactionsRecyclerViewAdapter().notifyDataSetChanged();
-//
-//                        viewModel.setSelectedTransaction(editedTransaction);
-
-                        final EditTransactionsViewModel editTransactionsViewModel =
-                                ((EditTransactionsActivity) requireActivity()).getViewModel();
-
-//                        editTransactionsViewModel.getSelectedTransaction().setValue("1500");
-
-                        if (viewModel.getEditTransactionsRecyclerViewAdapter() != null) {
-                            viewModel.getEditTransactionsRecyclerViewAdapter()
-                                    .notifyItemChanged(viewModel.getSelectedTransactionListPosition());
-                        }
+                    if (!selectedTransaction.equals(editedTransaction) &&
+                            viewModel.getEditTransactionsRecyclerViewAdapter() != null) {
+                        viewModel.getEditTransactionsRecyclerViewAdapter()
+                                .notifyItemChanged(viewModel.getSelectedTransactionListPosition());
                     }
                 }
             }
@@ -316,7 +300,8 @@ public class EditSpecificTransactionFragment extends Fragment {
         }
     }
 
-    private void setTextStyleEditText(@NonNull final EditText editText, final int color) {
+    private void setTextStyleEditText(@NonNull final EditText editText,
+                                      final int color) {
         editText.setTextColor(color);
         editText.setHintTextColor(color);
         editText.setBackgroundTintList(ColorStateList.valueOf(color));
@@ -426,12 +411,6 @@ public class EditSpecificTransactionFragment extends Fragment {
                     .child("PersonalTransactions")
                     .child(initialTransaction.getId())
                     .setValue(initialTransaction);
-
-//            if (initialTransaction.getTime().getMonth() != initialMonthIndex &&
-//                    viewModel.getEditTransactionsRecyclerViewAdapter() != null) {
-//                viewModel.getEditTransactionsRecyclerViewAdapter()
-//                        .notifyItemRemoved(viewModel.getSelectedTransactionListPosition());
-//            }
         }
 
         return initialTransaction;

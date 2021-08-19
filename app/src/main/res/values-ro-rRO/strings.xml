@@ -205,4 +205,5 @@
     <string name="time_date_year">Anul trebuie să fie între&#32;</string>
     <string name="proceed">Continuare</string>
     <string name="delete_error">Nu s-a putut realiza ștergerea</string>
+    <string name="delete_transaction">Sigur doriți să ștergeți această tranzacție?</string>
 </resources>

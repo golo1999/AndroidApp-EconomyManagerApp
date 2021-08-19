@@ -37,6 +37,7 @@ public class SplashScreenActivity extends AppCompatActivity {
 
         public void run() {
             preferences = getSharedPreferences(MyCustomVariables.getSharedPreferencesFileName(), MODE_PRIVATE);
+
             final Intent intent = new Intent(SplashScreenActivity.this,
                     MyCustomVariables.getFirebaseAuth().getCurrentUser() != null ?
                             MainScreenActivity.class : LogInActivity.class);
@@ -48,7 +49,8 @@ public class SplashScreenActivity extends AppCompatActivity {
             } finally {
                 if (MyCustomVariables.getFirebaseAuth().getCurrentUser() != null &&
                         MyCustomVariables.getFirebaseAuth().getUid() != null) {
-                    MyCustomVariables.getDatabaseReference().child(MyCustomVariables.getFirebaseAuth().getUid())
+                    MyCustomVariables.getDatabaseReference()
+                            .child(MyCustomVariables.getFirebaseAuth().getUid())
                             .addListenerForSingleValueEvent(new ValueEventListener() {
                                 @Override
                                 public void onDataChange(final @NonNull DataSnapshot snapshot) {

@@ -205,4 +205,5 @@
     <string name="time_date_month_28_days">&#32;sollte maximal 28 Tage haben</string>
     <string name="proceed">Fortfahren</string>
     <string name="delete_error">Der Löschvorgang konnte nicht ausgeführt werden</string>
+    <string name="delete_transaction">Möchten Sie diese Transaktion wirklich löschen?</string>
 </resources>

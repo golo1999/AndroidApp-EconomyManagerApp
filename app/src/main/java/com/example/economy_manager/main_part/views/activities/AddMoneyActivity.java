@@ -94,7 +94,7 @@ public class AddMoneyActivity extends AppCompatActivity {
 
             // if there was any radio button checked
             if (selectedID != -1 && MyCustomVariables.getFirebaseAuth().getUid() != null) {
-                if (!String.valueOf(valueField.getText()).trim().equals("")) {
+                if (!String.valueOf(valueField.getText()).trim().isEmpty()) {
                     if (MyCustomVariables.getFirebaseAuth().getUid() != null) {
                         final RadioButton radioButton = findViewById(selectedID);
 
@@ -153,12 +153,18 @@ public class AddMoneyActivity extends AppCompatActivity {
     private void limitTwoDecimals() {
         valueField.addTextChangedListener(new TextWatcher() {
             @Override
-            public void beforeTextChanged(final CharSequence s, final int start, final int count, final int after) {
+            public void beforeTextChanged(final CharSequence s,
+                                          final int start,
+                                          final int count,
+                                          final int after) {
 
             }
 
             @Override
-            public void onTextChanged(final CharSequence s, final int start, final int before, final int count) {
+            public void onTextChanged(final CharSequence s,
+                                      final int start,
+                                      final int before,
+                                      final int count) {
                 final int textLength = String.valueOf(s).length();
 
                 // if the number is decimal (contains comma)
