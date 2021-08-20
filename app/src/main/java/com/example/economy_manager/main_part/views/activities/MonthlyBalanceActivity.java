@@ -79,14 +79,13 @@ public class MonthlyBalanceActivity extends AppCompatActivity {
     }
 
     private void setActivityTheme() {
-        if (viewModel.getUserDetails() != null) {
-            final boolean checked = viewModel.getUserDetails().getApplicationSettings().getDarkTheme();
+        final boolean checked = viewModel.getUserDetails() != null ?
+                viewModel.getUserDetails().getApplicationSettings().getDarkTheme() :
+                MyCustomVariables.getDefaultUserDetails().getApplicationSettings().getDarkTheme();
 
-            final int theme = !checked ?
-                    R.drawable.ic_white_gradient_tobacco_ad : R.drawable.ic_black_gradient_night_shift;
+        final int theme = !checked ? R.drawable.ic_white_gradient_tobacco_ad : R.drawable.ic_black_gradient_night_shift;
 
-            getWindow().setBackgroundDrawableResource(theme);
-        }
+        getWindow().setBackgroundDrawableResource(theme);
     }
 
     private void setIncomesAndExpensesInParent() {
@@ -173,11 +172,9 @@ public class MonthlyBalanceActivity extends AppCompatActivity {
                                             final TextView valueText = transactionLayout
                                                     .findViewById(R.id.monthlyBalanceRelativeLayoutValue);
 
-                                            typeText.setText(Types
-                                                    .getTranslatedType(MonthlyBalanceActivity.this,
-                                                            String.valueOf(Transaction
-                                                                    .getTypeFromIndexInEnglish(transactionsListIterator
-                                                                            .getCategory()))));
+                                            typeText.setText(Types.getTranslatedType(MonthlyBalanceActivity.this,
+                                                    String.valueOf(Transaction.getTypeFromIndexInEnglish(transactionsListIterator
+                                                            .getCategory()))));
 
                                             typeText.setTextColor(viewModel.getUserDetails()
                                                     .getApplicationSettings().getDarkTheme() ?
@@ -226,7 +223,10 @@ public class MonthlyBalanceActivity extends AppCompatActivity {
 
     private void setTitle() {
         final int year = viewModel.getCurrentYear();
-        final String month = Months.getTranslatedMonth(MonthlyBalanceActivity.this, viewModel.getCurrentMonthName());
+
+        final String month = Months.getTranslatedMonth(MonthlyBalanceActivity.this,
+                viewModel.getCurrentMonthName());
+
         final String currentMonthYear = month.trim() + " " + year;
 
         activityTitle.setText(currentMonthYear);
@@ -236,8 +236,9 @@ public class MonthlyBalanceActivity extends AppCompatActivity {
 
     private void setCenterText() {
         if (MyCustomVariables.getFirebaseAuth().getUid() != null) {
-            final boolean darkThemeEnabled = viewModel.getUserDetails() != null &&
-                    viewModel.getUserDetails().getApplicationSettings().getDarkTheme();
+            final boolean darkThemeEnabled = viewModel.getUserDetails() != null ?
+                    viewModel.getUserDetails().getApplicationSettings().getDarkTheme() :
+                    MyCustomVariables.getDefaultUserDetails().getApplicationSettings().getDarkTheme();
 
             MyCustomVariables.getDatabaseReference()
                     .child(MyCustomVariables.getFirebaseAuth().getUid())

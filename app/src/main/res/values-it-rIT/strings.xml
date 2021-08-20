@@ -47,9 +47,7 @@
     <string name="email">E-mail</string>
     <string name="expense">Spesa</string>
     <string name="Expenses">Spese</string>
-    <string name="forgot_forgot">Hai dimenticato la password?</string>
     <string name="forgot_reset">Resetta la password</string>
-    <string name="signup_login">Accedi qui</string>
     <string name="signup_error7">La password deve contenere almeno 7 caratteri</string>
     <string name="rate_app">Valuta l\'applicazione</string>
     <string name="remaining_monthly_income">Reddito mensile rimanente</string>
@@ -70,7 +68,6 @@
     <string name="login_forgot_password">Ha dimenticato la password</string>
     <string name="login_login">Accesso</string>
     <string name="login_no_account">Non hai un account?&#160;</string>
-    <string name="login_signup">Registrati qui</string>
     <string name="login_incorrect_username_password">Nome utente o password errati</string>
     <string name="forgot_password_email_does_not_exist">L\'email non esiste nel le base dei dati</string>
     <string name="login_email_not_valid">Email non valido</string>

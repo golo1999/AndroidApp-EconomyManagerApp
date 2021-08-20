@@ -97,18 +97,27 @@ public class EditSpecificTransactionFragment extends Fragment {
                 if (selectedTransaction != null) {
                     final String editedNote = !String.valueOf(noteField.getText()).trim().isEmpty() ?
                             String.valueOf(noteField.getText()).trim() : selectedTransaction.getNote();
+
                     final String editedValue = !String.valueOf(valueField.getText()).trim().isEmpty() ?
                             String.valueOf(valueField.getText()).trim() : selectedTransaction.getValue();
+
                     final int parsedCategoryIndex = Transaction.getIndexFromCategory(Types.
                             getTypeInEnglish(requireContext(), String.valueOf(typeSpinner.getSelectedItem()).trim()));
+
                     final int editedCategoryIndex = parsedCategoryIndex >= 0 && parsedCategoryIndex <= 18 &&
                             parsedCategoryIndex != selectedTransaction.getCategory() ?
                             parsedCategoryIndex : selectedTransaction.getCategory();
+
                     final int datePickerSelectedYear = datePicker.getYear();
+
                     final int datePickerSelectedMonth = datePicker.getMonth();
+
                     final int datePickerSelectedDay = datePicker.getDayOfMonth();
+
                     final int timePickerSelectedHour = timePicker.getHour();
+
                     final int timePickerSelectedMinute = timePicker.getMinute();
+
                     final int timePickerSelectedSecond =
                             (datePickerSelectedYear != selectedTransaction.getTime().getYear() &&
                                     datePickerSelectedMonth != selectedTransaction.getTime().getMonth() &&
@@ -116,13 +125,17 @@ public class EditSpecificTransactionFragment extends Fragment {
                                     timePickerSelectedHour != selectedTransaction.getTime().getHour() &&
                                     timePickerSelectedMinute != selectedTransaction.getTime().getMinute()) ?
                                     LocalDateTime.now().getSecond() : selectedTransaction.getTime().getSecond();
+
                     final LocalDate selectedLocalDate =
                             LocalDate.of(datePickerSelectedYear, datePickerSelectedMonth, datePickerSelectedDay);
+
                     final MyCustomTime editedTime = new MyCustomTime(datePickerSelectedYear, datePickerSelectedMonth,
                             String.valueOf(selectedLocalDate.getMonth()), datePickerSelectedDay,
                             String.valueOf(selectedLocalDate.getDayOfWeek()), timePickerSelectedHour,
                             timePickerSelectedMinute, timePickerSelectedSecond);
+
                     final int editedCategoryType = (editedCategoryIndex >= 0 && editedCategoryIndex <= 3) ? 1 : 0;
+
                     final Transaction editedTransaction = new Transaction(selectedTransaction.getId(),
                             editedCategoryIndex, editedTime, editedCategoryType, editedNote, editedValue);
 
@@ -216,19 +229,20 @@ public class EditSpecificTransactionFragment extends Fragment {
         final ArrayAdapter<String> typesAdapter = new ArrayAdapter<String>(requireContext(),
                 R.layout.custom_spinner_item, types) {
             @Override
-            public View getDropDownView(final int position, final @Nullable View convertView,
-                                        @NonNull final ViewGroup parent) {
+            public View getDropDownView(final int position,
+                                        final @Nullable View convertView,
+                                        final @NonNull ViewGroup parent) {
                 final View v = super.getDropDownView(position, convertView, parent);
 
+                final boolean darkTheme = MyCustomVariables.getUserDetails() != null ?
+                        MyCustomVariables.getUserDetails().getApplicationSettings().getDarkTheme() :
+                        MyCustomVariables.getDefaultUserDetails().getApplicationSettings().getDarkTheme();
+
+                final int itemsColor = !darkTheme ? Color.WHITE : Color.BLACK;
+
                 ((TextView) v).setGravity(Gravity.CENTER);
-
-                if (MyCustomVariables.getUserDetails() != null) {
-                    final boolean darkTheme = MyCustomVariables.getUserDetails().getApplicationSettings().getDarkTheme();
-                    final int itemsColor = !darkTheme ? Color.WHITE : Color.BLACK;
-
-                    // setting items' text color based on the selected theme
-                    ((TextView) v).setTextColor(itemsColor);
-                }
+                // setting items' text color based on the selected theme
+                ((TextView) v).setTextColor(itemsColor);
 
                 return v;
             }
@@ -236,14 +250,18 @@ public class EditSpecificTransactionFragment extends Fragment {
 
         final AdapterView.OnItemSelectedListener listener = new AdapterView.OnItemSelectedListener() {
             @Override
-            public void onItemSelected(final AdapterView<?> parent, View view, int position, long id) {
-                if (MyCustomVariables.getUserDetails() != null) {
-                    final boolean darkTheme = MyCustomVariables.getUserDetails().getApplicationSettings().getDarkTheme();
-                    final int textColor = !darkTheme ? Color.parseColor("#195190") : Color.WHITE;
+            public void onItemSelected(final AdapterView<?> parent,
+                                       View view,
+                                       int position,
+                                       long id) {
+                final boolean darkTheme = MyCustomVariables.getUserDetails() != null ?
+                        MyCustomVariables.getUserDetails().getApplicationSettings().getDarkTheme() :
+                        MyCustomVariables.getDefaultUserDetails().getApplicationSettings().getDarkTheme();
 
-                    ((TextView) parent.getChildAt(0)).setTextColor(textColor);
-                    ((TextView) parent.getChildAt(0)).setGravity(Gravity.START);
-                }
+                final int textColor = !darkTheme ? Color.parseColor("#195190") : Color.WHITE;
+
+                ((TextView) parent.getChildAt(0)).setTextColor(textColor);
+                ((TextView) parent.getChildAt(0)).setGravity(Gravity.START);
             }
 
             @Override
@@ -279,25 +297,26 @@ public class EditSpecificTransactionFragment extends Fragment {
     }
 
     private void setTheme() {
-        if (MyCustomVariables.getUserDetails() != null) {
-            final boolean darkTheme = MyCustomVariables.getUserDetails().getApplicationSettings().getDarkTheme();
-            final int color = !darkTheme ? Color.parseColor("#195190") : Color.WHITE;
-            final int backgroundTheme = !darkTheme ?
-                    R.drawable.ic_white_gradient_tobacco_ad : R.drawable.ic_black_gradient_night_shift;
-            final int spinnerElementBackground = !darkTheme ?
-                    R.drawable.ic_blue_gradient_unloved_teen : R.drawable.ic_white_gradient_tobacco_ad;
+        final boolean darkTheme = MyCustomVariables.getUserDetails() != null ?
+                MyCustomVariables.getUserDetails().getApplicationSettings().getDarkTheme() :
+                MyCustomVariables.getDefaultUserDetails().getApplicationSettings().getDarkTheme();
 
-            setTextStyleEditText(noteField, color);
-            setTextStyleEditText(valueField, color);
+        final int color = !darkTheme ? Color.parseColor("#195190") : Color.WHITE;
 
-            requireActivity().getWindow().setBackgroundDrawableResource(backgroundTheme);
+        final int backgroundTheme = !darkTheme ?
+                R.drawable.ic_white_gradient_tobacco_ad : R.drawable.ic_black_gradient_night_shift;
 
-            // setting arrow's color
-            typeSpinner.getBackground().setColorFilter(color, PorterDuff.Mode.SRC_ATOP);
+        final int spinnerElementBackground = !darkTheme ?
+                R.drawable.ic_blue_gradient_unloved_teen : R.drawable.ic_white_gradient_tobacco_ad;
 
-            // setting items' color
-            typeSpinner.setPopupBackgroundResource(spinnerElementBackground);
-        }
+        setTextStyleEditText(noteField, color);
+        setTextStyleEditText(valueField, color);
+
+        requireActivity().getWindow().setBackgroundDrawableResource(backgroundTheme);
+        // setting arrow's color
+        typeSpinner.getBackground().setColorFilter(color, PorterDuff.Mode.SRC_ATOP);
+        // setting items' color
+        typeSpinner.setPopupBackgroundResource(spinnerElementBackground);
     }
 
     private void setTextStyleEditText(@NonNull final EditText editText,
@@ -322,11 +341,17 @@ public class EditSpecificTransactionFragment extends Fragment {
 
     private Transaction transactionHasBeenModified(@NonNull final Transaction initialTransaction) {
         final int initialMonthIndex = initialTransaction.getTime().getMonth();
+
         final int datePickerSelectedYear = datePicker.getYear();
+
         final int datePickerSelectedMonth = datePicker.getMonth() + 1;
+
         final int datePickerSelectedDay = datePicker.getDayOfMonth();
+
         final int timePickerSelectedHour = timePicker.getHour();
+
         final int timePickerSelectedMinute = timePicker.getMinute();
+
         final int timePickerSelectedSecond =
                 (datePickerSelectedYear != initialTransaction.getTime().getYear() &&
                         datePickerSelectedMonth != initialTransaction.getTime().getMonth() &&
@@ -334,12 +359,15 @@ public class EditSpecificTransactionFragment extends Fragment {
                         timePickerSelectedHour != initialTransaction.getTime().getHour() &&
                         timePickerSelectedMinute != initialTransaction.getTime().getMinute()) ?
                         LocalDateTime.now().getSecond() : initialTransaction.getTime().getSecond();
+
         final LocalDate selectedTimeLocalDate =
                 LocalDate.of(datePickerSelectedYear, datePickerSelectedMonth, datePickerSelectedDay);
+
         final MyCustomTime editedTime = new MyCustomTime(datePickerSelectedYear, datePickerSelectedMonth,
                 String.valueOf(selectedTimeLocalDate.getMonth()), datePickerSelectedDay,
                 String.valueOf(selectedTimeLocalDate.getDayOfWeek()), timePickerSelectedHour, timePickerSelectedMinute,
                 timePickerSelectedSecond);
+
         boolean hasBeenModified = false;
 
         if ((initialTransaction.getNote() != null &&
@@ -383,6 +411,7 @@ public class EditSpecificTransactionFragment extends Fragment {
 
         final String initialCategoryName = Types.getTranslatedType(requireContext(),
                 Transaction.getTypeFromIndexInEnglish(initialTransaction.getCategory()));
+
         final String selectedCategoryName = String.valueOf(typeSpinner.getSelectedItem()).trim();
 
         if (initialCategoryName != null && !initialCategoryName.equals(selectedCategoryName)) {
@@ -391,6 +420,7 @@ public class EditSpecificTransactionFragment extends Fragment {
 
             final int editedCategory =
                     Transaction.getIndexFromCategory(Types.getTypeInEnglish(requireContext(), selectedCategoryName));
+
             final int editedType = editedCategory >= 0 && editedCategory <= 3 ? 1 : 0;
 
             initialTransaction.setCategory(editedCategory);

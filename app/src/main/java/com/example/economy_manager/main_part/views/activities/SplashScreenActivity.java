@@ -7,12 +7,12 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.economy_manager.models.ApplicationSettings;
-import com.example.economy_manager.login_part.LogInActivity;
-import com.example.economy_manager.utilities.MyCustomVariables;
-import com.example.economy_manager.models.PersonalInformation;
 import com.example.economy_manager.R;
+import com.example.economy_manager.login_part.LogInActivity;
+import com.example.economy_manager.models.ApplicationSettings;
+import com.example.economy_manager.models.PersonalInformation;
 import com.example.economy_manager.models.UserDetails;
+import com.example.economy_manager.utilities.MyCustomVariables;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
@@ -37,10 +37,6 @@ public class SplashScreenActivity extends AppCompatActivity {
 
         public void run() {
             preferences = getSharedPreferences(MyCustomVariables.getSharedPreferencesFileName(), MODE_PRIVATE);
-
-            final Intent intent = new Intent(SplashScreenActivity.this,
-                    MyCustomVariables.getFirebaseAuth().getCurrentUser() != null ?
-                            MainScreenActivity.class : LogInActivity.class);
 
             try {
                 sleep(2000);
@@ -90,7 +86,9 @@ public class SplashScreenActivity extends AppCompatActivity {
                             });
                 }
 
-                startActivity(intent);
+                startActivity(new Intent(SplashScreenActivity.this,
+                        MyCustomVariables.getFirebaseAuth().getCurrentUser() != null ?
+                                MainScreenActivity.class : LogInActivity.class));
                 finish();
             }
         }

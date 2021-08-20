@@ -148,7 +148,8 @@ public class EditTransactionsActivity extends AppCompatActivity
                     .addValueEventListener(new ValueEventListener() {
                         @Override
                         public void onDataChange(final @NonNull DataSnapshot snapshot) {
-                            if (snapshot.exists() && snapshot.hasChildren()) {
+                            if (snapshot.exists() &&
+                                    snapshot.hasChildren()) {
                                 final ArrayList<String> yearsList = new ArrayList<>();
 
                                 final ArrayList<String> monthsList = new ArrayList<>();
@@ -279,12 +280,12 @@ public class EditTransactionsActivity extends AppCompatActivity
                                         .getString(R.string.edit_transactions_center_text_no_transactions).trim());
                             }
 
-                            if (userDetails != null) {
-                                final boolean darkThemeEnabled = userDetails.getApplicationSettings().getDarkTheme();
+                            final boolean darkThemeEnabled = userDetails != null ?
+                                    userDetails.getApplicationSettings().getDarkTheme() :
+                                    MyCustomVariables.getDefaultUserDetails().getApplicationSettings().getDarkTheme();
 
-                                centerText.setTextColor(!darkThemeEnabled ?
-                                        Color.parseColor("#195190") : Color.WHITE);
-                            }
+                            centerText.setTextColor(!darkThemeEnabled ?
+                                    Color.parseColor("#195190") : Color.WHITE);
 
                             centerText.setTextSize(20);
                             recyclerView.setEnabled(false);
@@ -370,17 +371,17 @@ public class EditTransactionsActivity extends AppCompatActivity
                                         final @Nullable View convertView,
                                         final @NonNull ViewGroup parent) {
                 final View v = super.getDropDownView(position, convertView, parent);
+
+                final boolean darkThemeEnabled = userDetails != null ?
+                        userDetails.getApplicationSettings().getDarkTheme() :
+                        MyCustomVariables.getDefaultUserDetails().getApplicationSettings().getDarkTheme();
+
+                final int itemsColor = !darkThemeEnabled ? Color.WHITE : Color.BLACK;
                 // all spinner elements are aligned to center
                 ((TextView) v).setGravity(Gravity.CENTER);
 
-                if (userDetails != null) {
-                    final boolean darkThemeEnabled = userDetails.getApplicationSettings().getDarkTheme();
-
-                    final int itemsColor = !darkThemeEnabled ? Color.WHITE : Color.BLACK;
-
-                    // setting text color based on the selected theme
-                    ((TextView) v).setTextColor(itemsColor);
-                }
+                // setting text color based on the selected theme
+                ((TextView) v).setTextColor(itemsColor);
 
                 return v;
             }
@@ -440,16 +441,16 @@ public class EditTransactionsActivity extends AppCompatActivity
                                         final @Nullable View convertView,
                                         final @NonNull ViewGroup parent) {
                 final View v = super.getDropDownView(position, convertView, parent);
+
+                final boolean darkThemeEnabled = userDetails != null ?
+                        userDetails.getApplicationSettings().getDarkTheme() :
+                        MyCustomVariables.getDefaultUserDetails().getApplicationSettings().getDarkTheme();
+
+                final int itemsColor = !darkThemeEnabled ? Color.WHITE : Color.BLACK;
                 // all spinner elements are aligned to center
                 ((TextView) v).setGravity(Gravity.CENTER);
-
-                if (userDetails != null) {
-                    final boolean darkThemeEnabled = userDetails.getApplicationSettings().getDarkTheme();
-                    final int itemsColor = !darkThemeEnabled ? Color.WHITE : Color.BLACK;
-
-                    // setting text color based on the selected theme
-                    ((TextView) v).setTextColor(itemsColor);
-                }
+                // setting text color based on the selected theme
+                ((TextView) v).setTextColor(itemsColor);
 
                 return v;
             }

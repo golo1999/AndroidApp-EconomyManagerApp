@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -33,42 +34,26 @@ import java.util.TimerTask;
 
 public class MainScreenActivity extends AppCompatActivity {
     private MainScreenViewModel viewModel;
-
     private ConstraintLayout firebaseDatabaseLoadingProgressBarLayout;
-
     private ProgressBar firebaseDatabaseLoadingProgressBar;
-
     private TextView greeting;
-
     private TextView date;
-
     private FloatingActionButton addButton;
-
     private FloatingActionButton subtractButton;
-
     private ImageView signOut;
-
     private ImageView edit;
-
     private ImageView balance;
-
     private TextView moneySpentPercentage;
-
     private ImageView account;
-
     private ImageView settings;
-
     private TextView remainingMonthlyIncomeText;
-
     private TextView monthlyBalanceText;
-
     private TextView lastWeekExpensesText;
-
     private TextView lastTenTransactionsText;
-
     private TextView topFiveExpensesText;
-
     private int timerCounter = 0;
+    private long backPressedTime;
+    private Toast backToast;
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
@@ -88,6 +73,21 @@ public class MainScreenActivity extends AppCompatActivity {
         setTextsBetweenFragments();
         setDates();
         setMoneySpentPercentage();
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (backPressedTime + 2000 > System.currentTimeMillis()) {
+            backToast.cancel();
+            super.onBackPressed();
+            return;
+        } else {
+            backToast = Toast.makeText(this,
+                    getResources().getString(R.string.press_again_exit), Toast.LENGTH_SHORT);
+            backToast.show();
+        }
+
+        backPressedTime = System.currentTimeMillis();
     }
 
     private void setVariables() {
@@ -160,12 +160,12 @@ public class MainScreenActivity extends AppCompatActivity {
     }
 
     private void setActivityTheme() {
-        if (viewModel.getUserDetails() != null) {
-            final boolean darkThemeEnabled = viewModel.getUserDetails().getApplicationSettings().getDarkTheme();
+        final boolean darkThemeEnabled = viewModel.getUserDetails() != null ?
+                viewModel.getUserDetails().getApplicationSettings().getDarkTheme() :
+                MyCustomVariables.getDefaultUserDetails().getApplicationSettings().getDarkTheme();
 
-            getWindow().setBackgroundDrawableResource(!darkThemeEnabled ?
-                    R.drawable.ic_white_gradient_tobacco_ad : R.drawable.ic_black_gradient_night_shift);
-        }
+        getWindow().setBackgroundDrawableResource(!darkThemeEnabled ?
+                R.drawable.ic_white_gradient_tobacco_ad : R.drawable.ic_black_gradient_night_shift);
     }
 
     private void setTimer() {
@@ -250,16 +250,16 @@ public class MainScreenActivity extends AppCompatActivity {
     }
 
     private void setTextsBetweenFragments() {
-        if (viewModel.getUserDetails() != null) {
-            final boolean darkThemeEnabled = viewModel.getUserDetails().getApplicationSettings().getDarkTheme();
+        final boolean darkThemeEnabled = viewModel.getUserDetails() != null ?
+                viewModel.getUserDetails().getApplicationSettings().getDarkTheme() :
+                MyCustomVariables.getDefaultUserDetails().getApplicationSettings().getDarkTheme();
 
-            final int color = !darkThemeEnabled ? Color.parseColor("#195190") : Color.WHITE;
+        final int color = !darkThemeEnabled ? getColor(R.color.turkish_sea) : Color.WHITE;
 
-            remainingMonthlyIncomeText.setTextColor(color);
-            monthlyBalanceText.setTextColor(color);
-            lastWeekExpensesText.setTextColor(color);
-            lastTenTransactionsText.setTextColor(color);
-            topFiveExpensesText.setTextColor(color);
-        }
+        remainingMonthlyIncomeText.setTextColor(color);
+        monthlyBalanceText.setTextColor(color);
+        lastWeekExpensesText.setTextColor(color);
+        lastTenTransactionsText.setTextColor(color);
+        topFiveExpensesText.setTextColor(color);
     }
 }

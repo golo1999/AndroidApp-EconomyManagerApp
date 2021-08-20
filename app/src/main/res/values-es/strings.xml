@@ -73,7 +73,6 @@
     <string name="choose_file">Escoger</string>
     <string name="bottom_nav_main_screen_sign_out">Desconectar</string>
     <string name="bottom_nav_main_screen_balance">Equilibrar</string>
-    <string name="signup_login">Entre aquí</string>
     <string name="custom_dialog_enter_password">Por favor, introduzca su contraseña</string>
     <string name="custom_dialog_old_password">Ingrese la contraseña anterior</string>
     <string name="custom_dialog_new_password">Ingrese nueva clave</string>
@@ -116,7 +115,6 @@
     <string name="email">Correo electrónico</string>
     <string name="expense">Gasto</string>
     <string name="Expenses">Gastos</string>
-    <string name="forgot_forgot">¿Olvidaste tu contraseña?</string>
     <string name="forgot_reset">Restablecer la contraseña</string>
     <string name="forgot_password_email_does_not_exist">El correo electrónico no existe en la base de datos</string>
     <string name="greet_good_morning">¡Buenos días!</string>
@@ -136,7 +134,6 @@
     <string name="last_10_transactions">Últimas 10 transacciones</string>
     <string name="login_forgot_password">Se te olvidó tu contraseña</string>
     <string name="login_login">Accender</string>
-    <string name="login_signup">Registrate aquí</string>
     <string name="login_incorrect_username_password">Nombre de usuario o contraseña incorrecta</string>
     <string name="login_email_not_valid">El correo no es válido</string>
     <string name="login_verify_email">Verifique su correo electrónico</string>

@@ -7,18 +7,17 @@ import android.util.Patterns;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.economy_manager.R;
 import com.example.economy_manager.models.ApplicationSettings;
 import com.example.economy_manager.models.BirthDate;
+import com.example.economy_manager.models.PersonalInformation;
+import com.example.economy_manager.models.UserDetails;
 import com.example.economy_manager.utilities.MyCustomMethods;
 import com.example.economy_manager.utilities.MyCustomSharedPreferences;
 import com.example.economy_manager.utilities.MyCustomVariables;
-import com.example.economy_manager.models.PersonalInformation;
-import com.example.economy_manager.R;
-import com.example.economy_manager.models.UserDetails;
 import com.google.firebase.auth.FirebaseUser;
 
 import java.time.LocalDate;
@@ -26,7 +25,6 @@ import java.time.LocalDate;
 public class SignUpActivity extends AppCompatActivity {
     private SharedPreferences preferences;
     private TextView logIn;
-    private TextView incorrectSignUp;
     private EditText emailField;
     private EditText passwordField;
     private Button signUpButton;
@@ -48,103 +46,102 @@ public class SignUpActivity extends AppCompatActivity {
     }
 
     private void setVariables() {
-        preferences = getSharedPreferences("ECONOMY_MANAGER_USER_DATA", MODE_PRIVATE);
+        preferences = getSharedPreferences(MyCustomVariables.getSharedPreferencesFileName(), MODE_PRIVATE);
         logIn = findViewById(R.id.signup_login);
         signUpButton = findViewById(R.id.signup_button);
         emailField = findViewById(R.id.signup_email);
         passwordField = findViewById(R.id.signup_password);
-        incorrectSignUp = findViewById(R.id.signup_incorrect_signup);
     }
 
     private void setOnClickListeners() {
-        logIn.setOnClickListener(v -> {
-            final Intent intent = new Intent(SignUpActivity.this, LogInActivity.class);
-            startActivity(intent);
-            overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
-        });
+        logIn.setOnClickListener(v -> onBackPressed());
 
-        signUpButton.setOnClickListener(v -> verification());
+        signUpButton.setOnClickListener(v -> {
+            // saving the trimmed email's value
+            final String enteredEmailValue = String.valueOf(emailField.getText()).trim();
+            // saving the password's value
+            final String enteredPasswordValue = String.valueOf(passwordField.getText());
+
+            validation(enteredEmailValue, enteredPasswordValue);
+        });
     }
 
-    private void verification() {
-        // salvam valoarea input-ului din email, fara spatii la inceput sau la final
-        final String val_email = emailField.getText().toString().trim();
-        // salvam valoarea inputului din parola
-        final String val_pass = passwordField.getText().toString();
-
+    private void validation(final String emailValue, final String passwordValue) {
         MyCustomMethods.closeTheKeyboard(this);
-
-        // daca parola are cel putin 7 caractere si email-ul este valid
-        if (val_pass.length() > 6 && Patterns.EMAIL_ADDRESS.matcher(val_email).matches()) {
-            // metoda de inregistrare a Firebase
+        // if the password has got at least 7 characters and the email is valid
+        if (passwordValue.length() > 6 && Patterns.EMAIL_ADDRESS.matcher(emailValue).matches()) {
+            // calling Firebase's register with email and password method
             MyCustomVariables.getFirebaseAuth()
-                    .createUserWithEmailAndPassword(val_email, val_pass).addOnCompleteListener(task -> {
-                // daca se poate crea contul
+                    .createUserWithEmailAndPassword(emailValue, passwordValue).addOnCompleteListener(task -> {
+                // if the account can be created
                 if (task.isSuccessful()) {
                     final FirebaseUser fbUser = MyCustomVariables.getFirebaseAuth().getCurrentUser();
-                    if (fbUser != null)
+
+                    if (fbUser != null) {
                         fbUser.sendEmailVerification().addOnCompleteListener(task1 -> {
                             if (task1.isSuccessful()) {
                                 userDetails = new UserDetails();
-                                Toast.makeText(SignUpActivity.this,
-                                        "Please verify your email",
-                                        Toast.LENGTH_SHORT).show();
+                                MyCustomMethods.showShortMessage(this, "Please verify your email");
                                 createPersonalInformationPath();
                                 createApplicationSettingsPath();
-                                MyCustomSharedPreferences
-                                        .saveUserDetailsToSharedPreferences(preferences,
-                                                userDetails);
+                                MyCustomSharedPreferences.saveUserDetailsToSharedPreferences(preferences, userDetails);
                                 MyCustomVariables.getFirebaseAuth().signOut();
                                 logIn.callOnClick();
                             }
                         });
+                    }
                 }
-                // daca nu se poate crea contul
+                // if the account can't be created
                 else {
-                    // afisam 'eroarea' ca email-ul deja exista
-                    incorrectSignUp.setText(R.string.signup_error1);
-                    passwordField.setText(""); // resetam parola
+                    // showing the error: user already exists
+                    MyCustomMethods.showShortMessage(this, getResources().getString(R.string.signup_error1));
+                    // resetting the password field
+                    emptyField(passwordField);
                 }
             });
         }
-        // daca atat emailul, cat si parola nu contin niciun caracter
-        else if (val_email.isEmpty() && val_pass.isEmpty()) {
-            // afisam 'eroarea'
-            incorrectSignUp.setText(R.string.signup_error2);
+        // if both email and password are empty
+        else if (emailValue.isEmpty() && passwordValue.isEmpty()) {
+            // showing the error
+            MyCustomMethods.showShortMessage(this, getResources().getString(R.string.signup_error2));
         }
-        // daca doar emailul nu contine niciun caracter
-        else if (val_email.isEmpty()) {
-            // afisam 'eroarea'
-            incorrectSignUp.setText(R.string.signup_error3);
-            passwordField.setText(""); // resetam parola
+        // if only the email is empty
+        else if (emailValue.isEmpty()) {
+            // showing the error
+            MyCustomMethods.showShortMessage(this, getResources().getString(R.string.signup_error3));
+            // resetting the password field
+            emptyField(passwordField);
         }
-        // daca doar parola nu contine caractere
-        else if (val_pass.isEmpty()) {
-            // afisam 'eroarea'
-            incorrectSignUp.setText(R.string.signup_error4);
+        // if only the password is empty
+        else if (passwordValue.isEmpty()) {
+            // showing the error
+            MyCustomMethods.showShortMessage(this, getResources().getString(R.string.signup_error4));
         }
-        // daca parola este prea scurta si email-ul nu este valid
-        else if (val_pass.length() < 7 && !Patterns.EMAIL_ADDRESS.matcher(val_email).matches()) {
-            // afisam 'eroarea'
-            incorrectSignUp.setText(R.string.signup_error5);
-            passwordField.setText(""); // resetam parola
+        // if the password is too short and the email isn't valid
+        else if (passwordValue.length() < 7 && !Patterns.EMAIL_ADDRESS.matcher(emailValue).matches()) {
+            // showing the error
+            MyCustomMethods.showShortMessage(this, getResources().getString(R.string.signup_error5));
+            // resetting the password field
+            emptyField(passwordField);
         }
-        // daca email-ul nu este valid
-        else if (!Patterns.EMAIL_ADDRESS.matcher(val_email).matches()) {
-            // afisam 'eroarea'
-            incorrectSignUp.setText(R.string.signup_error6);
-            passwordField.setText(""); // resetam parola
+        // if the email isn't valid
+        else if (!Patterns.EMAIL_ADDRESS.matcher(emailValue).matches()) {
+            // showing the error
+            MyCustomMethods.showShortMessage(this, getResources().getString(R.string.signup_error6));
+            // resetting the password field
+            emptyField(passwordField);
         }
-        // daca parola este prea scurta
+        // if the password is too short
         else {
-            // afisam 'eroarea'
-            incorrectSignUp.setText(R.string.signup_error7);
-            passwordField.setText(""); // resetam parola
+            // showing the error
+            MyCustomMethods.showShortMessage(this, getResources().getString(R.string.signup_error7));
+            // resetting the password field
+            emptyField(passwordField);
         }
     }
 
     private void createPersonalInformationPath() {
-        PersonalInformation information = new PersonalInformation("", "",
+        final PersonalInformation information = new PersonalInformation("", "",
                 "", "", "", "",
                 new BirthDate(LocalDate.now()), "", "");
 
@@ -159,7 +156,7 @@ public class SignUpActivity extends AppCompatActivity {
     }
 
     private void createApplicationSettingsPath() {
-        ApplicationSettings settings = new ApplicationSettings("GBP");
+        final ApplicationSettings settings = new ApplicationSettings("GBP");
 
         userDetails.setApplicationSettings(settings);
 
@@ -169,5 +166,9 @@ public class SignUpActivity extends AppCompatActivity {
                     .child("ApplicationSettings")
                     .setValue(settings);
         }
+    }
+
+    private void emptyField(final EditText field) {
+        field.setText("");
     }
 }

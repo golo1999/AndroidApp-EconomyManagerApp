@@ -7,18 +7,16 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.economy_manager.R;
 import com.example.economy_manager.utilities.MyCustomMethods;
 import com.example.economy_manager.utilities.MyCustomVariables;
-import com.example.economy_manager.R;
 
 public class ForgotPasswordActivity extends AppCompatActivity implements View.OnClickListener {
     private TextView logIn;
     private TextView signUp;
-    private TextView incorrectEmail;
     private Button forgotButton;
     private EditText emailField;
 
@@ -42,7 +40,6 @@ public class ForgotPasswordActivity extends AppCompatActivity implements View.On
         signUp = findViewById(R.id.forgot_signup);
         forgotButton = findViewById(R.id.forgot_button);
         emailField = findViewById(R.id.forgot_email);
-        incorrectEmail = findViewById(R.id.forgot_incorrect_email);
     }
 
     private void setOnClickListeners() {
@@ -55,13 +52,13 @@ public class ForgotPasswordActivity extends AppCompatActivity implements View.On
     public void onClick(View view) {
         final int clickedButtonId = view.getId();
 
-        // if the clicked button is the one for authentication or for registration
-        if (clickedButtonId == logIn.getId() || clickedButtonId == signUp.getId()) {
-            final Intent intent = new Intent(ForgotPasswordActivity.this,
-                    clickedButtonId == logIn.getId() ?
-                            LogInActivity.class : SignUpActivity.class);
-
-            startActivity(intent);
+        // if the clicked button is the one for authentication
+        if (clickedButtonId == logIn.getId()) {
+            onBackPressed();
+        }
+        // if the clicked button is the one for registration
+        else if (clickedButtonId == signUp.getId()) {
+            startActivity(new Intent(ForgotPasswordActivity.this, SignUpActivity.class));
             overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
         }
         // if the clicked button is the one for forgot password
@@ -75,19 +72,18 @@ public class ForgotPasswordActivity extends AppCompatActivity implements View.On
         if (Patterns.EMAIL_ADDRESS.matcher(emailText).matches()) {
             MyCustomVariables.getFirebaseAuth().sendPasswordResetEmail(emailText).addOnCompleteListener(task -> {
                 if (task.isSuccessful()) {
-                    Toast.makeText(ForgotPasswordActivity.this,
-                            "Password reset sent",
-                            Toast.LENGTH_LONG).show();
-
+                    MyCustomMethods.showLongMessage(this, "Password reset sent");
                     finish();
                     overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
                 } else {
-                    incorrectEmail.setText(R.string.forgot_password_email_does_not_exist);
+                    MyCustomMethods.showShortMessage(this,
+                            getResources().getString(R.string.forgot_password_email_does_not_exist));
                 }
             });
         } else {
-            incorrectEmail.setText(emailText.isEmpty() ?
-                    R.string.signup_error3 : R.string.login_email_not_valid);
+            MyCustomMethods.showShortMessage(this, emailText.isEmpty() ?
+                    getResources().getString(R.string.signup_error3) :
+                    getResources().getString(R.string.login_email_not_valid));
         }
     }
 }

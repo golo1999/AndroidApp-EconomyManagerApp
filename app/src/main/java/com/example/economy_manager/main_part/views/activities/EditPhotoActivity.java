@@ -10,13 +10,16 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.example.economy_manager.R;
+import com.example.economy_manager.models.UserDetails;
+import com.example.economy_manager.utilities.MyCustomMethods;
+import com.example.economy_manager.utilities.MyCustomSharedPreferences;
 import com.example.economy_manager.utilities.MyCustomVariables;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
@@ -27,11 +30,15 @@ import com.google.firebase.storage.StorageReference;
 import com.squareup.picasso.Picasso;
 
 public class EditPhotoActivity extends AppCompatActivity {
+    private UserDetails userDetails;
+
+    private ConstraintLayout topLayout;
+
     private ImageView goBack;
 
     private ImageView uploadedFile;
 
-    private TextView text;
+    private TextView topText;
 
     private ProgressBar progressBar;
 
@@ -50,7 +57,7 @@ public class EditPhotoActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.edit_photo_activity);
         setVariables();
-        setTheme();
+        setTopLayout();
         setOnClickListeners();
         setText();
         setInitialProgressBar();
@@ -65,8 +72,10 @@ public class EditPhotoActivity extends AppCompatActivity {
     }
 
     private void setVariables() {
+        userDetails = MyCustomSharedPreferences.retrieveUserDetailsFromSharedPreferences(this);
+        topLayout = findViewById(R.id.editPhotoTopLayout);
         goBack = findViewById(R.id.editPhotoBack);
-        text = findViewById(R.id.editPhotoText);
+        topText = findViewById(R.id.editPhotoText);
         progressBar = findViewById(R.id.editPhotoProgressBar);
         chooseFileButton = findViewById(R.id.editPhotoChooseFile);
         uploadFileButton = findViewById(R.id.editPhotoUploadFile);
@@ -83,10 +92,11 @@ public class EditPhotoActivity extends AppCompatActivity {
     }
 
     private void setText() {
-        String textToBeShown = getResources().getString(R.string.edit_photo_title).trim();
-        text.setText(textToBeShown);
-        text.setTextSize(20);
-        text.setTextColor(Color.WHITE);
+        final String textToBeShown = getResources().getString(R.string.edit_photo_title).trim();
+
+        topText.setText(textToBeShown);
+        topText.setTextSize(20);
+        topText.setTextColor(Color.WHITE);
     }
 
     private void setInitialProgressBar() {
@@ -126,9 +136,9 @@ public class EditPhotoActivity extends AppCompatActivity {
                                 progressBar.setProgress(0);
                                 progressBar.setVisibility(View.INVISIBLE);
                             }, 500);
-                            Toast.makeText(EditPhotoActivity.this,
-                                    getResources().getString(R.string.edit_photo_upload_successful),
-                                    Toast.LENGTH_SHORT).show();
+
+                            MyCustomMethods.showShortMessage(this,
+                                    getResources().getString(R.string.edit_photo_upload_successful));
 
                             final Task<Uri> uriTask = taskSnapshot.getStorage().getDownloadUrl();
 
@@ -142,18 +152,20 @@ public class EditPhotoActivity extends AppCompatActivity {
                                     .child("photoURL")
                                     .setValue(String.valueOf(url));
                         })
-                        .addOnFailureListener(e -> Toast.makeText(EditPhotoActivity.this,
-                                e.getMessage(),
-                                Toast.LENGTH_SHORT).show())
+                        .addOnFailureListener(e -> MyCustomMethods.showShortMessage(this, e.getMessage()))
                         .addOnProgressListener(taskSnapshot -> {
-                            final float progress =
-                                    100 * taskSnapshot.getBytesTransferred() / (float) taskSnapshot.getTotalByteCount();
+                            final long taskSnapshotBytesTransferred = taskSnapshot.getBytesTransferred();
+
+                            final float taskSnapshotTotalByteCount = (float) taskSnapshot.getTotalByteCount();
+
+                            final float progress = 100 * taskSnapshotBytesTransferred / taskSnapshotTotalByteCount;
 
                             progressBar.setProgress((int) progress);
                         });
             }
-        } else
-            Toast.makeText(this, getResources().getString(R.string.edit_photo_select_file), Toast.LENGTH_SHORT).show();
+        } else {
+            MyCustomMethods.showShortMessage(this, getResources().getString(R.string.edit_photo_select_file));
+        }
     }
 
     private void setPhoto() {
@@ -187,9 +199,11 @@ public class EditPhotoActivity extends AppCompatActivity {
         }
     }
 
-    private void setTheme() {
-        final int theme = R.drawable.ic_yellow_gradient_soda;
+    private void setTopLayout() {
+//        topLayout.setBackgroundColor(userDetails != null &&
+//                userDetails.getApplicationSettings().getDarkTheme() ?
+//                Color.parseColor("#195190") : Color.parseColor("#A2A2A1"));
 
-        getWindow().setBackgroundDrawableResource(theme);
+        topLayout.setBackgroundColor(Color.RED);
     }
 }

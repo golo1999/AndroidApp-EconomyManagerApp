@@ -10,7 +10,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -78,34 +77,20 @@ public class SubtractMoneyActivity extends AppCompatActivity {
         Collections.sort(buttonTextArray);
 
         for (int i = 0; i < buttonTextArray.size(); i++) {
-            final int ID = buttonTextArray.get(i)
-                    .equals(getResources().getString(R.string.subtract_money_bills).trim()) ?
-                    R.id.subtractMoneyRadioButtonBills : buttonTextArray.get(i)
-                    .equals(getResources().getString(R.string.subtract_money_car).trim()) ?
-                    R.id.subtractMoneyRadioButtonCar : buttonTextArray.get(i)
-                    .equals(getResources().getString(R.string.subtract_money_clothes).trim()) ?
-                    R.id.subtractMoneyRadioButtonClothes : buttonTextArray.get(i)
-                    .equals(getResources().getString(R.string.subtract_money_communications).trim()) ?
-                    R.id.subtractMoneyRadioButtonCommunications : buttonTextArray.get(i)
-                    .equals(getResources().getString(R.string.subtract_money_eating_out).trim()) ?
-                    R.id.subtractMoneyRadioButtonEatingOut : buttonTextArray.get(i)
-                    .equals(getResources().getString(R.string.subtract_money_entertainment).trim()) ?
-                    R.id.subtractMoneyRadioButtonEntertainment : buttonTextArray.get(i)
-                    .equals(getResources().getString(R.string.subtract_money_food).trim()) ?
-                    R.id.subtractMoneyRadioButtonFood : buttonTextArray.get(i)
-                    .equals(getResources().getString(R.string.subtract_money_gifts).trim()) ?
-                    R.id.subtractMoneyRadioButtonGifts : buttonTextArray.get(i)
-                    .equals(getResources().getString(R.string.subtract_money_health).trim()) ?
-                    R.id.subtractMoneyRadioButtonHealth : buttonTextArray.get(i)
-                    .equals(getResources().getString(R.string.subtract_money_house).trim()) ?
-                    R.id.subtractMoneyRadioButtonHouse : buttonTextArray.get(i)
-                    .equals(getResources().getString(R.string.subtract_money_pets).trim()) ?
-                    R.id.subtractMoneyRadioButtonPets : buttonTextArray.get(i)
-                    .equals(getResources().getString(R.string.subtract_money_sports).trim()) ?
-                    R.id.subtractMoneyRadioButtonSports : buttonTextArray.get(i)
-                    .equals(getResources().getString(R.string.subtract_money_taxi).trim()) ?
-                    R.id.subtractMoneyRadioButtonTaxi : buttonTextArray.get(i)
-                    .equals(getResources().getString(R.string.subtract_money_toiletry).trim()) ?
+            final int ID = buttonTextArray.get(i).equals(getResources().getString(R.string.subtract_money_bills).trim()) ?
+                    R.id.subtractMoneyRadioButtonBills : buttonTextArray.get(i).equals(getResources().getString(R.string.subtract_money_car).trim()) ?
+                    R.id.subtractMoneyRadioButtonCar : buttonTextArray.get(i).equals(getResources().getString(R.string.subtract_money_clothes).trim()) ?
+                    R.id.subtractMoneyRadioButtonClothes : buttonTextArray.get(i).equals(getResources().getString(R.string.subtract_money_communications).trim()) ?
+                    R.id.subtractMoneyRadioButtonCommunications : buttonTextArray.get(i).equals(getResources().getString(R.string.subtract_money_eating_out).trim()) ?
+                    R.id.subtractMoneyRadioButtonEatingOut : buttonTextArray.get(i).equals(getResources().getString(R.string.subtract_money_entertainment).trim()) ?
+                    R.id.subtractMoneyRadioButtonEntertainment : buttonTextArray.get(i).equals(getResources().getString(R.string.subtract_money_food).trim()) ?
+                    R.id.subtractMoneyRadioButtonFood : buttonTextArray.get(i).equals(getResources().getString(R.string.subtract_money_gifts).trim()) ?
+                    R.id.subtractMoneyRadioButtonGifts : buttonTextArray.get(i).equals(getResources().getString(R.string.subtract_money_health).trim()) ?
+                    R.id.subtractMoneyRadioButtonHealth : buttonTextArray.get(i).equals(getResources().getString(R.string.subtract_money_house).trim()) ?
+                    R.id.subtractMoneyRadioButtonHouse : buttonTextArray.get(i).equals(getResources().getString(R.string.subtract_money_pets).trim()) ?
+                    R.id.subtractMoneyRadioButtonPets : buttonTextArray.get(i).equals(getResources().getString(R.string.subtract_money_sports).trim()) ?
+                    R.id.subtractMoneyRadioButtonSports : buttonTextArray.get(i).equals(getResources().getString(R.string.subtract_money_taxi).trim()) ?
+                    R.id.subtractMoneyRadioButtonTaxi : buttonTextArray.get(i).equals(getResources().getString(R.string.subtract_money_toiletry).trim()) ?
                     R.id.subtractMoneyRadioButtonToiletry : R.id.subtractMoneyRadioButtonTransport;
 
             radioButton1[i] = new RadioButton(this);
@@ -150,10 +135,9 @@ public class SubtractMoneyActivity extends AppCompatActivity {
                                 .child(newTransaction.getId())
                                 .setValue(newTransaction)
                                 .addOnSuccessListener(aVoid -> {
-                                    Toast.makeText(SubtractMoneyActivity.this,
+                                    MyCustomMethods.showShortMessage(this,
                                             getResources().getString(R.string.expense) + " " +
-                                                    getResources().getString(R.string.add_money_added_successfully),
-                                            Toast.LENGTH_SHORT).show();
+                                                    getResources().getString(R.string.add_money_added_successfully));
                                     finish();
                                     overridePendingTransition(R.anim.slide_in_left,
                                             R.anim.slide_out_right);
@@ -164,16 +148,16 @@ public class SubtractMoneyActivity extends AppCompatActivity {
                                             .child("PersonalTransactions")
                                             .child(newTransaction.getId())
                                             .removeValue();
-                                    Toast.makeText(SubtractMoneyActivity.this,
-                                            "Try again",
-                                            Toast.LENGTH_SHORT).show();
+
+                                    MyCustomMethods.showShortMessage(this,
+                                            "Try again");
                                 });
                     }
                 } else {
-                    Toast.makeText(SubtractMoneyActivity.this, R.string.money_error4, Toast.LENGTH_SHORT).show();
+                    MyCustomMethods.showShortMessage(this, getResources().getString(R.string.money_error4));
                 }
             } else {
-                Toast.makeText(SubtractMoneyActivity.this, R.string.money_error1, Toast.LENGTH_SHORT).show();
+                MyCustomMethods.showShortMessage(this, getResources().getString(R.string.money_error1));
             }
         });
 

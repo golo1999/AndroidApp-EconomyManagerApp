@@ -10,7 +10,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -67,12 +66,9 @@ public class AddMoneyActivity extends AppCompatActivity {
         Collections.sort(buttonTextArray);
 
         for (int i = 0; i < buttonTextArray.size(); i++) {
-            final int ID = buttonTextArray.get(i)
-                    .equals(getResources().getString(R.string.add_money_deposits).trim()) ?
-                    R.id.addMoneyRadioButtonDeposits : buttonTextArray.get(i)
-                    .equals(getResources().getString(R.string.add_money_independent_sources).trim()) ?
-                    R.id.addMoneyRadioButtonIndependentSources : buttonTextArray.get(i)
-                    .equals(getResources().getString(R.string.salary).trim()) ?
+            final int ID = buttonTextArray.get(i).equals(getResources().getString(R.string.add_money_deposits).trim()) ?
+                    R.id.addMoneyRadioButtonDeposits : buttonTextArray.get(i).equals(getResources().getString(R.string.add_money_independent_sources).trim()) ?
+                    R.id.addMoneyRadioButtonIndependentSources : buttonTextArray.get(i).equals(getResources().getString(R.string.salary).trim()) ?
                     R.id.addMoneyRadioButtonSalary : R.id.addMoneyRadioButtonSaving;
 
             radioButton1[i] = new RadioButton(this);
@@ -116,10 +112,9 @@ public class AddMoneyActivity extends AppCompatActivity {
                                 .child(newTransaction.getId())
                                 .setValue(newTransaction)
                                 .addOnSuccessListener(aVoid -> {
-                                    Toast.makeText(AddMoneyActivity.this,
+                                    MyCustomMethods.showShortMessage(this,
                                             getResources().getString(R.string.income) + " " +
-                                                    getResources().getString(R.string.add_money_added_successfully),
-                                            Toast.LENGTH_SHORT).show();
+                                                    getResources().getString(R.string.add_money_added_successfully));
 
                                     finish();
                                     overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
@@ -131,18 +126,17 @@ public class AddMoneyActivity extends AppCompatActivity {
                                             .child(newTransaction.getId())
                                             .removeValue();
 
-                                    Toast.makeText(AddMoneyActivity.this,
-                                            "Try again",
-                                            Toast.LENGTH_SHORT).show();
+                                    MyCustomMethods.showShortMessage(this,
+                                            "Try again");
                                 });
                     }
                 } else {
-                    Toast.makeText(AddMoneyActivity.this, R.string.money_error4, Toast.LENGTH_SHORT).show();
+                    MyCustomMethods.showShortMessage(this, getResources().getString(R.string.money_error4));
                 }
             }
             // if there wasn't a radio button checked
             else {
-                Toast.makeText(AddMoneyActivity.this, R.string.money_error1, Toast.LENGTH_SHORT).show();
+                MyCustomMethods.showShortMessage(this, getResources().getString(R.string.money_error1));
             }
         });
 
@@ -184,8 +178,7 @@ public class AddMoneyActivity extends AppCompatActivity {
                     // if we add more than two decimals
                     if (textLength - positionOfComma > 3) {
                         // putting only the first two decimals
-                        valueField.setText(String.valueOf(valueField.getText())
-                                .substring(0, positionOfComma + 3));
+                        valueField.setText(String.valueOf(valueField.getText()).substring(0, positionOfComma + 3));
                         // putting the cursor at the end
                         valueField.setSelection(String.valueOf(valueField.getText()).length());
                     }

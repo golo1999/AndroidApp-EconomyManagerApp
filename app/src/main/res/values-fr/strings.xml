@@ -106,7 +106,6 @@
     <string name="email">Email</string>
     <string name="expense">Frais</string>
     <string name="Expenses">Dépenses</string>
-    <string name="forgot_forgot">Mot de passe oublié?</string>
     <string name="forgot_reset">Réinitialiser le mot de passe</string>
     <string name="forgot_password_email_does_not_exist">L\'email n\'existe pas dans la base de données</string>
     <string name="hour">Heure</string>
@@ -117,7 +116,6 @@
     <string name="login_forgot_password">Mot de passe oublié</string>
     <string name="login_login">S\'identifier</string>
     <string name="login_no_account">Vous n\'avez pas de compte?&#160;</string>
-    <string name="login_signup">Inscrivez-vous ici</string>
     <string name="login_incorrect_username_password">Identifiant ou mot de passe incorrect</string>
     <string name="login_email_not_valid">L\'email n\'est pas valide</string>
     <string name="login_verify_email">Veuillez vérifier votre email</string>
@@ -173,7 +171,6 @@
     <string name="signup_error6">Veuillez saisir un e-mail valide</string>
     <string name="signup_error7">Le mot de passe doit comporter au moins 7 caractères</string>
     <string name="signup_signup">S\'inscrire</string>
-    <string name="signup_login">Connectez-vous ici</string>
     <string name="subtract_money_title">Nouvelle dépense</string>
     <string name="subtract_money_bills">Factures</string>
     <string name="subtract_money_car">Voiture</string>

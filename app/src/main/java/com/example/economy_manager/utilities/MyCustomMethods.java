@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
@@ -47,5 +48,13 @@ public final class MyCustomMethods {
         currentActivity.overridePendingTransition(direction == 0 ?
                         R.anim.slide_in_left : R.anim.slide_in_right,
                 direction == 0 ? R.anim.slide_out_right : R.anim.slide_out_left);
+    }
+
+    public static void showShortMessage(final Context context, final String message) {
+        Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
+    }
+
+    public static void showLongMessage(final Context context, final String message) {
+        Toast.makeText(context, message, Toast.LENGTH_LONG).show();
     }
 }

@@ -11,13 +11,13 @@ import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.economy_manager.R;
 import com.example.economy_manager.main_part.views.activities.MainScreenActivity;
 import com.example.economy_manager.models.ApplicationSettings;
 import com.example.economy_manager.models.BirthDate;
+import com.example.economy_manager.models.PersonalInformation;
 import com.example.economy_manager.utilities.MyCustomMethods;
 import com.example.economy_manager.utilities.MyCustomVariables;
-import com.example.economy_manager.models.PersonalInformation;
-import com.example.economy_manager.R;
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
@@ -43,10 +43,9 @@ import java.util.Arrays;
 public class LogInActivity extends AppCompatActivity {
     private TextView signUp;
     private TextView forgotPassword;
-    private TextView incorrectLogin;
-    private Button logIn;
-    private LoginButton facebookLogIn;
-    private SignInButton googleLogIn;
+    private Button logInButton;
+    private LoginButton facebookLogInButton;
+    private SignInButton googleLogInButton;
     private EditText emailField;
     private EditText passwordField;
     private CallbackManager manager;
@@ -74,12 +73,11 @@ public class LogInActivity extends AppCompatActivity {
     private void setVariables() {
         signUp = findViewById(R.id.login_create_account);
         forgotPassword = findViewById(R.id.login_forgot_password);
-        logIn = findViewById(R.id.login_button);
+        logInButton = findViewById(R.id.login_button);
         emailField = findViewById(R.id.login_email);
         passwordField = findViewById(R.id.login_password);
-        incorrectLogin = findViewById(R.id.login_incorrect_login);
-        facebookLogIn = findViewById(R.id.login_button_facebook);
-        googleLogIn = findViewById(R.id.login_button_google);
+        facebookLogInButton = findViewById(R.id.login_button_facebook);
+        googleLogInButton = findViewById(R.id.login_button_google);
     }
 
     private void setOnClickListeners() {
@@ -89,7 +87,7 @@ public class LogInActivity extends AppCompatActivity {
             overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left); // slide dinspre dreapta spre stanga
         });
 
-        facebookLogIn.setOnClickListener(v -> buttonClickLoginFacebook());
+        facebookLogInButton.setOnClickListener(v -> buttonClickLoginFacebook());
 
         forgotPassword.setOnClickListener(v -> {
             Intent intent = new Intent(LogInActivity.this, ForgotPasswordActivity.class);
@@ -97,12 +95,12 @@ public class LogInActivity extends AppCompatActivity {
             overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
         });
 
-        googleLogIn.setOnClickListener(v -> {
+        googleLogInButton.setOnClickListener(v -> {
             googleOrFacebookInsideOnActivityResult = 1;
             googleSignIn();
         });
 
-        logIn.setOnClickListener(v -> validation(String.valueOf(emailField.getText()).trim(),
+        logInButton.setOnClickListener(v -> validation(String.valueOf(emailField.getText()).trim(),
                 String.valueOf(passwordField.getText())));
     }
 
@@ -126,7 +124,8 @@ public class LogInActivity extends AppCompatActivity {
                 } else {
                     // in cazul in care atat email-ul, cat si parola sunt valide,
                     // dar nu corespund informatiilor din baza de date Firebase
-                    incorrectLogin.setText(R.string.login_incorrect_username_password);
+                    MyCustomMethods.showShortMessage(this,
+                            getResources().getString(R.string.login_incorrect_username_password));
                     passwordField.setText(""); // stergem parola
                 }
             });
@@ -135,25 +134,31 @@ public class LogInActivity extends AppCompatActivity {
         else {
             MyCustomMethods.closeTheKeyboard(this);
             // daca atat email-ul, cat si parola nu contin niciun caracter
-            if (_email.isEmpty() && _password.isEmpty())
-                incorrectLogin.setText(R.string.signup_error2);
-            else if (_email.isEmpty()) // daca email-ul nu contine niciun caracter
-            {
-                incorrectLogin.setText(R.string.signup_error3);
+            if (_email.isEmpty() && _password.isEmpty()) {
+                MyCustomMethods.showShortMessage(this, getResources().getString(R.string.signup_error2));
+            }
+            // daca email-ul nu contine niciun caracter
+            else if (_email.isEmpty()) {
+                MyCustomMethods.showShortMessage(this, getResources().getString(R.string.signup_error3));
                 passwordField.setText("");
-            } else if (_password.isEmpty()) // daca parola nu contine niciun caracter
-                incorrectLogin.setText(R.string.signup_error4);
-            else if (!Patterns.EMAIL_ADDRESS.matcher(_email).matches() && _password.length() < 4) // daca email-ul nu are forma valida si parola este prea scurta
-            {
-                incorrectLogin.setText(R.string.signup_error5);
+            }
+            // daca parola nu contine niciun caracter
+            else if (_password.isEmpty()) {
+                MyCustomMethods.showShortMessage(this, getResources().getString(R.string.signup_error4));
+            }
+            // daca email-ul nu are forma valida si parola este prea scurta
+            else if (!Patterns.EMAIL_ADDRESS.matcher(_email).matches() && _password.length() < 4) {
+                MyCustomMethods.showShortMessage(this, getResources().getString(R.string.signup_error5));
                 passwordField.setText("");
-            } else if (!Patterns.EMAIL_ADDRESS.matcher(_email).matches()) // daca email-ul nu are forma valida, dar parola este in regula
-            {
-                incorrectLogin.setText(R.string.login_email_not_valid);
+            }
+            // daca email-ul nu are forma valida, dar parola este in regula
+            else if (!Patterns.EMAIL_ADDRESS.matcher(_email).matches()) {
+                MyCustomMethods.showShortMessage(this, getResources().getString(R.string.login_email_not_valid));
                 passwordField.setText("");
-            } else // daca parola este prea scurta, dar email-ul este in regula
-            {
-                incorrectLogin.setText(R.string.signup_error7);
+            }
+            // daca parola este prea scurta, dar email-ul este in regula
+            else {
+                MyCustomMethods.showShortMessage(this, getResources().getString(R.string.signup_error7));
                 passwordField.setText("");
             }
         }
@@ -186,7 +191,7 @@ public class LogInActivity extends AppCompatActivity {
     private void initializeFacebookLogin() {
         FacebookSdk.sdkInitialize(getApplicationContext());
         manager = CallbackManager.Factory.create();
-        facebookLogIn.setReadPermissions(Arrays.asList("email", "public_profile"));
+        facebookLogInButton.setReadPermissions(Arrays.asList("email", "public_profile"));
     }
 
     private void buttonClickLoginFacebook() {
@@ -225,7 +230,7 @@ public class LogInActivity extends AppCompatActivity {
     }
 
     private void setGoogleButtonSize() {
-        googleLogIn.setSize(SignInButton.SIZE_STANDARD);
+        googleLogInButton.setSize(SignInButton.SIZE_STANDARD);
     }
 
     private void setGoogleRequest() {
@@ -248,14 +253,15 @@ public class LogInActivity extends AppCompatActivity {
                     createApplicationSettingsPath();
                     goToTheMainScreen();
                 }
-            } else
+            } else {
                 Toast.makeText(getApplicationContext(), "Google authentication failed", Toast.LENGTH_SHORT).show();
+            }
         });
     }
 
     private void createPersonalInformationPath() {
-        PersonalInformation information = new PersonalInformation("", "", "", "",
-                "", "", new BirthDate(LocalDate.now()), "", "");
+        final PersonalInformation information = new PersonalInformation("", "", "",
+                "", "", "", new BirthDate(LocalDate.now()), "", "");
         if (MyCustomVariables.getFirebaseAuth().getUid() != null) {
             MyCustomVariables.getDatabaseReference()
                     .child(MyCustomVariables.getFirebaseAuth().getUid())
@@ -265,7 +271,8 @@ public class LogInActivity extends AppCompatActivity {
     }
 
     private void createApplicationSettingsPath() {
-        ApplicationSettings settings = new ApplicationSettings("GBP");
+        final ApplicationSettings settings = new ApplicationSettings("GBP");
+
         if (MyCustomVariables.getFirebaseAuth().getUid() != null) {
             MyCustomVariables.getDatabaseReference()
                     .child(MyCustomVariables.getFirebaseAuth().getUid())
@@ -275,7 +282,8 @@ public class LogInActivity extends AppCompatActivity {
     }
 
     private void goToTheMainScreen() {
-        Intent intent = new Intent(LogInActivity.this, MainScreenActivity.class);
+        final Intent intent = new Intent(LogInActivity.this, MainScreenActivity.class);
+
         Toast.makeText(LogInActivity.this, "Login successful", Toast.LENGTH_SHORT).show();
         finishAffinity();
         startActivity(intent); // incepem activitatea urmatoare

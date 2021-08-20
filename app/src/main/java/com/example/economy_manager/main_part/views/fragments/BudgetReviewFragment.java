@@ -112,7 +112,9 @@ public class BudgetReviewFragment extends Fragment {
         } else {
             final String currencySymbol = userDetails != null ?
                     userDetails.getApplicationSettings().getCurrencySymbol() : MyCustomMethods.getCurrencySymbol();
+
             final float totalMonthlyIncomes = 0f;
+
             final float totalMonthlyExpenses = 0f;
 
             incomesText.setText(Locale.getDefault().getDisplayLanguage().equals("English") ?

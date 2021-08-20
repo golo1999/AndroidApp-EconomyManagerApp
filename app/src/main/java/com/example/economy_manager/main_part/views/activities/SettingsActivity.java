@@ -17,7 +17,6 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -46,14 +45,23 @@ public class SettingsActivity extends AppCompatActivity
         implements DeleteAccountCustomDialog.CustomDialogListener,
         ChangePasswordCustomDialog.CustomDialogListener {
     private UserDetails userDetails;
+
     private SharedPreferences preferences;
+
     private ImageView goBack;
+
     private Button resetDatabase;
+
     private Button deleteAccount;
+
     private Button changePassword;
+
     private Spinner currencySelector;
+
     private TextView themeText;
+
     private TextView currencyText;
+
     private SwitchCompat darkThemeSwitch;
 
     @Override
@@ -249,31 +257,26 @@ public class SettingsActivity extends AppCompatActivity
                         if (task.isSuccessful()) {
                             user.updatePassword(newPassword).addOnCompleteListener(task1 -> {
                                 if (task1.isSuccessful()) {
-                                    Toast.makeText(SettingsActivity.this,
-                                            getResources().getString(R.string.settings_password_updated),
-                                            Toast.LENGTH_SHORT).show();
+                                    MyCustomMethods.showShortMessage(this,
+                                            getResources().getString(R.string.settings_password_updated));
                                 }
                             });
                         } else {
-                            Toast.makeText(SettingsActivity.this,
-                                    getResources().getString(R.string.settings_email_password_no_match),
-                                    Toast.LENGTH_SHORT).show();
+                            MyCustomMethods.showShortMessage(this,
+                                    getResources().getString(R.string.settings_email_password_no_match));
                         }
                     });
                 }
             }
         } else if (oldPassword.trim().isEmpty() && newPassword.trim().isEmpty()) {
-            Toast.makeText(this,
-                    getResources().getString(R.string.settings_passwords_not_empty),
-                    Toast.LENGTH_SHORT).show();
+            MyCustomMethods.showShortMessage(this,
+                    getResources().getString(R.string.settings_passwords_not_empty));
         } else if (oldPassword.trim().isEmpty()) {
-            Toast.makeText(this,
-                    getResources().getString(R.string.settings_old_password_not_empty),
-                    Toast.LENGTH_SHORT).show();
+            MyCustomMethods.showShortMessage(this,
+                    getResources().getString(R.string.settings_old_password_not_empty));
         } else {
-            Toast.makeText(this,
-                    getResources().getString(R.string.settings_new_password_not_empty),
-                    Toast.LENGTH_SHORT).show();
+            MyCustomMethods.showShortMessage(this,
+                    getResources().getString(R.string.settings_new_password_not_empty));
         }
         MyCustomMethods.closeTheKeyboard(this);
     }
@@ -301,20 +304,20 @@ public class SettingsActivity extends AppCompatActivity
                                 finishAffinity();
                                 startActivity(intent);
                                 overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
-                                Toast.makeText(SettingsActivity.this,
-                                        getResources().getString(R.string.settings_account_deleted),
-                                        Toast.LENGTH_SHORT).show();
+
+                                MyCustomMethods.showShortMessage(this,
+                                        getResources().getString(R.string.settings_account_deleted));
                             });
                         } else
-                            Toast.makeText(SettingsActivity.this,
-                                    getResources().getString(R.string.settings_email_password_no_match),
-                                    Toast.LENGTH_SHORT).show();
+                            MyCustomMethods.showShortMessage(this,
+                                    getResources().getString(R.string.settings_email_password_no_match));
                         MyCustomMethods.closeTheKeyboard(this);
                     });
                 }
             }
-        } else
-            Toast.makeText(this, getResources().getString(R.string.signup_error4), Toast.LENGTH_SHORT).show();
+        } else {
+            MyCustomMethods.showShortMessage(this, getResources().getString(R.string.signup_error4));
+        }
     }
 
     @Override
@@ -351,9 +354,9 @@ public class SettingsActivity extends AppCompatActivity
                     finishAffinity();
                     startActivity(intent);
                     overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
-                    Toast.makeText(SettingsActivity.this,
-                            getResources().getString(R.string.settings_account_deleted),
-                            Toast.LENGTH_SHORT).show();
+
+                    MyCustomMethods.showShortMessage(this,
+                            getResources().getString(R.string.settings_account_deleted));
                 });
             });
         }
@@ -377,19 +380,20 @@ public class SettingsActivity extends AppCompatActivity
                                     .child("PersonalTransactions")
                                     .removeValue();
 
-                            Toast.makeText(SettingsActivity.this,
-                                    getResources().getString(R.string.settings_database_reset),
-                                    Toast.LENGTH_SHORT).show();
-                        } else
-                            Toast.makeText(SettingsActivity.this,
-                                    getResources().getString(R.string.settings_email_password_no_match),
-                                    Toast.LENGTH_SHORT).show();
+                            MyCustomMethods.showShortMessage(this,
+                                    getResources().getString(R.string.settings_database_reset));
+                        } else {
+                            MyCustomMethods.showShortMessage(this,
+                                    getResources().getString(R.string.settings_email_password_no_match));
+                        }
+
                         MyCustomMethods.closeTheKeyboard(this);
                     });
                 }
             }
-        } else
-            Toast.makeText(this, getResources().getString(R.string.signup_error4), Toast.LENGTH_SHORT).show();
+        } else {
+            MyCustomMethods.showShortMessage(this, getResources().getString(R.string.signup_error4));
+        }
     }
 
     @Override
@@ -421,13 +425,11 @@ public class SettingsActivity extends AppCompatActivity
                             .child("PersonalTransactions")
                             .removeValue();
 
-                    Toast.makeText(SettingsActivity.this,
-                            getResources().getString(R.string.settings_database_reset),
-                            Toast.LENGTH_SHORT).show();
+                    MyCustomMethods.showShortMessage(this,
+                            getResources().getString(R.string.settings_database_reset));
                 } else {
-                    Toast.makeText(SettingsActivity.this,
-                            getResources().getString(R.string.settings_email_password_no_match),
-                            Toast.LENGTH_SHORT).show();
+                    MyCustomMethods.showShortMessage(this,
+                            getResources().getString(R.string.settings_email_password_no_match));
                     MyCustomMethods.closeTheKeyboard(this);
                 }
             });
@@ -451,9 +453,9 @@ public class SettingsActivity extends AppCompatActivity
         final ArrayAdapter<String> currencyAdapter = new ArrayAdapter<String>(this,
                 R.layout.custom_spinner_item, currencyList) {
             @Override
-            public View getDropDownView(int position,
-                                        @Nullable View convertView,
-                                        @NonNull ViewGroup parent) {
+            public View getDropDownView(final int position,
+                                        final @Nullable View convertView,
+                                        final @NonNull ViewGroup parent) {
                 final View v = super.getDropDownView(position, convertView, parent);
 
                 ((TextView) v).setGravity(Gravity.CENTER);
@@ -554,7 +556,8 @@ public class SettingsActivity extends AppCompatActivity
                 "RON" : selectedCurrency.equals("RUB") ?
                 "₽" : "$";
 
-        if (MyCustomVariables.getFirebaseAuth().getUid() != null && userDetails != null &&
+        if (MyCustomVariables.getFirebaseAuth().getUid() != null &&
+                userDetails != null &&
                 !userDetails.getApplicationSettings().getCurrency().equals(selectedCurrency)) {
             userDetails.getApplicationSettings().setCurrency(selectedCurrency);
             MyCustomSharedPreferences.saveUserDetailsToSharedPreferences(preferences, userDetails);

@@ -16,7 +16,8 @@ public class EditAccountViewModel extends AndroidViewModel {
     private ArrayList<String> countryList = new ArrayList<>();
     private ArrayList<String> genderList = new ArrayList<>();
 
-    public EditAccountViewModel(@NonNull Application application, UserDetails userDetails) {
+    public EditAccountViewModel(final @NonNull Application application,
+                                final UserDetails userDetails) {
         super(application);
 
         this.userDetails = userDetails;
@@ -51,7 +52,7 @@ public class EditAccountViewModel extends AndroidViewModel {
         this.genderList = genderList;
     }
 
-    private void addCountriesToList(Application app) {
+    private void addCountriesToList(final Application app) {
         countryList.add(app.getResources().getString(R.string.edit_account_country_albania));
         countryList.add(app.getResources().getString(R.string.edit_account_country_andorra));
         countryList.add(app.getResources().getString(R.string.edit_account_country_armenia));
@@ -105,7 +106,7 @@ public class EditAccountViewModel extends AndroidViewModel {
         countryList.add(app.getResources().getString(R.string.edit_account_country_select_country));
     }
 
-    private void addGendersToList(Application app) {
+    private void addGendersToList(final Application app) {
         genderList.add(app.getResources().getString(R.string.edit_account_gender_female));
         genderList.add(app.getResources().getString(R.string.edit_account_gender_male));
         genderList.add(app.getResources().getString(R.string.edit_account_gender_other));
@@ -114,14 +115,15 @@ public class EditAccountViewModel extends AndroidViewModel {
         Collections.sort(genderList);
     }
 
-    private void sortListAscending(ArrayList<String> list) {
+    private void sortListAscending(final ArrayList<String> list) {
         if (!list.isEmpty()) {
             Collections.sort(list);
         }
     }
 
-    public int getPositionInCountryList(Application app, String countryName) {
-        String translatedCountryName;
+    public int getPositionInCountryList(final Application app,
+                                        final String countryName) {
+        final String translatedCountryName;
 
         switch (countryName) {
             case "Albania":
@@ -333,8 +335,9 @@ public class EditAccountViewModel extends AndroidViewModel {
         return Collections.binarySearch(getCountryList(), translatedCountryName);
     }
 
-    public String getCountryNameInEnglish(Application app, int positionInCountryList) {
-        String countryName = getCountryList().get(positionInCountryList);
+    public String getCountryNameInEnglish(final Application app,
+                                          final int positionInCountryList) {
+        final String countryName = getCountryList().get(positionInCountryList);
 
         if (countryName.equals(app.getResources().getString(R.string.edit_account_country_albania)))
             return "Albania";
@@ -439,8 +442,9 @@ public class EditAccountViewModel extends AndroidViewModel {
         else return null;
     }
 
-    public int getPositionInGenderList(Application app, String gender) {
-        String translatedGender = gender.equals("Female") ?
+    public int getPositionInGenderList(final Application app,
+                                       final String gender) {
+        final String translatedGender = gender.equals("Female") ?
                 app.getResources().getString(R.string.edit_account_gender_female) :
                 gender.equals("Male") ?
                         app.getResources().getString(R.string.edit_account_gender_male) :
@@ -450,8 +454,9 @@ public class EditAccountViewModel extends AndroidViewModel {
         return Collections.binarySearch(getGenderList(), translatedGender);
     }
 
-    public String getGenderInEnglish(Application app, int positionInGenderList) {
-        String gender = getGenderList().get(positionInGenderList);
+    public String getGenderInEnglish(final Application app,
+                                     final int positionInGenderList) {
+        final String gender = getGenderList().get(positionInGenderList);
 
         return gender.equals(app.getResources().getString(R.string.edit_account_gender_female)) ?
                 "Female" : gender.equals(app.getResources().getString(R.string.edit_account_gender_male)) ?
