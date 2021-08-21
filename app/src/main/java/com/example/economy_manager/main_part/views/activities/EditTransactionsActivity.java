@@ -3,7 +3,6 @@ package com.example.economy_manager.main_part.views.activities;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -38,6 +37,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
 
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -246,14 +246,14 @@ public class EditTransactionsActivity extends AppCompatActivity
                                             }
 
                                             @Override
-                                            public void onNothingSelected(AdapterView<?> parent) {
+                                            public void onNothingSelected(final AdapterView<?> parent) {
 
                                             }
                                         });
                                     }
 
                                     @Override
-                                    public void onNothingSelected(AdapterView<?> parent) {
+                                    public void onNothingSelected(final AdapterView<?> parent) {
 
                                     }
                                 });
@@ -271,9 +271,7 @@ public class EditTransactionsActivity extends AppCompatActivity
                                     userDetails.getApplicationSettings().getDarkTheme() :
                                     MyCustomVariables.getDefaultUserDetails().getApplicationSettings().getDarkTheme();
 
-                            centerText.setTextColor(!darkThemeEnabled ?
-                                    Color.parseColor("#195190") : Color.WHITE);
-
+                            centerText.setTextColor(!darkThemeEnabled ? getColor(R.color.turkish_sea) : Color.WHITE);
                             centerText.setTextSize(20);
                             recyclerView.setEnabled(false);
                             recyclerView.setVisibility(View.GONE);
@@ -300,7 +298,7 @@ public class EditTransactionsActivity extends AppCompatActivity
 
         int positionOfCurrentMonth = -1;
 
-        // initializing array's elements with 0
+        // initializing frequency array's elements with 0
         Arrays.fill(frequency, 0);
 
         // creating the frequency array
@@ -337,7 +335,7 @@ public class EditTransactionsActivity extends AppCompatActivity
 
         // saving current month's position if it has been found => for setting the default month spinner's selected
         // item as the current month
-        for (String listIterator : list) {
+        for (final String listIterator : list) {
             final String listIteratorInEnglish =
                     Months.getMonthInEnglish(EditTransactionsActivity.this, listIterator);
 
@@ -377,46 +375,71 @@ public class EditTransactionsActivity extends AppCompatActivity
         monthSpinner.setAdapter(monthAdapter);
 
         // if the current month exists in the list and the selected year is the current one
-        if (positionOfCurrentMonth >= 0 && selectedYear.equals(String.valueOf(currentTime.get(Calendar.YEAR)))) {
+        if (positionOfCurrentMonth >= 0 &&
+                selectedYear.equals(String.valueOf(currentTime.get(Calendar.YEAR)))) {
             // setting the current month as default when opening the activity or when selecting the current year
             monthSpinner.setSelection(positionOfCurrentMonth);
         } else {
-            Log.d("frequencyArray", Arrays.toString(frequency) + " " + positionOfCurrentMonth);
+            // subtracting 1 because we start from index 0
+            final int currentMonthIndex = LocalDate.now().getMonthValue() - 1;
+            boolean nearbyMonthFound = false;
 
-            // nu merge
+            // if the current month is at least February
+            if (currentMonthIndex > 0) {
+                for (int monthCounter = currentMonthIndex - 1; monthCounter >= 0; --monthCounter) {
+                    if (frequency[monthCounter] == 1) {
+                        nearbyMonthFound = true;
 
-//            final int currentMonthIndex = LocalDate.now().getMonthValue();
-//            boolean nearbyMonthFound = false;
-//
-//            // if the current month is at least February
-//            if (currentMonthIndex > 1) {
-//                for (int monthCounter = currentMonthIndex - 2; monthCounter >= 0; --monthCounter) {
-//                    if (frequency[monthCounter] == 1) {
-//                        nearbyMonthFound = true;
-//                        monthSpinner.setSelection(monthCounter);
-//                        break;
-//                    }
-//                }
-//
-//                if (!nearbyMonthFound) {
-//                    for (int monthCounter = currentMonthIndex - 1; monthCounter < months.length; ++monthCounter) {
-//                        if (frequency[monthCounter] == 1) {
-//                            monthSpinner.setSelection(monthCounter);
-//                            break;
-//                        }
-//                    }
-//                }
-//            }
-//
-//            // if the current month is January
-//            else {
-//                for (int monthCounter = currentMonthIndex; monthCounter < months.length; ++monthCounter) {
-//                    if (frequency[monthCounter] == 1) {
-//                        monthSpinner.setSelection(monthCounter);
-//                        break;
-//                    }
-//                }
-//            }
+                        for (int listIteratorCounter = 0; listIteratorCounter < list.size(); ++listIteratorCounter) {
+                            final String listIteratorInEnglish =
+                                    Months.getMonthInEnglish(EditTransactionsActivity.this,
+                                            list.get(listIteratorCounter));
+
+                            if (listIteratorInEnglish.equals(Months.getMonthFromIndex(this, monthCounter))) {
+                                monthSpinner.setSelection(listIteratorCounter);
+                                break;
+                            }
+                        }
+                        break;
+                    }
+                }
+
+                if (!nearbyMonthFound) {
+                    for (int monthCounter = currentMonthIndex; monthCounter < frequency.length; ++monthCounter) {
+                        if (frequency[monthCounter] == 1) {
+                            for (int listIteratorCounter = 0; listIteratorCounter < list.size(); ++listIteratorCounter) {
+                                final String listIteratorInEnglish =
+                                        Months.getMonthInEnglish(EditTransactionsActivity.this,
+                                                list.get(listIteratorCounter));
+
+                                if (listIteratorInEnglish.equals(Months.getMonthFromIndex(this, monthCounter))) {
+                                    monthSpinner.setSelection(listIteratorCounter);
+                                    break;
+                                }
+                            }
+                            break;
+                        }
+                    }
+                }
+            }
+            // if the current month is January
+            else {
+                for (int monthCounter = currentMonthIndex; monthCounter < frequency.length; ++monthCounter) {
+                    if (frequency[monthCounter] == 1) {
+                        for (int listIteratorCounter = 0; listIteratorCounter < list.size(); ++listIteratorCounter) {
+                            final String listIteratorInEnglish =
+                                    Months.getMonthInEnglish(EditTransactionsActivity.this,
+                                            list.get(listIteratorCounter));
+
+                            if (listIteratorInEnglish.equals(Months.getMonthFromIndex(this, monthCounter))) {
+                                monthSpinner.setSelection(listIteratorCounter);
+                                break;
+                            }
+                        }
+                        break;
+                    }
+                }
+            }
         }
     }
 
