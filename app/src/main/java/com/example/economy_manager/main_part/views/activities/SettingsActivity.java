@@ -45,23 +45,14 @@ public class SettingsActivity extends AppCompatActivity
         implements DeleteAccountCustomDialog.CustomDialogListener,
         ChangePasswordCustomDialog.CustomDialogListener {
     private UserDetails userDetails;
-
     private SharedPreferences preferences;
-
     private ImageView goBack;
-
     private Button resetDatabase;
-
     private Button deleteAccount;
-
     private Button changePassword;
-
     private Spinner currencySelector;
-
     private TextView themeText;
-
     private TextView currencyText;
-
     private SwitchCompat darkThemeSwitch;
 
     @Override
@@ -119,7 +110,9 @@ public class SettingsActivity extends AppCompatActivity
                         .setMessage(getResources().getString(R.string.settings_change_password).trim())
                         .setPositiveButton(getResources().getString(R.string.settings_yes).trim(),
                                 (dialog, which) -> {
-                                    ChangePasswordCustomDialog dialogChangePassword1 = new ChangePasswordCustomDialog();
+                                    final ChangePasswordCustomDialog dialogChangePassword1 =
+                                            new ChangePasswordCustomDialog();
+
                                     dialogChangePassword1.show(getSupportFragmentManager(), "example dialog");
                                 })
                         .setNegativeButton(getResources().getString(R.string.cancel).trim(),
@@ -147,7 +140,8 @@ public class SettingsActivity extends AppCompatActivity
                                                     .getProviderId().equals("password")) {
                                         choice = 2;
                                     }
-                                    DeleteAccountCustomDialog dialogClass = new DeleteAccountCustomDialog(choice);
+                                    final DeleteAccountCustomDialog dialogClass = new DeleteAccountCustomDialog(choice);
+
                                     dialogClass.show(getSupportFragmentManager(), "example dialog");
                                 })
                         .setNegativeButton(getResources().getString(R.string.cancel).trim(),
@@ -177,7 +171,8 @@ public class SettingsActivity extends AppCompatActivity
                                                     .getProviderId().equals("password")) {
                                         choice = 3;
                                     }
-                                    DeleteAccountCustomDialog dialogClass = new DeleteAccountCustomDialog(choice);
+                                    final DeleteAccountCustomDialog dialogClass = new DeleteAccountCustomDialog(choice);
+
                                     dialogClass.show(getSupportFragmentManager(), "example dialog");
                                 })
                         .setNegativeButton(getResources().getString(R.string.cancel).trim(),
@@ -243,11 +238,14 @@ public class SettingsActivity extends AppCompatActivity
     }
 
     @Override
-    public void changePassword(final String oldPassword, final String newPassword) {
-        if (!oldPassword.trim().equals("") && !newPassword.trim().equals("")) {
+    public void changePassword(final String oldPassword,
+                               final String newPassword) {
+        if (!oldPassword.trim().isEmpty() &&
+                !newPassword.trim().isEmpty()) {
             final FirebaseUser user = MyCustomVariables.getFirebaseAuth().getCurrentUser();
 
-            if (user != null && MyCustomVariables.getFirebaseAuth().getUid() != null) {
+            if (user != null &&
+                    MyCustomVariables.getFirebaseAuth().getUid() != null) {
                 final String email = user.getEmail();
 
                 if (email != null) {
@@ -268,7 +266,8 @@ public class SettingsActivity extends AppCompatActivity
                     });
                 }
             }
-        } else if (oldPassword.trim().isEmpty() && newPassword.trim().isEmpty()) {
+        } else if (oldPassword.trim().isEmpty() &&
+                newPassword.trim().isEmpty()) {
             MyCustomMethods.showShortMessage(this,
                     getResources().getString(R.string.settings_passwords_not_empty));
         } else if (oldPassword.trim().isEmpty()) {
@@ -286,11 +285,13 @@ public class SettingsActivity extends AppCompatActivity
         if (!password.trim().isEmpty()) {
             final FirebaseUser user = MyCustomVariables.getFirebaseAuth().getCurrentUser();
 
-            if (user != null && MyCustomVariables.getFirebaseAuth().getUid() != null) {
+            if (user != null &&
+                    MyCustomVariables.getFirebaseAuth().getUid() != null) {
                 final String email = user.getEmail();
 
                 if (email != null) {
                     final AuthCredential credential = EmailAuthProvider.getCredential(email, password);
+
                     user.reauthenticate(credential).addOnCompleteListener(task -> {
                         if (task.isSuccessful()) {
                             MyCustomVariables.getDatabaseReference()
@@ -298,11 +299,9 @@ public class SettingsActivity extends AppCompatActivity
                                     .removeValue();
 
                             user.delete().addOnCompleteListener(task1 -> {
-                                final Intent intent = new Intent(SettingsActivity.this, LogInActivity.class);
-
                                 MyCustomVariables.getFirebaseAuth().signOut();
                                 finishAffinity();
-                                startActivity(intent);
+                                startActivity(new Intent(SettingsActivity.this, LogInActivity.class));
                                 overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
 
                                 MyCustomMethods.showShortMessage(this,
@@ -328,37 +327,43 @@ public class SettingsActivity extends AppCompatActivity
                     .getCredential(String.valueOf(AccessToken.getCurrentAccessToken()));
 
             // in cazul in care providerul de autentificare este google
-            if (MyCustomVariables.getFirebaseAuth().getCurrentUser()
+            if (MyCustomVariables.getFirebaseAuth()
+                    .getCurrentUser()
                     .getProviderData()
                     .get(MyCustomVariables.getFirebaseAuth().getCurrentUser().getProviderData().size() - 1)
                     .getProviderId()
                     .equals("google.com")) {
-                GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(this);
-                if (account != null)
-                    credential = GoogleAuthProvider.getCredential(account.getIdToken(),
-                            null);
+                final GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(this);
+
+                if (account != null) {
+                    credential = GoogleAuthProvider.getCredential(account.getIdToken(), null);
+                }
             }
 
-            MyCustomVariables.getFirebaseAuth().getCurrentUser().reauthenticate(credential).addOnCompleteListener(task -> {
-                if (MyCustomVariables.getFirebaseAuth().getUid() != null) {
-                    MyCustomVariables.getDatabaseReference()
-                            .child(MyCustomVariables.getFirebaseAuth().getUid())
-                            .child("PersonalTransactions")
-                            .removeValue();
-                }
+            MyCustomVariables.getFirebaseAuth()
+                    .getCurrentUser()
+                    .reauthenticate(credential)
+                    .addOnCompleteListener(task -> {
+                        if (MyCustomVariables.getFirebaseAuth().getUid() != null) {
+                            MyCustomVariables.getDatabaseReference()
+                                    .child(MyCustomVariables.getFirebaseAuth().getUid())
+                                    .child("PersonalTransactions")
+                                    .removeValue();
+                        }
 
-                MyCustomVariables.getFirebaseAuth().getCurrentUser().delete().addOnCompleteListener(task1 -> {
-                    final Intent intent = new Intent(SettingsActivity.this, LogInActivity.class);
+                        MyCustomVariables.getFirebaseAuth()
+                                .getCurrentUser()
+                                .delete()
+                                .addOnCompleteListener(task1 -> {
+                                    MyCustomVariables.getFirebaseAuth().signOut();
+                                    finishAffinity();
+                                    startActivity(new Intent(SettingsActivity.this, LogInActivity.class));
+                                    overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
 
-                    MyCustomVariables.getFirebaseAuth().signOut();
-                    finishAffinity();
-                    startActivity(intent);
-                    overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
-
-                    MyCustomMethods.showShortMessage(this,
-                            getResources().getString(R.string.settings_account_deleted));
-                });
-            });
+                                    MyCustomMethods.showShortMessage(this,
+                                            getResources().getString(R.string.settings_account_deleted));
+                                });
+                    });
         }
     }
 
@@ -367,7 +372,8 @@ public class SettingsActivity extends AppCompatActivity
         if (!password.trim().isEmpty()) {
             final FirebaseUser user = MyCustomVariables.getFirebaseAuth().getCurrentUser();
 
-            if (user != null && MyCustomVariables.getFirebaseAuth().getUid() != null) {
+            if (user != null &&
+                    MyCustomVariables.getFirebaseAuth().getUid() != null) {
                 final String email = user.getEmail();
 
                 if (email != null) {
@@ -412,27 +418,29 @@ public class SettingsActivity extends AppCompatActivity
                     .equals("google.com")) {
                 final GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(this);
 
-                if (account != null)
-                    credential = GoogleAuthProvider.getCredential(account.getIdToken(),
-                            null);
+                if (account != null) {
+                    credential = GoogleAuthProvider.getCredential(account.getIdToken(), null);
+                }
             }
 
-            MyCustomVariables.getFirebaseAuth().getCurrentUser()
-                    .reauthenticate(credential).addOnCompleteListener(task -> {
-                if (task.isSuccessful()) {
-                    MyCustomVariables.getDatabaseReference()
-                            .child(MyCustomVariables.getFirebaseAuth().getUid())
-                            .child("PersonalTransactions")
-                            .removeValue();
+            MyCustomVariables.getFirebaseAuth()
+                    .getCurrentUser()
+                    .reauthenticate(credential)
+                    .addOnCompleteListener(task -> {
+                        if (task.isSuccessful()) {
+                            MyCustomVariables.getDatabaseReference()
+                                    .child(MyCustomVariables.getFirebaseAuth().getUid())
+                                    .child("PersonalTransactions")
+                                    .removeValue();
 
-                    MyCustomMethods.showShortMessage(this,
-                            getResources().getString(R.string.settings_database_reset));
-                } else {
-                    MyCustomMethods.showShortMessage(this,
-                            getResources().getString(R.string.settings_email_password_no_match));
-                    MyCustomMethods.closeTheKeyboard(this);
-                }
-            });
+                            MyCustomMethods.showShortMessage(this,
+                                    getResources().getString(R.string.settings_database_reset));
+                        } else {
+                            MyCustomMethods.showShortMessage(this,
+                                    getResources().getString(R.string.settings_email_password_no_match));
+                            MyCustomMethods.closeTheKeyboard(this);
+                        }
+                    });
         }
     }
 
@@ -474,7 +482,6 @@ public class SettingsActivity extends AppCompatActivity
                 MyCustomVariables.getDefaultUserDetails().getApplicationSettings().getDarkTheme();
 
         final int itemsColor = !darkThemeEnabled ? Color.WHITE : Color.BLACK;
-
         // setting elements' text color based on the selected theme
         ((TextView) v).setTextColor(itemsColor);
     }
@@ -491,8 +498,8 @@ public class SettingsActivity extends AppCompatActivity
                     final boolean darkThemeEnabled = userDetails != null ?
                             userDetails.getApplicationSettings().getDarkTheme() :
                             MyCustomVariables.getDefaultUserDetails().getApplicationSettings().getDarkTheme();
-                    final int color = !darkThemeEnabled ? Color.parseColor("#195190") : Color.WHITE;
 
+                    final int color = !darkThemeEnabled ? Color.parseColor("#195190") : Color.WHITE;
                     // the first element will have the text aligned to its start and
                     // the color based on the selected theme
                     ((TextView) parent.getChildAt(0)).setTextColor(color);

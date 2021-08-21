@@ -33,6 +33,7 @@ public class BudgetReviewFragment extends Fragment {
 
     public static BudgetReviewFragment newInstance() {
         final BudgetReviewFragment fragment = new BudgetReviewFragment();
+
         final Bundle args = new Bundle();
 
         fragment.setArguments(args);
@@ -77,7 +78,9 @@ public class BudgetReviewFragment extends Fragment {
                             final String currencySymbol = userDetails != null ?
                                     userDetails.getApplicationSettings().getCurrencySymbol() :
                                     MyCustomMethods.getCurrencySymbol();
+
                             float totalMonthlyIncomes = 0f;
+
                             float totalMonthlyExpenses = 0f;
 
                             if (snapshot.exists() && snapshot.hasChild("PersonalTransactions") &&

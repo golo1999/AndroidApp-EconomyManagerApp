@@ -31,13 +31,9 @@ import java.util.Locale;
 
 public class MonthlyBalanceActivity extends AppCompatActivity {
     private MonthlyBalanceViewModel viewModel;
-
     private ImageView goBack;
-
     private TextView activityTitle;
-
     private TextView centerText;
-
     private LinearLayout mainLayout;
 
     @Override

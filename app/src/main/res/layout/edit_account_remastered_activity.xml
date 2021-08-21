@@ -132,12 +132,11 @@
                 app:layout_constraintTop_toBottomOf="@id/editAccountRemasteredCountrySpinner"
                 app:layout_constraintWidth_percent=".8" />
 
-            <EditText
-                android:id="@+id/editAccountRemasteredBirthDateField"
+            <DatePicker
+                android:id="@+id/editAccountRemasteredBirthDatePicker"
                 android:layout_width="0sp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20sp"
-                android:textSize="18sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/editAccountRemasteredGenderSpinner"
@@ -152,7 +151,7 @@
                 android:textSize="18sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/editAccountRemasteredBirthDateField"
+                app:layout_constraintTop_toBottomOf="@id/editAccountRemasteredBirthDatePicker"
                 app:layout_constraintWidth_percent=".8" />
 
             <Button

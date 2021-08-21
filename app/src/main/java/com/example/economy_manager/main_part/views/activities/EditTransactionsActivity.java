@@ -46,31 +46,18 @@ import java.util.Locale;
 public class EditTransactionsActivity extends AppCompatActivity
         implements DeleteTransactionCustomDialog.DeleteDialogListener {
     private UserDetails userDetails;
-
     private EditTransactionsViewModel viewModel;
-
     private ConstraintLayout activityLayout;
-
     private FrameLayout fragmentLayout;
-
     private ImageView goBack;
-
     private TextView activityTitle;
-
     private TextView centerText;
-
     private RecyclerView recyclerView;
-
     private Spinner monthSpinner;
-
     private Spinner yearSpinner;
-
     private ConstraintLayout bottomLayout;
-
     private final ArrayList<Transaction> allTransactionsList = new ArrayList<>();
-
     private final ArrayList<Transaction> transactionsList = new ArrayList<>();
-
     private EditTransactionsRecyclerViewAdapter recyclerViewAdapter;
 
     public EditTransactionsViewModel getViewModel() {

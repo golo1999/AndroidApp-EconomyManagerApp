@@ -3,6 +3,7 @@ package com.example.economy_manager.main_part.viewmodels;
 import android.app.Application;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.lifecycle.AndroidViewModel;
 
 import com.example.economy_manager.R;
@@ -335,10 +336,9 @@ public class EditAccountViewModel extends AndroidViewModel {
         return Collections.binarySearch(getCountryList(), translatedCountryName);
     }
 
+    @Nullable
     public String getCountryNameInEnglish(final Application app,
-                                          final int positionInCountryList) {
-        final String countryName = getCountryList().get(positionInCountryList);
-
+                                          final String countryName) {
         if (countryName.equals(app.getResources().getString(R.string.edit_account_country_albania)))
             return "Albania";
         else if (countryName.equals(app.getResources().getString(R.string.edit_account_country_andorra)))
@@ -454,10 +454,9 @@ public class EditAccountViewModel extends AndroidViewModel {
         return Collections.binarySearch(getGenderList(), translatedGender);
     }
 
+    @Nullable
     public String getGenderInEnglish(final Application app,
-                                     final int positionInGenderList) {
-        final String gender = getGenderList().get(positionInGenderList);
-
+                                     final String gender) {
         return gender.equals(app.getResources().getString(R.string.edit_account_gender_female)) ?
                 "Female" : gender.equals(app.getResources().getString(R.string.edit_account_gender_male)) ?
                 "Male" : gender.equals(app.getResources().getString(R.string.edit_account_gender_other)) ?

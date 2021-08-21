@@ -1,7 +1,7 @@
 package com.example.economy_manager.main_part.views.activities;
 
 import android.content.Intent;
-import android.graphics.Color;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -9,12 +9,10 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.example.economy_manager.R;
 import com.example.economy_manager.models.UserDetails;
@@ -27,29 +25,18 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
 
 public class EditPhotoActivity extends AppCompatActivity {
-    private UserDetails userDetails;
-
-    private ConstraintLayout topLayout;
-
+    private SharedPreferences preferences;
     private ImageView goBack;
-
     private ImageView uploadedFile;
-
-    private TextView topText;
-
     private ProgressBar progressBar;
-
     private Uri imageUri;
-
     private Button chooseFileButton;
-
     private Button uploadFileButton;
-
     private StorageReference storageReference;
-
     private static final int PICK_IMAGE_REQUEST = 2;
 
     @Override
@@ -57,9 +44,7 @@ public class EditPhotoActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.edit_photo_activity);
         setVariables();
-        setTopLayout();
         setOnClickListeners();
-        setText();
         setInitialProgressBar();
         setPhoto();
     }
@@ -72,10 +57,8 @@ public class EditPhotoActivity extends AppCompatActivity {
     }
 
     private void setVariables() {
-        userDetails = MyCustomSharedPreferences.retrieveUserDetailsFromSharedPreferences(this);
-        topLayout = findViewById(R.id.editPhotoTopLayout);
+        preferences = getSharedPreferences(MyCustomVariables.getSharedPreferencesFileName(), MODE_PRIVATE);
         goBack = findViewById(R.id.editPhotoBack);
-        topText = findViewById(R.id.editPhotoText);
         progressBar = findViewById(R.id.editPhotoProgressBar);
         chooseFileButton = findViewById(R.id.editPhotoChooseFile);
         uploadFileButton = findViewById(R.id.editPhotoUploadFile);
@@ -91,35 +74,32 @@ public class EditPhotoActivity extends AppCompatActivity {
         uploadFileButton.setOnClickListener(v -> uploadFile());
     }
 
-    private void setText() {
-        final String textToBeShown = getResources().getString(R.string.edit_photo_title).trim();
-
-        topText.setText(textToBeShown);
-        topText.setTextSize(20);
-        topText.setTextColor(Color.WHITE);
-    }
-
     private void setInitialProgressBar() {
         progressBar.setVisibility(View.INVISIBLE);
     }
 
     private void openFileChooser() {
-        Intent intent = new Intent();
+        final Intent intent = new Intent();
+
         intent.setType("image/*");
         intent.setAction(Intent.ACTION_GET_CONTENT);
         startActivityForResult(intent, PICK_IMAGE_REQUEST);
     }
 
     @Override
-    protected void onActivityResult(final int requestCode, final int resultCode, final @Nullable Intent data) {
+    protected void onActivityResult(final int requestCode,
+                                    final int resultCode,
+                                    final @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
         if (requestCode == PICK_IMAGE_REQUEST &&
                 data != null &&
                 data.getData() != null) {
+            final int screenWidthPixels = (int) (0.75 * getResources().getDisplayMetrics().widthPixels);
+
             imageUri = data.getData();
             uploadedFile.setImageURI(imageUri);
-            uploadedFile.getLayoutParams().width = (int) (0.75 * getResources().getDisplayMetrics().widthPixels);
+            uploadedFile.getLayoutParams().width = screenWidthPixels;
         }
     }
 
@@ -131,7 +111,8 @@ public class EditPhotoActivity extends AppCompatActivity {
                 storageReference.child(MyCustomVariables.getFirebaseAuth().getUid())
                         .putFile(imageUri)
                         .addOnSuccessListener(taskSnapshot -> {
-                            Handler handler = new Handler();
+                            final Handler handler = new Handler();
+
                             handler.postDelayed(() -> {
                                 progressBar.setProgress(0);
                                 progressBar.setVisibility(View.INVISIBLE);
@@ -151,6 +132,25 @@ public class EditPhotoActivity extends AppCompatActivity {
                                     .child("PersonalInformation")
                                     .child("photoURL")
                                     .setValue(String.valueOf(url));
+
+                            final UserDetails userDetailsFromSharedPreferences =
+                                    MyCustomSharedPreferences.retrieveUserDetailsFromSharedPreferences(this);
+
+                            // updating current user's photo url if it's not the same as before
+                            if (userDetailsFromSharedPreferences != null) {
+                                if (!userDetailsFromSharedPreferences.getPersonalInformation().getPhotoURL()
+                                        .equals(String.valueOf(url))) {
+                                    userDetailsFromSharedPreferences.getPersonalInformation()
+                                            .setPhotoURL(String.valueOf(url));
+                                }
+
+                                if (!userDetailsAlreadyExistInSharedPreferences(userDetailsFromSharedPreferences)) {
+                                    MyCustomSharedPreferences.saveUserDetailsToSharedPreferences(preferences,
+                                            userDetailsFromSharedPreferences);
+
+                                    MyCustomVariables.setUserDetails(userDetailsFromSharedPreferences);
+                                }
+                            }
                         })
                         .addOnFailureListener(e -> MyCustomMethods.showShortMessage(this, e.getMessage()))
                         .addOnProgressListener(taskSnapshot -> {
@@ -192,18 +192,25 @@ public class EditPhotoActivity extends AppCompatActivity {
                         }
 
                         @Override
-                        public void onCancelled(@NonNull DatabaseError error) {
+                        public void onCancelled(final @NonNull DatabaseError error) {
 
                         }
                     });
         }
     }
 
-    private void setTopLayout() {
-//        topLayout.setBackgroundColor(userDetails != null &&
-//                userDetails.getApplicationSettings().getDarkTheme() ?
-//                Color.parseColor("#195190") : Color.parseColor("#A2A2A1"));
+    private UserDetails retrieveUserDetailsFromSharedPreferences() {
+        SharedPreferences preferences =
+                getSharedPreferences(MyCustomVariables.getSharedPreferencesFileName(), MODE_PRIVATE);
+        Gson gson = new Gson();
+        String json = preferences.getString("currentUserDetails", "");
 
-        topLayout.setBackgroundColor(Color.RED);
+        return gson.fromJson(json, UserDetails.class);
+    }
+
+    private boolean userDetailsAlreadyExistInSharedPreferences(final UserDetails details) {
+        UserDetails userDetailsFromSharedPreferences = retrieveUserDetailsFromSharedPreferences();
+
+        return details.equals(userDetailsFromSharedPreferences);
     }
 }

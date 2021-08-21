@@ -62,8 +62,8 @@ public class SplashScreenActivity extends AppCompatActivity {
 
                                         if (applicationSettings != null &&
                                                 personalInformation != null) {
-                                            final UserDetails details = new UserDetails(applicationSettings,
-                                                    personalInformation);
+                                            final UserDetails details =
+                                                    new UserDetails(applicationSettings, personalInformation);
 
                                             if (!userDetailsAlreadyExistInSharedPreferences(details)) {
                                                 saveUserDetailsToSharedPreferences(details);

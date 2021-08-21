@@ -131,12 +131,10 @@ public class MainScreenActivity extends AppCompatActivity {
                 SubtractMoneyActivity.class, 1));
 
         signOut.setOnClickListener(v -> {
-            final Intent intent = new Intent(MainScreenActivity.this, LogInActivity.class);
-
             LoginManager.getInstance().logOut();
             MyCustomVariables.getFirebaseAuth().signOut();
             finishAffinity();
-            startActivity(intent);
+            startActivity(new Intent(MainScreenActivity.this, LogInActivity.class));
             overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
         });
     }
