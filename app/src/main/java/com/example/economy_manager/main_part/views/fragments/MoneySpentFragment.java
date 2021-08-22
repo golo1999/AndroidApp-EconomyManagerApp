@@ -1,7 +1,6 @@
 package com.example.economy_manager.main_part.views.fragments;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,7 +26,7 @@ import java.util.Locale;
 
 public class MoneySpentFragment extends Fragment {
     private MainScreenViewModel viewModel;
-    private TextView moneySpent;
+    private TextView moneySpentText;
 
     public MoneySpentFragment() {
         // Required empty public constructor
@@ -67,7 +66,7 @@ public class MoneySpentFragment extends Fragment {
 
     private void setVariables(final View v) {
         viewModel = new ViewModelProvider((ViewModelStoreOwner) requireContext()).get(MainScreenViewModel.class);
-        moneySpent = v.findViewById(R.id.money_spent_week);
+        moneySpentText = v.findViewById(R.id.money_spent_week);
     }
 
     private void setLastWeekExpenses() {
@@ -94,14 +93,13 @@ public class MoneySpentFragment extends Fragment {
                                             transaction.getType() == 0 &&
                                             wasMadeInTheLastWeek(transaction.getTime())) {
                                         moneySpentLastWeek += Float.parseFloat(transaction.getValue());
-                                        Log.d("lastWeekTransaction", transaction.toString());
                                     }
                                 }
                             }
 
                             // if the user hasn't spent money in the last week
                             if (moneySpentLastWeek <= 0f) {
-                                moneySpent.setText(R.string.no_money_last_week);
+                                moneySpentText.setText(R.string.no_money_last_week);
                             }
                             // if the user spent money in the last week
                             else {
@@ -112,7 +110,10 @@ public class MoneySpentFragment extends Fragment {
                                             "%.2f", moneySpentLastWeek));
                                 }
 
-                                final String moneySpentText = Locale.getDefault().getDisplayLanguage().equals("English") ?
+                                final boolean languageIsEnglish =
+                                        Locale.getDefault().getDisplayLanguage().equals("English");
+
+                                final String moneySpentText = languageIsEnglish ?
                                         // english
                                         getResources().getString(R.string.money_spent_you_spent) +
                                                 " " + currencySymbol + moneySpentLastWeek + " " +
@@ -122,7 +123,7 @@ public class MoneySpentFragment extends Fragment {
                                                 " " + moneySpentLastWeek + " " + currencySymbol + " " +
                                                 getResources().getString(R.string.money_spent_last_week);
 
-                                moneySpent.setText(moneySpentText.trim());
+                                MoneySpentFragment.this.moneySpentText.setText(moneySpentText.trim());
                             }
                         }
 

@@ -20,8 +20,14 @@ public class MyCustomTime implements Serializable, Comparable<MyCustomTime> {
         // Required empty public constructor
     }
 
-    public MyCustomTime(int year, int month, String monthName, int day, String dayName, int hour,
-                        int minute, int second) {
+    public MyCustomTime(int year,
+                        int month,
+                        String monthName,
+                        int day,
+                        String dayName,
+                        int hour,
+                        int minute,
+                        int second) {
         this.year = year;
         this.month = month;
         this.monthName = monthName;
@@ -32,7 +38,12 @@ public class MyCustomTime implements Serializable, Comparable<MyCustomTime> {
         this.second = second;
     }
 
-    public MyCustomTime(int year, int month, int day, int hour, int minute, int second) {
+    public MyCustomTime(int year,
+                        int month,
+                        int day,
+                        int hour,
+                        int minute,
+                        int second) {
         this.year = year;
         this.month = month;
         this.day = day;
