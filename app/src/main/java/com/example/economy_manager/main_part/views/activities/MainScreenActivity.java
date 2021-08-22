@@ -51,6 +51,7 @@ public class MainScreenActivity extends AppCompatActivity {
     private TextView lastWeekExpensesText;
     private TextView lastTenTransactionsText;
     private TextView topFiveExpensesText;
+    private TextView pieChartSpentPercentageText;
     private int timerCounter = 0;
     private long backPressedTime;
     private Toast backToast;
@@ -109,6 +110,7 @@ public class MainScreenActivity extends AppCompatActivity {
         lastWeekExpensesText = findViewById(R.id.mainScreenLastWeekSpent);
         lastTenTransactionsText = findViewById(R.id.mainScreenLastTenTransactions);
         topFiveExpensesText = findViewById(R.id.mainScreenTopFiveExpenses);
+        pieChartSpentPercentageText = findViewById(R.id.mainScreenMoneySpentPercentage);
     }
 
     private void setOnClickListeners() {
@@ -259,5 +261,6 @@ public class MainScreenActivity extends AppCompatActivity {
         lastWeekExpensesText.setTextColor(color);
         lastTenTransactionsText.setTextColor(color);
         topFiveExpensesText.setTextColor(color);
+        pieChartSpentPercentageText.setTextColor(color);
     }
 }

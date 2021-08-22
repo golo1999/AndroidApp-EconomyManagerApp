@@ -1,6 +1,7 @@
 package com.example.economy_manager.main_part.views.fragments;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,6 +35,7 @@ public class MoneySpentFragment extends Fragment {
 
     public static MoneySpentFragment newInstance() {
         final MoneySpentFragment fragment = new MoneySpentFragment();
+
         final Bundle args = new Bundle();
 
         fragment.setArguments(args);
@@ -78,9 +80,11 @@ public class MoneySpentFragment extends Fragment {
                             final String currencySymbol = viewModel.getUserDetails() != null ?
                                     viewModel.getUserDetails().getApplicationSettings().getCurrencySymbol() :
                                     MyCustomMethods.getCurrencySymbol();
+
                             float moneySpentLastWeek = 0f;
 
-                            if (snapshot.exists() && snapshot.hasChild("PersonalTransactions") &&
+                            if (snapshot.exists() &&
+                                    snapshot.hasChild("PersonalTransactions") &&
                                     snapshot.child("PersonalTransactions").hasChildren()) {
                                 for (final DataSnapshot transactionIterator :
                                         snapshot.child("PersonalTransactions").getChildren()) {
@@ -90,6 +94,7 @@ public class MoneySpentFragment extends Fragment {
                                             transaction.getType() == 0 &&
                                             wasMadeInTheLastWeek(transaction.getTime())) {
                                         moneySpentLastWeek += Float.parseFloat(transaction.getValue());
+                                        Log.d("lastWeekTransaction", transaction.toString());
                                     }
                                 }
                             }
@@ -107,8 +112,7 @@ public class MoneySpentFragment extends Fragment {
                                             "%.2f", moneySpentLastWeek));
                                 }
 
-                                final String moneySpentText = Locale.getDefault().getDisplayLanguage()
-                                        .equals("English") ?
+                                final String moneySpentText = Locale.getDefault().getDisplayLanguage().equals("English") ?
                                         // english
                                         getResources().getString(R.string.money_spent_you_spent) +
                                                 " " + currencySymbol + moneySpentLastWeek + " " +
@@ -131,11 +135,16 @@ public class MoneySpentFragment extends Fragment {
     }
 
     private boolean wasMadeInTheLastWeek(final @NonNull MyCustomTime transactionTime) {
-        final LocalDateTime oneWeekAgoTime = LocalDateTime.now().minusDays(7);
+        final LocalDateTime oneWeekAgoTime = LocalDateTime.now().minusWeeks(1);
+
         final LocalDateTime transactionTimeParsed = LocalDateTime.of(transactionTime.getYear(),
                 transactionTime.getMonth(), transactionTime.getDay(), transactionTime.getHour(),
                 transactionTime.getMinute(), transactionTime.getSecond());
 
-        return transactionTimeParsed.isAfter(oneWeekAgoTime);
+        final boolean isAfterOneWeekAgo = transactionTimeParsed.isAfter(oneWeekAgoTime);
+
+        final boolean isBeforeNow = transactionTimeParsed.isBefore(LocalDateTime.now());
+
+        return isAfterOneWeekAgo && isBeforeNow;
     }
 }

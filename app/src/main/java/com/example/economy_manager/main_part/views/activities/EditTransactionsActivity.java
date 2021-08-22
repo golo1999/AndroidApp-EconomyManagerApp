@@ -141,11 +141,13 @@ public class EditTransactionsActivity extends AppCompatActivity
 
                                 final ArrayList<String> monthsList = new ArrayList<>();
 
+                                final Iterable<DataSnapshot> snapshotChildren = snapshot.getChildren();
+
                                 if (!allTransactionsList.isEmpty()) {
                                     allTransactionsList.clear();
                                 }
 
-                                for (final DataSnapshot transaction : snapshot.getChildren()) {
+                                snapshotChildren.forEach((final DataSnapshot transaction) -> {
                                     final Transaction transactionFromDatabase = transaction.getValue(Transaction.class);
 
                                     if (transactionFromDatabase != null && transactionFromDatabase.getTime() != null) {
@@ -170,7 +172,7 @@ public class EditTransactionsActivity extends AppCompatActivity
 
                                         allTransactionsList.add(transactionFromDatabase);
                                     }
-                                }
+                                });
 
                                 createYearSpinner(yearsList);
 
@@ -194,7 +196,7 @@ public class EditTransactionsActivity extends AppCompatActivity
                                             monthsList.clear();
                                         }
 
-                                        for (final Transaction transaction : allTransactionsList) {
+                                        allTransactionsList.forEach((final Transaction transaction) -> {
                                             if (String.valueOf(transaction.getTime().getYear()).equals(selectedYear)) {
                                                 final String transactionMonthParsed =
                                                         transaction.getTime().getMonthName().charAt(0) +
@@ -217,7 +219,7 @@ public class EditTransactionsActivity extends AppCompatActivity
                                                     }
                                                 }
                                             }
-                                        }
+                                        });
 
                                         createMonthSpinner(monthsList, selectedYear);
 
@@ -302,7 +304,7 @@ public class EditTransactionsActivity extends AppCompatActivity
         Arrays.fill(frequency, 0);
 
         // creating the frequency array
-        for (final String listIterator : list) {
+        list.forEach((final String listIterator) -> {
             int counter = -1;
             // finding out which months are also found into the selected year's months list
             for (String monthsListIterator : months) {
@@ -312,7 +314,7 @@ public class EditTransactionsActivity extends AppCompatActivity
                     frequency[counter - 1] = 1;
                 }
             }
-        }
+        });
 
         // clearing the list and adding the months in their natural order
         list.clear();
@@ -388,18 +390,14 @@ public class EditTransactionsActivity extends AppCompatActivity
             if (currentMonthIndex > 0) {
                 for (int monthCounter = currentMonthIndex - 1; monthCounter >= 0; --monthCounter) {
                     if (frequency[monthCounter] == 1) {
+                        final int nearbyMonthIndexFromSpinner = getNearestMonthPositionFromSpinner(list, monthCounter);
+
                         nearbyMonthFound = true;
 
-                        for (int listIteratorCounter = 0; listIteratorCounter < list.size(); ++listIteratorCounter) {
-                            final String listIteratorInEnglish =
-                                    Months.getMonthInEnglish(EditTransactionsActivity.this,
-                                            list.get(listIteratorCounter));
-
-                            if (listIteratorInEnglish.equals(Months.getMonthFromIndex(this, monthCounter))) {
-                                monthSpinner.setSelection(listIteratorCounter);
-                                break;
-                            }
+                        if (nearbyMonthIndexFromSpinner >= -1) {
+                            monthSpinner.setSelection(nearbyMonthIndexFromSpinner);
                         }
+
                         break;
                     }
                 }
@@ -407,16 +405,12 @@ public class EditTransactionsActivity extends AppCompatActivity
                 if (!nearbyMonthFound) {
                     for (int monthCounter = currentMonthIndex; monthCounter < frequency.length; ++monthCounter) {
                         if (frequency[monthCounter] == 1) {
-                            for (int listIteratorCounter = 0; listIteratorCounter < list.size(); ++listIteratorCounter) {
-                                final String listIteratorInEnglish =
-                                        Months.getMonthInEnglish(EditTransactionsActivity.this,
-                                                list.get(listIteratorCounter));
+                            final int nearbyMonthIndexFromSpinner = getNearestMonthPositionFromSpinner(list, monthCounter);
 
-                                if (listIteratorInEnglish.equals(Months.getMonthFromIndex(this, monthCounter))) {
-                                    monthSpinner.setSelection(listIteratorCounter);
-                                    break;
-                                }
+                            if (nearbyMonthIndexFromSpinner >= -1) {
+                                monthSpinner.setSelection(nearbyMonthIndexFromSpinner);
                             }
+
                             break;
                         }
                     }
@@ -426,16 +420,12 @@ public class EditTransactionsActivity extends AppCompatActivity
             else {
                 for (int monthCounter = currentMonthIndex; monthCounter < frequency.length; ++monthCounter) {
                     if (frequency[monthCounter] == 1) {
-                        for (int listIteratorCounter = 0; listIteratorCounter < list.size(); ++listIteratorCounter) {
-                            final String listIteratorInEnglish =
-                                    Months.getMonthInEnglish(EditTransactionsActivity.this,
-                                            list.get(listIteratorCounter));
+                        final int nearbyMonthIndexFromSpinner = getNearestMonthPositionFromSpinner(list, monthCounter);
 
-                            if (listIteratorInEnglish.equals(Months.getMonthFromIndex(this, monthCounter))) {
-                                monthSpinner.setSelection(listIteratorCounter);
-                                break;
-                            }
+                        if (nearbyMonthIndexFromSpinner >= -1) {
+                            monthSpinner.setSelection(nearbyMonthIndexFromSpinner);
                         }
+
                         break;
                     }
                 }
@@ -499,7 +489,7 @@ public class EditTransactionsActivity extends AppCompatActivity
             recyclerViewAdapter.notifyItemRangeRemoved(0, currentNumberOfTransactions);
         }
 
-        for (final Transaction transaction : allTransactionsList) {
+        allTransactionsList.forEach((final Transaction transaction) -> {
             final String transactionMonthParsed = transaction.getTime().getMonthName().charAt(0) +
                     transaction.getTime().getMonthName().substring(1).toLowerCase();
 
@@ -511,7 +501,7 @@ public class EditTransactionsActivity extends AppCompatActivity
                     transactionMonthParsed.equals(selectedMonthNameInEnglish)) {
                 transactionsList.add(transaction);
             }
-        }
+        });
 
         transactionsList.sort((final Transaction o1, final Transaction o2) ->
                 Float.compare(Float.parseFloat(o2.getValue()), Float.parseFloat(o1.getValue())));
@@ -565,6 +555,19 @@ public class EditTransactionsActivity extends AppCompatActivity
 
         fragmentLayout.setVisibility(View.INVISIBLE);
         activityLayout.setVisibility(View.VISIBLE);
+    }
+
+    private int getNearestMonthPositionFromSpinner(final ArrayList<String> monthsList, final int monthIndex) {
+        for (int listIteratorCounter = 0; listIteratorCounter < monthsList.size(); ++listIteratorCounter) {
+            final String listIteratorInEnglish = Months.getMonthInEnglish(EditTransactionsActivity.this,
+                    monthsList.get(listIteratorCounter));
+
+            if (listIteratorInEnglish.equals(Months.getMonthFromIndex(this, monthIndex))) {
+                return listIteratorCounter;
+            }
+        }
+
+        return -1;
     }
 
     @Override

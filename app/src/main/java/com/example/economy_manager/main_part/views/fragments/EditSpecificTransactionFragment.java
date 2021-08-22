@@ -127,7 +127,7 @@ public class EditSpecificTransactionFragment extends Fragment {
                                     LocalDateTime.now().getSecond() : selectedTransaction.getTime().getSecond();
 
                     final LocalDate selectedLocalDate =
-                            LocalDate.of(datePickerSelectedYear, datePickerSelectedMonth, datePickerSelectedDay);
+                            LocalDate.of(datePickerSelectedYear, datePickerSelectedMonth + 1, datePickerSelectedDay);
 
                     final MyCustomTime editedTime = new MyCustomTime(datePickerSelectedYear, datePickerSelectedMonth,
                             String.valueOf(selectedLocalDate.getMonth()), datePickerSelectedDay,
