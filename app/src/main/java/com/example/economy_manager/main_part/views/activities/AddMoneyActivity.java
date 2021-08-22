@@ -5,8 +5,6 @@ import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -47,8 +45,8 @@ public class AddMoneyActivity extends AppCompatActivity implements DatePickerDia
         super.onCreate(savedInstanceState);
         setContentView(R.layout.add_money_activity);
         setVariables();
-        setDateText(LocalDate.now());
-        limitTwoDecimals();
+        viewModel.setDateText(LocalDate.now(), dateText);
+        viewModel.limitTwoDecimals(valueField);
         createRadioButtons();
         setOnClickListeners();
     }
@@ -67,7 +65,7 @@ public class AddMoneyActivity extends AppCompatActivity implements DatePickerDia
                           final int dayOfMonth) {
         final LocalDate newTransactionDate = LocalDate.of(year, month + 1, dayOfMonth);
 
-        setDateText(newTransactionDate);
+        viewModel.setDateText(newTransactionDate, dateText);
     }
 
     private void setVariables() {
@@ -163,13 +161,13 @@ public class AddMoneyActivity extends AppCompatActivity implements DatePickerDia
     private void createRadioButtons() {
         final ArrayList<String> buttonTextArray = new ArrayList<>();
 
-        final String depositsText = getResources().getString(R.string.add_money_deposits).trim();
+        final String depositsText = viewModel.getDepositsText(this);
 
-        final String independentSourcesText = getResources().getString(R.string.add_money_independent_sources).trim();
+        final String independentSourcesText = viewModel.getIndependentSourcesText(this);
 
-        final String salaryText = getResources().getString(R.string.salary).trim();
+        final String salaryText = viewModel.getSalaryText(this);
 
-        final String savingText = getResources().getString(R.string.saving).trim();
+        final String savingText = viewModel.getSavingText(this);
 
         buttonTextArray.add(depositsText);
         buttonTextArray.add(independentSourcesText);
@@ -193,79 +191,5 @@ public class AddMoneyActivity extends AppCompatActivity implements DatePickerDia
             radioButton1[i].setTextColor(Color.WHITE);
             radioGroup.addView(radioButton1[i]);
         }
-    }
-
-    // method for limiting the number to only two decimals
-    private void limitTwoDecimals() {
-        valueField.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(final CharSequence s,
-                                          final int start,
-                                          final int count,
-                                          final int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(final CharSequence s,
-                                      final int start,
-                                      final int before,
-                                      final int count) {
-                final int textLength = String.valueOf(s).length();
-
-                // if the number is decimal (contains comma)
-                if (String.valueOf(s).contains(".")) {
-                    // saving comma's position
-                    final int positionOfComma = String.valueOf(s).indexOf(".");
-                    // adding a zero before if the first character is a dot (i.e: .5 => 0.5)
-                    if (positionOfComma == 0 && textLength == 1) {
-                        final String text = "0" + valueField.getText();
-
-                        valueField.setText(text);
-                        // putting the cursor at the end
-                        valueField.setSelection(String.valueOf(valueField.getText()).length());
-                    }
-                    // if we add more than two decimals
-                    if (textLength - positionOfComma > 3) {
-                        // putting only the first two decimals
-                        valueField.setText(String.valueOf(valueField.getText()).substring(0, positionOfComma + 3));
-                        // putting the cursor at the end
-                        valueField.setSelection(String.valueOf(valueField.getText()).length());
-                    }
-                }
-            }
-
-            @Override
-            public void afterTextChanged(final Editable s) {
-
-            }
-        });
-    }
-
-    private void setDateText(final LocalDate date) {
-        final String dayName = date.getDayOfWeek().name().charAt(0) +
-                date.getDayOfWeek().name().substring(1).toLowerCase();
-
-        final String monthName = String.valueOf(date.getMonth()).charAt(0) +
-                String.valueOf(date.getMonth()).substring(1).toLowerCase();
-
-        final int day = date.getDayOfMonth();
-
-        final StringBuilder transactionDate = new StringBuilder(dayName)
-                .append(", ")
-                .append(monthName)
-                .append(" ")
-                .append(day);
-        // displaying the year if it's not the current one
-        if (date.getYear() != LocalDate.now().getYear()) {
-            transactionDate.append(", ")
-                    .append(date.getYear());
-        }
-
-        if (!viewModel.getTransactionDate().equals(date)) {
-            viewModel.setTransactionDate(date);
-        }
-
-        dateText.setText(transactionDate);
     }
 }

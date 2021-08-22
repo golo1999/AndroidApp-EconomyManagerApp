@@ -5,8 +5,6 @@ import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -47,8 +45,8 @@ public class SubtractMoneyActivity extends AppCompatActivity implements DatePick
         super.onCreate(savedInstanceState);
         setContentView(R.layout.subtract_money_activity);
         setVariables();
-        setDateText(LocalDate.now());
-        limitTwoDecimals();
+        viewModel.setDateText(LocalDate.now(), dateText);
+        viewModel.limitTwoDecimals(valueField);
         createRadioButtons();
         setOnClickListeners();
     }
@@ -67,7 +65,7 @@ public class SubtractMoneyActivity extends AppCompatActivity implements DatePick
                           final int dayOfMonth) {
         final LocalDate newTransactionDate = LocalDate.of(year, month + 1, dayOfMonth);
 
-        setDateText(newTransactionDate);
+        viewModel.setDateText(newTransactionDate, dateText);
     }
 
     private void setVariables() {
@@ -93,7 +91,6 @@ public class SubtractMoneyActivity extends AppCompatActivity implements DatePick
             final int selectedID = radioGroup.getCheckedRadioButtonId();
 
             MyCustomMethods.closeTheKeyboard(SubtractMoneyActivity.this);
-
             // if there was any radio button checked
             if (selectedID != -1 && MyCustomVariables.getFirebaseAuth().getUid() != null) {
                 if (!String.valueOf(valueField.getText()).trim().equals("")) {
@@ -135,8 +132,7 @@ public class SubtractMoneyActivity extends AppCompatActivity implements DatePick
                                             getResources().getString(R.string.expense) + " " +
                                                     getResources().getString(R.string.add_money_added_successfully));
                                     finish();
-                                    overridePendingTransition(R.anim.slide_in_left,
-                                            R.anim.slide_out_right);
+                                    overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
                                 })
                                 .addOnFailureListener(e -> {
                                     MyCustomVariables.getDatabaseReference()
@@ -161,35 +157,35 @@ public class SubtractMoneyActivity extends AppCompatActivity implements DatePick
     private void createRadioButtons() {
         final ArrayList<String> buttonTextArray = new ArrayList<>();
 
-        final String billsText = getResources().getString(R.string.subtract_money_bills).trim();
+        final String billsText = viewModel.getBillsText(this);
 
-        final String carText = getResources().getString(R.string.subtract_money_car).trim();
+        final String carText = viewModel.getCarText(this);
 
-        final String clothesText = getResources().getString(R.string.subtract_money_clothes).trim();
+        final String clothesText = viewModel.getClothesText(this);
 
-        final String communicationsText = getResources().getString(R.string.subtract_money_communications).trim();
+        final String communicationsText = viewModel.getCommunicationsText(this);
 
-        final String eatingOutText = getResources().getString(R.string.subtract_money_eating_out).trim();
+        final String eatingOutText = viewModel.getEatingOutText(this);
 
-        final String entertainmentText = getResources().getString(R.string.subtract_money_entertainment).trim();
+        final String entertainmentText = viewModel.getEntertainmentText(this);
 
-        final String foodText = getResources().getString(R.string.subtract_money_food).trim();
+        final String foodText = viewModel.getFoodText(this);
 
-        final String giftsText = getResources().getString(R.string.subtract_money_gifts).trim();
+        final String giftsText = viewModel.getGiftsText(this);
 
-        final String healthText = getResources().getString(R.string.subtract_money_health).trim();
+        final String healthText = viewModel.getHealthText(this);
 
-        final String houseText = getResources().getString(R.string.subtract_money_house).trim();
+        final String houseText = viewModel.getHouseText(this);
 
-        final String petsText = getResources().getString(R.string.subtract_money_pets).trim();
+        final String petsText = viewModel.getPetsText(this);
 
-        final String sportsText = getResources().getString(R.string.subtract_money_sports).trim();
+        final String sportsText = viewModel.getSportsText(this);
 
-        final String taxiText = getResources().getString(R.string.subtract_money_taxi).trim();
+        final String taxiText = viewModel.getTaxiText(this);
 
-        final String toiletryText = getResources().getString(R.string.subtract_money_toiletry).trim();
+        final String toiletryText = viewModel.getToiletryText(this);
 
-        final String transportText = getResources().getString(R.string.subtract_money_transport).trim();
+        final String transportText = viewModel.getTransportText(this);
 
         buttonTextArray.add(billsText);
         buttonTextArray.add(carText);
@@ -235,80 +231,5 @@ public class SubtractMoneyActivity extends AppCompatActivity implements DatePick
             radioButton1[i].setTextColor(Color.WHITE);
             radioGroup.addView(radioButton1[i]);
         }
-    }
-
-    // method for limiting the number to only two decimals
-    private void limitTwoDecimals() {
-        valueField.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(final CharSequence s,
-                                          final int start,
-                                          final int count,
-                                          final int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(final CharSequence s,
-                                      final int start,
-                                      final int before,
-                                      final int count) {
-                final int textLength = String.valueOf(s).length();
-
-                // if the number is decimal (contains comma)
-                if (String.valueOf(s).contains(".")) {
-                    // saving comma's position
-                    final int positionOfComma = String.valueOf(s).indexOf(".");
-                    // adding a zero before if the first character is a dot (i.e: .5 => 0.5)
-                    if (positionOfComma == 0 && textLength == 1) {
-                        final String text = "0" + valueField.getText();
-
-                        valueField.setText(text);
-                        // putting the cursor at the end
-                        valueField.setSelection(String.valueOf(valueField.getText()).length());
-                    }
-                    // if we add more than two decimals
-                    if (textLength - positionOfComma > 3) {
-                        // putting only the first two decimals
-                        valueField.setText(String.valueOf(valueField.getText())
-                                .substring(0, positionOfComma + 3));
-                        // putting the cursor at the end
-                        valueField.setSelection(String.valueOf(valueField.getText()).length());
-                    }
-                }
-            }
-
-            @Override
-            public void afterTextChanged(final Editable s) {
-
-            }
-        });
-    }
-
-    private void setDateText(final LocalDate date) {
-        final String dayName = date.getDayOfWeek().name().charAt(0) +
-                date.getDayOfWeek().name().substring(1).toLowerCase();
-
-        final String monthName = String.valueOf(date.getMonth()).charAt(0) +
-                String.valueOf(date.getMonth()).substring(1).toLowerCase();
-
-        final int day = date.getDayOfMonth();
-
-        final StringBuilder transactionDate = new StringBuilder(dayName)
-                .append(", ")
-                .append(monthName)
-                .append(" ")
-                .append(day);
-        // displaying the year if it's not the current one
-        if (date.getYear() != LocalDate.now().getYear()) {
-            transactionDate.append(", ")
-                    .append(date.getYear());
-        }
-
-        if (!viewModel.getTransactionDate().equals(date)) {
-            viewModel.setTransactionDate(date);
-        }
-
-        dateText.setText(transactionDate);
     }
 }
