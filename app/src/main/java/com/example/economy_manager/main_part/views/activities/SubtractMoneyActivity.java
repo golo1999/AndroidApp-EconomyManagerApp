@@ -30,7 +30,9 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
 
-public class SubtractMoneyActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener {
+public class SubtractMoneyActivity
+        extends AppCompatActivity
+        implements DatePickerDialog.OnDateSetListener {
     private SubtractMoneyViewModel viewModel;
     private TextView dateText;
     private EditText valueField;

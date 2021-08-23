@@ -16,4 +16,21 @@
     <color name="orange">#F95700</color>
     <color name="black">#000000</color>
     <color name="turkish_sea">#195190</color>
+
+    <color name="expenses_bills">#BB22BE</color>
+    <color name="expenses_car">#C6980C</color>
+    <color name="expenses_clothes">#E1932C</color>
+    <color name="expenses_communications">#8FBCF2</color>
+    <color name="expenses_eating_out">#1F9891</color>
+    <color name="expenses_entertainment">#FC2427</color>
+    <color name="expenses_food">#840EF3</color>
+    <color name="expenses_gifts">#3BC322</color>
+    <color name="expenses_health">#849FFC</color>
+    <color name="expenses_house">#DFBD52</color>
+    <color name="expenses_pets">#2101D0</color>
+    <color name="expenses_sports">#5A355E</color>
+    <color name="expenses_taxi">#7CF00D</color>
+    <color name="expenses_toiletry">#D98D26</color>
+    <color name="expenses_transport">#087AD9</color>
+
 </resources>

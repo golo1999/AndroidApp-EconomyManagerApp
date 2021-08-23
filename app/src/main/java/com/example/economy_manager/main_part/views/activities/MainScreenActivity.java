@@ -1,9 +1,12 @@
 package com.example.economy_manager.main_part.views.activities;
 
 import android.content.Intent;
+import android.content.res.Resources;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -17,6 +20,7 @@ import androidx.lifecycle.ViewModelProvider;
 import com.example.economy_manager.R;
 import com.example.economy_manager.login_part.LogInActivity;
 import com.example.economy_manager.main_part.viewmodels.MainScreenViewModel;
+import com.example.economy_manager.main_part.views.fragments.MoneySpentPercentageFragment;
 import com.example.economy_manager.models.Transaction;
 import com.example.economy_manager.models.UserDetails;
 import com.example.economy_manager.utilities.MyCustomMethods;
@@ -32,9 +36,13 @@ import java.time.LocalDate;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class MainScreenActivity extends AppCompatActivity {
+public class MainScreenActivity
+        extends AppCompatActivity
+        implements MoneySpentPercentageFragment.MoneySpentPercentageListener {
     private MainScreenViewModel viewModel;
     private ConstraintLayout firebaseDatabaseLoadingProgressBarLayout;
+    private FrameLayout moneySpentPercentageLayout;
+    private ViewGroup.LayoutParams moneySpentPercentageLayoutParams;
     private ProgressBar firebaseDatabaseLoadingProgressBar;
     private TextView greeting;
     private TextView date;
@@ -43,7 +51,7 @@ public class MainScreenActivity extends AppCompatActivity {
     private ImageView signOut;
     private ImageView edit;
     private ImageView balance;
-    private TextView moneySpentPercentage;
+    private TextView moneySpentPercentageText;
     private ImageView account;
     private ImageView settings;
     private TextView remainingMonthlyIncomeText;
@@ -84,33 +92,59 @@ public class MainScreenActivity extends AppCompatActivity {
             return;
         } else {
             backToast = Toast.makeText(this,
-                    getResources().getString(R.string.press_again_exit), Toast.LENGTH_SHORT);
+                    getResources().getString(R.string.press_again_exit),
+                    Toast.LENGTH_SHORT);
+
             backToast.show();
         }
 
         backPressedTime = System.currentTimeMillis();
     }
 
+    @Override
+    public void onEmptyPieChart() {
+        if (moneySpentPercentageLayoutParams.height != ViewGroup.LayoutParams.WRAP_CONTENT) {
+            moneySpentPercentageLayoutParams.height = ViewGroup.LayoutParams.WRAP_CONTENT;
+        }
+
+        moneySpentPercentageLayout.setLayoutParams(moneySpentPercentageLayoutParams);
+    }
+
+    @Override
+    public void onNotEmptyPieChart() {
+        final int screenHeight = Resources.getSystem().getDisplayMetrics().heightPixels;
+
+        final int percentageScreenHeight = (int) (screenHeight * 0.4);
+
+        if (moneySpentPercentageLayoutParams.height != percentageScreenHeight) {
+            moneySpentPercentageLayoutParams.height = percentageScreenHeight;
+        }
+
+        moneySpentPercentageLayout.setLayoutParams(moneySpentPercentageLayoutParams);
+    }
+
     private void setVariables() {
         viewModel = new ViewModelProvider(this).get(MainScreenViewModel.class);
         firebaseDatabaseLoadingProgressBarLayout = findViewById(R.id.main_screen_progress_bar_layout);
+        moneySpentPercentageLayout = findViewById(R.id.fragment_money_spent_percentage_container);
+        moneySpentPercentageLayoutParams = moneySpentPercentageLayout.getLayoutParams();
         firebaseDatabaseLoadingProgressBar = findViewById(R.id.main_screen_progress_bar);
-        greeting = findViewById(R.id.greetingText);
-        date = findViewById(R.id.dateText);
-        addButton = findViewById(R.id.fabAdd);
-        subtractButton = findViewById(R.id.fabSubtract);
+        greeting = findViewById(R.id.main_screen_greeting_text);
+        date = findViewById(R.id.main_screen_date_text);
+        addButton = findViewById(R.id.main_screen_fab_add);
+        subtractButton = findViewById(R.id.main_screen_fab_subtract);
         signOut = findViewById(R.id.main_screen_sign_out);
         edit = findViewById(R.id.main_screen_edit);
         balance = findViewById(R.id.main_screen_balance);
-        moneySpentPercentage = findViewById(R.id.currentMoneyText);
+        moneySpentPercentageText = findViewById(R.id.main_screen_current_money_text);
         account = findViewById(R.id.main_screen_account);
         settings = findViewById(R.id.main_screen_settings);
-        remainingMonthlyIncomeText = findViewById(R.id.mainScreenRemainingIncome);
-        monthlyBalanceText = findViewById(R.id.mainScreenMonthlyBalance);
-        lastWeekExpensesText = findViewById(R.id.mainScreenLastWeekSpent);
-        lastTenTransactionsText = findViewById(R.id.mainScreenLastTenTransactions);
-        topFiveExpensesText = findViewById(R.id.mainScreenTopFiveExpenses);
-        pieChartSpentPercentageText = findViewById(R.id.mainScreenMoneySpentPercentage);
+        remainingMonthlyIncomeText = findViewById(R.id.main_screen_remaining_income_text);
+        monthlyBalanceText = findViewById(R.id.main_screen_monthly_balance_text);
+        lastWeekExpensesText = findViewById(R.id.main_screen_last_week_spent_text);
+        lastTenTransactionsText = findViewById(R.id.main_screen_last_ten_transactions_text);
+        topFiveExpensesText = findViewById(R.id.main_screen_top_five_expenses_text);
+        pieChartSpentPercentageText = findViewById(R.id.main_screen_money_spent_percentage_text);
     }
 
     private void setOnClickListeners() {
@@ -232,9 +266,9 @@ public class MainScreenActivity extends AppCompatActivity {
                                                         + getResources().getString(R.string.money_spent_percentage) :
                                         getResources().getString(R.string.no_money_records_month);
 
-                                moneySpentPercentage.setText(percentageText);
+                                moneySpentPercentageText.setText(percentageText);
                             } else {
-                                moneySpentPercentage.setText(getResources().getString(R.string.no_money_records_yet));
+                                moneySpentPercentageText.setText(getResources().getString(R.string.no_money_records_yet));
                             }
 
                             firebaseDatabaseLoadingProgressBar.setVisibility(View.GONE);

@@ -16,7 +16,7 @@
         android:padding="10sp">
 
         <TextView
-            android:id="@+id/topFiveExpensesCenterText"
+            android:id="@+id/top_five_expenses_center_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginVertical="10sp"
@@ -30,7 +30,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <LinearLayout
-            android:id="@+id/topFiveExpensesMainLayout"
+            android:id="@+id/top_five_expenses_main_layout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical" />

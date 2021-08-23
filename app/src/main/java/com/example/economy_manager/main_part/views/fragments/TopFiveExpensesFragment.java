@@ -65,8 +65,8 @@ public class TopFiveExpensesFragment extends Fragment {
 
     private void setVariables(final View v) {
         viewModel = new ViewModelProvider((ViewModelStoreOwner) requireContext()).get(MainScreenViewModel.class);
-        mainLayout = v.findViewById(R.id.topFiveExpensesMainLayout);
-        centerText = v.findViewById(R.id.topFiveExpensesCenterText);
+        mainLayout = v.findViewById(R.id.top_five_expenses_main_layout);
+        centerText = v.findViewById(R.id.top_five_expenses_center_text);
     }
 
     private void createAndSetList() {
@@ -145,10 +145,10 @@ public class TopFiveExpensesFragment extends Fragment {
                             .inflate(R.layout.top_five_expenses_linearlayout, mainLayout, false);
 
                     final TextView typeFromChildLayout =
-                            childLayout.findViewById(R.id.topFiveExpensesConstraintLayoutType);
+                            childLayout.findViewById(R.id.top_five_expenses_constraint_layout_type);
 
                     final TextView valueFromChildLayout =
-                            childLayout.findViewById(R.id.topFiveExpensesConstraintLayoutValue);
+                            childLayout.findViewById(R.id.top_five_expenses_constraint_layout_value);
 
                     final String valueWithCurrency = Locale.getDefault().getDisplayLanguage().equals("English") ?
                             currencySymbol + transaction.getValue() : transaction.getValue() + " " + currencySymbol;

@@ -4,21 +4,38 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    app:cardCornerRadius="20dp"
-    app:cardElevation="0dp"
+    app:cardCornerRadius="20sp"
+    app:cardElevation="0sp"
     tools:context=".main_part.views.fragments.MoneySpentPercentageFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <com.anychart.AnyChartView
-            android:id="@+id/moneySpentPieChart"
+        <TextView
+            android:id="@+id/money_spent_percentage_no_expenses_text"
+            android:layout_width="0sp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:padding="20sp"
+            android:text="@string/top_5_expenses_no_expenses_this_month"
+            android:textAlignment="center"
+            android:textColor="@color/turkish_sea"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <org.eazegraph.lib.charts.PieChart
+            android:id="@+id/money_spent_pie_chart"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:padding="20sp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

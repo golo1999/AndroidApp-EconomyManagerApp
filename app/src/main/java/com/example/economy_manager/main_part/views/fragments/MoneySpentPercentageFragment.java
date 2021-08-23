@@ -1,41 +1,39 @@
 package com.example.economy_manager.main_part.views.fragments;
 
+import android.content.Context;
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Toast;
-
-import com.anychart.AnyChart;
-import com.anychart.AnyChartView;
-import com.anychart.chart.common.dataentry.DataEntry;
-import com.anychart.chart.common.dataentry.ValueDataEntry;
-import com.anychart.charts.Pie;
+import com.example.economy_manager.R;
+import com.example.economy_manager.models.Transaction;
+import com.example.economy_manager.models.UserDetails;
+import com.example.economy_manager.utilities.MyCustomMethods;
 import com.example.economy_manager.utilities.MyCustomSharedPreferences;
 import com.example.economy_manager.utilities.MyCustomVariables;
-import com.example.economy_manager.R;
-import com.example.economy_manager.models.UserDetails;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
 
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
+import org.eazegraph.lib.charts.PieChart;
+import org.eazegraph.lib.models.PieModel;
+
+import java.time.LocalDate;
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Locale;
-import java.util.Map;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class MoneySpentPercentageFragment extends Fragment {
     private UserDetails userDetails;
-    private LinkedHashMap<String, Float> transactionTypesList;
-    private Calendar currentTime;
-    private AnyChartView pieChart;
+    private LinkedHashMap<Integer, Float> transactionTypesMap;
+    private TextView noExpensesMadeThisMonthText;
+    private PieChart pieChart;
+    private MoneySpentPercentageListener listener;
 
     public MoneySpentPercentageFragment() {
         // Required empty public constructor
@@ -43,11 +41,29 @@ public class MoneySpentPercentageFragment extends Fragment {
 
     public static MoneySpentPercentageFragment newInstance() {
         final MoneySpentPercentageFragment fragment = new MoneySpentPercentageFragment();
+
         final Bundle args = new Bundle();
 
         fragment.setArguments(args);
 
         return fragment;
+    }
+
+    public interface MoneySpentPercentageListener {
+        void onEmptyPieChart();
+
+        void onNotEmptyPieChart();
+    }
+
+    @Override
+    public void onAttach(final @NonNull Context context) {
+        super.onAttach(context);
+
+        try {
+            listener = (MoneySpentPercentageListener) context;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(context.toString() + " must implement MoneySpentPercentageListener");
+        }
     }
 
     @Override
@@ -56,7 +72,9 @@ public class MoneySpentPercentageFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(final LayoutInflater inflater, final ViewGroup container, final Bundle savedInstanceState) {
+    public View onCreateView(final LayoutInflater inflater,
+                             final ViewGroup container,
+                             final Bundle savedInstanceState) {
         final View v = inflater.inflate(R.layout.money_spent_percentage_fragment, container, false);
 
         setVariables(v);
@@ -69,7 +87,7 @@ public class MoneySpentPercentageFragment extends Fragment {
         super.onStart();
         setUserDetails();
         populateMap();
-        setPieChart();
+        //setPieChartData();
     }
 
     private void setUserDetails() {
@@ -77,12 +95,12 @@ public class MoneySpentPercentageFragment extends Fragment {
     }
 
     private void setVariables(final View v) {
-        transactionTypesList = new LinkedHashMap<>();
-        currentTime = Calendar.getInstance();
-        pieChart = v.findViewById(R.id.moneySpentPieChart);
+        transactionTypesMap = new LinkedHashMap<>();
+        noExpensesMadeThisMonthText = v.findViewById(R.id.money_spent_percentage_no_expenses_text);
+        pieChart = v.findViewById(R.id.money_spent_pie_chart);
     }
 
-    // metoda pentru calcularea procentajelor fiecarui tip de cheltuiala (ex: house 5%, food 35%, bills 50%)
+    // method for calculating each expense's percentage (i.e: house 5%, food 35%, bills 50%)
     private void populateMap() {
         if (MyCustomVariables.getFirebaseAuth().getUid() != null) {
             MyCustomVariables.getDatabaseReference()
@@ -90,79 +108,69 @@ public class MoneySpentPercentageFragment extends Fragment {
                     .addValueEventListener(new ValueEventListener() {
                         @Override
                         public void onDataChange(final @NonNull DataSnapshot snapshot) {
-//                            final String currencySymbol = userDetails != null ?
-//                                    userDetails.getApplicationSettings().getCurrencySymbol() :
-//                                    MyCustomMethods.getCurrencySymbol();
-//                            float totalMonthlyIncomes = 0f;
-//                            float totalMonthlyExpenses = 0f;
-//
-//                            if (snapshot.exists() && snapshot.hasChild("PersonalTransactions") &&
-//                                    snapshot.child("PersonalTransactions").hasChildren()) {
-//                                for (final DataSnapshot databaseTransaction :
-//                                        snapshot.child("PersonalTransactions").getChildren()) {
-//                                    final Transaction transaction = databaseTransaction.getValue(Transaction.class);
-//
-//                                    if (transaction != null) {
-//                                        if (transaction.getCategory() > 0 && transaction.getCategory() < 4) {
-//                                            totalMonthlyIncomes += Float.parseFloat(transaction.getValue());
-//                                        } else {
-//                                            totalMonthlyExpenses += Float.parseFloat(transaction.getValue());
-//                                        }
-//                                    }
-//                                }
-//                            }
+                            if (snapshot.exists() &&
+                                    snapshot.hasChild("PersonalTransactions") &&
+                                    snapshot.child("PersonalTransactions").hasChildren()) {
+                                final Iterable<DataSnapshot> personalTransactions =
+                                        snapshot.child("PersonalTransactions").getChildren();
 
-                            //
+                                final int currentMonthIndex = LocalDate.now().getMonthValue();
 
-                            if (snapshot.hasChild("PersonalTransactions")) {
-                                if (snapshot.child("PersonalTransactions").hasChildren()) {
-                                    SimpleDateFormat monthFormat = new SimpleDateFormat("LLLL", Locale.ENGLISH);
-                                    float transactionTypeSum, overall;
+                                final int currentYear = LocalDate.now().getYear();
 
-                                    if (transactionTypesList.size() > 0)
-                                        transactionTypesList.clear();
+                                AtomicReference<Float> currentMonthExpensesTotal = new AtomicReference<>(0f);
 
-                                    for (DataSnapshot yearIterator : snapshot.child("PersonalTransactions").getChildren())
-                                        if (String.valueOf(yearIterator.getKey()).equals(String.valueOf(currentTime.get(Calendar.YEAR)))) // daca a fost gasit anul curent
-                                            for (DataSnapshot monthIterator : yearIterator.getChildren())
-                                                if (String.valueOf(monthIterator.getKey()).equals(monthFormat.format(currentTime.getTime()))) // daca a fost gasita luna curenta
-                                                    for (DataSnapshot monthChild : monthIterator.getChildren())
-                                                        if (String.valueOf(monthChild.getKey()).equals("Expenses")) // daca este cheltuiala
-                                                            if (monthChild.hasChild("Overall")) {
-                                                                overall = Float.parseFloat(String.valueOf(monthChild.child("Overall").getValue()));
-
-                                                                for (DataSnapshot monthGrandChild : monthChild.getChildren())
-                                                                    if (!String.valueOf(monthGrandChild.getKey()).equals("Overall")) // daca fiul nu este 'Overall'
-                                                                    {
-                                                                        transactionTypeSum = 0f;
-                                                                        for (DataSnapshot monthGreatGrandChild : monthGrandChild.getChildren())
-                                                                            transactionTypeSum += Float.parseFloat(String.valueOf(monthGreatGrandChild.child("value").getValue())); // adunam valoarea tranzactiilor de un tip
-                                                                        transactionTypesList.put(String.valueOf(monthGrandChild.getKey()), Float.parseFloat(String.format(Locale.getDefault(), "%.0f", 100f * transactionTypeSum / overall))); // punem in linkedhashmap (ex: house, 10) => 10 = 10%
-                                                                    }
-                                                            }
+                                if (!transactionTypesMap.isEmpty()) {
+                                    transactionTypesMap.clear();
                                 }
-                            }
 
-                            if (transactionTypesList.size() > 0) {
-                                //Toast.makeText(getContext(), ">0", Toast.LENGTH_SHORT).show();
-                                float sum = 0f;
-                                for (Map.Entry<String, Float> transactionType : transactionTypesList.entrySet())
-                                    sum += transactionType.getValue();
-                                transactionTypesList.entrySet().stream().sorted(Map.Entry.<String, Float>comparingByValue().reversed()).forEach(entry -> Toast.makeText(getContext(), entry.getKey() + " " + entry.getValue(), Toast.LENGTH_SHORT).show()); // aici apare exceptia java.lang.NullPointerException: Attempt to invoke virtual method 'java.lang.String android.content.Context.getPackageName()' on a null object reference
-                                //transactionTypesList.entrySet().stream().sorted(Map.Entry.comparingByKey()).forEach(entry -> Toast.makeText(getContext(), entry.getKey()+" "+entry.getValue(), Toast.LENGTH_SHORT).show());
-                                //Toast.makeText(getContext(), "total: "+sum, Toast.LENGTH_SHORT).show();
-                                Pie pie = AnyChart.pie();
-                                List<DataEntry> dataEntryList = new ArrayList<>();
+                                personalTransactions.forEach((final DataSnapshot personalTransactionIterator) -> {
+                                    final Transaction personalTransaction =
+                                            personalTransactionIterator.getValue(Transaction.class);
 
-                                for (Map.Entry<String, Float> iterator : transactionTypesList.entrySet()) {
-                                    dataEntryList.add(new ValueDataEntry(iterator.getKey(), iterator.getValue()));
+                                    if (personalTransaction != null &&
+                                            personalTransaction.getType() == 0 &&
+                                            personalTransaction.getTime().getYear() == currentYear &&
+                                            personalTransaction.getTime().getMonth() == currentMonthIndex) {
+                                        final int personalTransactionCategory = personalTransaction.getCategory();
+
+                                        currentMonthExpensesTotal.updateAndGet((final Float value) ->
+                                                value + Float.parseFloat(personalTransaction.getValue()));
+
+                                        if (!transactionTypesMap.containsKey(personalTransactionCategory)) {
+                                            final float personalTransactionValue =
+                                                    Float.parseFloat(String.format(Locale.getDefault(),
+                                                            "%.0f",
+                                                            Float.parseFloat(personalTransaction.getValue())));
+
+                                            transactionTypesMap.put(personalTransactionCategory,
+                                                    personalTransactionValue);
+                                        } else {
+                                            final float personalTransactionCategoryCurrentSum =
+                                                    Float.parseFloat(String.valueOf(transactionTypesMap
+                                                            .get(personalTransactionCategory)));
+
+                                            final float personalTransactionValue =
+                                                    Float.parseFloat(String.format(Locale.getDefault(),
+                                                            "%.0f",
+                                                            Float.parseFloat(personalTransaction.getValue())));
+
+                                            transactionTypesMap.put(personalTransactionCategory,
+                                                    personalTransactionCategoryCurrentSum + personalTransactionValue);
+                                        }
+                                    }
+                                });
+
+                                if (!transactionTypesMap.isEmpty()) {
+                                    listener.onNotEmptyPieChart();
+                                    noExpensesMadeThisMonthText.setVisibility(View.GONE);
+                                    pieChart.setVisibility(View.VISIBLE);
+                                    setPieChartData(transactionTypesMap, currentMonthExpensesTotal.get());
+                                } else {
+                                    listener.onEmptyPieChart();
+                                    pieChart.setVisibility(View.GONE);
+                                    noExpensesMadeThisMonthText.setVisibility(View.VISIBLE);
                                 }
-                                pie.data(dataEntryList);
-                                pieChart.setChart(pie);
-                            }
-                            // daca nu exista nicio tranzactie in lista
-                            else {
-                                //Toast.makeText(getContext(), "=0", Toast.LENGTH_SHORT).show();
                             }
                         }
 
@@ -174,19 +182,38 @@ public class MoneySpentPercentageFragment extends Fragment {
         }
     }
 
-    private void setPieChart() {
+    private void setPieChartData(final LinkedHashMap<Integer, Float> transactionTypesMap,
+                                 final float totalMonthlyExpenses) {
+        pieChart.clearChart();
 
+        transactionTypesMap.forEach((final Integer key, final Float value) -> {
+            final int categoryPercentage = (int) (100 * (value / totalMonthlyExpenses));
 
-//        if(transactionTypesList.size()>0) // daca avem tranzactii in lista
-//        {
-//            for(Map.Entry<String, Float> transactionType: transactionTypesList.entrySet())
-//            {
-//                //Toast.makeText(getContext(), transactionType.getKey()+": "+transactionType.getValue()+"%", Toast.LENGTH_SHORT).show();
-//            }
-//        }
-//        else // daca nu avem nicio tranzactie in lista
-//        {
-//
-//        }
+            final int categoryColor = requireContext().getColor(key == 4 ?
+                    R.color.expenses_bills : key == 5 ?
+                    R.color.expenses_car : key == 6 ?
+                    R.color.expenses_clothes : key == 7 ?
+                    R.color.expenses_communications : key == 8 ?
+                    R.color.expenses_eating_out : key == 9 ?
+                    R.color.expenses_entertainment : key == 10 ?
+                    R.color.expenses_food : key == 11 ?
+                    R.color.expenses_gifts : key == 12 ?
+                    R.color.expenses_health : key == 13 ?
+                    R.color.expenses_house : key == 14 ?
+                    R.color.expenses_pets : key == 15 ?
+                    R.color.expenses_sports : key == 16 ?
+                    R.color.expenses_taxi : key == 17 ?
+                    R.color.expenses_toiletry : R.color.expenses_transport);
+
+            MyCustomMethods.showShortMessage(requireContext(), key + " " + categoryPercentage + " " + categoryColor);
+
+            pieChart.addPieSlice(new PieModel("i" + key, categoryPercentage, categoryColor));
+        });
+
+//        pieChart.addPieSlice(new PieModel("i1", 1, Color.GREEN));
+
+//        pieChart.addPieSlice(new PieModel("i1", 45, Color.RED));
+//        pieChart.addPieSlice(new PieModel("i2", 15, Color.BLUE));
+//        pieChart.addPieSlice(new PieModel("i3", 40, Color.GREEN));
     }
 }

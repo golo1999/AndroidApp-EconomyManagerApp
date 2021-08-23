@@ -18,6 +18,7 @@ public class DeleteTransactionCustomDialog extends DialogFragment {
     private final ArrayList<Transaction> transactionsList;
     private final EditTransactionsRecyclerViewAdapter adapter;
     private final int positionInList;
+    private DeleteDialogListener listener;
 
     public DeleteTransactionCustomDialog(final ArrayList<Transaction> transactionsList,
                                          final EditTransactionsRecyclerViewAdapter adapter,
@@ -35,8 +36,6 @@ public class DeleteTransactionCustomDialog extends DialogFragment {
 
         void onDialogNegativeClick(final DialogFragment dialog);
     }
-
-    private DeleteDialogListener listener;
 
     @NonNull
     @Override
