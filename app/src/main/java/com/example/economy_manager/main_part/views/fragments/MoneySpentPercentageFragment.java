@@ -13,7 +13,6 @@ import androidx.fragment.app.Fragment;
 import com.example.economy_manager.R;
 import com.example.economy_manager.models.Transaction;
 import com.example.economy_manager.models.UserDetails;
-import com.example.economy_manager.utilities.MyCustomMethods;
 import com.example.economy_manager.utilities.MyCustomSharedPreferences;
 import com.example.economy_manager.utilities.MyCustomVariables;
 import com.google.firebase.database.DataSnapshot;
@@ -24,8 +23,11 @@ import org.eazegraph.lib.charts.PieChart;
 import org.eazegraph.lib.models.PieModel;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class MoneySpentPercentageFragment extends Fragment {
@@ -87,7 +89,6 @@ public class MoneySpentPercentageFragment extends Fragment {
         super.onStart();
         setUserDetails();
         populateMap();
-        //setPieChartData();
     }
 
     private void setUserDetails() {
@@ -118,7 +119,8 @@ public class MoneySpentPercentageFragment extends Fragment {
 
                                 final int currentYear = LocalDate.now().getYear();
 
-                                AtomicReference<Float> currentMonthExpensesTotal = new AtomicReference<>(0f);
+                                final AtomicReference<Float> currentMonthExpensesTotal =
+                                        new AtomicReference<>(0f);
 
                                 if (!transactionTypesMap.isEmpty()) {
                                     transactionTypesMap.clear();
@@ -128,6 +130,7 @@ public class MoneySpentPercentageFragment extends Fragment {
                                     final Transaction personalTransaction =
                                             personalTransactionIterator.getValue(Transaction.class);
 
+                                    // if the transaction is a current month & year expense
                                     if (personalTransaction != null &&
                                             personalTransaction.getType() == 0 &&
                                             personalTransaction.getTime().getYear() == currentYear &&
@@ -137,6 +140,7 @@ public class MoneySpentPercentageFragment extends Fragment {
                                         currentMonthExpensesTotal.updateAndGet((final Float value) ->
                                                 value + Float.parseFloat(personalTransaction.getValue()));
 
+                                        // updating current category's total value if it already exists
                                         if (!transactionTypesMap.containsKey(personalTransactionCategory)) {
                                             final float personalTransactionValue =
                                                     Float.parseFloat(String.format(Locale.getDefault(),
@@ -145,7 +149,9 @@ public class MoneySpentPercentageFragment extends Fragment {
 
                                             transactionTypesMap.put(personalTransactionCategory,
                                                     personalTransactionValue);
-                                        } else {
+                                        }
+                                        // if the current category doesn't exist yet
+                                        else {
                                             final float personalTransactionCategoryCurrentSum =
                                                     Float.parseFloat(String.valueOf(transactionTypesMap
                                                             .get(personalTransactionCategory)));
@@ -165,6 +171,8 @@ public class MoneySpentPercentageFragment extends Fragment {
                                     listener.onNotEmptyPieChart();
                                     noExpensesMadeThisMonthText.setVisibility(View.GONE);
                                     pieChart.setVisibility(View.VISIBLE);
+
+                                    sortMapDescendingByValue(transactionTypesMap);
                                     setPieChartData(transactionTypesMap, currentMonthExpensesTotal.get());
                                 } else {
                                     listener.onEmptyPieChart();
@@ -205,15 +213,20 @@ public class MoneySpentPercentageFragment extends Fragment {
                     R.color.expenses_taxi : key == 17 ?
                     R.color.expenses_toiletry : R.color.expenses_transport);
 
-            MyCustomMethods.showShortMessage(requireContext(), key + " " + categoryPercentage + " " + categoryColor);
+            final PieModel pieSlice = new PieModel("category" + key, categoryPercentage, categoryColor);
 
-            pieChart.addPieSlice(new PieModel("i" + key, categoryPercentage, categoryColor));
+            pieChart.addPieSlice(pieSlice);
         });
+    }
 
-//        pieChart.addPieSlice(new PieModel("i1", 1, Color.GREEN));
+    private void sortMapDescendingByValue(final LinkedHashMap<Integer, Float> map) {
+        final List<Map.Entry<Integer, Float>> sortedEntries = new ArrayList<>(map.entrySet());
 
-//        pieChart.addPieSlice(new PieModel("i1", 45, Color.RED));
-//        pieChart.addPieSlice(new PieModel("i2", 15, Color.BLUE));
-//        pieChart.addPieSlice(new PieModel("i3", 40, Color.GREEN));
+        sortedEntries.sort((final Map.Entry<Integer, Float> entry1, final Map.Entry<Integer, Float> entry2) ->
+                entry2.getValue().compareTo(entry1.getValue()));
+
+        map.clear();
+
+        sortedEntries.forEach((final Map.Entry<Integer, Float> entry) -> map.put(entry.getKey(), entry.getValue()));
     }
 }

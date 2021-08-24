@@ -11,9 +11,11 @@
         android:roundIcon="@mipmap/ic_new_app_icon_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.DayNight.NoActionBar">
+
         <activity
             android:name="com.example.economy_manager.main_part.views.activities.SettingsActivity"
             android:parentActivityName="com.example.economy_manager.main_part.views.activities.MainScreenActivity" />
+
         <activity android:name="com.example.economy_manager.main_part.views.activities.SplashScreenActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -21,39 +23,47 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name="com.example.economy_manager.main_part.views.activities.TimeAndDatePickerActivity"
-            android:parentActivityName="com.example.economy_manager.main_part.views.activities.EditSpecificTransactionActivity" />
+
         <activity android:name="com.example.economy_manager.main_part.views.activities.EditSpecificTransactionActivity" />
+
         <activity
             android:name="com.example.economy_manager.main_part.views.activities.EditPhotoActivity"
             android:parentActivityName="com.example.economy_manager.main_part.views.activities.EditAccountActivity" />
+
         <activity
             android:name="com.example.economy_manager.main_part.views.activities.EditAccountActivity"
             android:parentActivityName="com.example.economy_manager.main_part.views.activities.MainScreenActivity" />
+
         <activity
             android:name="com.example.economy_manager.main_part.views.activities.MonthlyBalanceActivity"
             android:parentActivityName="com.example.economy_manager.main_part.views.activities.MainScreenActivity" />
+
         <activity
             android:name="com.example.economy_manager.main_part.views.activities.EditTransactionsActivity"
             android:parentActivityName="com.example.economy_manager.main_part.views.activities.MainScreenActivity" />
+
         <activity
             android:name="com.example.economy_manager.main_part.views.activities.SubtractMoneyActivity"
             android:parentActivityName="com.example.economy_manager.main_part.views.activities.MainScreenActivity"
             android:windowSoftInputMode="stateAlwaysHidden" />
+
         <activity
             android:name="com.example.economy_manager.main_part.views.activities.AddMoneyActivity"
             android:parentActivityName="com.example.economy_manager.main_part.views.activities.MainScreenActivity"
             android:windowSoftInputMode="stateAlwaysHidden" />
+
         <activity
             android:name="com.example.economy_manager.login_part.LogInActivity"
             android:parentActivityName="com.example.economy_manager.main_part.views.activities.SplashScreenActivity" />
+
         <activity
             android:name="com.example.economy_manager.login_part.ForgotPasswordActivity"
             android:parentActivityName="com.example.economy_manager.login_part.LogInActivity" />
+
         <activity
             android:name="com.example.economy_manager.login_part.SignUpActivity"
             android:parentActivityName="com.example.economy_manager.login_part.LogInActivity" />
+
         <activity android:name="com.example.economy_manager.main_part.views.activities.MainScreenActivity" />
 
         <meta-data
@@ -64,6 +74,7 @@
             android:name="com.facebook.FacebookActivity"
             android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
             android:label="@string/app_name" />
+
         <activity
             android:name="com.facebook.CustomTabActivity"
             android:exported="true">
@@ -76,7 +87,6 @@
                 <data android:scheme="@string/fb_login_protocol_scheme" />
             </intent-filter>
         </activity>
-
 
     </application>
 

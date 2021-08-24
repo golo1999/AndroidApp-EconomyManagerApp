@@ -148,25 +148,31 @@ public class MainScreenActivity
     }
 
     private void setOnClickListeners() {
-        account.setOnClickListener(v -> MyCustomMethods.goToActivityInDirection(MainScreenActivity.this,
-                EditAccountActivity.class, 1));
+        account.setOnClickListener((final View v) ->
+                MyCustomMethods.goToActivityInDirection(MainScreenActivity.this,
+                        EditAccountActivity.class, 1));
 
-        addButton.setOnClickListener(v -> MyCustomMethods.goToActivityInDirection(MainScreenActivity.this,
-                AddMoneyActivity.class, 1));
+        addButton.setOnClickListener((final View v) ->
+                MyCustomMethods.goToActivityInDirection(MainScreenActivity.this,
+                        AddMoneyActivity.class, 1));
 
-        balance.setOnClickListener(v -> MyCustomMethods.goToActivityInDirection(MainScreenActivity.this,
-                MonthlyBalanceActivity.class, 0));
+        balance.setOnClickListener((final View v) ->
+                MyCustomMethods.goToActivityInDirection(MainScreenActivity.this,
+                        MonthlyBalanceActivity.class, 0));
 
-        edit.setOnClickListener(v -> MyCustomMethods.goToActivityInDirection(MainScreenActivity.this,
-                EditTransactionsActivity.class, 0));
+        edit.setOnClickListener((final View v) ->
+                MyCustomMethods.goToActivityInDirection(MainScreenActivity.this,
+                        EditTransactionsActivity.class, 0));
 
-        settings.setOnClickListener(v -> MyCustomMethods.goToActivityInDirection(MainScreenActivity.this,
-                SettingsActivity.class, 1));
+        settings.setOnClickListener((final View v) ->
+                MyCustomMethods.goToActivityInDirection(MainScreenActivity.this,
+                        SettingsActivity.class, 1));
 
-        subtractButton.setOnClickListener(v -> MyCustomMethods.goToActivityInDirection(MainScreenActivity.this,
-                SubtractMoneyActivity.class, 1));
+        subtractButton.setOnClickListener((final View v) ->
+                MyCustomMethods.goToActivityInDirection(MainScreenActivity.this,
+                        SubtractMoneyActivity.class, 1));
 
-        signOut.setOnClickListener(v -> {
+        signOut.setOnClickListener((final View v) -> {
             LoginManager.getInstance().logOut();
             MyCustomVariables.getFirebaseAuth().signOut();
             finishAffinity();
@@ -256,8 +262,9 @@ public class MainScreenActivity
                                     }
                                 }
 
-                                final int percentage = Float
-                                        .valueOf(totalMonthlyExpenses / totalMonthlyIncomes * 100).intValue();
+                                final int percentage =
+                                        Float.valueOf(totalMonthlyExpenses / totalMonthlyIncomes * 100).intValue();
+
                                 final String percentageText = currentMonthTransactionsExist ?
                                         percentage <= 100 ?
                                                 getResources().getString(R.string.money_spent_you_spent) + " " + percentage

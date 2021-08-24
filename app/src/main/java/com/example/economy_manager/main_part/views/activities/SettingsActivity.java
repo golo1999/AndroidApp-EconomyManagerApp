@@ -1,6 +1,7 @@
 package com.example.economy_manager.main_part.views.activities;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
@@ -14,6 +15,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -35,6 +37,7 @@ import com.example.economy_manager.utilities.MyCustomVariables;
 import com.facebook.AccessToken;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.EmailAuthProvider;
 import com.google.firebase.auth.FacebookAuthProvider;
@@ -47,10 +50,11 @@ public class SettingsActivity extends AppCompatActivity
     private UserDetails userDetails;
     private SharedPreferences preferences;
     private ImageView goBack;
-    private Button resetDatabase;
-    private Button deleteAccount;
-    private Button changePassword;
-    private Spinner currencySelector;
+    private Button rateAppButton;
+    private Button changePasswordButton;
+    private Button resetDatabaseButton;
+    private Button deleteAccountButton;
+    private Spinner currencySelectorSpinner;
     private TextView themeText;
     private TextView currencyText;
     private SwitchCompat darkThemeSwitch;
@@ -61,6 +65,7 @@ public class SettingsActivity extends AppCompatActivity
         setContentView(R.layout.settings_activity);
         setVariables();
         setTheme();
+        setAllButtonsStyle();
         setDarkThemeSwitch(darkThemeSwitch);
         setTexts();
         setOnClickListeners();
@@ -82,10 +87,11 @@ public class SettingsActivity extends AppCompatActivity
         userDetails = MyCustomSharedPreferences.retrieveUserDetailsFromSharedPreferences(this);
         preferences = getSharedPreferences(MyCustomVariables.getSharedPreferencesFileName(), MODE_PRIVATE);
         goBack = findViewById(R.id.settings_back);
-        resetDatabase = findViewById(R.id.settings_delete_database);
-        deleteAccount = findViewById(R.id.settings_delete_button);
-        changePassword = findViewById(R.id.settings_change_password_button);
-        currencySelector = findViewById(R.id.settings_currency_spinner);
+        rateAppButton = findViewById(R.id.settings_rate_button);
+        changePasswordButton = findViewById(R.id.settings_change_password_button);
+        resetDatabaseButton = findViewById(R.id.settings_delete_database);
+        deleteAccountButton = findViewById(R.id.settings_delete_button);
+        currencySelectorSpinner = findViewById(R.id.settings_currency_spinner);
         currencyText = findViewById(R.id.settings_currency_text);
         themeText = findViewById(R.id.settings_theme_text);
         darkThemeSwitch = findViewById(R.id.settings_dark_theme_switch);
@@ -101,7 +107,7 @@ public class SettingsActivity extends AppCompatActivity
     }
 
     private void setOnClickListeners() {
-        changePassword.setOnClickListener(v -> {
+        changePasswordButton.setOnClickListener((final View v) -> {
             if (v.getContext() != null) {
                 final Context context = v.getContext();
 
@@ -109,20 +115,21 @@ public class SettingsActivity extends AppCompatActivity
                         .setTitle(getResources().getString(R.string.settings_warning).trim())
                         .setMessage(getResources().getString(R.string.settings_change_password).trim())
                         .setPositiveButton(getResources().getString(R.string.settings_yes).trim(),
-                                (dialog, which) -> {
+                                (final DialogInterface dialog, final int which) -> {
                                     final ChangePasswordCustomDialog dialogChangePassword1 =
                                             new ChangePasswordCustomDialog();
 
                                     dialogChangePassword1.show(getSupportFragmentManager(), "example dialog");
                                 })
                         .setNegativeButton(getResources().getString(R.string.cancel).trim(),
-                                (dialog, which) -> {
+                                (final DialogInterface dialog, final int which) -> {
 
-                                }).show();
+                                })
+                        .show();
             }
         });
 
-        deleteAccount.setOnClickListener(v -> {
+        deleteAccountButton.setOnClickListener((final View v) -> {
             if (v.getContext() != null) {
                 final Context context = v.getContext();
 
@@ -130,7 +137,7 @@ public class SettingsActivity extends AppCompatActivity
                         .setTitle(getResources().getString(R.string.settings_warning).trim())
                         .setMessage(getResources().getString(R.string.settings_delete_account).trim())
                         .setPositiveButton(getResources().getString(R.string.settings_yes).trim(),
-                                (dialog, which) -> {
+                                (final DialogInterface dialog, final int which) -> {
                                     int choice = 0;
 
                                     if (MyCustomVariables.getFirebaseAuth().getCurrentUser() != null &&
@@ -145,15 +152,16 @@ public class SettingsActivity extends AppCompatActivity
                                     dialogClass.show(getSupportFragmentManager(), "example dialog");
                                 })
                         .setNegativeButton(getResources().getString(R.string.cancel).trim(),
-                                (dialog, which) -> {
+                                (final DialogInterface dialog, final int which) -> {
 
-                                }).show();
+                                })
+                        .show();
             }
         });
 
-        goBack.setOnClickListener(v -> onBackPressed());
+        goBack.setOnClickListener((final View v) -> onBackPressed());
 
-        resetDatabase.setOnClickListener(v -> {
+        resetDatabaseButton.setOnClickListener((final View v) -> {
             if (v.getContext() != null) {
                 final Context context = v.getContext();
 
@@ -161,7 +169,7 @@ public class SettingsActivity extends AppCompatActivity
                         .setTitle(getResources().getString(R.string.settings_warning).trim())
                         .setMessage(getResources().getString(R.string.settings_reset_database).trim())
                         .setPositiveButton(getResources().getString(R.string.settings_yes).trim(),
-                                (dialog, which) -> {
+                                (final DialogInterface dialog, final int which) -> {
                                     int choice = 1;
 
                                     if (MyCustomVariables.getFirebaseAuth().getCurrentUser() != null &&
@@ -176,9 +184,10 @@ public class SettingsActivity extends AppCompatActivity
                                     dialogClass.show(getSupportFragmentManager(), "example dialog");
                                 })
                         .setNegativeButton(getResources().getString(R.string.cancel).trim(),
-                                (dialog, which) -> {
+                                (final DialogInterface dialog, final int which) -> {
 
-                                }).show();
+                                })
+                        .show();
             }
         });
     }
@@ -193,18 +202,18 @@ public class SettingsActivity extends AppCompatActivity
         final String currency = userDetails != null ?
                 userDetails.getApplicationSettings().getCurrency() : MyCustomVariables.getDefaultCurrency();
         // turkish sea (blue) or white
-        final int color = !darkThemeEnabled ? Color.parseColor("#195190") : Color.WHITE;
+        final int color = !darkThemeEnabled ? getColor(R.color.turkish_sea) : Color.WHITE;
 
         final int dropDownTheme = !darkThemeEnabled ?
                 R.drawable.ic_blue_gradient_unloved_teen : R.drawable.ic_white_gradient_tobacco_ad;
 
         // setting arrow color
-        currencySelector.getBackground().setColorFilter(color, PorterDuff.Mode.SRC_ATOP);
+        currencySelectorSpinner.getBackground().setColorFilter(color, PorterDuff.Mode.SRC_ATOP);
 
         // setting elements' color
-        currencySelector.setPopupBackgroundResource(dropDownTheme);
+        currencySelectorSpinner.setPopupBackgroundResource(dropDownTheme);
 
-        currencySelector.setSelection(currency.equals("AUD") ?
+        currencySelectorSpinner.setSelection(currency.equals("AUD") ?
                 0 : currency.equals("BRL") ?
                 1 : currency.equals("CAD") ?
                 2 : currency.equals("CHF") ?
@@ -217,7 +226,7 @@ public class SettingsActivity extends AppCompatActivity
                 9 : currency.equals("RUB") ?
                 10 : 11);
 
-        darkThemeSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
+        darkThemeSwitch.setOnCheckedChangeListener((final CompoundButton buttonView, final boolean isChecked) -> {
             if (MyCustomVariables.getFirebaseAuth().getUid() != null) {
                 MyCustomVariables.getDatabaseReference()
                         .child(MyCustomVariables.getFirebaseAuth().getUid())
@@ -229,10 +238,7 @@ public class SettingsActivity extends AppCompatActivity
                 MyCustomSharedPreferences.saveUserDetailsToSharedPreferences(preferences, userDetails);
 
                 MyCustomVariables.setUserDetails(userDetails);
-
-                setTheme();
-                setTexts();
-                //setCurrencySpinnerTheme();
+                MyCustomMethods.restartCurrentActivity(this);
             }
         });
     }
@@ -251,9 +257,9 @@ public class SettingsActivity extends AppCompatActivity
                 if (email != null) {
                     final AuthCredential credential = EmailAuthProvider.getCredential(email, oldPassword);
 
-                    user.reauthenticate(credential).addOnCompleteListener(task -> {
+                    user.reauthenticate(credential).addOnCompleteListener((final Task<Void> task) -> {
                         if (task.isSuccessful()) {
-                            user.updatePassword(newPassword).addOnCompleteListener(task1 -> {
+                            user.updatePassword(newPassword).addOnCompleteListener((final Task<Void> task1) -> {
                                 if (task1.isSuccessful()) {
                                     MyCustomMethods.showShortMessage(this,
                                             getResources().getString(R.string.settings_password_updated));
@@ -277,6 +283,7 @@ public class SettingsActivity extends AppCompatActivity
             MyCustomMethods.showShortMessage(this,
                     getResources().getString(R.string.settings_new_password_not_empty));
         }
+
         MyCustomMethods.closeTheKeyboard(this);
     }
 
@@ -292,13 +299,13 @@ public class SettingsActivity extends AppCompatActivity
                 if (email != null) {
                     final AuthCredential credential = EmailAuthProvider.getCredential(email, password);
 
-                    user.reauthenticate(credential).addOnCompleteListener(task -> {
+                    user.reauthenticate(credential).addOnCompleteListener((final Task<Void> task) -> {
                         if (task.isSuccessful()) {
                             MyCustomVariables.getDatabaseReference()
                                     .child(MyCustomVariables.getFirebaseAuth().getUid())
                                     .removeValue();
 
-                            user.delete().addOnCompleteListener(task1 -> {
+                            user.delete().addOnCompleteListener((final Task<Void> task1) -> {
                                 MyCustomVariables.getFirebaseAuth().signOut();
                                 finishAffinity();
                                 startActivity(new Intent(SettingsActivity.this, LogInActivity.class));
@@ -343,7 +350,7 @@ public class SettingsActivity extends AppCompatActivity
             MyCustomVariables.getFirebaseAuth()
                     .getCurrentUser()
                     .reauthenticate(credential)
-                    .addOnCompleteListener(task -> {
+                    .addOnCompleteListener((final Task<Void> task) -> {
                         if (MyCustomVariables.getFirebaseAuth().getUid() != null) {
                             MyCustomVariables.getDatabaseReference()
                                     .child(MyCustomVariables.getFirebaseAuth().getUid())
@@ -354,7 +361,7 @@ public class SettingsActivity extends AppCompatActivity
                         MyCustomVariables.getFirebaseAuth()
                                 .getCurrentUser()
                                 .delete()
-                                .addOnCompleteListener(task1 -> {
+                                .addOnCompleteListener((final Task<Void> task1) -> {
                                     MyCustomVariables.getFirebaseAuth().signOut();
                                     finishAffinity();
                                     startActivity(new Intent(SettingsActivity.this, LogInActivity.class));
@@ -379,7 +386,7 @@ public class SettingsActivity extends AppCompatActivity
                 if (email != null) {
                     final AuthCredential credential = EmailAuthProvider.getCredential(email, password);
 
-                    user.reauthenticate(credential).addOnCompleteListener(task -> {
+                    user.reauthenticate(credential).addOnCompleteListener((final Task<Void> task) -> {
                         if (task.isSuccessful()) {
                             MyCustomVariables.getDatabaseReference()
                                     .child(MyCustomVariables.getFirebaseAuth().getUid())
@@ -426,7 +433,7 @@ public class SettingsActivity extends AppCompatActivity
             MyCustomVariables.getFirebaseAuth()
                     .getCurrentUser()
                     .reauthenticate(credential)
-                    .addOnCompleteListener(task -> {
+                    .addOnCompleteListener((final Task<Void> task) -> {
                         if (task.isSuccessful()) {
                             MyCustomVariables.getDatabaseReference()
                                     .child(MyCustomVariables.getFirebaseAuth().getUid())
@@ -449,7 +456,7 @@ public class SettingsActivity extends AppCompatActivity
                 userDetails.getApplicationSettings().getDarkTheme() :
                 MyCustomVariables.getDefaultUserDetails().getApplicationSettings().getDarkTheme();
 
-        final int color = !checked ? Color.parseColor("#195190") : Color.WHITE;
+        final int color = !checked ? getColor(R.color.turkish_sea) : Color.WHITE;
 
         themeText.setTextColor(color);
         currencyText.setTextColor(color);
@@ -473,7 +480,7 @@ public class SettingsActivity extends AppCompatActivity
             }
         };
 
-        currencySelector.setAdapter(currencyAdapter);
+        currencySelectorSpinner.setAdapter(currencyAdapter);
     }
 
     private void setCurrencySpinnerTheme(final View v) {
@@ -499,7 +506,7 @@ public class SettingsActivity extends AppCompatActivity
                             userDetails.getApplicationSettings().getDarkTheme() :
                             MyCustomVariables.getDefaultUserDetails().getApplicationSettings().getDarkTheme();
 
-                    final int color = !darkThemeEnabled ? Color.parseColor("#195190") : Color.WHITE;
+                    final int color = !darkThemeEnabled ? getColor(R.color.turkish_sea) : Color.WHITE;
                     // the first element will have the text aligned to its start and
                     // the color based on the selected theme
                     ((TextView) parent.getChildAt(0)).setTextColor(color);
@@ -514,7 +521,7 @@ public class SettingsActivity extends AppCompatActivity
             }
         };
 
-        currencySelector.setOnItemSelectedListener(itemSelectedListener);
+        currencySelectorSpinner.setOnItemSelectedListener(itemSelectedListener);
     }
 
     private void setDarkThemeSwitch(final SwitchCompat darkThemeSwitch) {
@@ -537,7 +544,7 @@ public class SettingsActivity extends AppCompatActivity
             switch (authProvider) {
                 case "google.com":
                 case "facebook.com":
-                    changePassword.setVisibility(View.GONE);
+                    changePasswordButton.setVisibility(View.GONE);
                     break;
                 //case "password":
                 //break;
@@ -546,7 +553,7 @@ public class SettingsActivity extends AppCompatActivity
     }
 
     private void saveSelectedCurrency() {
-        final String selectedCurrency = String.valueOf(currencySelector.getSelectedItem());
+        final String selectedCurrency = String.valueOf(currencySelectorSpinner.getSelectedItem());
 
         final String currencySymbol;
 
@@ -581,5 +588,22 @@ public class SettingsActivity extends AppCompatActivity
                     .child("currencySymbol")
                     .setValue(currencySymbol);
         }
+    }
+
+    private void setAllButtonsStyle() {
+        setButtonStyle(rateAppButton,
+                userDetails != null && userDetails.getApplicationSettings().getDarkTheme());
+        setButtonStyle(changePasswordButton,
+                userDetails != null && userDetails.getApplicationSettings().getDarkTheme());
+        setButtonStyle(resetDatabaseButton,
+                userDetails != null && userDetails.getApplicationSettings().getDarkTheme());
+        setButtonStyle(deleteAccountButton,
+                userDetails != null && userDetails.getApplicationSettings().getDarkTheme());
+    }
+
+    private void setButtonStyle(final Button button,
+                                final boolean darkThemeEnabled) {
+        button.setBackgroundResource(!darkThemeEnabled ? R.drawable.button_blue_border : R.drawable.button_white_border);
+        button.setTextColor(getColor(!darkThemeEnabled ? R.color.turkish_sea : R.color.white));
     }
 }

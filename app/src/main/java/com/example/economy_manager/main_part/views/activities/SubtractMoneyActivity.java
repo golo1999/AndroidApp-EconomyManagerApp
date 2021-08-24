@@ -129,14 +129,14 @@ public class SubtractMoneyActivity
                                 .child("PersonalTransactions")
                                 .child(newTransaction.getId())
                                 .setValue(newTransaction)
-                                .addOnSuccessListener(aVoid -> {
+                                .addOnSuccessListener((final Void aVoid) -> {
                                     MyCustomMethods.showShortMessage(this,
                                             getResources().getString(R.string.expense) + " " +
                                                     getResources().getString(R.string.add_money_added_successfully));
                                     finish();
                                     overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
                                 })
-                                .addOnFailureListener(e -> {
+                                .addOnFailureListener((final Exception e) -> {
                                     MyCustomVariables.getDatabaseReference()
                                             .child(MyCustomVariables.getFirebaseAuth().getUid())
                                             .child("PersonalTransactions")

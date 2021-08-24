@@ -17,10 +17,10 @@ import com.example.economy_manager.models.UserDetails;
 
 import java.util.ArrayList;
 
-public class MonthsSpinnerAdapter extends ArrayAdapter<String> {
+public class MonthsSpinnerAdapter_NOT_WORKING extends ArrayAdapter<String> {
     private final UserDetails userDetails;
 
-    public MonthsSpinnerAdapter(final Context context, final ArrayList<String> monthsList, final UserDetails userDetails) {
+    public MonthsSpinnerAdapter_NOT_WORKING(final Context context, final ArrayList<String> monthsList, final UserDetails userDetails) {
         super(context, 0, monthsList);
 
         this.userDetails = userDetails;

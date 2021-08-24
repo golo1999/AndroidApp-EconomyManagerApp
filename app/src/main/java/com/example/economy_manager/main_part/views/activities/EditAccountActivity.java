@@ -239,7 +239,6 @@ public class EditAccountActivity extends AppCompatActivity {
         setEditTextColor(lastNameInput, color);
         setEditTextColor(phoneNumberInput, color);
         setEditTextColor(websiteInput, color);
-//        setEditTextColor(birthDatePicker, color);
         setEditTextColor(careerTitleInput, color);
 
         setUpdateProfileButtonStyle(darkThemeEnabled);

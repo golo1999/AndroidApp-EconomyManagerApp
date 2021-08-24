@@ -50,6 +50,12 @@ public final class MyCustomMethods {
                 direction == 0 ? R.anim.slide_out_right : R.anim.slide_out_left);
     }
 
+    public static void restartCurrentActivity(final Activity activity) {
+        activity.startActivity(activity.getIntent());
+        activity.finish();
+        activity.overridePendingTransition(0, 0);
+    }
+
     public static void showShortMessage(final Context context, final String message) {
         Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
     }

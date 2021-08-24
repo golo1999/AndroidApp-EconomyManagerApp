@@ -128,7 +128,7 @@ public class AddMoneyActivity extends AppCompatActivity implements DatePickerDia
                                 .child("PersonalTransactions")
                                 .child(newTransaction.getId())
                                 .setValue(newTransaction)
-                                .addOnSuccessListener(aVoid -> {
+                                .addOnSuccessListener((final Void aVoid) -> {
                                     MyCustomMethods.showShortMessage(this,
                                             getResources().getString(R.string.income) + " " +
                                                     getResources().getString(R.string.add_money_added_successfully));
@@ -136,7 +136,7 @@ public class AddMoneyActivity extends AppCompatActivity implements DatePickerDia
                                     finish();
                                     overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
                                 })
-                                .addOnFailureListener(e -> {
+                                .addOnFailureListener((final Exception e) -> {
                                     MyCustomVariables.getDatabaseReference()
                                             .child(MyCustomVariables.getFirebaseAuth().getUid())
                                             .child("PersonalTransactions")
