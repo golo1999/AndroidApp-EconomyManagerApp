@@ -69,7 +69,7 @@ public class SettingsActivity extends AppCompatActivity
         setDarkThemeSwitch(darkThemeSwitch);
         setTexts();
         setOnClickListeners();
-        createCurrencySpinner();
+        createCurrencySelectorSpinner();
         setSpinners();
         setSelectedItemColorSpinner();
         hideButtons();
@@ -193,8 +193,6 @@ public class SettingsActivity extends AppCompatActivity
     }
 
     private void setSpinners() {
-        Log.d("userDetailsInSettings", userDetails.toString());
-
         final boolean darkThemeEnabled = userDetails != null ?
                 userDetails.getApplicationSettings().getDarkTheme() :
                 MyCustomVariables.getDefaultUserDetails().getApplicationSettings().getDarkTheme();
@@ -462,7 +460,7 @@ public class SettingsActivity extends AppCompatActivity
         currencyText.setTextColor(color);
     }
 
-    private void createCurrencySpinner() {
+    private void createCurrencySelectorSpinner() {
         final String[] currencyList = getResources().getStringArray(R.array.currencies);
 
         final ArrayAdapter<String> currencyAdapter = new ArrayAdapter<String>(this,
@@ -474,7 +472,7 @@ public class SettingsActivity extends AppCompatActivity
                 final View v = super.getDropDownView(position, convertView, parent);
 
                 ((TextView) v).setGravity(Gravity.CENTER);
-                setCurrencySpinnerTheme(v);
+                setCurrencySelectorSpinnerTheme(v);
 
                 return v;
             }
@@ -483,7 +481,7 @@ public class SettingsActivity extends AppCompatActivity
         currencySelectorSpinner.setAdapter(currencyAdapter);
     }
 
-    private void setCurrencySpinnerTheme(final View v) {
+    private void setCurrencySelectorSpinnerTheme(final View v) {
         final boolean darkThemeEnabled = userDetails != null ?
                 userDetails.getApplicationSettings().getDarkTheme() :
                 MyCustomVariables.getDefaultUserDetails().getApplicationSettings().getDarkTheme();
@@ -555,9 +553,7 @@ public class SettingsActivity extends AppCompatActivity
     private void saveSelectedCurrency() {
         final String selectedCurrency = String.valueOf(currencySelectorSpinner.getSelectedItem());
 
-        final String currencySymbol;
-
-        currencySymbol = selectedCurrency.equals("AUD") ?
+        final String currencySymbol = selectedCurrency.equals("AUD") ?
                 "A$" : selectedCurrency.equals("BRL") ?
                 "R$" : selectedCurrency.equals("CAD") ?
                 "C$" : selectedCurrency.equals("CHF") ?
@@ -570,11 +566,17 @@ public class SettingsActivity extends AppCompatActivity
                 "RON" : selectedCurrency.equals("RUB") ?
                 "₽" : "$";
 
+        // le detecteaza perfect
+        Log.d("currentCurrency", userDetails.getApplicationSettings().getCurrency());
+        Log.d("newCurrency", selectedCurrency);
+        //
+
         if (MyCustomVariables.getFirebaseAuth().getUid() != null &&
                 userDetails != null &&
                 !userDetails.getApplicationSettings().getCurrency().equals(selectedCurrency)) {
             userDetails.getApplicationSettings().setCurrency(selectedCurrency);
             MyCustomSharedPreferences.saveUserDetailsToSharedPreferences(preferences, userDetails);
+            MyCustomVariables.setUserDetails(userDetails);
 
             MyCustomVariables.getDatabaseReference()
                     .child(MyCustomVariables.getFirebaseAuth().getUid())

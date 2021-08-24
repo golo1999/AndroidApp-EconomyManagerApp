@@ -22,8 +22,9 @@ public final class MyCustomMethods {
         final View v = parentActivity.getCurrentFocus();
 
         if (v != null) {
-            final InputMethodManager manager = (InputMethodManager) parentActivity.
-                    getSystemService(Context.INPUT_METHOD_SERVICE);
+            final InputMethodManager manager =
+                    (InputMethodManager) parentActivity.getSystemService(Context.INPUT_METHOD_SERVICE);
+
             manager.hideSoftInputFromWindow(v.getWindowToken(), 0);
         }
     }
@@ -48,6 +49,12 @@ public final class MyCustomMethods {
         currentActivity.overridePendingTransition(direction == 0 ?
                         R.anim.slide_in_left : R.anim.slide_in_right,
                 direction == 0 ? R.anim.slide_out_right : R.anim.slide_out_left);
+    }
+
+    public static void goToActivityWithFadeTransition(final @NonNull Activity currentActivity,
+                                                      final @NonNull Class<? extends Activity> nextActivity) {
+        currentActivity.startActivity(new Intent(currentActivity, nextActivity));
+        currentActivity.overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
     }
 
     public static void restartCurrentActivity(final Activity activity) {

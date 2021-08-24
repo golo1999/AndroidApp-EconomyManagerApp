@@ -161,8 +161,8 @@ public class EditSpecificTransactionFragment extends Fragment {
 
     private void setTitle() {
         if ((viewModel.getActivityTitle() == null) || (!viewModel.getActivityTitle()
-                .equals(getResources().getString(R.string.edit_specific_transaction_title).trim()))) {
-            viewModel.setActivityTitle(getResources().getString(R.string.edit_specific_transaction_title).trim());
+                .equals(requireContext().getResources().getString(R.string.edit_specific_transaction_title).trim()))) {
+            viewModel.setActivityTitle(requireContext().getResources().getString(R.string.edit_specific_transaction_title).trim());
         }
 
         titleText.setText(viewModel.getActivityTitle());
@@ -179,9 +179,9 @@ public class EditSpecificTransactionFragment extends Fragment {
             int positionInTheTransactionTypesList = -1;
 
             noteField.setHint(selectedTransaction.getNote() != null ?
-                    selectedTransaction.getNote() : getResources().getString(R.string.note));
+                    selectedTransaction.getNote() : requireContext().getResources().getString(R.string.note));
             valueField.setHint(selectedTransaction.getValue() != null ?
-                    selectedTransaction.getValue() : getResources().getString(R.string.value));
+                    selectedTransaction.getValue() : requireContext().getResources().getString(R.string.value));
 
             populateTransactionTypesList(transactionTypesList);
 
@@ -200,25 +200,25 @@ public class EditSpecificTransactionFragment extends Fragment {
     }
 
     private void populateTransactionTypesList(@NonNull final ArrayList<String> list) {
-        list.add(getResources().getString(R.string.add_money_deposits).trim());
-        list.add(getResources().getString(R.string.add_money_independent_sources).trim());
-        list.add(getResources().getString(R.string.salary).trim());
-        list.add(getResources().getString(R.string.saving).trim());
-        list.add(getResources().getString(R.string.subtract_money_bills).trim());
-        list.add(getResources().getString(R.string.subtract_money_car).trim());
-        list.add(getResources().getString(R.string.subtract_money_clothes).trim());
-        list.add(getResources().getString(R.string.subtract_money_communications).trim());
-        list.add(getResources().getString(R.string.subtract_money_eating_out).trim());
-        list.add(getResources().getString(R.string.subtract_money_entertainment).trim());
-        list.add(getResources().getString(R.string.subtract_money_food).trim());
-        list.add(getResources().getString(R.string.subtract_money_gifts).trim());
-        list.add(getResources().getString(R.string.subtract_money_health).trim());
-        list.add(getResources().getString(R.string.subtract_money_house).trim());
-        list.add(getResources().getString(R.string.subtract_money_pets).trim());
-        list.add(getResources().getString(R.string.subtract_money_sports).trim());
-        list.add(getResources().getString(R.string.subtract_money_taxi).trim());
-        list.add(getResources().getString(R.string.subtract_money_toiletry).trim());
-        list.add(getResources().getString(R.string.subtract_money_transport).trim());
+        list.add(requireContext().getResources().getString(R.string.add_money_deposits).trim());
+        list.add(requireContext().getResources().getString(R.string.add_money_independent_sources).trim());
+        list.add(requireContext().getResources().getString(R.string.salary).trim());
+        list.add(requireContext().getResources().getString(R.string.saving).trim());
+        list.add(requireContext().getResources().getString(R.string.subtract_money_bills).trim());
+        list.add(requireContext().getResources().getString(R.string.subtract_money_car).trim());
+        list.add(requireContext().getResources().getString(R.string.subtract_money_clothes).trim());
+        list.add(requireContext().getResources().getString(R.string.subtract_money_communications).trim());
+        list.add(requireContext().getResources().getString(R.string.subtract_money_eating_out).trim());
+        list.add(requireContext().getResources().getString(R.string.subtract_money_entertainment).trim());
+        list.add(requireContext().getResources().getString(R.string.subtract_money_food).trim());
+        list.add(requireContext().getResources().getString(R.string.subtract_money_gifts).trim());
+        list.add(requireContext().getResources().getString(R.string.subtract_money_health).trim());
+        list.add(requireContext().getResources().getString(R.string.subtract_money_house).trim());
+        list.add(requireContext().getResources().getString(R.string.subtract_money_pets).trim());
+        list.add(requireContext().getResources().getString(R.string.subtract_money_sports).trim());
+        list.add(requireContext().getResources().getString(R.string.subtract_money_taxi).trim());
+        list.add(requireContext().getResources().getString(R.string.subtract_money_toiletry).trim());
+        list.add(requireContext().getResources().getString(R.string.subtract_money_transport).trim());
 
         Collections.sort(list);
     }
@@ -270,25 +270,25 @@ public class EditSpecificTransactionFragment extends Fragment {
             }
         };
 
-        types.add(getResources().getString(R.string.subtract_money_bills).trim());
-        types.add(getResources().getString(R.string.subtract_money_car).trim());
-        types.add(getResources().getString(R.string.subtract_money_clothes).trim());
-        types.add(getResources().getString(R.string.subtract_money_communications).trim());
-        types.add(getResources().getString(R.string.add_money_deposits).trim());
-        types.add(getResources().getString(R.string.subtract_money_eating_out).trim());
-        types.add(getResources().getString(R.string.subtract_money_entertainment).trim());
-        types.add(getResources().getString(R.string.subtract_money_food).trim());
-        types.add(getResources().getString(R.string.subtract_money_gifts).trim());
-        types.add(getResources().getString(R.string.subtract_money_health).trim());
-        types.add(getResources().getString(R.string.subtract_money_house).trim());
-        types.add(getResources().getString(R.string.subtract_money_pets).trim());
-        types.add(getResources().getString(R.string.add_money_independent_sources).trim());
-        types.add(getResources().getString(R.string.salary).trim());
-        types.add(getResources().getString(R.string.saving).trim());
-        types.add(getResources().getString(R.string.subtract_money_sports).trim());
-        types.add(getResources().getString(R.string.subtract_money_taxi).trim());
-        types.add(getResources().getString(R.string.subtract_money_toiletry).trim());
-        types.add(getResources().getString(R.string.subtract_money_transport).trim());
+        types.add(requireContext().getResources().getString(R.string.subtract_money_bills).trim());
+        types.add(requireContext().getResources().getString(R.string.subtract_money_car).trim());
+        types.add(requireContext().getResources().getString(R.string.subtract_money_clothes).trim());
+        types.add(requireContext().getResources().getString(R.string.subtract_money_communications).trim());
+        types.add(requireContext().getResources().getString(R.string.add_money_deposits).trim());
+        types.add(requireContext().getResources().getString(R.string.subtract_money_eating_out).trim());
+        types.add(requireContext().getResources().getString(R.string.subtract_money_entertainment).trim());
+        types.add(requireContext().getResources().getString(R.string.subtract_money_food).trim());
+        types.add(requireContext().getResources().getString(R.string.subtract_money_gifts).trim());
+        types.add(requireContext().getResources().getString(R.string.subtract_money_health).trim());
+        types.add(requireContext().getResources().getString(R.string.subtract_money_house).trim());
+        types.add(requireContext().getResources().getString(R.string.subtract_money_pets).trim());
+        types.add(requireContext().getResources().getString(R.string.add_money_independent_sources).trim());
+        types.add(requireContext().getResources().getString(R.string.salary).trim());
+        types.add(requireContext().getResources().getString(R.string.saving).trim());
+        types.add(requireContext().getResources().getString(R.string.subtract_money_sports).trim());
+        types.add(requireContext().getResources().getString(R.string.subtract_money_taxi).trim());
+        types.add(requireContext().getResources().getString(R.string.subtract_money_toiletry).trim());
+        types.add(requireContext().getResources().getString(R.string.subtract_money_transport).trim());
 
         Collections.sort(types);
 

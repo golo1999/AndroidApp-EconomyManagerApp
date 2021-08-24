@@ -114,7 +114,7 @@ public class MainScreenActivity
     public void onNotEmptyPieChart() {
         final int screenHeight = Resources.getSystem().getDisplayMetrics().heightPixels;
 
-        final int percentageScreenHeight = (int) (screenHeight * 0.4);
+        final int percentageScreenHeight = (int) (screenHeight * 0.25);
 
         if (moneySpentPercentageLayoutParams.height != percentageScreenHeight) {
             moneySpentPercentageLayoutParams.height = percentageScreenHeight;

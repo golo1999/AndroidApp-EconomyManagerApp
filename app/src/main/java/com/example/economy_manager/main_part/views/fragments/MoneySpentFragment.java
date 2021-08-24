@@ -113,17 +113,17 @@ public class MoneySpentFragment extends Fragment {
                                 final boolean languageIsEnglish =
                                         Locale.getDefault().getDisplayLanguage().equals("English");
 
-                                final String moneySpentText = languageIsEnglish ?
+                                final String youSpentText = languageIsEnglish ?
                                         // english
-                                        getResources().getString(R.string.money_spent_you_spent) +
+                                        requireContext().getResources().getString(R.string.money_spent_you_spent) +
                                                 " " + currencySymbol + moneySpentLastWeek + " " +
-                                                getResources().getString(R.string.money_spent_last_week) :
+                                                requireContext().getResources().getString(R.string.money_spent_last_week) :
                                         // everything else
-                                        getResources().getString(R.string.money_spent_you_spent) +
+                                        requireContext().getResources().getString(R.string.money_spent_you_spent) +
                                                 " " + moneySpentLastWeek + " " + currencySymbol + " " +
-                                                getResources().getString(R.string.money_spent_last_week);
+                                                requireContext().getResources().getString(R.string.money_spent_last_week);
 
-                                MoneySpentFragment.this.moneySpentText.setText(moneySpentText.trim());
+                                moneySpentText.setText(youSpentText.trim());
                             }
                         }
 

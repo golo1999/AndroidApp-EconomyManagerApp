@@ -104,7 +104,8 @@ public class LastTenTransactionsFragment extends Fragment {
                         }
                     });
         } else {
-            showNoTransactionsLayout(mainLayout, getResources().getString(R.string.no_transactions_yet));
+            showNoTransactionsLayout(mainLayout,
+                    requireContext().getResources().getString(R.string.no_transactions_yet));
         }
     }
 
@@ -117,14 +118,15 @@ public class LastTenTransactionsFragment extends Fragment {
 
         try {
             if (transactionsList.size() == 0) {
-                showNoTransactionsLayout(mainLayout, getResources().getString(R.string.no_transactions_this_month));
+                showNoTransactionsLayout(mainLayout,
+                        requireContext().getResources().getString(R.string.no_transactions_this_month));
             }
             // if the transactions list isn't empty
             else {
                 ArrayList<Transaction> limitedTransactionsList = null;
 
                 // sorting the list by date descending
-                transactionsList.sort((transaction1, transaction2) ->
+                transactionsList.sort((final Transaction transaction1, final Transaction transaction2) ->
                         transaction2.getTime().compareTo(transaction1.getTime()));
 
                 // creating a new list from the first 10 transactions only if there are more than that

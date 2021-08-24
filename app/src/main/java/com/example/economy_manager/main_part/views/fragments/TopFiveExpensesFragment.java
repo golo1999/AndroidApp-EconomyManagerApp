@@ -104,7 +104,7 @@ public class TopFiveExpensesFragment extends Fragment {
                         }
                     });
         } else {
-            centerText.setText(getResources().getString(R.string.top_5_expenses_no_expenses_yet));
+            centerText.setText(requireContext().getResources().getString(R.string.top_5_expenses_no_expenses_yet));
             centerText.setVisibility(View.VISIBLE);
         }
     }
@@ -116,7 +116,10 @@ public class TopFiveExpensesFragment extends Fragment {
 
         try {
             if (expensesList.size() == 0) {
-                centerText.setText(getResources().getString(R.string.top_5_expenses_no_expenses_this_month));
+                final String noExpensesThisMonthText =
+                        requireContext().getResources().getString(R.string.top_5_expenses_no_expenses_this_month);
+
+                centerText.setText(noExpensesThisMonthText);
                 centerText.setVisibility(View.VISIBLE);
             }
             // if the expenses list isn't empty

@@ -2,9 +2,11 @@ package com.example.economy_manager.main_part.views.fragments;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -15,6 +17,7 @@ import com.example.economy_manager.models.Transaction;
 import com.example.economy_manager.models.UserDetails;
 import com.example.economy_manager.utilities.MyCustomSharedPreferences;
 import com.example.economy_manager.utilities.MyCustomVariables;
+import com.example.economy_manager.utilities.Types;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
@@ -28,12 +31,14 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class MoneySpentPercentageFragment extends Fragment {
     private UserDetails userDetails;
     private LinkedHashMap<Integer, Float> transactionTypesMap;
     private TextView noExpensesMadeThisMonthText;
+    private LinearLayout detailsLayout;
     private PieChart pieChart;
     private MoneySpentPercentageListener listener;
 
@@ -98,7 +103,8 @@ public class MoneySpentPercentageFragment extends Fragment {
     private void setVariables(final View v) {
         transactionTypesMap = new LinkedHashMap<>();
         noExpensesMadeThisMonthText = v.findViewById(R.id.money_spent_percentage_no_expenses_text);
-        pieChart = v.findViewById(R.id.money_spent_pie_chart);
+        detailsLayout = v.findViewById(R.id.money_spent_percentage_details_layout);
+        pieChart = v.findViewById(R.id.money_spent_percentage_pie_chart);
     }
 
     // method for calculating each expense's percentage (i.e: house 5%, food 35%, bills 50%)
@@ -192,7 +198,13 @@ public class MoneySpentPercentageFragment extends Fragment {
 
     private void setPieChartData(final LinkedHashMap<Integer, Float> transactionTypesMap,
                                  final float totalMonthlyExpenses) {
+        final AtomicInteger transactionTypesIndex = new AtomicInteger(0);
+
         pieChart.clearChart();
+
+        if (detailsLayout.getChildCount() > 0) {
+            detailsLayout.removeAllViews();
+        }
 
         transactionTypesMap.forEach((final Integer key, final Float value) -> {
             final int categoryPercentage = (int) (100 * (value / totalMonthlyExpenses));
@@ -216,6 +228,47 @@ public class MoneySpentPercentageFragment extends Fragment {
             final PieModel pieSlice = new PieModel("category" + key, categoryPercentage, categoryColor);
 
             pieChart.addPieSlice(pieSlice);
+
+            transactionTypesIndex.getAndIncrement();
+
+            final LinearLayout categoryLayout = new LinearLayout(requireContext());
+
+            final LinearLayout.LayoutParams categoryLayoutParams =
+                    new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+                            ViewGroup.LayoutParams.WRAP_CONTENT);
+
+            categoryLayoutParams.gravity = Gravity.CENTER_VERTICAL;
+            categoryLayout.setOrientation(LinearLayout.HORIZONTAL);
+
+//            if (transactionTypesIndex.get() > 1) {
+//                categoryLayoutParams.topMargin = 5;
+//            }
+
+            categoryLayout.setLayoutParams(categoryLayoutParams);
+
+            final View categoryView = new View(requireContext());
+
+            final ViewGroup.LayoutParams categoryViewParams = new ViewGroup.LayoutParams(30, 30);
+
+            categoryView.setBackgroundColor(categoryColor);
+            categoryView.setLayoutParams(categoryViewParams);
+            categoryLayout.addView(categoryView);
+
+            final TextView categoryTextView = new TextView(requireContext());
+
+            final ViewGroup.LayoutParams categoryTextViewParams =
+                    new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+
+            final String categoryTextViewText = Types.getTranslatedType(requireContext(),
+                    String.valueOf(Transaction.getTypeFromIndexInEnglish(key))) + " " + "(" + categoryPercentage + "%)";
+
+            categoryTextView.setPaddingRelative(10, 0, 0, 0);
+            categoryTextView.setText(categoryTextViewText);
+            categoryTextView.setTextSize(18);
+            categoryTextView.setLayoutParams(categoryTextViewParams);
+            categoryLayout.addView(categoryTextView);
+
+            detailsLayout.addView(categoryLayout);
         });
     }
 
@@ -227,6 +280,18 @@ public class MoneySpentPercentageFragment extends Fragment {
 
         map.clear();
 
-        sortedEntries.forEach((final Map.Entry<Integer, Float> entry) -> map.put(entry.getKey(), entry.getValue()));
+        // if there are maximum 5 categories
+        if (sortedEntries.size() <= 5) {
+            sortedEntries.forEach((final Map.Entry<Integer, Float> entry) -> map.put(entry.getKey(), entry.getValue()));
+        }
+        // if there are more than 5 categories
+        else {
+            sortedEntries.stream().limit(5).forEach((final Map.Entry<Integer, Float> entry) ->
+                    map.put(entry.getKey(), entry.getValue()));
+        }
+    }
+
+    private void setDetailsLayout() {
+
     }
 }
