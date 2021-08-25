@@ -1,22 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <item name="addMoneyRadioButtonDeposits" type="id"/>
-    <item name="addMoneyRadioButtonIndependentSources" type="id"/>
-    <item name="addMoneyRadioButtonSalary" type="id"/>
-    <item name="addMoneyRadioButtonSaving" type="id"/>
-    <item name="subtractMoneyRadioButtonBills" type="id"/>
-    <item name="subtractMoneyRadioButtonCar" type="id"/>
-    <item name="subtractMoneyRadioButtonClothes" type="id"/>
-    <item name="subtractMoneyRadioButtonCommunications" type="id"/>
-    <item name="subtractMoneyRadioButtonEatingOut" type="id"/>
-    <item name="subtractMoneyRadioButtonEntertainment" type="id"/>
-    <item name="subtractMoneyRadioButtonFood" type="id"/>
-    <item name="subtractMoneyRadioButtonGifts" type="id"/>
-    <item name="subtractMoneyRadioButtonHealth" type="id"/>
-    <item name="subtractMoneyRadioButtonHouse" type="id"/>
-    <item name="subtractMoneyRadioButtonPets" type="id"/>
-    <item name="subtractMoneyRadioButtonSports" type="id"/>
-    <item name="subtractMoneyRadioButtonTaxi" type="id"/>
-    <item name="subtractMoneyRadioButtonToiletry" type="id"/>
-    <item name="subtractMoneyRadioButtonTransport" type="id"/>
+    <item name="add_money_radio_button_deposits" type="id" />
+    <item name="add_money_radio_button_independent_sources" type="id" />
+    <item name="add_money_radio_button_salary" type="id" />
+    <item name="add_money_radio_button_saving" type="id" />
+    <item name="add_money_radio_button_bills" type="id" />
+    <item name="add_money_radio_button_car" type="id" />
+    <item name="add_money_radio_button_clothes" type="id" />
+    <item name="add_money_radio_button_communications" type="id" />
+    <item name="add_money_radio_button_eating_out" type="id" />
+    <item name="add_money_radio_button_entertainment" type="id" />
+    <item name="add_money_radio_button_food" type="id" />
+    <item name="add_money_radio_button_gifts" type="id" />
+    <item name="add_money_radio_button_health" type="id" />
+    <item name="add_money_radio_button_house" type="id" />
+    <item name="add_money_radio_button_pets" type="id" />
+    <item name="add_money_radio_button_sports" type="id" />
+    <item name="add_money_radio_button_taxi" type="id" />
+    <item name="add_money_radio_button_toiletry" type="id" />
+    <item name="add_money_radio_button_transport" type="id" />
 </resources>

@@ -326,11 +326,11 @@ public class SettingsActivity extends AppCompatActivity
     @Override
     public void deleteAccount() {
         if (MyCustomVariables.getFirebaseAuth().getCurrentUser() != null) {
-            // initializam acreditarea (credential) pentru autentificare cu facebook
+            // initializing credentials for Facebook authentication
             AuthCredential credential = FacebookAuthProvider
                     .getCredential(String.valueOf(AccessToken.getCurrentAccessToken()));
 
-            // in cazul in care providerul de autentificare este google
+            // if the authentication provider is Google
             if (MyCustomVariables.getFirebaseAuth()
                     .getCurrentUser()
                     .getProviderData()
@@ -410,11 +410,11 @@ public class SettingsActivity extends AppCompatActivity
     public void resetDatabase() {
         if (MyCustomVariables.getFirebaseAuth().getUid() != null &&
                 MyCustomVariables.getFirebaseAuth().getCurrentUser() != null) {
-            // initializam acreditarea (credential) pentru autentificare cu facebook
+            // initializing credentials for Facebook authentication
             AuthCredential credential = FacebookAuthProvider
                     .getCredential(String.valueOf(AccessToken.getCurrentAccessToken()));
 
-            // in cazul in care providerul de autentificare este google
+            // if the authentication provider is Google
             if (MyCustomVariables.getFirebaseAuth().getCurrentUser()
                     .getProviderData()
                     .get(MyCustomVariables.getFirebaseAuth().getCurrentUser().getProviderData().size() - 1)
@@ -538,13 +538,8 @@ public class SettingsActivity extends AppCompatActivity
                     .get(user.getProviderData().size() - 1)
                     .getProviderId();
 
-            switch (authProvider) {
-                case "google.com":
-                case "facebook.com":
-                    changePasswordButton.setVisibility(View.GONE);
-                    break;
-                //case "password":
-                //break;
+            if (authProvider.equals("google.com") || authProvider.equals("facebook.com")) {
+                changePasswordButton.setVisibility(View.GONE);
             }
         }
     }

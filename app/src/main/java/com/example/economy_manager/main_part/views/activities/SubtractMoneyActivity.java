@@ -209,20 +209,20 @@ public class SubtractMoneyActivity
 
         for (int i = 0; i < buttonTextArray.size(); i++) {
             final int ID = buttonTextArray.get(i).equals(billsText) ?
-                    R.id.subtractMoneyRadioButtonBills : buttonTextArray.get(i).equals(carText) ?
-                    R.id.subtractMoneyRadioButtonCar : buttonTextArray.get(i).equals(clothesText) ?
-                    R.id.subtractMoneyRadioButtonClothes : buttonTextArray.get(i).equals(communicationsText) ?
-                    R.id.subtractMoneyRadioButtonCommunications : buttonTextArray.get(i).equals(eatingOutText) ?
-                    R.id.subtractMoneyRadioButtonEatingOut : buttonTextArray.get(i).equals(entertainmentText) ?
-                    R.id.subtractMoneyRadioButtonEntertainment : buttonTextArray.get(i).equals(foodText) ?
-                    R.id.subtractMoneyRadioButtonFood : buttonTextArray.get(i).equals(giftsText) ?
-                    R.id.subtractMoneyRadioButtonGifts : buttonTextArray.get(i).equals(healthText) ?
-                    R.id.subtractMoneyRadioButtonHealth : buttonTextArray.get(i).equals(houseText) ?
-                    R.id.subtractMoneyRadioButtonHouse : buttonTextArray.get(i).equals(petsText) ?
-                    R.id.subtractMoneyRadioButtonPets : buttonTextArray.get(i).equals(sportsText) ?
-                    R.id.subtractMoneyRadioButtonSports : buttonTextArray.get(i).equals(taxiText) ?
-                    R.id.subtractMoneyRadioButtonTaxi : buttonTextArray.get(i).equals(toiletryText) ?
-                    R.id.subtractMoneyRadioButtonToiletry : R.id.subtractMoneyRadioButtonTransport;
+                    R.id.add_money_radio_button_bills : buttonTextArray.get(i).equals(carText) ?
+                    R.id.add_money_radio_button_car : buttonTextArray.get(i).equals(clothesText) ?
+                    R.id.add_money_radio_button_clothes : buttonTextArray.get(i).equals(communicationsText) ?
+                    R.id.add_money_radio_button_communications : buttonTextArray.get(i).equals(eatingOutText) ?
+                    R.id.add_money_radio_button_eating_out : buttonTextArray.get(i).equals(entertainmentText) ?
+                    R.id.add_money_radio_button_entertainment : buttonTextArray.get(i).equals(foodText) ?
+                    R.id.add_money_radio_button_food : buttonTextArray.get(i).equals(giftsText) ?
+                    R.id.add_money_radio_button_gifts : buttonTextArray.get(i).equals(healthText) ?
+                    R.id.add_money_radio_button_health : buttonTextArray.get(i).equals(houseText) ?
+                    R.id.add_money_radio_button_house : buttonTextArray.get(i).equals(petsText) ?
+                    R.id.add_money_radio_button_pets : buttonTextArray.get(i).equals(sportsText) ?
+                    R.id.add_money_radio_button_sports : buttonTextArray.get(i).equals(taxiText) ?
+                    R.id.add_money_radio_button_taxi : buttonTextArray.get(i).equals(toiletryText) ?
+                    R.id.add_money_radio_button_toiletry : R.id.add_money_radio_button_transport;
 
             radioButton1[i] = new RadioButton(this);
             radioButton1[i].setText(buttonTextArray.get(i));

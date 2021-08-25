@@ -178,9 +178,9 @@ public class AddMoneyActivity extends AppCompatActivity implements DatePickerDia
 
         for (int i = 0; i < buttonTextArray.size(); i++) {
             final int ID = buttonTextArray.get(i).equals(depositsText) ?
-                    R.id.addMoneyRadioButtonDeposits : buttonTextArray.get(i).equals(independentSourcesText) ?
-                    R.id.addMoneyRadioButtonIndependentSources : buttonTextArray.get(i).equals(salaryText) ?
-                    R.id.addMoneyRadioButtonSalary : R.id.addMoneyRadioButtonSaving;
+                    R.id.add_money_radio_button_deposits : buttonTextArray.get(i).equals(independentSourcesText) ?
+                    R.id.add_money_radio_button_independent_sources : buttonTextArray.get(i).equals(salaryText) ?
+                    R.id.add_money_radio_button_salary : R.id.add_money_radio_button_saving;
 
             radioButton1[i] = new RadioButton(this);
             radioButton1[i].setText(buttonTextArray.get(i));
