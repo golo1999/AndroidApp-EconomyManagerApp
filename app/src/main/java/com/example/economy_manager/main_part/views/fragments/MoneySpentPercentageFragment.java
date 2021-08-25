@@ -231,44 +231,9 @@ public class MoneySpentPercentageFragment extends Fragment {
 
             transactionTypesIndex.getAndIncrement();
 
-            final LinearLayout categoryLayout = new LinearLayout(requireContext());
-
-            final LinearLayout.LayoutParams categoryLayoutParams =
-                    new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
-                            ViewGroup.LayoutParams.WRAP_CONTENT);
-
-            categoryLayoutParams.gravity = Gravity.CENTER_VERTICAL;
-            categoryLayout.setOrientation(LinearLayout.HORIZONTAL);
-
-//            if (transactionTypesIndex.get() > 1) {
-//                categoryLayoutParams.topMargin = 5;
-//            }
-
-            categoryLayout.setLayoutParams(categoryLayoutParams);
-
-            final View categoryView = new View(requireContext());
-
-            final ViewGroup.LayoutParams categoryViewParams = new ViewGroup.LayoutParams(30, 30);
-
-            categoryView.setBackgroundColor(categoryColor);
-            categoryView.setLayoutParams(categoryViewParams);
-            categoryLayout.addView(categoryView);
-
-            final TextView categoryTextView = new TextView(requireContext());
-
-            final ViewGroup.LayoutParams categoryTextViewParams =
-                    new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-
-            final String categoryTextViewText = Types.getTranslatedType(requireContext(),
-                    String.valueOf(Transaction.getTypeFromIndexInEnglish(key))) + " " + "(" + categoryPercentage + "%)";
-
-            categoryTextView.setPaddingRelative(10, 0, 0, 0);
-            categoryTextView.setText(categoryTextViewText);
-            categoryTextView.setTextSize(18);
-            categoryTextView.setLayoutParams(categoryTextViewParams);
-            categoryLayout.addView(categoryTextView);
-
-            detailsLayout.addView(categoryLayout);
+            if (transactionTypesIndex.get() <= 5) {
+                addPieChartDetail(key, categoryPercentage, categoryColor);
+            }
         });
     }
 
@@ -280,18 +245,44 @@ public class MoneySpentPercentageFragment extends Fragment {
 
         map.clear();
 
-        // if there are maximum 5 categories
-        if (sortedEntries.size() <= 5) {
-            sortedEntries.forEach((final Map.Entry<Integer, Float> entry) -> map.put(entry.getKey(), entry.getValue()));
-        }
-        // if there are more than 5 categories
-        else {
-            sortedEntries.stream().limit(5).forEach((final Map.Entry<Integer, Float> entry) ->
-                    map.put(entry.getKey(), entry.getValue()));
-        }
+        sortedEntries.forEach((final Map.Entry<Integer, Float> entry) -> map.put(entry.getKey(), entry.getValue()));
     }
 
-    private void setDetailsLayout() {
+    private void addPieChartDetail(final int categoryIndex,
+                                   final int categoryPercentage,
+                                   final int categoryColor) {
+        final LinearLayout categoryLayout = new LinearLayout(requireContext());
 
+        final LinearLayout.LayoutParams categoryLayoutParams =
+                new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+                        ViewGroup.LayoutParams.WRAP_CONTENT);
+
+        categoryLayoutParams.gravity = Gravity.CENTER_VERTICAL;
+        categoryLayout.setLayoutParams(categoryLayoutParams);
+
+        final View categoryView = new View(requireContext());
+
+        final ViewGroup.LayoutParams categoryViewParams = new ViewGroup.LayoutParams(30, 30);
+
+        categoryView.setBackgroundColor(categoryColor);
+        categoryView.setLayoutParams(categoryViewParams);
+        categoryLayout.addView(categoryView);
+
+        final TextView categoryTextView = new TextView(requireContext());
+
+        final ViewGroup.LayoutParams categoryTextViewParams =
+                new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+
+        final String categoryTextViewText = Types.getTranslatedType(requireContext(),
+                String.valueOf(Transaction.getTypeFromIndexInEnglish(categoryIndex))) +
+                " " + "(" + categoryPercentage + "%)";
+
+        categoryTextView.setPaddingRelative(10, 0, 0, 0);
+        categoryTextView.setText(categoryTextViewText);
+        categoryTextView.setTextSize(16);
+        categoryTextView.setLayoutParams(categoryTextViewParams);
+        categoryLayout.addView(categoryTextView);
+
+        detailsLayout.addView(categoryLayout);
     }
 }

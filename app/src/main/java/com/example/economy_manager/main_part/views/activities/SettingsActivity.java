@@ -8,7 +8,6 @@ import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.Typeface;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -565,11 +564,6 @@ public class SettingsActivity extends AppCompatActivity
                 "¥" : selectedCurrency.equals("RON") ?
                 "RON" : selectedCurrency.equals("RUB") ?
                 "₽" : "$";
-
-        // le detecteaza perfect
-        Log.d("currentCurrency", userDetails.getApplicationSettings().getCurrency());
-        Log.d("newCurrency", selectedCurrency);
-        //
 
         if (MyCustomVariables.getFirebaseAuth().getUid() != null &&
                 userDetails != null &&
