@@ -13,7 +13,7 @@
         app:cardElevation="10sp">
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/transactionLayout"
+            android:id="@+id/transaction_layout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:paddingVertical="5sp"
@@ -21,7 +21,7 @@
             android:paddingEnd="0sp">
 
             <TextView
-                android:id="@+id/transactionCategory"
+                android:id="@+id/transaction_category"
                 android:layout_width="0sp"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="5sp"
@@ -30,13 +30,13 @@
                 android:textColor="@color/black"
                 android:textSize="20sp"
                 android:textStyle="bold"
-                app:layout_constraintBottom_toTopOf="@id/transactionPrice"
-                app:layout_constraintEnd_toStartOf="@id/transactionEdit"
+                app:layout_constraintBottom_toTopOf="@id/transaction_price"
+                app:layout_constraintEnd_toStartOf="@id/transaction_edit"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
-                android:id="@+id/transactionPrice"
+                android:id="@+id/transaction_price"
                 android:layout_width="0sp"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="5sp"
@@ -46,13 +46,13 @@
                 android:textColor="@color/black"
                 android:textSize="18sp"
                 android:textStyle="bold|italic"
-                app:layout_constraintBottom_toTopOf="@id/transactionNote"
-                app:layout_constraintEnd_toStartOf="@id/transactionEdit"
+                app:layout_constraintBottom_toTopOf="@id/transaction_note"
+                app:layout_constraintEnd_toStartOf="@id/transaction_edit"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/transactionCategory" />
+                app:layout_constraintTop_toBottomOf="@id/transaction_category" />
 
             <TextView
-                android:id="@+id/transactionNote"
+                android:id="@+id/transaction_note"
                 android:layout_width="0sp"
                 android:layout_height="match_parent"
                 android:layout_marginHorizontal="5sp"
@@ -64,21 +64,21 @@
                 android:textSize="16sp"
                 android:textStyle="italic"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@id/transactionEdit"
+                app:layout_constraintEnd_toStartOf="@id/transaction_edit"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/transactionPrice" />
+                app:layout_constraintTop_toBottomOf="@id/transaction_price" />
 
             <ImageView
-                android:id="@+id/transactionEdit"
+                android:id="@+id/transaction_edit"
                 android:layout_width="50sp"
                 android:layout_height="50sp"
                 android:src="@drawable/ic_edit_black"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintRight_toLeftOf="@id/transactionDelete"
+                app:layout_constraintRight_toLeftOf="@id/transaction_delete"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <ImageView
-                android:id="@+id/transactionDelete"
+                android:id="@+id/transaction_delete"
                 android:layout_width="50sp"
                 android:layout_height="50sp"
                 android:src="@drawable/ic_delete"

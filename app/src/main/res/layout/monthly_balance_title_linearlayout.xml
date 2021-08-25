@@ -5,12 +5,12 @@
     android:layout_height="match_parent">
 
     <RelativeLayout
-        android:id="@+id/monthlyBalanceTitleRelativeLayout"
+        android:id="@+id/monthly_balance_title_relative_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
         <TextView
-            android:id="@+id/monthlyBalanceRelativeLayoutDay"
+            android:id="@+id/monthly_balance_relative_layout_day"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
@@ -18,7 +18,7 @@
             android:textStyle="bold" />
 
         <TextView
-            android:id="@+id/monthlyBalanceRelativeLayoutDayTotalSum"
+            android:id="@+id/monthly_balance_relative_layout_day_total_sum"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"

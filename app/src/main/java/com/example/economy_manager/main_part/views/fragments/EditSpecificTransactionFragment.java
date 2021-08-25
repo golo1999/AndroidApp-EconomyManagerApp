@@ -75,14 +75,14 @@ public class EditSpecificTransactionFragment extends Fragment {
 
     private void setVariables(@NonNull final View view) {
         viewModel = new ViewModelProvider((ViewModelStoreOwner) requireContext()).get(EditTransactionsViewModel.class);
-        goBack = view.findViewById(R.id.editSpecificTransactionBack);
-        titleText = view.findViewById(R.id.editSpecificTransactionTitle);
-        noteField = view.findViewById(R.id.editSpecificTransactionNoteEdit);
-        valueField = view.findViewById(R.id.editSpecificTransactionValueEdit);
-        datePicker = view.findViewById(R.id.editSpecificTransactionDateEdit);
-        timePicker = view.findViewById(R.id.editSpecificTransactionTimeEdit);
-        typeSpinner = view.findViewById(R.id.editSpecificTransactionTypeSpinner);
-        saveChangesButton = view.findViewById(R.id.editSpecificTransactionSave);
+        goBack = view.findViewById(R.id.edit_specific_transaction_back);
+        titleText = view.findViewById(R.id.edit_specific_transaction_title);
+        noteField = view.findViewById(R.id.edit_specific_transaction_note_field);
+        valueField = view.findViewById(R.id.edit_specific_transaction_value_field);
+        datePicker = view.findViewById(R.id.edit_specific_transaction_date_picker);
+        timePicker = view.findViewById(R.id.edit_specific_transaction_time_picker);
+        typeSpinner = view.findViewById(R.id.edit_specific_transaction_type_spinner);
+        saveChangesButton = view.findViewById(R.id.edit_specific_transaction_save_button);
     }
 
     private void setOnClickListeners() {

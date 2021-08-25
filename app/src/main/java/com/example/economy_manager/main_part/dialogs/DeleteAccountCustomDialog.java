@@ -63,7 +63,7 @@ public class DeleteAccountCustomDialog extends AppCompatDialogFragment {
                 listener.resetDatabase();
             }
 
-            password = view.findViewById(R.id.deleteAccountPassword);
+            password = view.findViewById(R.id.delete_account_password);
         }
 
         return builder.create();

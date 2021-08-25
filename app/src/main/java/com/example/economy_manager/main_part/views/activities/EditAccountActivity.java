@@ -81,18 +81,18 @@ public class EditAccountActivity extends AppCompatActivity {
         preferences = getSharedPreferences(MyCustomVariables.getSharedPreferencesFileName(), MODE_PRIVATE);
         userDetails = MyCustomSharedPreferences.retrieveUserDetailsFromSharedPreferences(this);
         editAccountViewModel = new EditAccountViewModel(getApplication(), userDetails);
-        goBack = findViewById(R.id.editAccountRemasteredBack);
-        firstNameInput = findViewById(R.id.editAccountRemasteredFirstNameField);
-        lastNameInput = findViewById(R.id.editAccountRemasteredLastNameField);
-        phoneNumberInput = findViewById(R.id.editAccountRemasteredPhoneField);
-        websiteInput = findViewById(R.id.editAccountRemasteredWebsiteField);
-        birthDatePicker = findViewById(R.id.editAccountRemasteredBirthDatePicker);
-        careerTitleInput = findViewById(R.id.editAccountRemasteredCareerTitleField);
-        countrySpinner = findViewById(R.id.editAccountRemasteredCountrySpinner);
-        genderSpinner = findViewById(R.id.editAccountRemasteredGenderSpinner);
-        accountPhoto = findViewById(R.id.editAccountRemasteredPhoto);
-        topText = findViewById(R.id.editAccountRemasteredTopText);
-        updateProfileButton = findViewById(R.id.editAccountRemasteredUpdateButton);
+        goBack = findViewById(R.id.edit_account_remastered_back);
+        firstNameInput = findViewById(R.id.edit_account_remastered_first_name_field);
+        lastNameInput = findViewById(R.id.edit_account_remastered_last_name_field);
+        phoneNumberInput = findViewById(R.id.edit_account_remastered_phone_field);
+        websiteInput = findViewById(R.id.edit_account_remastered_website_field);
+        birthDatePicker = findViewById(R.id.edit_account_remastered_birth_date_picker);
+        careerTitleInput = findViewById(R.id.edit_account_remastered_career_title_field);
+        countrySpinner = findViewById(R.id.edit_account_remastered_country_spinner);
+        genderSpinner = findViewById(R.id.edit_account_remastered_gender_spinner);
+        accountPhoto = findViewById(R.id.edit_account_remastered_photo);
+        topText = findViewById(R.id.edit_account_remastered_top_text);
+        updateProfileButton = findViewById(R.id.edit_account_remastered_update_button);
     }
 
     private void setOnClickListeners() {

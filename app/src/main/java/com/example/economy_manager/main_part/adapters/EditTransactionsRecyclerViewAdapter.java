@@ -125,12 +125,12 @@ public class EditTransactionsRecyclerViewAdapter
 
         private void setVariables(final View v) {
             preferences = context.getSharedPreferences(MyCustomVariables.getSharedPreferencesFileName(), MODE_PRIVATE);
-            transactionCategory = v.findViewById(R.id.transactionCategory);
-            transactionPrice = v.findViewById(R.id.transactionPrice);
-            transactionNote = v.findViewById(R.id.transactionNote);
-            transactionEdit = v.findViewById(R.id.transactionEdit);
-            transactionDelete = v.findViewById(R.id.transactionDelete);
-            mainLayout = v.findViewById(R.id.transactionLayout);
+            transactionCategory = v.findViewById(R.id.transaction_category);
+            transactionPrice = v.findViewById(R.id.transaction_price);
+            transactionNote = v.findViewById(R.id.transaction_note);
+            transactionEdit = v.findViewById(R.id.transaction_edit);
+            transactionDelete = v.findViewById(R.id.transaction_delete);
+            mainLayout = v.findViewById(R.id.transaction_layout);
         }
 
         private void setOnClickListeners() {

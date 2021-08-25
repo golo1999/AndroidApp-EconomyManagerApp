@@ -18,7 +18,7 @@
         tools:context=".main_part.views.fragments.ShowSavingsFragment">
 
         <TextView
-            android:id="@+id/fragment2Savings"
+            android:id="@+id/show_savings_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAlignment="center"

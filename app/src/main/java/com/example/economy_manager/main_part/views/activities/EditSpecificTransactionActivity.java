@@ -79,14 +79,14 @@ public class EditSpecificTransactionActivity extends AppCompatActivity {
 
     private void setVariables() {
         viewModel = new ViewModelProvider(this).get(EditSpecificTransactionViewModel.class);
-        goBack = findViewById(R.id.editSpecificTransactionBack);
-        titleText = findViewById(R.id.editSpecificTransactionTitle);
-        noteField = findViewById(R.id.editSpecificTransactionNoteEdit);
-        valueField = findViewById(R.id.editSpecificTransactionValueEdit);
-        datePicker = findViewById(R.id.editSpecificTransactionDateEdit);
-        timePicker = findViewById(R.id.editSpecificTransactionTimeEdit);
-        typeSpinner = findViewById(R.id.editSpecificTransactionTypeSpinner);
-        saveChangesButton = findViewById(R.id.editSpecificTransactionSave);
+        goBack = findViewById(R.id.edit_specific_transaction_back);
+        titleText = findViewById(R.id.edit_specific_transaction_title);
+        noteField = findViewById(R.id.edit_specific_transaction_note_field);
+        valueField = findViewById(R.id.edit_specific_transaction_value_field);
+        datePicker = findViewById(R.id.edit_specific_transaction_date_picker);
+        timePicker = findViewById(R.id.edit_specific_transaction_time_picker);
+        typeSpinner = findViewById(R.id.edit_specific_transaction_type_spinner);
+        saveChangesButton = findViewById(R.id.edit_specific_transaction_save_button);
         dateText = findViewById(R.id.editSpecificTransactionDateText);
         valueText = findViewById(R.id.editSpecificTransactionValueText);
         noteText = findViewById(R.id.editSpecificTransactionNoteText);

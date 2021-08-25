@@ -17,7 +17,7 @@
         app:layout_constraintWidth_percent=".7">
 
         <TextView
-            android:id="@+id/deleteAccountText"
+            android:id="@+id/delete_account_text"
             android:layout_width="0sp"
             android:layout_height="wrap_content"
             android:text="@string/custom_dialog_enter_password"
@@ -29,7 +29,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <EditText
-            android:id="@+id/deleteAccountPassword"
+            android:id="@+id/delete_account_password"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="textPassword"
@@ -37,7 +37,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/deleteAccountText" />
+            app:layout_constraintTop_toBottomOf="@id/delete_account_text" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

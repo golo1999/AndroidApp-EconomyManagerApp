@@ -93,13 +93,13 @@ public class EditTransactionsActivity extends AppCompatActivity
         viewModel = new ViewModelProvider(this).get(EditTransactionsViewModel.class);
         activityLayout = findViewById(R.id.edit_transactions_activity_layout);
         fragmentLayout = findViewById(R.id.edit_transactions_fragment_layout);
-        goBack = findViewById(R.id.editTransactionsBack);
-        recyclerView = findViewById(R.id.editTransactionsRecyclerView);
-        activityTitle = findViewById(R.id.editTransactionsTitle);
-        monthSpinner = findViewById(R.id.editTransactionBottomLayoutMonthSpinner);
-        yearSpinner = findViewById(R.id.editTransactionBottomLayoutYearSpinner);
-        centerText = findViewById(R.id.editTransactionsCenterText);
-        bottomLayout = findViewById(R.id.editTransactionBottomLayout);
+        goBack = findViewById(R.id.edit_transactions_back);
+        recyclerView = findViewById(R.id.edit_transactions_recycler_view);
+        activityTitle = findViewById(R.id.edit_transactions_title);
+        monthSpinner = findViewById(R.id.edit_transactions_bottom_layout_month_spinner);
+        yearSpinner = findViewById(R.id.edit_transactions_bottom_layout_year_spinner);
+        centerText = findViewById(R.id.edit_transactions_center_text);
+        bottomLayout = findViewById(R.id.edit_transactions_bottom_layout);
         recyclerViewAdapter = new EditTransactionsRecyclerViewAdapter(viewModel,
                 transactionsList,
                 this,

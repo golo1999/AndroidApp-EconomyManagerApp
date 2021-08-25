@@ -39,8 +39,8 @@ public class ChangePasswordCustomDialog extends AppCompatDialogFragment {
 
                     });
 
-            oldPasswordField = view.findViewById(R.id.changePasswordOldPassword);
-            newPasswordField = view.findViewById(R.id.changePasswordNewPassword);
+            oldPasswordField = view.findViewById(R.id.change_password_old_password);
+            newPasswordField = view.findViewById(R.id.change_password_new_password);
         }
 
         return builder.create();

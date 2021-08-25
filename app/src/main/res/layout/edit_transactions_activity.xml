@@ -13,7 +13,7 @@
         android:layout_height="match_parent">
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/editTransactionsTopLayout"
+            android:id="@+id/edit_transaction_top_layout"
             android:layout_width="0sp"
             android:layout_height="wrap_content"
             android:background="#A2A2A1"
@@ -23,7 +23,7 @@
             app:layout_constraintTop_toTopOf="parent">
 
             <ImageView
-                android:id="@+id/editTransactionsBack"
+                android:id="@+id/edit_transactions_back"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/ic_back"
@@ -32,19 +32,19 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
-                android:id="@+id/editTransactionsTitle"
+                android:id="@+id/edit_transactions_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintLeft_toRightOf="@id/editTransactionsBack"
+                app:layout_constraintLeft_toRightOf="@id/edit_transactions_back"
                 app:layout_constraintTop_toTopOf="parent" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <TextView
-            android:id="@+id/editTransactionsCenterText"
+            android:id="@+id/edit_transactions_center_text"
             android:layout_width="0sp"
             android:layout_height="wrap_content"
             android:textAlignment="center"
@@ -55,17 +55,17 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/editTransactionsRecyclerView"
+            android:id="@+id/edit_transactions_recycler_view"
             android:layout_width="0sp"
             android:layout_height="0sp"
             android:divider="@null"
-            app:layout_constraintBottom_toTopOf="@id/editTransactionBottomLayout"
+            app:layout_constraintBottom_toTopOf="@id/edit_transactions_bottom_layout"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/editTransactionsTopLayout" />
+            app:layout_constraintTop_toBottomOf="@id/edit_transaction_top_layout" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/editTransactionBottomLayout"
+            android:id="@+id/edit_transactions_bottom_layout"
             android:layout_width="0sp"
             android:layout_height="wrap_content"
             android:background="#A2A2A1"
@@ -75,7 +75,7 @@
             app:layout_constraintStart_toStartOf="parent">
 
             <Spinner
-                android:id="@+id/editTransactionBottomLayoutMonthSpinner"
+                android:id="@+id/edit_transactions_bottom_layout_month_spinner"
                 style="@style/Widget.AppCompat.TextView.SpinnerItem"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -84,12 +84,12 @@
                 android:textAlignment="center"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toLeftOf="@id/editTransactionBottomLayoutYearSpinner"
+                app:layout_constraintRight_toLeftOf="@id/edit_transactions_bottom_layout_year_spinner"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintWidth_percent=".45" />
 
             <Spinner
-                android:id="@+id/editTransactionBottomLayoutYearSpinner"
+                android:id="@+id/edit_transactions_bottom_layout_year_spinner"
                 style="@style/Widget.AppCompat.TextView.SpinnerItem"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -97,7 +97,7 @@
                 android:popupBackground="@drawable/ic_black_gradient_whale_house"
                 android:textAlignment="center"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintLeft_toRightOf="@id/editTransactionBottomLayoutMonthSpinner"
+                app:layout_constraintLeft_toRightOf="@id/edit_transactions_bottom_layout_month_spinner"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintWidth_percent=".45" />

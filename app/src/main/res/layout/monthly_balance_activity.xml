@@ -8,7 +8,7 @@
     tools:context=".main_part.views.activities.MonthlyBalanceActivity">
 
     <TextView
-        android:id="@+id/monthlyBalanceCenterText"
+        android:id="@+id/monthly_balance_center_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
@@ -16,7 +16,7 @@
         android:textStyle="bold" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/monthlyBalanceTopLayout"
+        android:id="@+id/monthly_balance_top_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
@@ -25,7 +25,7 @@
         android:background="#A2A2A1">
 
         <ImageView
-            android:id="@+id/monthlyBalanceBack"
+            android:id="@+id/monthly_balance_back"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
@@ -35,13 +35,13 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/monthlyBalanceTitle"
+            android:id="@+id/monthly_balance_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintLeft_toRightOf="@id/monthlyBalanceBack"
+            app:layout_constraintLeft_toRightOf="@id/monthly_balance_back"
             app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
@@ -49,12 +49,12 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/monthlyBalanceTopLayout"
+        android:layout_below="@+id/monthly_balance_top_layout"
         android:paddingStart="5dp"
         android:paddingEnd="5dp">
 
         <LinearLayout
-            android:id="@+id/monthlyBalanceMainLayout"
+            android:id="@+id/monthly_balance_main_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical" />

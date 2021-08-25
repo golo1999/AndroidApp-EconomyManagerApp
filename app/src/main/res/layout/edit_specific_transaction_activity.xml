@@ -7,7 +7,7 @@
     tools:context=".main_part.views.activities.EditSpecificTransactionActivity">
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/editSpecificTransactionTopLayout"
+        android:id="@+id/edit_specific_transaction_top_layout"
         android:layout_width="0sp"
         android:layout_height="wrap_content"
         android:background="#A2A2A1"
@@ -16,7 +16,7 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
-            android:id="@+id/editSpecificTransactionBack"
+            android:id="@+id/edit_specific_transaction_back"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="5sp"
@@ -26,14 +26,14 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/editSpecificTransactionTitle"
+            android:id="@+id/edit_specific_transaction_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="20sp"
             android:textAlignment="center"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintLeft_toRightOf="@+id/editSpecificTransactionBack"
+            app:layout_constraintLeft_toRightOf="@+id/edit_specific_transaction_back"
             app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
@@ -45,7 +45,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/editSpecificTransactionTopLayout">
+        app:layout_constraintTop_toBottomOf="@id/edit_specific_transaction_top_layout">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -60,13 +60,13 @@
                 android:text="@string/note"
                 android:textAlignment="center"
                 android:textStyle="bold"
-                app:layout_constraintBottom_toBottomOf="@+id/editSpecificTransactionNoteEdit"
+                app:layout_constraintBottom_toBottomOf="@+id/edit_specific_transaction_note_field"
                 app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toLeftOf="@id/editSpecificTransactionNoteEdit"
-                app:layout_constraintTop_toTopOf="@id/editSpecificTransactionNoteEdit" />
+                app:layout_constraintRight_toLeftOf="@id/edit_specific_transaction_note_field"
+                app:layout_constraintTop_toTopOf="@id/edit_specific_transaction_note_field" />
 
             <EditText
-                android:id="@+id/editSpecificTransactionNoteEdit"
+                android:id="@+id/edit_specific_transaction_note_field"
                 android:layout_width="0sp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20sp"
@@ -84,20 +84,20 @@
                 android:text="@string/value"
                 android:textAlignment="center"
                 android:textStyle="bold"
-                app:layout_constraintBottom_toBottomOf="@+id/editSpecificTransactionValueEdit"
+                app:layout_constraintBottom_toBottomOf="@+id/edit_specific_transaction_value_field"
                 app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toLeftOf="@id/editSpecificTransactionValueEdit"
-                app:layout_constraintTop_toTopOf="@id/editSpecificTransactionValueEdit" />
+                app:layout_constraintRight_toLeftOf="@id/edit_specific_transaction_value_field"
+                app:layout_constraintTop_toTopOf="@id/edit_specific_transaction_value_field" />
 
             <EditText
-                android:id="@+id/editSpecificTransactionValueEdit"
+                android:id="@+id/edit_specific_transaction_value_field"
                 android:layout_width="0sp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20sp"
                 android:inputType="numberDecimal"
                 app:layout_constraintLeft_toRightOf="@id/editSpecificTransactionValueText"
                 app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/editSpecificTransactionNoteEdit"
+                app:layout_constraintTop_toBottomOf="@+id/edit_specific_transaction_note_field"
                 app:layout_constraintWidth_percent=".75" />
 
             <TextView
@@ -108,11 +108,11 @@
                 android:textAlignment="center"
                 android:textStyle="bold"
                 app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toLeftOf="@id/editSpecificTransactionDateEdit"
-                app:layout_constraintTop_toTopOf="@id/editSpecificTransactionDateEdit" />
+                app:layout_constraintRight_toLeftOf="@id/edit_specific_transaction_date_picker"
+                app:layout_constraintTop_toTopOf="@id/edit_specific_transaction_date_picker" />
 
             <DatePicker
-                android:id="@+id/editSpecificTransactionDateEdit"
+                android:id="@+id/edit_specific_transaction_date_picker"
                 android:layout_width="0sp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20sp"
@@ -120,7 +120,7 @@
                 android:inputType="text"
                 app:layout_constraintLeft_toRightOf="@id/editSpecificTransactionDateText"
                 app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/editSpecificTransactionValueEdit"
+                app:layout_constraintTop_toBottomOf="@+id/edit_specific_transaction_value_field"
                 app:layout_constraintWidth_percent=".75" />
 
             <TextView
@@ -131,11 +131,11 @@
                 android:textAlignment="center"
                 android:textStyle="bold"
                 app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toLeftOf="@id/editSpecificTransactionTimeEdit"
-                app:layout_constraintTop_toTopOf="@id/editSpecificTransactionTimeEdit" />
+                app:layout_constraintRight_toLeftOf="@id/edit_specific_transaction_time_picker"
+                app:layout_constraintTop_toTopOf="@id/edit_specific_transaction_time_picker" />
 
             <TimePicker
-                android:id="@+id/editSpecificTransactionTimeEdit"
+                android:id="@+id/edit_specific_transaction_time_picker"
                 android:layout_width="0sp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20sp"
@@ -143,7 +143,7 @@
                 android:inputType="text"
                 app:layout_constraintLeft_toRightOf="@id/editSpecificTransactionDateText"
                 app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/editSpecificTransactionDateEdit"
+                app:layout_constraintTop_toBottomOf="@+id/edit_specific_transaction_date_picker"
                 app:layout_constraintWidth_percent=".75" />
 
             <TextView
@@ -153,13 +153,13 @@
                 android:text="@string/type"
                 android:textAlignment="center"
                 android:textStyle="bold"
-                app:layout_constraintBottom_toBottomOf="@+id/editSpecificTransactionTypeSpinner"
+                app:layout_constraintBottom_toBottomOf="@+id/edit_specific_transaction_type_spinner"
                 app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toLeftOf="@id/editSpecificTransactionTypeSpinner"
-                app:layout_constraintTop_toTopOf="@id/editSpecificTransactionTypeSpinner" />
+                app:layout_constraintRight_toLeftOf="@id/edit_specific_transaction_type_spinner"
+                app:layout_constraintTop_toTopOf="@id/edit_specific_transaction_type_spinner" />
 
             <Spinner
-                android:id="@+id/editSpecificTransactionTypeSpinner"
+                android:id="@+id/edit_specific_transaction_type_spinner"
                 android:layout_width="0sp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20sp"
@@ -168,11 +168,11 @@
                 android:theme="@style/Spinner"
                 app:layout_constraintLeft_toRightOf="@id/editSpecificTransactionDateText"
                 app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/editSpecificTransactionTimeEdit"
+                app:layout_constraintTop_toBottomOf="@+id/edit_specific_transaction_time_picker"
                 app:layout_constraintWidth_percent=".75" />
 
             <Button
-                android:id="@+id/editSpecificTransactionSave"
+                android:id="@+id/edit_specific_transaction_save_button"
                 android:layout_width="0sp"
                 android:layout_height="wrap_content"
                 android:layout_marginVertical="20sp"
@@ -184,7 +184,7 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/editSpecificTransactionTypeSpinner"
+                app:layout_constraintTop_toBottomOf="@id/edit_specific_transaction_type_spinner"
                 app:layout_constraintWidth_percent=".8" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>

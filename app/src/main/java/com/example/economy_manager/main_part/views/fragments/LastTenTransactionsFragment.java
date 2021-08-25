@@ -66,7 +66,7 @@ public class LastTenTransactionsFragment extends Fragment {
 
     private void setVariables(final View v) {
         viewModel = new ViewModelProvider((ViewModelStoreOwner) requireContext()).get(MainScreenViewModel.class);
-        mainLayout = v.findViewById(R.id.fragmentLastTenTransactionsMainLayout);
+        mainLayout = v.findViewById(R.id.fragment_last_ten_transactions_main_layout);
     }
 
     // method for setting the transactions list and displaying it on the screen
@@ -143,10 +143,10 @@ public class LastTenTransactionsFragment extends Fragment {
                             .inflate(R.layout.last_ten_transactions_linearlayout, mainLayout, false);
 
                     final TextView typeFromChildLayout =
-                            childLayout.findViewById(R.id.lastTenTransactionsConstraintLayoutTitle);
+                            childLayout.findViewById(R.id.last_ten_transactions_constraint_layout_title);
 
                     final TextView valueFromChildLayout =
-                            childLayout.findViewById(R.id.lastTenTransactionsConstraintLayoutPrice);
+                            childLayout.findViewById(R.id.last_ten_transactions_constraint_layout_price);
 
                     final String valueWithCurrency = Locale.getDefault().getDisplayLanguage().equals("English") ?
                             currencySymbol + transaction.getValue() : transaction.getValue() + " " + currencySymbol;

@@ -58,10 +58,10 @@ public class MonthlyBalanceActivity extends AppCompatActivity {
 
     private void setVariables() {
         viewModel = new ViewModelProvider(this).get(MonthlyBalanceViewModel.class);
-        goBack = findViewById(R.id.monthlyBalanceBack);
-        activityTitle = findViewById(R.id.monthlyBalanceTitle);
-        centerText = findViewById(R.id.monthlyBalanceCenterText);
-        mainLayout = findViewById(R.id.monthlyBalanceMainLayout);
+        goBack = findViewById(R.id.monthly_balance_back);
+        activityTitle = findViewById(R.id.monthly_balance_title);
+        centerText = findViewById(R.id.monthly_balance_center_text);
+        mainLayout = findViewById(R.id.monthly_balance_main_layout);
     }
 
     private void setOnClickListeners() {
@@ -136,10 +136,10 @@ public class MonthlyBalanceActivity extends AppCompatActivity {
                                                     R.layout.monthly_balance_title_linearlayout, null);
 
                                     final TextView dayText = dayAndSumLayout
-                                            .findViewById(R.id.monthlyBalanceRelativeLayoutDay);
+                                            .findViewById(R.id.monthly_balance_relative_layout_day);
 
                                     final TextView totalSumText = dayAndSumLayout
-                                            .findViewById(R.id.monthlyBalanceRelativeLayoutDayTotalSum);
+                                            .findViewById(R.id.monthly_balance_relative_layout_day_total_sum);
 
                                     mainLayout.addView(dayAndSumLayout);
                                     dayText.setText(dateTranslated);
@@ -163,10 +163,10 @@ public class MonthlyBalanceActivity extends AppCompatActivity {
                                                             R.layout.monthly_balance_linearlayout,
                                                             null);
                                             final TextView typeText = transactionLayout
-                                                    .findViewById(R.id.monthlyBalanceRelativeLayoutType);
+                                                    .findViewById(R.id.monthly_balance_relative_layout_type);
 
                                             final TextView valueText = transactionLayout
-                                                    .findViewById(R.id.monthlyBalanceRelativeLayoutValue);
+                                                    .findViewById(R.id.monthly_balance_relative_layout_value);
 
                                             typeText.setText(Types.getTranslatedType(MonthlyBalanceActivity.this,
                                                     String.valueOf(Transaction.getTypeFromIndexInEnglish(transactionsListIterator

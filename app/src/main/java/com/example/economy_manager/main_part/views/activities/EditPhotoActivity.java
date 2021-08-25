@@ -58,11 +58,11 @@ public class EditPhotoActivity extends AppCompatActivity {
 
     private void setVariables() {
         preferences = getSharedPreferences(MyCustomVariables.getSharedPreferencesFileName(), MODE_PRIVATE);
-        goBack = findViewById(R.id.editPhotoBack);
-        progressBar = findViewById(R.id.editPhotoProgressBar);
-        chooseFileButton = findViewById(R.id.editPhotoChooseFile);
-        uploadFileButton = findViewById(R.id.editPhotoUploadFile);
-        uploadedFile = findViewById(R.id.editPhotoFileUploaded);
+        goBack = findViewById(R.id.edit_photo_back);
+        progressBar = findViewById(R.id.edit_photo_progress_bar);
+        chooseFileButton = findViewById(R.id.edit_photo_choose_file);
+        uploadFileButton = findViewById(R.id.edit_photo_upload_file);
+        uploadedFile = findViewById(R.id.edit_photo_file_uploaded);
         storageReference = FirebaseStorage.getInstance().getReference();
     }
 

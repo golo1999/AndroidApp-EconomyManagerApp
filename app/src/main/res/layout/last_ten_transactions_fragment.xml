@@ -9,7 +9,7 @@
     app:cardElevation="0dp">
 
     <LinearLayout
-        android:id="@+id/fragmentLastTenTransactionsMainLayout"
+        android:id="@+id/fragment_last_ten_transactions_main_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="center"
@@ -17,7 +17,7 @@
         android:padding="10sp">
 
         <TextView
-            android:id="@+id/fragment1NoRecordings"
+            android:id="@+id/fragment_last_ten_transaction_no_records_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"

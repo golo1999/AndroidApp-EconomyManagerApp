@@ -6,24 +6,24 @@
     android:layout_height="match_parent">
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/monthlyBalanceRelativeLayout"
+        android:id="@+id/monthly_balance_relative_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
         <TextView
-            android:id="@+id/monthlyBalanceRelativeLayoutType"
+            android:id="@+id/monthly_balance_relative_layout_type"
             android:layout_width="0sp"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="20sp"
             android:textAlignment="textStart"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/monthlyBalanceRelativeLayoutValue"
+            app:layout_constraintEnd_toStartOf="@id/monthly_balance_relative_layout_value"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/monthlyBalanceRelativeLayoutValue"
+            android:id="@+id/monthly_balance_relative_layout_value"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAlignment="center"

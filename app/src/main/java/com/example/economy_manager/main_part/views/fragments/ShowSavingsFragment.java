@@ -64,7 +64,7 @@ public class ShowSavingsFragment extends Fragment {
 
     private void setVariables(final View v) {
         viewModel = new ViewModelProvider((ViewModelStoreOwner) requireContext()).get(MainScreenViewModel.class);
-        savingsText = v.findViewById(R.id.fragment2Savings);
+        savingsText = v.findViewById(R.id.show_savings_text);
     }
 
     private void setSavings() {
