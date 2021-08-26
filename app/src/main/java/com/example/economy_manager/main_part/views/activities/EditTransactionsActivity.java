@@ -1,5 +1,6 @@
 package com.example.economy_manager.main_part.views.activities;
 
+import android.app.DatePickerDialog;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
@@ -8,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.DatePicker;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.Spinner;
@@ -18,6 +20,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.DialogFragment;
+import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -41,10 +44,13 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.List;
 import java.util.Locale;
 
 public class EditTransactionsActivity extends AppCompatActivity
-        implements DeleteTransactionCustomDialog.DeleteDialogListener {
+        implements DeleteTransactionCustomDialog.DeleteDialogListener,
+        EditSpecificTransactionFragment.OnDateReceivedCallBack,
+        DatePickerDialog.OnDateSetListener {
     private UserDetails userDetails;
     private EditTransactionsViewModel viewModel;
     private ConstraintLayout activityLayout;
@@ -86,6 +92,26 @@ public class EditTransactionsActivity extends AppCompatActivity
             finish();
             overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
         }
+    }
+
+    @Override
+    public void onDateReceived(final LocalDate newDate) {
+        final Fragment currentDisplayedFragment =
+                getCurrentDisplayedFragment(getSupportFragmentManager().getFragments());
+
+        if (currentDisplayedFragment instanceof EditSpecificTransactionFragment) {
+            ((EditSpecificTransactionFragment) currentDisplayedFragment).setDateText(newDate);
+        }
+    }
+
+    @Override
+    public void onDateSet(final DatePicker datePicker,
+                          final int year,
+                          final int month,
+                          final int dayOfMonth) {
+        final LocalDate newTransactionDate = LocalDate.of(year, month + 1, dayOfMonth);
+
+        onDateReceived(newTransactionDate);
     }
 
     private void setVariables() {
@@ -592,5 +618,16 @@ public class EditTransactionsActivity extends AppCompatActivity
     @Override
     public void onDialogNegativeClick(final DialogFragment dialog) {
 
+    }
+
+    private Fragment getCurrentDisplayedFragment(final List<Fragment> fragmentsList) {
+        if (fragmentsList != null) {
+            for (final Fragment fragment : fragmentsList) {
+                if (fragment != null && fragment.isVisible())
+                    return fragment;
+            }
+        }
+
+        return null;
     }
 }

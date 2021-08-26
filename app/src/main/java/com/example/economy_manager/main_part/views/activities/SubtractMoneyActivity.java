@@ -47,7 +47,7 @@ public class SubtractMoneyActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.subtract_money_activity);
         setVariables();
-        viewModel.setDateText(LocalDate.now(), dateText);
+        setDateText(LocalDate.now());
         viewModel.limitTwoDecimals(valueField);
         createRadioButtons();
         setOnClickListeners();
@@ -67,7 +67,9 @@ public class SubtractMoneyActivity
                           final int dayOfMonth) {
         final LocalDate newTransactionDate = LocalDate.of(year, month + 1, dayOfMonth);
 
-        viewModel.setDateText(newTransactionDate, dateText);
+        final String formattedDate = MyCustomMethods.getFormattedDate(newTransactionDate);
+
+        dateText.setText(formattedDate);
     }
 
     private void setVariables() {
@@ -233,5 +235,11 @@ public class SubtractMoneyActivity
             radioButton1[i].setTextColor(Color.WHITE);
             radioGroup.addView(radioButton1[i]);
         }
+    }
+
+    private void setDateText(final LocalDate date) {
+        final String formattedDate = MyCustomMethods.getFormattedDate(date);
+
+        dateText.setText(formattedDate);
     }
 }

@@ -34,7 +34,6 @@ public class MoneySpentFragment extends Fragment {
 
     public static MoneySpentFragment newInstance() {
         final MoneySpentFragment fragment = new MoneySpentFragment();
-
         final Bundle args = new Bundle();
 
         fragment.setArguments(args);

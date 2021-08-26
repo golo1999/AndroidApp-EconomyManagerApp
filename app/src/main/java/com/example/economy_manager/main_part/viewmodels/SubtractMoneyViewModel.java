@@ -83,33 +83,6 @@ public class SubtractMoneyViewModel extends ViewModel {
         return context.getResources().getString(R.string.subtract_money_transport).trim();
     }
 
-    public void setDateText(final LocalDate date, final TextView dateText) {
-        final String dayName = date.getDayOfWeek().name().charAt(0) +
-                date.getDayOfWeek().name().substring(1).toLowerCase();
-
-        final String monthName = String.valueOf(date.getMonth()).charAt(0) +
-                String.valueOf(date.getMonth()).substring(1).toLowerCase();
-
-        final int day = date.getDayOfMonth();
-
-        final StringBuilder transactionDate = new StringBuilder(dayName)
-                .append(", ")
-                .append(monthName)
-                .append(" ")
-                .append(day);
-        // displaying the year if it's not the current one
-        if (date.getYear() != LocalDate.now().getYear()) {
-            transactionDate.append(", ")
-                    .append(date.getYear());
-        }
-
-        if (!getTransactionDate().equals(date)) {
-            setTransactionDate(date);
-        }
-
-        dateText.setText(transactionDate);
-    }
-
     // method for limiting the number to only two decimals
     public void limitTwoDecimals(final EditText field) {
         field.addTextChangedListener(new TextWatcher() {
