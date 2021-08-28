@@ -1,6 +1,7 @@
 package com.example.economy_manager.main_part.views.activities;
 
 import android.app.DatePickerDialog;
+import android.app.TimePickerDialog;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
@@ -14,6 +15,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.TimePicker;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -41,6 +43,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -50,7 +53,9 @@ import java.util.Locale;
 public class EditTransactionsActivity extends AppCompatActivity
         implements DeleteTransactionCustomDialog.DeleteDialogListener,
         EditSpecificTransactionFragment.OnDateReceivedCallBack,
-        DatePickerDialog.OnDateSetListener {
+        EditSpecificTransactionFragment.OnTimeReceivedCallBack,
+        DatePickerDialog.OnDateSetListener,
+        TimePickerDialog.OnTimeSetListener {
     private UserDetails userDetails;
     private EditTransactionsViewModel viewModel;
     private ConstraintLayout activityLayout;
@@ -112,6 +117,25 @@ public class EditTransactionsActivity extends AppCompatActivity
         final LocalDate newTransactionDate = LocalDate.of(year, month + 1, dayOfMonth);
 
         onDateReceived(newTransactionDate);
+    }
+
+    @Override
+    public void onTimeReceived(final LocalTime newTime) {
+        final Fragment currentDisplayedFragment =
+                getCurrentDisplayedFragment(getSupportFragmentManager().getFragments());
+
+        if (currentDisplayedFragment instanceof EditSpecificTransactionFragment) {
+            ((EditSpecificTransactionFragment) currentDisplayedFragment).setTimeText(newTime);
+        }
+    }
+
+    @Override
+    public void onTimeSet(final TimePicker timePicker,
+                          final int hourOfDay,
+                          final int minute) {
+        final LocalTime newTransactionTime = LocalTime.of(hourOfDay, minute);
+
+        onTimeReceived(newTransactionTime);
     }
 
     private void setVariables() {

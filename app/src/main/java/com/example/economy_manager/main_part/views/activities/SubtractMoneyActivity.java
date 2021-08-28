@@ -67,9 +67,7 @@ public class SubtractMoneyActivity
                           final int dayOfMonth) {
         final LocalDate newTransactionDate = LocalDate.of(year, month + 1, dayOfMonth);
 
-        final String formattedDate = MyCustomMethods.getFormattedDate(newTransactionDate);
-
-        dateText.setText(formattedDate);
+        setDateText(newTransactionDate);
     }
 
     private void setVariables() {
@@ -239,6 +237,12 @@ public class SubtractMoneyActivity
 
     private void setDateText(final LocalDate date) {
         final String formattedDate = MyCustomMethods.getFormattedDate(date);
+
+        if (!viewModel.getTransactionDate().equals(date)) {
+            viewModel.setTransactionDate(date);
+        }
+
+        MyCustomMethods.showShortMessage(this, viewModel.getTransactionDate().toString());
 
         dateText.setText(formattedDate);
     }

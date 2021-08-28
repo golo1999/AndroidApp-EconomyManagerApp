@@ -7,6 +7,9 @@ import com.example.economy_manager.main_part.adapters.EditTransactionsRecyclerVi
 import com.example.economy_manager.models.Transaction;
 import com.example.economy_manager.models.UserDetails;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
+
 public class EditTransactionsViewModel extends ViewModel {
     private UserDetails userDetails;
     private Fragment editSpecificTransactionFragment;
@@ -14,6 +17,8 @@ public class EditTransactionsViewModel extends ViewModel {
     private Transaction selectedTransaction;
     private int selectedTransactionListPosition;
     private EditTransactionsRecyclerViewAdapter editTransactionsRecyclerViewAdapter;
+    private LocalDate transactionDate = LocalDate.now();
+    private LocalTime transactionTime = LocalTime.now();
 
     public UserDetails getUserDetails() {
         return userDetails;
@@ -61,5 +66,21 @@ public class EditTransactionsViewModel extends ViewModel {
 
     public void setEditTransactionsRecyclerViewAdapter(EditTransactionsRecyclerViewAdapter editTransactionsRecyclerViewAdapter) {
         this.editTransactionsRecyclerViewAdapter = editTransactionsRecyclerViewAdapter;
+    }
+
+    public LocalDate getTransactionDate() {
+        return transactionDate;
+    }
+
+    public void setTransactionDate(LocalDate transactionDate) {
+        this.transactionDate = transactionDate;
+    }
+
+    public LocalTime getTransactionTime() {
+        return transactionTime;
+    }
+
+    public void setTransactionTime(LocalTime transactionTime) {
+        this.transactionTime = transactionTime;
     }
 }

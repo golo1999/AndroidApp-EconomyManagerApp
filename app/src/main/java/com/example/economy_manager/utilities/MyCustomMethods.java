@@ -3,6 +3,7 @@ package com.example.economy_manager.utilities;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.text.format.DateFormat;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
@@ -12,6 +13,7 @@ import androidx.annotation.NonNull;
 import com.example.economy_manager.R;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.Locale;
 
 public final class MyCustomMethods {
@@ -94,5 +96,32 @@ public final class MyCustomMethods {
         }
 
         return String.valueOf(transactionDate);
+    }
+
+    public static String getFormattedTime(final Context context,
+                                          final LocalTime time) {
+        final String hour = time.getHour() < 10 ?
+                "0" + time.getHour() : time.getHour() > 12 && !DateFormat.is24HourFormat(context) ?
+                String.valueOf(time.getHour() - 12) : String.valueOf(time.getHour());
+
+        final String minute = time.getMinute() < 10 ?
+                "0" + time.getMinute() : String.valueOf(time.getMinute());
+
+        final String second = time.getSecond() < 10 ?
+                "0" + time.getSecond() : String.valueOf(time.getSecond());
+
+        final StringBuilder transactionTime = new StringBuilder(hour)
+                .append(":")
+                .append(minute)
+                .append(":")
+                .append(second);
+
+        // setting AM or PM if the time format is 12h
+        if (!DateFormat.is24HourFormat(context)) {
+            transactionTime.append(" ")
+                    .append(time.getHour() < 12 ? "AM" : "PM");
+        }
+
+        return String.valueOf(transactionTime);
     }
 }

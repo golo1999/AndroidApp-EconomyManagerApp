@@ -15,7 +15,6 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.TimePicker;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -32,7 +31,7 @@ import com.example.economy_manager.utilities.MyCustomVariables;
 import com.example.economy_manager.utilities.Types;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Collections;
 
@@ -42,13 +41,21 @@ public class EditSpecificTransactionFragment extends Fragment {
     private EditText noteField;
     private EditText valueField;
     private TextView dateText;
-    private TimePicker timePicker;
+    private TextView timeText;
     private Spinner typeSpinner;
     private ImageView goBack;
     private Button saveChangesButton;
 
+    /**
+     * Interfaces for passing the received date & time from EditTransactionsActivity (parent) to this fragment (child)
+     * The received date & time from the pickers are sent to the parent activity, not this fragment
+     */
     public interface OnDateReceivedCallBack {
         void onDateReceived(final LocalDate newDate);
+    }
+
+    public interface OnTimeReceivedCallBack {
+        void onTimeReceived(final LocalTime newTime);
     }
 
     public EditSpecificTransactionFragment() {
@@ -63,38 +70,41 @@ public class EditSpecificTransactionFragment extends Fragment {
     }
 
     @Override
-    public void onViewCreated(final @NonNull View view, final @Nullable Bundle savedInstanceState) {
+    public void onViewCreated(final @NonNull View view,
+                              final @Nullable Bundle savedInstanceState) {
         setVariables(view);
-        setTheme();
+        setFragmentTheme();
         setSaveChangesButtonStyle(viewModel.getUserDetails() != null &&
                 viewModel.getUserDetails().getApplicationSettings().getDarkTheme());
-//        setDatePicker(viewModel.getSelectedTransaction());
         setDateText(viewModel.getUserDetails() != null ?
                 LocalDate.of(viewModel.getSelectedTransaction().getTime().getYear(),
                         viewModel.getSelectedTransaction().getTime().getMonth(),
-                        viewModel.getSelectedTransaction().getTime().getDay()) : LocalDate.now());
-        setTimePicker(viewModel.getSelectedTransaction());
+                        viewModel.getSelectedTransaction().getTime().getDay()) : viewModel.getTransactionDate());
+        setTimeText(viewModel.getUserDetails() != null ?
+                LocalTime.of(viewModel.getSelectedTransaction().getTime().getHour(),
+                        viewModel.getSelectedTransaction().getTime().getMinute(),
+                        viewModel.getSelectedTransaction().getTime().getSecond()) : viewModel.getTransactionTime());
         setOnClickListeners();
         setOnFocusChangeListener(viewModel.getSelectedTransaction());
         setTitle();
         createTransactionTypesSpinner();
-        setHints();
+        setFieldHints();
     }
 
-    private void setVariables(@NonNull final View view) {
+    private void setVariables(final @NonNull View view) {
         viewModel = new ViewModelProvider((ViewModelStoreOwner) requireContext()).get(EditTransactionsViewModel.class);
         goBack = view.findViewById(R.id.edit_specific_transaction_back);
         titleText = view.findViewById(R.id.edit_specific_transaction_title);
         noteField = view.findViewById(R.id.edit_specific_transaction_note_field);
         valueField = view.findViewById(R.id.edit_specific_transaction_value_field);
         dateText = view.findViewById(R.id.edit_specific_transaction_date_text);
-        timePicker = view.findViewById(R.id.edit_specific_transaction_time_picker);
+        timeText = view.findViewById(R.id.edit_specific_transaction_time_text);
         typeSpinner = view.findViewById(R.id.edit_specific_transaction_type_spinner);
         saveChangesButton = view.findViewById(R.id.edit_specific_transaction_save_button);
     }
 
     private void setOnClickListeners() {
-        goBack.setOnClickListener(v -> requireActivity().onBackPressed());
+        goBack.setOnClickListener((final View v) -> requireActivity().onBackPressed());
 
         dateText.setOnClickListener((final View view) -> {
             final int selectedTransactionYear = viewModel.getSelectedTransaction().getTime().getYear();
@@ -111,7 +121,7 @@ public class EditSpecificTransactionFragment extends Fragment {
             datePickerFragment.show(getChildFragmentManager(), "date_picker");
         });
 
-        saveChangesButton.setOnClickListener(v -> {
+        saveChangesButton.setOnClickListener((final View v) -> {
             MyCustomMethods.closeTheKeyboard(requireActivity());
 
             if (MyCustomVariables.getUserDetails() != null) {
@@ -123,6 +133,8 @@ public class EditSpecificTransactionFragment extends Fragment {
 
                     final String editedValue = !String.valueOf(valueField.getText()).trim().isEmpty() ?
                             String.valueOf(valueField.getText()).trim() : selectedTransaction.getValue();
+
+                    final LocalDate editedDate = viewModel.getTransactionDate();
 
                     final int parsedCategoryIndex = Transaction.getIndexFromCategory(Types.
                             getTypeInEnglish(requireContext(), String.valueOf(typeSpinner.getSelectedItem()).trim()));
@@ -180,6 +192,21 @@ public class EditSpecificTransactionFragment extends Fragment {
 
             requireActivity().onBackPressed();
         });
+
+        timeText.setOnClickListener((final View view) -> {
+            final int selectedTransactionHour = viewModel.getSelectedTransaction().getTime().getHour();
+
+            final int selectedTransactionMinute = viewModel.getSelectedTransaction().getTime().getMinute();
+
+            final int selectedTransactionSecond = viewModel.getSelectedTransaction().getTime().getSecond();
+
+            final LocalTime selectedTransactionTime =
+                    LocalTime.of(selectedTransactionHour, selectedTransactionMinute, selectedTransactionSecond);
+
+            final DialogFragment timePickerFragment = new TimePickerFragment(selectedTransactionTime);
+
+            timePickerFragment.show(getChildFragmentManager(), "time_picker");
+        });
     }
 
     private void setTitle() {
@@ -195,7 +222,7 @@ public class EditSpecificTransactionFragment extends Fragment {
         titleText.setTextSize(18);
     }
 
-    private void setHints() {
+    private void setFieldHints() {
         if (viewModel.getSelectedTransaction() != null) {
             final Transaction selectedTransaction = viewModel.getSelectedTransaction();
 
@@ -227,7 +254,7 @@ public class EditSpecificTransactionFragment extends Fragment {
         }
     }
 
-    private void populateTransactionTypesList(@NonNull final ArrayList<String> list) {
+    private void populateTransactionTypesList(final @NonNull ArrayList<String> list) {
         list.add(requireContext().getResources().getString(R.string.add_money_deposits).trim());
         list.add(requireContext().getResources().getString(R.string.add_money_independent_sources).trim());
         list.add(requireContext().getResources().getString(R.string.salary).trim());
@@ -279,14 +306,14 @@ public class EditSpecificTransactionFragment extends Fragment {
         final AdapterView.OnItemSelectedListener listener = new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(final AdapterView<?> parent,
-                                       View view,
-                                       int position,
-                                       long id) {
+                                       final View view,
+                                       final int position,
+                                       final long id) {
                 final boolean darkTheme = MyCustomVariables.getUserDetails() != null ?
                         MyCustomVariables.getUserDetails().getApplicationSettings().getDarkTheme() :
                         MyCustomVariables.getDefaultUserDetails().getApplicationSettings().getDarkTheme();
 
-                final int textColor = !darkTheme ? Color.parseColor("#195190") : Color.WHITE;
+                final int textColor = !darkTheme ? requireContext().getColor(R.color.turkish_sea) : Color.WHITE;
 
                 ((TextView) parent.getChildAt(0)).setTextColor(textColor);
                 ((TextView) parent.getChildAt(0)).setGravity(Gravity.START);
@@ -324,12 +351,12 @@ public class EditSpecificTransactionFragment extends Fragment {
         typeSpinner.setOnItemSelectedListener(listener);
     }
 
-    private void setTheme() {
+    private void setFragmentTheme() {
         final boolean darkTheme = MyCustomVariables.getUserDetails() != null ?
                 MyCustomVariables.getUserDetails().getApplicationSettings().getDarkTheme() :
                 MyCustomVariables.getDefaultUserDetails().getApplicationSettings().getDarkTheme();
 
-        final int color = !darkTheme ? Color.parseColor("#195190") : Color.WHITE;
+        final int color = !darkTheme ? requireContext().getColor(R.color.turkish_sea) : Color.WHITE;
 
         final int backgroundTheme = !darkTheme ?
                 R.drawable.ic_white_gradient_tobacco_ad : R.drawable.ic_black_gradient_night_shift;
@@ -339,6 +366,8 @@ public class EditSpecificTransactionFragment extends Fragment {
 
         setTextStyleEditText(noteField, color);
         setTextStyleEditText(valueField, color);
+        setDateTextColor(color);
+        setTimeTextColor(color);
 
         requireActivity().getWindow().setBackgroundDrawableResource(backgroundTheme);
         // setting arrow's color
@@ -347,7 +376,7 @@ public class EditSpecificTransactionFragment extends Fragment {
         typeSpinner.setPopupBackgroundResource(spinnerElementBackground);
     }
 
-    private void setTextStyleEditText(@NonNull final EditText editText,
+    private void setTextStyleEditText(final @NonNull EditText editText,
                                       final int color) {
         editText.setTextColor(color);
         editText.setHintTextColor(color);
@@ -474,22 +503,6 @@ public class EditSpecificTransactionFragment extends Fragment {
 //        return initialTransaction;
 //    }
 
-//    private void setDatePicker(final @Nullable Transaction selectedTransaction) {
-//        datePicker.updateDate(selectedTransaction != null && selectedTransaction.getTime() != null ?
-//                        viewModel.getSelectedTransaction().getTime().getYear() : LocalDate.now().getYear(),
-//                selectedTransaction != null && selectedTransaction.getTime() != null ?
-//                        viewModel.getSelectedTransaction().getTime().getMonth() - 1 : LocalDate.now().getMonthValue() - 1,
-//                selectedTransaction != null && selectedTransaction.getTime() != null ?
-//                        viewModel.getSelectedTransaction().getTime().getDay() : LocalDate.now().getDayOfMonth());
-//    }
-
-    private void setTimePicker(final @Nullable Transaction selectedTransaction) {
-        timePicker.setHour(selectedTransaction != null && selectedTransaction.getTime() != null ?
-                selectedTransaction.getTime().getHour() : LocalDateTime.now().getHour());
-        timePicker.setMinute(selectedTransaction != null && selectedTransaction.getTime() != null ?
-                selectedTransaction.getTime().getMinute() : LocalDateTime.now().getMinute());
-    }
-
     private void setSaveChangesButtonStyle(final boolean darkThemeEnabled) {
         final int background = !darkThemeEnabled ? R.drawable.button_blue_border : R.drawable.button_white_border;
 
@@ -502,6 +515,36 @@ public class EditSpecificTransactionFragment extends Fragment {
     public void setDateText(final LocalDate date) {
         final String formattedDate = MyCustomMethods.getFormattedDate(date);
 
+        if (!viewModel.getTransactionDate().equals(date)) {
+            viewModel.setTransactionDate(date);
+        }
+
         dateText.setText(formattedDate);
+    }
+
+    public void setTimeText(final LocalTime time) {
+        final String formattedTime = MyCustomMethods.getFormattedTime(requireContext(), time);
+
+        if (!viewModel.getTransactionTime().equals(time)) {
+            viewModel.setTransactionTime(time);
+        }
+
+        timeText.setText(formattedTime);
+    }
+
+    private void setDateTextColor(final int color) {
+        final int drawableStartIcon = color == requireContext().getColor(R.color.turkish_sea) ?
+                R.drawable.ic_calendar_blue : R.drawable.ic_calendar_white;
+
+        dateText.setTextColor(color);
+        dateText.setCompoundDrawablesRelativeWithIntrinsicBounds(drawableStartIcon, 0, 0, 0);
+    }
+
+    private void setTimeTextColor(final int color) {
+        final int drawableStartIcon = color == requireContext().getColor(R.color.turkish_sea) ?
+                R.drawable.ic_time_blue : R.drawable.ic_time_white;
+
+        timeText.setTextColor(color);
+        timeText.setCompoundDrawablesRelativeWithIntrinsicBounds(drawableStartIcon, 0, 0, 0);
     }
 }
