@@ -96,7 +96,10 @@ public class ShowSavingsFragment extends Fragment {
                                 }
                             }
 
-                            final float totalMonthlySavings = totalMonthlyIncomes - totalMonthlyExpenses;
+                            float totalMonthlySavings = totalMonthlyIncomes - totalMonthlyExpenses;
+
+                            totalMonthlySavings =
+                                    MyCustomMethods.getRoundedNumberToNDecimalPlaces(totalMonthlySavings, 2);
 
                             savingsText.setText(!Locale.getDefault().getDisplayLanguage().equals("English") ?
                                     totalMonthlySavings + " " + currencySymbol : totalMonthlySavings < 0f ?

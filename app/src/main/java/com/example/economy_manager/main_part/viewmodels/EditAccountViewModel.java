@@ -9,6 +9,7 @@ import androidx.lifecycle.AndroidViewModel;
 import com.example.economy_manager.R;
 import com.example.economy_manager.models.UserDetails;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
 
@@ -16,6 +17,7 @@ public class EditAccountViewModel extends AndroidViewModel {
     private UserDetails userDetails;
     private ArrayList<String> countryList = new ArrayList<>();
     private ArrayList<String> genderList = new ArrayList<>();
+    private LocalDate transactionDate = LocalDate.now();
 
     public EditAccountViewModel(final @NonNull Application application,
                                 final UserDetails userDetails) {
@@ -51,6 +53,14 @@ public class EditAccountViewModel extends AndroidViewModel {
 
     public void setGenderList(ArrayList<String> genderList) {
         this.genderList = genderList;
+    }
+
+    public LocalDate getTransactionDate() {
+        return transactionDate;
+    }
+
+    public void setTransactionDate(LocalDate transactionDate) {
+        this.transactionDate = transactionDate;
     }
 
     private void addCountriesToList(final Application app) {

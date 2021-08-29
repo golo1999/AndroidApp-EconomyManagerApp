@@ -85,6 +85,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="20sp"
                     android:drawablePadding="10sp"
+                    android:hint="@string/date"
                     android:textSize="18sp"
                     android:textStyle="bold" />
 
@@ -94,6 +95,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="20sp"
                     android:drawablePadding="10sp"
+                    android:hint="@string/time"
                     android:textSize="18sp"
                     android:textStyle="bold" />
 

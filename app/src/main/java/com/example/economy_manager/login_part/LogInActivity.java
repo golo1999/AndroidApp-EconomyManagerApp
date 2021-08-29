@@ -3,6 +3,7 @@ package com.example.economy_manager.login_part;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Patterns;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -34,6 +35,7 @@ import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
+import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.GoogleAuthProvider;
 
@@ -81,78 +83,78 @@ public class LogInActivity extends AppCompatActivity {
     }
 
     private void setOnClickListeners() {
-        signUp.setOnClickListener(v -> {
-            Intent intent = new Intent(LogInActivity.this, SignUpActivity.class);
-            startActivity(intent);
-            overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left); // slide dinspre dreapta spre stanga
+        signUp.setOnClickListener((final View v) -> {
+            MyCustomMethods.goToActivityInDirection(LogInActivity.this, SignUpActivity.class, 1);
         });
 
         facebookLogInButton.setOnClickListener(v -> buttonClickLoginFacebook());
 
-        forgotPassword.setOnClickListener(v -> {
-            Intent intent = new Intent(LogInActivity.this, ForgotPasswordActivity.class);
-            startActivity(intent);
-            overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
+        forgotPassword.setOnClickListener((final View v) -> {
+            MyCustomMethods.goToActivityInDirection(LogInActivity.this, ForgotPasswordActivity.class, 0);
         });
 
-        googleLogInButton.setOnClickListener(v -> {
+        googleLogInButton.setOnClickListener((final View v) -> {
             googleOrFacebookInsideOnActivityResult = 1;
             googleSignIn();
         });
 
-        logInButton.setOnClickListener(v -> validation(String.valueOf(emailField.getText()).trim(),
+        logInButton.setOnClickListener((final View v) -> validation(String.valueOf(emailField.getText()).trim(),
                 String.valueOf(passwordField.getText())));
     }
 
-    private void validation(final String _email, final String _password) {
+    private void validation(final String emailValue,
+                            final String passwordValue) {
         // in cazul in care email-ul este valid si parola are cel putin 7 caractere, incercam sa facem log in
-        if (Patterns.EMAIL_ADDRESS.matcher(_email).matches() && _password.length() >= 7) {
+        if (Patterns.EMAIL_ADDRESS.matcher(emailValue).matches() &&
+                passwordValue.length() >= 7) {
             MyCustomVariables.getFirebaseAuth()
-                    .signInWithEmailAndPassword(_email, _password).addOnCompleteListener(task -> {
-                MyCustomMethods.closeTheKeyboard(this);
-                // daca atat email-ul, cat si parola corespund, se face verifica daca emailul este verificat
-                if (task.isSuccessful()) {
-                    if (MyCustomVariables.getFirebaseAuth().getCurrentUser() != null) {
-                        if (MyCustomVariables.getFirebaseAuth().getCurrentUser().isEmailVerified()) {
-                            goToTheMainScreen();
+                    .signInWithEmailAndPassword(emailValue, passwordValue)
+                    .addOnCompleteListener((final Task<AuthResult> task) -> {
+                        MyCustomMethods.closeTheKeyboard(this);
+                        // daca atat email-ul, cat si parola corespund, se face verifica daca emailul este verificat
+                        if (task.isSuccessful()) {
+                            if (MyCustomVariables.getFirebaseAuth().getCurrentUser() != null) {
+                                if (MyCustomVariables.getFirebaseAuth().getCurrentUser().isEmailVerified()) {
+                                    goToTheMainScreen();
+                                } else {
+                                    Toast.makeText(LogInActivity.this, getResources().getString(R.string.verify_email),
+                                            Toast.LENGTH_SHORT).show();
+
+                                    passwordField.setText("");
+                                }
+                            }
                         } else {
-                            Toast.makeText(LogInActivity.this, getResources().getString(R.string.login_verify_email),
-                                    Toast.LENGTH_SHORT).show();
-                            passwordField.setText("");
+                            // in cazul in care atat email-ul, cat si parola sunt valide,
+                            // dar nu corespund informatiilor din baza de date Firebase
+                            MyCustomMethods.showShortMessage(this,
+                                    getResources().getString(R.string.login_incorrect_username_password));
+                            passwordField.setText(""); // stergem parola
                         }
-                    }
-                } else {
-                    // in cazul in care atat email-ul, cat si parola sunt valide,
-                    // dar nu corespund informatiilor din baza de date Firebase
-                    MyCustomMethods.showShortMessage(this,
-                            getResources().getString(R.string.login_incorrect_username_password));
-                    passwordField.setText(""); // stergem parola
-                }
-            });
+                    });
         }
         // in cazul in care nu se respecta conditia de log in
         else {
             MyCustomMethods.closeTheKeyboard(this);
             // daca atat email-ul, cat si parola nu contin niciun caracter
-            if (_email.isEmpty() && _password.isEmpty()) {
+            if (emailValue.isEmpty() && passwordValue.isEmpty()) {
                 MyCustomMethods.showShortMessage(this, getResources().getString(R.string.signup_error2));
             }
             // daca email-ul nu contine niciun caracter
-            else if (_email.isEmpty()) {
+            else if (emailValue.isEmpty()) {
                 MyCustomMethods.showShortMessage(this, getResources().getString(R.string.signup_error3));
                 passwordField.setText("");
             }
             // daca parola nu contine niciun caracter
-            else if (_password.isEmpty()) {
+            else if (passwordValue.isEmpty()) {
                 MyCustomMethods.showShortMessage(this, getResources().getString(R.string.signup_error4));
             }
             // daca email-ul nu are forma valida si parola este prea scurta
-            else if (!Patterns.EMAIL_ADDRESS.matcher(_email).matches() && _password.length() < 4) {
+            else if (!Patterns.EMAIL_ADDRESS.matcher(emailValue).matches() && passwordValue.length() < 4) {
                 MyCustomMethods.showShortMessage(this, getResources().getString(R.string.signup_error5));
                 passwordField.setText("");
             }
             // daca email-ul nu are forma valida, dar parola este in regula
-            else if (!Patterns.EMAIL_ADDRESS.matcher(_email).matches()) {
+            else if (!Patterns.EMAIL_ADDRESS.matcher(emailValue).matches()) {
                 MyCustomMethods.showShortMessage(this, getResources().getString(R.string.login_email_not_valid));
                 passwordField.setText("");
             }

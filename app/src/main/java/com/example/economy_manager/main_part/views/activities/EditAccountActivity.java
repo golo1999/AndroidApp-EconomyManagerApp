@@ -1,6 +1,6 @@
 package com.example.economy_manager.main_part.views.activities;
 
-import android.content.Intent;
+import android.app.DatePickerDialog;
 import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
@@ -22,38 +22,50 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.DialogFragment;
 
 import com.example.economy_manager.R;
 import com.example.economy_manager.main_part.viewmodels.EditAccountViewModel;
+import com.example.economy_manager.main_part.views.fragments.DatePickerFragment;
 import com.example.economy_manager.models.BirthDate;
 import com.example.economy_manager.models.PersonalInformation;
 import com.example.economy_manager.models.UserDetails;
 import com.example.economy_manager.utilities.MyCustomMethods;
 import com.example.economy_manager.utilities.MyCustomSharedPreferences;
 import com.example.economy_manager.utilities.MyCustomVariables;
+import com.google.android.gms.tasks.Task;
 import com.squareup.picasso.Picasso;
 
+import java.time.LocalDate;
 import java.util.Locale;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class EditAccountActivity extends AppCompatActivity {
+public class EditAccountActivity
+        extends AppCompatActivity
+        implements DatePickerDialog.OnDateSetListener {
     private SharedPreferences preferences;
     private EditAccountViewModel editAccountViewModel;
     private UserDetails userDetails;
     private ImageView goBack;
     private CircleImageView accountPhoto;
-    private TextView topText;
     private EditText firstNameInput;
     private EditText lastNameInput;
     private EditText phoneNumberInput;
     private EditText websiteInput;
-    private DatePicker birthDatePicker;
+    private TextView birthDateText;
     private EditText careerTitleInput;
     private Spinner countrySpinner;
     private Spinner genderSpinner;
     private Button updateProfileButton;
     private boolean darkThemeEnabled;
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        finish();
+        overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,7 +74,6 @@ public class EditAccountActivity extends AppCompatActivity {
         setVariables();
         setTheme();
         setOnClickListeners();
-        setTopText();
         setCountrySpinner();
         setGenderSpinner();
         getPersonalInformation();
@@ -71,10 +82,13 @@ public class EditAccountActivity extends AppCompatActivity {
     }
 
     @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-        finish();
-        overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
+    public void onDateSet(final DatePicker datePicker,
+                          final int year,
+                          final int month,
+                          final int dayOfMonth) {
+        final LocalDate newTransactionDate = LocalDate.of(year, month + 1, dayOfMonth);
+
+        setBirthDateText(newTransactionDate);
     }
 
     private void setVariables() {
@@ -86,24 +100,28 @@ public class EditAccountActivity extends AppCompatActivity {
         lastNameInput = findViewById(R.id.edit_account_remastered_last_name_field);
         phoneNumberInput = findViewById(R.id.edit_account_remastered_phone_field);
         websiteInput = findViewById(R.id.edit_account_remastered_website_field);
-        birthDatePicker = findViewById(R.id.edit_account_remastered_birth_date_picker);
+        birthDateText = findViewById(R.id.edit_account_remastered_birth_date_text);
         careerTitleInput = findViewById(R.id.edit_account_remastered_career_title_field);
         countrySpinner = findViewById(R.id.edit_account_remastered_country_spinner);
         genderSpinner = findViewById(R.id.edit_account_remastered_gender_spinner);
         accountPhoto = findViewById(R.id.edit_account_remastered_photo);
-        topText = findViewById(R.id.edit_account_remastered_top_text);
         updateProfileButton = findViewById(R.id.edit_account_remastered_update_button);
     }
 
     private void setOnClickListeners() {
-        accountPhoto.setOnClickListener(v -> {
-            startActivity(new Intent(EditAccountActivity.this, EditPhotoActivity.class));
-            overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+        accountPhoto.setOnClickListener((final View view) ->
+                MyCustomMethods.goToActivityWithFadeTransition(EditAccountActivity.this,
+                        EditPhotoActivity.class));
+
+        birthDateText.setOnClickListener((final View view) -> {
+            final DialogFragment datePickerFragment = new DatePickerFragment(editAccountViewModel.getTransactionDate());
+
+            datePickerFragment.show(getSupportFragmentManager(), "date_picker");
         });
 
-        goBack.setOnClickListener(v -> onBackPressed());
+        goBack.setOnClickListener((final View view) -> onBackPressed());
 
-        updateProfileButton.setOnClickListener(view -> {
+        updateProfileButton.setOnClickListener((final View view) -> {
             final PersonalInformation editedPersonalInformation = validation(userDetails.getPersonalInformation());
             // updating user's new info into the database, into SharedPreferences and into utilities
             if (editedPersonalInformation != null &&
@@ -112,8 +130,8 @@ public class EditAccountActivity extends AppCompatActivity {
                         .child(MyCustomVariables.getFirebaseAuth().getUid())
                         .child("PersonalInformation")
                         .setValue(editedPersonalInformation)
-                        .addOnCompleteListener(task ->
-                                MyCustomMethods.showShortMessage(this, "Profile updated successfully"));
+                        .addOnCompleteListener((final Task<Void> task) -> MyCustomMethods.showShortMessage(this,
+                                getResources().getString(R.string.profile_updated_successfully)));
 
                 userDetails.setPersonalInformation(editedPersonalInformation);
                 MyCustomSharedPreferences.saveUserDetailsToSharedPreferences(preferences, userDetails);
@@ -122,7 +140,8 @@ public class EditAccountActivity extends AppCompatActivity {
 
                 onBackPressed();
             } else {
-                MyCustomMethods.showShortMessage(this, "Please complete all fields");
+                MyCustomMethods.showShortMessage(this,
+                        getResources().getString(R.string.please_complete_all_fields));
             }
         });
 
@@ -165,10 +184,6 @@ public class EditAccountActivity extends AppCompatActivity {
         final int genderSpinnerSelection = editAccountViewModel.getPositionInGenderList(getApplication(),
                 userDetails != null ? userDetails.getPersonalInformation().getGender().trim() : "");
 
-        final BirthDate birthDateHint =
-                userDetails.getPersonalInformation().getBirthDate().toString().trim().isEmpty() || userDetails == null ?
-                        new BirthDate() : userDetails.getPersonalInformation().getBirthDate();
-
         final String careerTitleHint =
                 userDetails.getPersonalInformation().getCareerTitle().trim().isEmpty() || userDetails == null ?
                         getResources().getString(R.string.edit_account_career_title).trim() :
@@ -194,24 +209,13 @@ public class EditAccountActivity extends AppCompatActivity {
 
         genderSpinner.setSelection(genderSpinnerSelection);
 
-        // if the birth date is not selected as today (today is the default date for DatePicker)
-        if (!birthDateHint.equals(new BirthDate())) {
-            final int birthDateYear = birthDateHint.getYear();
-            final int birthDateMonth = birthDateHint.getMonth() - 1;
-            final int birthDateDay = birthDateHint.getDay();
-
-            birthDatePicker.updateDate(birthDateYear, birthDateMonth, birthDateDay);
-        }
+        setBirthDateText(editAccountViewModel.getUserDetails().getPersonalInformation().getBirthDate() != null ?
+                LocalDate.of(editAccountViewModel.getUserDetails().getPersonalInformation().getBirthDate().getYear(),
+                        editAccountViewModel.getUserDetails().getPersonalInformation().getBirthDate().getMonth(),
+                        editAccountViewModel.getUserDetails().getPersonalInformation().getBirthDate().getDay()) :
+                LocalDate.now());
 
         careerTitleInput.setHint(careerTitleHint);
-    }
-
-    private void setTopText() {
-        final String text = getResources().getString(R.string.edit_account).trim();
-
-        topText.setText(text);
-        topText.setTextSize(20);
-        topText.setTextColor(Color.WHITE);
     }
 
     private void setTheme() {
@@ -241,6 +245,7 @@ public class EditAccountActivity extends AppCompatActivity {
         setEditTextColor(websiteInput, color);
         setEditTextColor(careerTitleInput, color);
 
+        setBirthDateTextStyle(color);
         setUpdateProfileButtonStyle(darkThemeEnabled);
     }
 
@@ -354,13 +359,29 @@ public class EditAccountActivity extends AppCompatActivity {
     }
 
     private PersonalInformation validation(final PersonalInformation initialPersonalInformation) {
-        final String enteredFirstName = String.valueOf(firstNameInput.getText()).trim();
+        final String enteredFirstName = !String.valueOf(firstNameInput.getText()).trim().equals("") ?
+                String.valueOf(firstNameInput.getText()).trim() :
+                !String.valueOf(firstNameInput.getHint()).trim()
+                        .equals(getResources().getString(R.string.edit_account_first_name)) ?
+                        String.valueOf(firstNameInput.getHint()).trim() : "";
 
-        final String enteredLastName = String.valueOf(lastNameInput.getText()).trim();
+        final String enteredLastName = !String.valueOf(lastNameInput.getText()).trim().equals("") ?
+                String.valueOf(lastNameInput.getText()).trim() :
+                !String.valueOf(lastNameInput.getHint()).trim()
+                        .equals(getResources().getString(R.string.edit_account_last_name)) ?
+                        String.valueOf(lastNameInput.getHint()).trim() : "";
 
-        final String enteredPhoneNumber = String.valueOf(phoneNumberInput.getText()).trim();
+        final String enteredPhoneNumber = !String.valueOf(phoneNumberInput.getText()).trim().equals("") ?
+                String.valueOf(phoneNumberInput.getText()).trim() :
+                !String.valueOf(phoneNumberInput.getHint()).trim()
+                        .equals(getResources().getString(R.string.edit_account_phone_number)) ?
+                        String.valueOf(phoneNumberInput.getHint()).trim() : "";
 
-        final String enteredWebsite = String.valueOf(websiteInput.getText()).trim();
+        final String enteredWebsite = !String.valueOf(websiteInput.getText()).trim().equals("") ?
+                String.valueOf(websiteInput.getText()).trim() :
+                !String.valueOf(websiteInput.getHint()).trim()
+                        .equals(getResources().getString(R.string.edit_account_website)) ?
+                        String.valueOf(websiteInput.getHint()).trim() : "";
 
         final String enteredCountry = Locale.getDefault().getDisplayLanguage().equals("English") ?
                 String.valueOf(countrySpinner.getSelectedItem()).trim() :
@@ -372,30 +393,85 @@ public class EditAccountActivity extends AppCompatActivity {
                 String.valueOf(editAccountViewModel.getGenderInEnglish(getApplication(),
                         String.valueOf(genderSpinner.getSelectedItem()))).trim();
 
-        final int birthDateYear = birthDatePicker.getYear();
+        final int birthDateYear = editAccountViewModel.getTransactionDate().getYear();
 
-        final int birthDateMonth = birthDatePicker.getMonth() + 1;
+        final int birthDateMonth = editAccountViewModel.getTransactionDate().getMonthValue();
 
-        final int birthDateDay = birthDatePicker.getDayOfMonth();
+        final int birthDateDay = editAccountViewModel.getTransactionDate().getDayOfMonth();
 
         final BirthDate enteredBirthDate = new BirthDate(birthDateYear, birthDateMonth, birthDateDay);
 
-        final String enteredCareerTitle = String.valueOf(careerTitleInput.getText()).trim();
+        final String enteredCareerTitle = !String.valueOf(careerTitleInput.getText()).trim().equals("") ?
+                String.valueOf(careerTitleInput.getText()).trim() :
+                !String.valueOf(careerTitleInput.getHint()).trim()
+                        .equals(getResources().getString(R.string.edit_account_career_title)) ?
+                        String.valueOf(careerTitleInput.getHint()).trim() : "";
 
         final String enteredPhotoURL = initialPersonalInformation.getPhotoURL();
 
-        final PersonalInformation editedPersonalInformation = new PersonalInformation(enteredFirstName, enteredLastName,
-                enteredPhoneNumber, enteredWebsite, enteredCountry, enteredGender, enteredBirthDate, enteredCareerTitle,
-                enteredPhotoURL);
+        final PersonalInformation editedPersonalInformation =
+                new PersonalInformation(enteredFirstName,
+                        enteredLastName,
+                        enteredPhoneNumber,
+                        enteredWebsite,
+                        enteredCountry,
+                        enteredGender,
+                        enteredBirthDate,
+                        enteredCareerTitle,
+                        enteredPhotoURL);
+
+        final boolean firstNameIsOK = !enteredFirstName.isEmpty() ||
+                !String.valueOf(firstNameInput.getHint()).trim()
+                        .equals(getResources().getString(R.string.edit_account_first_name).trim());
+
+        final boolean lastNameIsOK = !enteredLastName.isEmpty() ||
+                !String.valueOf(lastNameInput.getHint()).trim()
+                        .equals(getResources().getString(R.string.edit_account_last_name).trim());
+
+        final boolean phoneNumberIsOK = !enteredPhoneNumber.isEmpty() ||
+                !String.valueOf(phoneNumberInput.getHint()).trim()
+                        .equals(getResources().getString(R.string.edit_account_phone_number).trim());
+
+        final boolean websiteIsOK = !enteredWebsite.isEmpty() ||
+                !String.valueOf(websiteInput.getHint()).trim()
+                        .equals(getResources().getString(R.string.edit_account_website).trim());
+
+        final boolean countryNameIsOK = !enteredCountry.isEmpty();
+
+        final boolean genderIsOK = !enteredGender.isEmpty();
+
+        final boolean careerTitleIsOK = !enteredCareerTitle.isEmpty() ||
+                !String.valueOf(careerTitleInput.getHint()).trim()
+                        .equals(getResources().getString(R.string.edit_account_career_title).trim());
 
         return !initialPersonalInformation.equals(editedPersonalInformation) &&
-                !enteredFirstName.isEmpty() &&
-                !enteredLastName.isEmpty() &&
-                !enteredPhoneNumber.isEmpty() &&
-                !enteredWebsite.isEmpty() &&
-                !enteredCountry.isEmpty() &&
-                !enteredGender.isEmpty() &&
-                !enteredCareerTitle.isEmpty() ?
+                firstNameIsOK &&
+                lastNameIsOK &&
+                phoneNumberIsOK &&
+                websiteIsOK &&
+                countryNameIsOK &&
+                genderIsOK &&
+                careerTitleIsOK ?
                 editedPersonalInformation : null;
+    }
+
+    private void setBirthDateText(final LocalDate date) {
+        final String formattedDate = MyCustomMethods.getFormattedDate(date);
+
+        if (!editAccountViewModel.getTransactionDate().equals(date)) {
+            editAccountViewModel.setTransactionDate(date);
+        }
+
+        MyCustomMethods.showShortMessage(this, editAccountViewModel.getTransactionDate().toString());
+
+        birthDateText.setText(formattedDate);
+    }
+
+    private void setBirthDateTextStyle(final int color) {
+        final int drawableStartIcon = color == getColor(R.color.turkish_sea) ?
+                R.drawable.ic_time_blue : R.drawable.ic_time_white;
+
+        birthDateText.setTextColor(color);
+        birthDateText.setCompoundDrawablesRelativeWithIntrinsicBounds(drawableStartIcon, 0, 0, 0);
     }
 }

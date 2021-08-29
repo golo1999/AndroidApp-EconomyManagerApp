@@ -100,8 +100,15 @@ public class BudgetReviewFragment extends Fragment {
                                 }
                             }
 
+                            totalMonthlyIncomes =
+                                    MyCustomMethods.getRoundedNumberToNDecimalPlaces(totalMonthlyIncomes, 2);
+
+                            totalMonthlyExpenses =
+                                    MyCustomMethods.getRoundedNumberToNDecimalPlaces(totalMonthlyExpenses, 2);
+
                             incomesText.setText(Locale.getDefault().getDisplayLanguage().equals("English") ?
                                     currencySymbol + totalMonthlyIncomes : totalMonthlyIncomes + " " + currencySymbol);
+
                             expensesText.setText(Locale.getDefault().getDisplayLanguage().equals("English") ?
                                     currencySymbol + totalMonthlyExpenses : totalMonthlyExpenses + " " + currencySymbol);
 

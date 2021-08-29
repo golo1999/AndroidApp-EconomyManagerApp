@@ -13,8 +13,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.economy_manager.R;
 import com.example.economy_manager.utilities.MyCustomMethods;
 import com.example.economy_manager.utilities.MyCustomVariables;
+import com.google.android.gms.tasks.Task;
 
-public class ForgotPasswordActivity extends AppCompatActivity implements View.OnClickListener {
+public class ForgotPasswordActivity
+        extends AppCompatActivity
+        implements View.OnClickListener {
     private TextView logIn;
     private TextView signUp;
     private Button forgotButton;
@@ -63,23 +66,27 @@ public class ForgotPasswordActivity extends AppCompatActivity implements View.On
         }
         // if the clicked button is the one for forgot password
         else if (clickedButtonId == forgotButton.getId()) {
-            validation(String.valueOf(emailField.getText()));
+            validation(String.valueOf(emailField.getText()).trim());
         }
     }
 
     private void validation(final String emailText) {
         MyCustomMethods.closeTheKeyboard(this);
+
         if (Patterns.EMAIL_ADDRESS.matcher(emailText).matches()) {
-            MyCustomVariables.getFirebaseAuth().sendPasswordResetEmail(emailText).addOnCompleteListener(task -> {
-                if (task.isSuccessful()) {
-                    MyCustomMethods.showLongMessage(this, "Password reset sent");
-                    finish();
-                    overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
-                } else {
-                    MyCustomMethods.showShortMessage(this,
-                            getResources().getString(R.string.forgot_password_email_does_not_exist));
-                }
-            });
+            MyCustomVariables.getFirebaseAuth()
+                    .sendPasswordResetEmail(emailText)
+                    .addOnCompleteListener((final Task<Void> task) -> {
+                        if (task.isSuccessful()) {
+                            MyCustomMethods.showLongMessage(this,
+                                    getResources().getString(R.string.verify_email));
+                            finish();
+                            overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+                        } else {
+                            MyCustomMethods.showShortMessage(this,
+                                    getResources().getString(R.string.forgot_password_email_does_not_exist));
+                        }
+                    });
         } else {
             MyCustomMethods.showShortMessage(this, emailText.isEmpty() ?
                     getResources().getString(R.string.signup_error3) :

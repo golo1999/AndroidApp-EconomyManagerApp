@@ -1,6 +1,5 @@
 package com.example.economy_manager.login_part;
 
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Patterns;
@@ -81,7 +80,8 @@ public class SignUpActivity extends AppCompatActivity {
                         fbUser.sendEmailVerification().addOnCompleteListener(task1 -> {
                             if (task1.isSuccessful()) {
                                 userDetails = new UserDetails();
-                                MyCustomMethods.showShortMessage(this, "Please verify your email");
+                                MyCustomMethods.showShortMessage(this,
+                                        getResources().getString(R.string.verify_email));
                                 createPersonalInformationPath();
                                 createApplicationSettingsPath();
                                 MyCustomSharedPreferences.saveUserDetailsToSharedPreferences(preferences, userDetails);

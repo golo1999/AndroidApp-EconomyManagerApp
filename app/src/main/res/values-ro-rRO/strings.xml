@@ -127,7 +127,7 @@
     <string name="settings_reset_database">Sunteți sigur/ă că doriți resetarea bazei de date?</string>
     <string name="settings_delete_account">Sunteți sigur/ă că doriți ștergerea contului?</string>
     <string name="settings_change_password">Sunteți sigur/ă că doriți schimbarea parolei?</string>
-    <string name="login_verify_email">Vă rugăm să vă verificați emailul</string>
+    <string name="verify_email">Vă rugăm să vă verificați emailul</string>
     <string name="edit_account_country_romania">România</string>
     <string name="edit_account_country_italy">Italia</string>
     <string name="edit_account_country_armenia">Armenia</string>
@@ -203,4 +203,9 @@
     <string name="proceed">Continuare</string>
     <string name="delete_error">Nu s-a putut realiza ștergerea</string>
     <string name="delete_transaction">Sigur doriți să ștergeți această tranzacție?</string>
+    <string name="update_profile">Actualizați profilul</string>
+    <string name="time">Timp</string>
+    <string name="profile_updated_successfully">Profilul a fost actualizat cu succes</string>
+    <string name="press_again_exit">Apăsați din nou pentru a ieși</string>
+    <string name="please_complete_all_fields">Vă rugăm să completați toate câmpurile</string>
 </resources>

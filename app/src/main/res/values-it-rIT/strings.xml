@@ -127,7 +127,7 @@
     <string name="settings_change_password">Sei sicuro di voler cambiare la tua password?</string>
     <string name="settings_reset_database">Sei sicuro di voler ripristinare il database?</string>
     <string name="settings_delete_account">Sei sicuro di voler eliminare il tuo account?</string>
-    <string name="login_verify_email">Per favore verifica la tua email</string>
+    <string name="verify_email">Per favore verifica la tua email</string>
     <string name="edit_account_country_romania">Romania</string>
     <string name="edit_account_country_italy">Italia</string>
     <string name="edit_account_country_azerbaijan">Azerbaigian</string>
@@ -203,4 +203,9 @@
     <string name="proceed">Procedere</string>
     <string name="delete_error">Impossibile eseguire l\'eliminazione</string>
     <string name="delete_transaction">Sei sicuro di voler eliminare questa transazione?</string>
+    <string name="update_profile">Aggiorna il profilo</string>
+    <string name="time">Tempo</string>
+    <string name="profile_updated_successfully">Profilo aggiornato con successo</string>
+    <string name="please_complete_all_fields">Per favore completa tutti i campi</string>
+    <string name="press_again_exit">Premi di nuovo per uscire</string>
 </resources>

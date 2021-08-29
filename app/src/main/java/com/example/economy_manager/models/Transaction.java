@@ -76,8 +76,6 @@ public class Transaction {
             if (category.equals(categoryName.trim())) {
                 break;
             }
-
-            Log.d("category123", categoryName + " " + category + " " + index);
         }
 
         return index;

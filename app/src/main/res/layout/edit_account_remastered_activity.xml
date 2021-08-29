@@ -44,7 +44,10 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="20sp"
+                    android:text="@string/edit_account"
                     android:textAlignment="center"
+                    android:textColor="@color/white"
+                    android:textSize="20sp"
                     android:textStyle="bold"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintLeft_toRightOf="@id/edit_account_remastered_back"
@@ -132,11 +135,14 @@
                 app:layout_constraintTop_toBottomOf="@id/edit_account_remastered_country_spinner"
                 app:layout_constraintWidth_percent=".8" />
 
-            <DatePicker
-                android:id="@+id/edit_account_remastered_birth_date_picker"
+            <TextView
+                android:id="@+id/edit_account_remastered_birth_date_text"
                 android:layout_width="0sp"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_marginTop="20sp"
+                android:drawablePadding="10sp"
+                android:textSize="18sp"
+                android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/edit_account_remastered_gender_spinner"
@@ -151,7 +157,7 @@
                 android:textSize="18sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/edit_account_remastered_birth_date_picker"
+                app:layout_constraintTop_toBottomOf="@id/edit_account_remastered_birth_date_text"
                 app:layout_constraintWidth_percent=".8" />
 
             <Button

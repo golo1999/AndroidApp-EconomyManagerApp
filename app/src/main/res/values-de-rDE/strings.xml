@@ -127,7 +127,7 @@
     <string name="settings_change_password">Möchten Sie Ihr Passwort wirklich ändern?</string>
     <string name="settings_reset_database">Möchten Sie die Datenbank wirklich zurücksetzen?</string>
     <string name="settings_delete_account">Möchten Sie Ihr Konto wirklich löschen?</string>
-    <string name="login_verify_email">Bitte überprüfen Sie Ihre E-Mail</string>
+    <string name="verify_email">Bitte überprüfen Sie Ihre E-Mail</string>
     <string name="edit_account_country_romania">Rumänien</string>
     <string name="edit_account_country_italy">Italien</string>
     <string name="edit_account_country_spain">Spanien</string>
@@ -203,4 +203,9 @@
     <string name="proceed">Fortfahren</string>
     <string name="delete_error">Der Löschvorgang konnte nicht ausgeführt werden</string>
     <string name="delete_transaction">Möchten Sie diese Transaktion wirklich löschen?</string>
+    <string name="update_profile">Profil aktualisieren</string>
+    <string name="time">Zeit</string>
+    <string name="profile_updated_successfully">Profil erfolgreich aktualisiert</string>
+    <string name="please_complete_all_fields">Bitte fülle alle Felder aus</string>
+    <string name="press_again_exit">Zum Beenden erneut drücken</string>
 </resources>

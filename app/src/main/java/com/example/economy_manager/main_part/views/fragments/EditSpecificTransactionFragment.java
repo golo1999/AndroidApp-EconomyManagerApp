@@ -4,6 +4,7 @@ import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,35 +21,38 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelStoreOwner;
 
 import com.example.economy_manager.R;
 import com.example.economy_manager.main_part.viewmodels.EditTransactionsViewModel;
+import com.example.economy_manager.models.MyCustomTime;
 import com.example.economy_manager.models.Transaction;
 import com.example.economy_manager.utilities.MyCustomMethods;
 import com.example.economy_manager.utilities.MyCustomVariables;
 import com.example.economy_manager.utilities.Types;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Collections;
 
 public class EditSpecificTransactionFragment extends Fragment {
-    private EditTransactionsViewModel viewModel;
-    private TextView titleText;
-    private EditText noteField;
-    private EditText valueField;
     private TextView dateText;
-    private TextView timeText;
-    private Spinner typeSpinner;
     private ImageView goBack;
+    private EditText noteField;
     private Button saveChangesButton;
+    private TextView timeText;
+    private TextView titleText;
+    private Spinner typeSpinner;
+    private EditText valueField;
+    private EditTransactionsViewModel viewModel;
 
     /**
+     * The received date & time from the pickers are sent to the parent activity
      * Interfaces for passing the received date & time from EditTransactionsActivity (parent) to this fragment (child)
-     * The received date & time from the pickers are sent to the parent activity, not this fragment
      */
     public interface OnDateReceivedCallBack {
         void onDateReceived(final LocalDate newDate);
@@ -86,196 +90,9 @@ public class EditSpecificTransactionFragment extends Fragment {
                         viewModel.getSelectedTransaction().getTime().getSecond()) : viewModel.getTransactionTime());
         setOnClickListeners();
         setOnFocusChangeListener(viewModel.getSelectedTransaction());
-        setTitle();
+        setFragmentTitle();
         createTransactionTypesSpinner();
         setFieldHints();
-    }
-
-    private void setVariables(final @NonNull View view) {
-        viewModel = new ViewModelProvider((ViewModelStoreOwner) requireContext()).get(EditTransactionsViewModel.class);
-        goBack = view.findViewById(R.id.edit_specific_transaction_back);
-        titleText = view.findViewById(R.id.edit_specific_transaction_title);
-        noteField = view.findViewById(R.id.edit_specific_transaction_note_field);
-        valueField = view.findViewById(R.id.edit_specific_transaction_value_field);
-        dateText = view.findViewById(R.id.edit_specific_transaction_date_text);
-        timeText = view.findViewById(R.id.edit_specific_transaction_time_text);
-        typeSpinner = view.findViewById(R.id.edit_specific_transaction_type_spinner);
-        saveChangesButton = view.findViewById(R.id.edit_specific_transaction_save_button);
-    }
-
-    private void setOnClickListeners() {
-        goBack.setOnClickListener((final View v) -> requireActivity().onBackPressed());
-
-        dateText.setOnClickListener((final View view) -> {
-            final int selectedTransactionYear = viewModel.getSelectedTransaction().getTime().getYear();
-
-            final int selectedTransactionMonth = viewModel.getSelectedTransaction().getTime().getMonth();
-
-            final int selectedTransactionDay = viewModel.getSelectedTransaction().getTime().getDay();
-
-            final LocalDate selectedTransactionDate =
-                    LocalDate.of(selectedTransactionYear, selectedTransactionMonth, selectedTransactionDay);
-
-            final DialogFragment datePickerFragment = new DatePickerFragment(selectedTransactionDate);
-
-            datePickerFragment.show(getChildFragmentManager(), "date_picker");
-        });
-
-        saveChangesButton.setOnClickListener((final View v) -> {
-            MyCustomMethods.closeTheKeyboard(requireActivity());
-
-            if (MyCustomVariables.getUserDetails() != null) {
-                Transaction selectedTransaction = viewModel.getSelectedTransaction();
-
-                if (selectedTransaction != null) {
-                    final String editedNote = !String.valueOf(noteField.getText()).trim().isEmpty() ?
-                            String.valueOf(noteField.getText()).trim() : selectedTransaction.getNote();
-
-                    final String editedValue = !String.valueOf(valueField.getText()).trim().isEmpty() ?
-                            String.valueOf(valueField.getText()).trim() : selectedTransaction.getValue();
-
-                    final LocalDate editedDate = viewModel.getTransactionDate();
-
-                    final int parsedCategoryIndex = Transaction.getIndexFromCategory(Types.
-                            getTypeInEnglish(requireContext(), String.valueOf(typeSpinner.getSelectedItem()).trim()));
-
-                    final int editedCategoryIndex = parsedCategoryIndex >= 0 && parsedCategoryIndex <= 18 &&
-                            parsedCategoryIndex != selectedTransaction.getCategory() ?
-                            parsedCategoryIndex : selectedTransaction.getCategory();
-
-//                    final int datePickerSelectedYear = datePicker.getYear();
-//
-//                    final int datePickerSelectedMonth = datePicker.getMonth();
-//
-//                    final int datePickerSelectedDay = datePicker.getDayOfMonth();
-//
-//                    final int timePickerSelectedHour = timePicker.getHour();
-//
-//                    final int timePickerSelectedMinute = timePicker.getMinute();
-//
-//                    final int timePickerSelectedSecond =
-//                            (datePickerSelectedYear != selectedTransaction.getTime().getYear() &&
-//                                    datePickerSelectedMonth != selectedTransaction.getTime().getMonth() &&
-//                                    datePickerSelectedDay != selectedTransaction.getTime().getDay() &&
-//                                    timePickerSelectedHour != selectedTransaction.getTime().getHour() &&
-//                                    timePickerSelectedMinute != selectedTransaction.getTime().getMinute()) ?
-//                                    LocalDateTime.now().getSecond() : selectedTransaction.getTime().getSecond();
-//
-//                    final LocalDate selectedLocalDate =
-//                            LocalDate.of(datePickerSelectedYear, datePickerSelectedMonth + 1, datePickerSelectedDay);
-//
-//                    final MyCustomTime editedTime = new MyCustomTime(datePickerSelectedYear, datePickerSelectedMonth,
-//                            String.valueOf(selectedLocalDate.getMonth()), datePickerSelectedDay,
-//                            String.valueOf(selectedLocalDate.getDayOfWeek()), timePickerSelectedHour,
-//                            timePickerSelectedMinute, timePickerSelectedSecond);
-//
-//                    final int editedCategoryType = (editedCategoryIndex >= 0 && editedCategoryIndex <= 3) ? 1 : 0;
-//
-//                    final Transaction editedTransaction = new Transaction(selectedTransaction.getId(),
-//                            editedCategoryIndex, editedTime, editedCategoryType, editedNote, editedValue);
-//
-//                    Log.d("editedInitialTransaction", transactionHasBeenModified(selectedTransaction).toString());
-//
-//                    Log.d("selectedTransaction", selectedTransaction.toString());
-//
-//                    Log.d("editedTransaction", editedTransaction.toString());
-//
-//                    //Toast.makeText(requireContext(), String.valueOf(selectedTransaction.equals(editedTransaction)), Toast.LENGTH_SHORT).show();
-//
-//                    if (!selectedTransaction.equals(editedTransaction) &&
-//                            viewModel.getEditTransactionsRecyclerViewAdapter() != null) {
-//                        viewModel.getEditTransactionsRecyclerViewAdapter()
-//                                .notifyItemChanged(viewModel.getSelectedTransactionListPosition());
-//                    }
-                }
-            }
-
-            requireActivity().onBackPressed();
-        });
-
-        timeText.setOnClickListener((final View view) -> {
-            final int selectedTransactionHour = viewModel.getSelectedTransaction().getTime().getHour();
-
-            final int selectedTransactionMinute = viewModel.getSelectedTransaction().getTime().getMinute();
-
-            final int selectedTransactionSecond = viewModel.getSelectedTransaction().getTime().getSecond();
-
-            final LocalTime selectedTransactionTime =
-                    LocalTime.of(selectedTransactionHour, selectedTransactionMinute, selectedTransactionSecond);
-
-            final DialogFragment timePickerFragment = new TimePickerFragment(selectedTransactionTime);
-
-            timePickerFragment.show(getChildFragmentManager(), "time_picker");
-        });
-    }
-
-    private void setTitle() {
-        final String editSpecificTransactionText =
-                requireContext().getResources().getString(R.string.edit_specific_transaction_title).trim();
-
-        if (viewModel.getActivityTitle() == null || !viewModel.getActivityTitle().equals(editSpecificTransactionText)) {
-            viewModel.setActivityTitle(editSpecificTransactionText);
-        }
-
-        titleText.setText(viewModel.getActivityTitle());
-        titleText.setTextColor(Color.WHITE);
-        titleText.setTextSize(18);
-    }
-
-    private void setFieldHints() {
-        if (viewModel.getSelectedTransaction() != null) {
-            final Transaction selectedTransaction = viewModel.getSelectedTransaction();
-
-            final String translatedType = Types.getTranslatedType(requireContext(),
-                    String.valueOf(Transaction.getTypeFromIndexInEnglish(selectedTransaction.getCategory())));
-
-            final ArrayList<String> transactionTypesList = new ArrayList<>();
-
-            int positionInTheTransactionTypesList = -1;
-
-            noteField.setHint(selectedTransaction.getNote() != null ?
-                    selectedTransaction.getNote() : requireContext().getResources().getString(R.string.note));
-            valueField.setHint(selectedTransaction.getValue() != null ?
-                    selectedTransaction.getValue() : requireContext().getResources().getString(R.string.value));
-
-            populateTransactionTypesList(transactionTypesList);
-
-            for (final String type : transactionTypesList) {
-                ++positionInTheTransactionTypesList;
-
-                if (type.equals(translatedType)) {
-                    break;
-                }
-            }
-
-            if (positionInTheTransactionTypesList != -1) {
-                typeSpinner.setSelection(positionInTheTransactionTypesList);
-            }
-        }
-    }
-
-    private void populateTransactionTypesList(final @NonNull ArrayList<String> list) {
-        list.add(requireContext().getResources().getString(R.string.add_money_deposits).trim());
-        list.add(requireContext().getResources().getString(R.string.add_money_independent_sources).trim());
-        list.add(requireContext().getResources().getString(R.string.salary).trim());
-        list.add(requireContext().getResources().getString(R.string.saving).trim());
-        list.add(requireContext().getResources().getString(R.string.subtract_money_bills).trim());
-        list.add(requireContext().getResources().getString(R.string.subtract_money_car).trim());
-        list.add(requireContext().getResources().getString(R.string.subtract_money_clothes).trim());
-        list.add(requireContext().getResources().getString(R.string.subtract_money_communications).trim());
-        list.add(requireContext().getResources().getString(R.string.subtract_money_eating_out).trim());
-        list.add(requireContext().getResources().getString(R.string.subtract_money_entertainment).trim());
-        list.add(requireContext().getResources().getString(R.string.subtract_money_food).trim());
-        list.add(requireContext().getResources().getString(R.string.subtract_money_gifts).trim());
-        list.add(requireContext().getResources().getString(R.string.subtract_money_health).trim());
-        list.add(requireContext().getResources().getString(R.string.subtract_money_house).trim());
-        list.add(requireContext().getResources().getString(R.string.subtract_money_pets).trim());
-        list.add(requireContext().getResources().getString(R.string.subtract_money_sports).trim());
-        list.add(requireContext().getResources().getString(R.string.subtract_money_taxi).trim());
-        list.add(requireContext().getResources().getString(R.string.subtract_money_toiletry).trim());
-        list.add(requireContext().getResources().getString(R.string.subtract_money_transport).trim());
-
-        Collections.sort(list);
     }
 
     private void createTransactionTypesSpinner() {
@@ -351,6 +168,81 @@ public class EditSpecificTransactionFragment extends Fragment {
         typeSpinner.setOnItemSelectedListener(listener);
     }
 
+    private void populateTransactionTypesList(final @NonNull ArrayList<String> list) {
+        list.add(requireContext().getResources().getString(R.string.add_money_deposits).trim());
+        list.add(requireContext().getResources().getString(R.string.add_money_independent_sources).trim());
+        list.add(requireContext().getResources().getString(R.string.salary).trim());
+        list.add(requireContext().getResources().getString(R.string.saving).trim());
+        list.add(requireContext().getResources().getString(R.string.subtract_money_bills).trim());
+        list.add(requireContext().getResources().getString(R.string.subtract_money_car).trim());
+        list.add(requireContext().getResources().getString(R.string.subtract_money_clothes).trim());
+        list.add(requireContext().getResources().getString(R.string.subtract_money_communications).trim());
+        list.add(requireContext().getResources().getString(R.string.subtract_money_eating_out).trim());
+        list.add(requireContext().getResources().getString(R.string.subtract_money_entertainment).trim());
+        list.add(requireContext().getResources().getString(R.string.subtract_money_food).trim());
+        list.add(requireContext().getResources().getString(R.string.subtract_money_gifts).trim());
+        list.add(requireContext().getResources().getString(R.string.subtract_money_health).trim());
+        list.add(requireContext().getResources().getString(R.string.subtract_money_house).trim());
+        list.add(requireContext().getResources().getString(R.string.subtract_money_pets).trim());
+        list.add(requireContext().getResources().getString(R.string.subtract_money_sports).trim());
+        list.add(requireContext().getResources().getString(R.string.subtract_money_taxi).trim());
+        list.add(requireContext().getResources().getString(R.string.subtract_money_toiletry).trim());
+        list.add(requireContext().getResources().getString(R.string.subtract_money_transport).trim());
+
+        Collections.sort(list);
+    }
+
+    public void setDateText(final LocalDate date) {
+        final String formattedDate = MyCustomMethods.getFormattedDate(date);
+
+        if (!viewModel.getTransactionDate().equals(date)) {
+            viewModel.setTransactionDate(date);
+        }
+
+        dateText.setText(formattedDate);
+    }
+
+    private void setDateTextColor(final int color) {
+        final int drawableStartIcon = color == requireContext().getColor(R.color.turkish_sea) ?
+                R.drawable.ic_calendar_blue : R.drawable.ic_calendar_white;
+
+        dateText.setTextColor(color);
+        dateText.setCompoundDrawablesRelativeWithIntrinsicBounds(drawableStartIcon, 0, 0, 0);
+    }
+
+    private void setFieldHints() {
+        if (viewModel.getSelectedTransaction() != null) {
+            final Transaction selectedTransaction = viewModel.getSelectedTransaction();
+
+            final String translatedType = Types.getTranslatedType(requireContext(),
+                    String.valueOf(Transaction.getTypeFromIndexInEnglish(selectedTransaction.getCategory())));
+
+            final ArrayList<String> transactionTypesList = new ArrayList<>();
+
+            int positionInTheTransactionTypesList = -1;
+
+            noteField.setHint(selectedTransaction.getNote() != null ?
+                    selectedTransaction.getNote() : requireContext().getResources().getString(R.string.note));
+
+            valueField.setHint(selectedTransaction.getValue() != null ?
+                    selectedTransaction.getValue() : requireContext().getResources().getString(R.string.value));
+
+            populateTransactionTypesList(transactionTypesList);
+
+            for (final String type : transactionTypesList) {
+                ++positionInTheTransactionTypesList;
+
+                if (type.equals(translatedType)) {
+                    break;
+                }
+            }
+
+            if (positionInTheTransactionTypesList != -1) {
+                typeSpinner.setSelection(positionInTheTransactionTypesList);
+            }
+        }
+    }
+
     private void setFragmentTheme() {
         final boolean darkTheme = MyCustomVariables.getUserDetails() != null ?
                 MyCustomVariables.getUserDetails().getApplicationSettings().getDarkTheme() :
@@ -376,11 +268,122 @@ public class EditSpecificTransactionFragment extends Fragment {
         typeSpinner.setPopupBackgroundResource(spinnerElementBackground);
     }
 
-    private void setTextStyleEditText(final @NonNull EditText editText,
-                                      final int color) {
-        editText.setTextColor(color);
-        editText.setHintTextColor(color);
-        editText.setBackgroundTintList(ColorStateList.valueOf(color));
+    private void setFragmentTitle() {
+        final String editSpecificTransactionText =
+                requireContext().getResources().getString(R.string.edit_specific_transaction_title).trim();
+
+        if (viewModel.getActivityTitle() == null || !viewModel.getActivityTitle().equals(editSpecificTransactionText)) {
+            viewModel.setActivityTitle(editSpecificTransactionText);
+        }
+
+        titleText.setText(viewModel.getActivityTitle());
+        titleText.setTextColor(Color.WHITE);
+        titleText.setTextSize(18);
+    }
+
+    private void setOnClickListeners() {
+        goBack.setOnClickListener((final View v) -> requireActivity().onBackPressed());
+
+        dateText.setOnClickListener((final View view) -> {
+            final int selectedTransactionYear = viewModel.getSelectedTransaction().getTime().getYear();
+
+            final int selectedTransactionMonth = viewModel.getSelectedTransaction().getTime().getMonth();
+
+            final int selectedTransactionDay = viewModel.getSelectedTransaction().getTime().getDay();
+
+            final LocalDate selectedTransactionDate =
+                    LocalDate.of(selectedTransactionYear, selectedTransactionMonth, selectedTransactionDay);
+
+            final DialogFragment datePickerFragment = new DatePickerFragment(selectedTransactionDate);
+
+            datePickerFragment.show(getChildFragmentManager(), "date_picker");
+        });
+
+        saveChangesButton.setOnClickListener((final View v) -> {
+            MyCustomMethods.closeTheKeyboard(requireActivity());
+
+            if (MyCustomVariables.getUserDetails() != null) {
+                Transaction selectedTransaction = viewModel.getSelectedTransaction();
+
+                if (selectedTransaction != null) {
+                    final String editedNote = !String.valueOf(noteField.getText()).trim().isEmpty() ?
+                            String.valueOf(noteField.getText()).trim() : selectedTransaction.getNote();
+
+                    final String editedValue = !String.valueOf(valueField.getText()).trim().isEmpty() ?
+                            String.valueOf(valueField.getText()).trim() : selectedTransaction.getValue();
+
+                    final int parsedCategoryIndex = Transaction.getIndexFromCategory(Types.
+                            getTypeInEnglish(requireContext(), String.valueOf(typeSpinner.getSelectedItem()).trim()));
+
+                    final int editedCategoryIndex = parsedCategoryIndex >= 0 && parsedCategoryIndex <= 18 &&
+                            parsedCategoryIndex != selectedTransaction.getCategory() ?
+                            parsedCategoryIndex : selectedTransaction.getCategory();
+
+                    final int selectedYear = viewModel.getTransactionDate().getYear();
+
+                    final int selectedMonth = viewModel.getTransactionDate().getMonthValue();
+
+                    final int selectedDay = viewModel.getTransactionDate().getDayOfMonth();
+
+                    final int selectedHour = viewModel.getTransactionTime().getHour();
+
+                    final int selectedMinute = viewModel.getTransactionTime().getMinute();
+
+                    final int selectedSecond =
+                            (selectedYear != selectedTransaction.getTime().getYear() &&
+                                    selectedMonth != selectedTransaction.getTime().getMonth() &&
+                                    selectedDay != selectedTransaction.getTime().getDay() &&
+                                    selectedHour != selectedTransaction.getTime().getHour() &&
+                                    selectedMinute != selectedTransaction.getTime().getMinute()) ?
+                                    LocalDateTime.now().getSecond() : selectedTransaction.getTime().getSecond();
+
+                    final LocalDate selectedLocalDate =
+                            LocalDate.of(selectedYear, selectedMonth, selectedDay);
+
+                    final MyCustomTime editedTime = new MyCustomTime(selectedYear,
+                            selectedMonth,
+                            String.valueOf(selectedLocalDate.getMonth()),
+                            selectedDay,
+                            String.valueOf(selectedLocalDate.getDayOfWeek()),
+                            selectedHour,
+                            selectedMinute,
+                            selectedSecond);
+
+                    final int editedCategoryType = (editedCategoryIndex >= 0 && editedCategoryIndex <= 3) ? 1 : 0;
+
+                    final Transaction editedTransaction = new Transaction(selectedTransaction.getId(),
+                            editedCategoryIndex, editedTime, editedCategoryType, editedNote, editedValue);
+
+                    // apelarea metodei face ca tranzactia sa fie modificata
+                    Log.d("editedInitialTransaction", transactionHasBeenModified(selectedTransaction).toString());
+
+                    if (!selectedTransaction.equals(editedTransaction) &&
+                            viewModel.getEditTransactionsRecyclerViewAdapter() != null) {
+                        viewModel.getEditTransactionsRecyclerViewAdapter()
+                                .notifyItemChanged(viewModel.getSelectedTransactionListPosition());
+                    }
+                }
+            }
+
+            requireActivity().onBackPressed();
+        });
+
+        timeText.setOnClickListener((final View view) -> {
+            final int selectedTransactionHour = viewModel.getSelectedTransaction().getTime().getHour();
+
+            final int selectedTransactionMinute = viewModel.getSelectedTransaction().getTime().getMinute();
+
+            final int selectedTransactionSecond = viewModel.getSelectedTransaction().getTime().getSecond();
+
+            final LocalTime selectedTransactionTime =
+                    LocalTime.of(selectedTransactionHour, selectedTransactionMinute, selectedTransactionSecond);
+
+            final DialogFragment timePickerFragment = new TimePickerFragment(selectedTransactionTime);
+
+            final FragmentManager fragmentManager = getChildFragmentManager();
+
+            timePickerFragment.show(fragmentManager, "time_picker");
+        });
     }
 
     private void setOnFocusChangeListener(final Transaction selectedTransaction) {
@@ -396,113 +399,6 @@ public class EditSpecificTransactionFragment extends Fragment {
         noteField.setOnFocusChangeListener(listener);
     }
 
-//    private Transaction transactionHasBeenModified(@NonNull final Transaction initialTransaction) {
-//        final int initialMonthIndex = initialTransaction.getTime().getMonth();
-//
-//        final int datePickerSelectedYear = datePicker.getYear();
-//
-//        final int datePickerSelectedMonth = datePicker.getMonth() + 1;
-//
-//        final int datePickerSelectedDay = datePicker.getDayOfMonth();
-//
-//        final int timePickerSelectedHour = timePicker.getHour();
-//
-//        final int timePickerSelectedMinute = timePicker.getMinute();
-//
-//        final int timePickerSelectedSecond =
-//                (datePickerSelectedYear != initialTransaction.getTime().getYear() &&
-//                        datePickerSelectedMonth != initialTransaction.getTime().getMonth() &&
-//                        datePickerSelectedDay != initialTransaction.getTime().getDay() &&
-//                        timePickerSelectedHour != initialTransaction.getTime().getHour() &&
-//                        timePickerSelectedMinute != initialTransaction.getTime().getMinute()) ?
-//                        LocalDateTime.now().getSecond() : initialTransaction.getTime().getSecond();
-//
-//        final LocalDate selectedTimeLocalDate =
-//                LocalDate.of(datePickerSelectedYear, datePickerSelectedMonth, datePickerSelectedDay);
-//
-//        final MyCustomTime editedTime = new MyCustomTime(datePickerSelectedYear, datePickerSelectedMonth,
-//                String.valueOf(selectedTimeLocalDate.getMonth()), datePickerSelectedDay,
-//                String.valueOf(selectedTimeLocalDate.getDayOfWeek()), timePickerSelectedHour, timePickerSelectedMinute,
-//                timePickerSelectedSecond);
-//
-//        boolean hasBeenModified = false;
-//
-//        if ((initialTransaction.getNote() != null &&
-//                !String.valueOf(noteField.getText()).trim().equals(initialTransaction.getNote().trim())) ||
-//                (initialTransaction.getNote() == null && !String.valueOf(noteField.getText()).trim().isEmpty())) {
-//            Log.d("initialNote", initialTransaction.getNote() != null ? initialTransaction.getNote() : "null");
-//            Log.d("editedNote", String.valueOf(noteField.getText()).trim());
-//
-//            final String editedNote = !String.valueOf(noteField.getText()).trim().isEmpty() ?
-//                    String.valueOf(noteField.getText()).trim() : null;
-//
-//            initialTransaction.setNote(editedNote);
-//
-//            hasBeenModified = true;
-//        }
-//
-//        if (!String.valueOf(valueField.getText()).trim().equals(String.valueOf(valueField.getHint()).trim()) &&
-//                !String.valueOf(valueField.getText()).trim().isEmpty()) {
-//            Log.d("initialValue", initialTransaction.getValue().trim());
-//            Log.d("editedValue", String.valueOf(valueField.getText()).trim());
-//
-//            final String editedValue = String.valueOf(valueField.getText()).trim();
-//
-//            initialTransaction.setValue(editedValue);
-//
-//            if (!hasBeenModified) {
-//                hasBeenModified = true;
-//            }
-//        }
-//
-//        if (!editedTime.equals(initialTransaction.getTime())) {
-//            Log.d("initialTime", initialTransaction.getTime().toString());
-//            Log.d("editedTime", editedTime.toString());
-//
-//            initialTransaction.setTime(editedTime);
-//
-//            if (!hasBeenModified) {
-//                hasBeenModified = true;
-//            }
-//        }
-//
-//        final String initialCategoryName = Types.getTranslatedType(requireContext(),
-//                Transaction.getTypeFromIndexInEnglish(initialTransaction.getCategory()));
-//
-//        final String selectedCategoryName = String.valueOf(typeSpinner.getSelectedItem()).trim();
-//
-//        if (initialCategoryName != null && !initialCategoryName.equals(selectedCategoryName)) {
-//            Log.d("initialCategory", initialCategoryName);
-//            Log.d("editedCategory", selectedCategoryName);
-//
-//            final int editedCategory =
-//                    Transaction.getIndexFromCategory(Types.getTypeInEnglish(requireContext(), selectedCategoryName));
-//
-//            final int editedType = editedCategory >= 0 && editedCategory <= 3 ? 1 : 0;
-//
-//            initialTransaction.setCategory(editedCategory);
-//
-//            if (editedType != initialTransaction.getType()) {
-//                initialTransaction.setType(editedType);
-//            }
-//
-//            if (!hasBeenModified) {
-//                hasBeenModified = true;
-//            }
-//        }
-//
-//        // updating the transaction in the Firebase database
-//        if (hasBeenModified && MyCustomVariables.getFirebaseAuth().getUid() != null) {
-//            MyCustomVariables.getDatabaseReference()
-//                    .child(MyCustomVariables.getFirebaseAuth().getUid())
-//                    .child("PersonalTransactions")
-//                    .child(initialTransaction.getId())
-//                    .setValue(initialTransaction);
-//        }
-//
-//        return initialTransaction;
-//    }
-
     private void setSaveChangesButtonStyle(final boolean darkThemeEnabled) {
         final int background = !darkThemeEnabled ? R.drawable.button_blue_border : R.drawable.button_white_border;
 
@@ -512,14 +408,11 @@ public class EditSpecificTransactionFragment extends Fragment {
         saveChangesButton.setTextColor(textColor);
     }
 
-    public void setDateText(final LocalDate date) {
-        final String formattedDate = MyCustomMethods.getFormattedDate(date);
-
-        if (!viewModel.getTransactionDate().equals(date)) {
-            viewModel.setTransactionDate(date);
-        }
-
-        dateText.setText(formattedDate);
+    private void setTextStyleEditText(final @NonNull EditText editText,
+                                      final int color) {
+        editText.setTextColor(color);
+        editText.setHintTextColor(color);
+        editText.setBackgroundTintList(ColorStateList.valueOf(color));
     }
 
     public void setTimeText(final LocalTime time) {
@@ -532,19 +425,121 @@ public class EditSpecificTransactionFragment extends Fragment {
         timeText.setText(formattedTime);
     }
 
-    private void setDateTextColor(final int color) {
-        final int drawableStartIcon = color == requireContext().getColor(R.color.turkish_sea) ?
-                R.drawable.ic_calendar_blue : R.drawable.ic_calendar_white;
-
-        dateText.setTextColor(color);
-        dateText.setCompoundDrawablesRelativeWithIntrinsicBounds(drawableStartIcon, 0, 0, 0);
-    }
-
     private void setTimeTextColor(final int color) {
         final int drawableStartIcon = color == requireContext().getColor(R.color.turkish_sea) ?
                 R.drawable.ic_time_blue : R.drawable.ic_time_white;
 
         timeText.setTextColor(color);
         timeText.setCompoundDrawablesRelativeWithIntrinsicBounds(drawableStartIcon, 0, 0, 0);
+    }
+
+    private void setVariables(final @NonNull View view) {
+        dateText = view.findViewById(R.id.edit_specific_transaction_date_text);
+        goBack = view.findViewById(R.id.edit_specific_transaction_back);
+        noteField = view.findViewById(R.id.edit_specific_transaction_note_field);
+        saveChangesButton = view.findViewById(R.id.edit_specific_transaction_save_button);
+        timeText = view.findViewById(R.id.edit_specific_transaction_time_text);
+        titleText = view.findViewById(R.id.edit_specific_transaction_title);
+        typeSpinner = view.findViewById(R.id.edit_specific_transaction_type_spinner);
+        valueField = view.findViewById(R.id.edit_specific_transaction_value_field);
+        viewModel = new ViewModelProvider((ViewModelStoreOwner) requireContext()).get(EditTransactionsViewModel.class);
+    }
+
+    private Transaction transactionHasBeenModified(final @NonNull Transaction initialTransaction) {
+        final int selectedYear = viewModel.getTransactionDate().getYear();
+
+        final int selectedMonth = viewModel.getTransactionDate().getMonthValue();
+
+        final int selectedDay = viewModel.getTransactionDate().getDayOfMonth();
+
+        final int selectedHour = viewModel.getTransactionTime().getHour();
+
+        final int selectedMinute = viewModel.getTransactionTime().getMinute();
+
+        final int selectedSecond =
+                (selectedYear != initialTransaction.getTime().getYear() &&
+                        selectedMonth != initialTransaction.getTime().getMonth() &&
+                        selectedDay != initialTransaction.getTime().getDay() &&
+                        selectedHour != initialTransaction.getTime().getHour() &&
+                        selectedMinute != initialTransaction.getTime().getMinute()) ?
+                        LocalDateTime.now().getSecond() : initialTransaction.getTime().getSecond();
+
+        final LocalDate selectedTimeLocalDate =
+                LocalDate.of(selectedYear, selectedMonth, selectedDay);
+
+        final MyCustomTime editedTime = new MyCustomTime(selectedYear,
+                selectedMonth,
+                String.valueOf(selectedTimeLocalDate.getMonth()),
+                selectedDay,
+                String.valueOf(selectedTimeLocalDate.getDayOfWeek()),
+                selectedHour,
+                selectedMinute,
+                selectedSecond);
+
+        boolean hasBeenModified = false;
+
+        if ((initialTransaction.getNote() != null &&
+                !String.valueOf(noteField.getText()).trim().equals(initialTransaction.getNote().trim()) &&
+                !String.valueOf(noteField.getText()).trim().isEmpty()) ||
+                (initialTransaction.getNote() == null && !String.valueOf(noteField.getText()).trim().isEmpty())) {
+            final String editedNote = !String.valueOf(noteField.getText()).trim().isEmpty() ?
+                    String.valueOf(noteField.getText()).trim() : null;
+
+            initialTransaction.setNote(editedNote);
+
+            hasBeenModified = true;
+        }
+
+        if (!String.valueOf(valueField.getText()).trim().equals(String.valueOf(valueField.getHint()).trim()) &&
+                !String.valueOf(valueField.getText()).trim().isEmpty()) {
+            final String editedValue = String.valueOf(valueField.getText()).trim();
+
+            initialTransaction.setValue(editedValue);
+
+            if (!hasBeenModified) {
+                hasBeenModified = true;
+            }
+        }
+
+        if (!editedTime.equals(initialTransaction.getTime())) {
+            initialTransaction.setTime(editedTime);
+
+            if (!hasBeenModified) {
+                hasBeenModified = true;
+            }
+        }
+
+        final String initialCategoryName = Types.getTranslatedType(requireContext(),
+                Transaction.getTypeFromIndexInEnglish(initialTransaction.getCategory()));
+
+        final String selectedCategoryName = String.valueOf(typeSpinner.getSelectedItem()).trim();
+
+        if (initialCategoryName != null && !initialCategoryName.equals(selectedCategoryName)) {
+            final int editedCategory =
+                    Transaction.getIndexFromCategory(Types.getTypeInEnglish(requireContext(), selectedCategoryName));
+
+            final int editedType = editedCategory >= 0 && editedCategory <= 3 ? 1 : 0;
+
+            initialTransaction.setCategory(editedCategory);
+
+            if (editedType != initialTransaction.getType()) {
+                initialTransaction.setType(editedType);
+            }
+
+            if (!hasBeenModified) {
+                hasBeenModified = true;
+            }
+        }
+
+        // updating the transaction into the Firebase database
+        if (hasBeenModified && MyCustomVariables.getFirebaseAuth().getUid() != null) {
+            MyCustomVariables.getDatabaseReference()
+                    .child(MyCustomVariables.getFirebaseAuth().getUid())
+                    .child("PersonalTransactions")
+                    .child(initialTransaction.getId())
+                    .setValue(initialTransaction);
+        }
+
+        return initialTransaction;
     }
 }

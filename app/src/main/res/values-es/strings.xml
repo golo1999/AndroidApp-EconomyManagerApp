@@ -136,7 +136,7 @@
     <string name="login_login">Accender</string>
     <string name="login_incorrect_username_password">Nombre de usuario o contraseña incorrecta</string>
     <string name="login_email_not_valid">El correo no es válido</string>
-    <string name="login_verify_email">Verifique su correo electrónico</string>
+    <string name="verify_email">Verifique su correo electrónico</string>
     <string name="minute">Minuto</string>
     <string name="login_no_account">¿No tienes una cuenta?&#160;</string>
     <string name="signup_error7">La contraseña debe tener al menos 7 caracteres</string>
@@ -203,4 +203,9 @@
     <string name="proceed">Proceder</string>
     <string name="delete_error">No se pudo realizar la eliminación</string>
     <string name="delete_transaction">¿Está seguro de que desea eliminar esta transacción?</string>
+    <string name="update_profile">Actualización del perfil</string>
+    <string name="time">Tiempo</string>
+    <string name="profile_updated_successfully">Perfil actualizado con éxito</string>
+    <string name="please_complete_all_fields">Porfavor complete todos los campos</string>
+    <string name="press_again_exit">" Presione de nuevo para salir"</string>
 </resources>

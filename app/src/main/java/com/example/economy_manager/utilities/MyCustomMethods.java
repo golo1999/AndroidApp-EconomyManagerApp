@@ -44,7 +44,10 @@ public final class MyCustomMethods {
                 "RON" : "£";
     }
 
-    // direction : 0 -> left, 1 -> right
+    /**
+     * Method for navigating to another activity with sliding transition into a direction
+     * Direction: 0 (left), 1 (right)
+     */
     public static void goToActivityInDirection(final @NonNull Activity currentActivity,
                                                final @NonNull Class<? extends Activity> nextActivity,
                                                final int direction) {
@@ -52,6 +55,11 @@ public final class MyCustomMethods {
         currentActivity.overridePendingTransition(direction == 0 ?
                         R.anim.slide_in_left : R.anim.slide_in_right,
                 direction == 0 ? R.anim.slide_out_right : R.anim.slide_out_left);
+    }
+
+    public static void finishActivityWithFadeTransition(final @NonNull Activity currentActivity) {
+        currentActivity.finish();
+        currentActivity.overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
     }
 
     public static void goToActivityWithFadeTransition(final @NonNull Activity currentActivity,
@@ -123,5 +131,18 @@ public final class MyCustomMethods {
         }
 
         return String.valueOf(transactionTime);
+    }
+
+    public static float getRoundedNumberToNDecimalPlaces(final float number,
+                                                         final int scale) {
+        int pow = 10;
+
+        for (int i = 1; i < scale; i++) {
+            pow *= 10;
+        }
+
+        float tmp = number * pow;
+
+        return ((float) ((int) ((tmp - (int) tmp) >= 0.5f ? tmp + 1 : tmp))) / pow;
     }
 }

@@ -25,6 +25,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
 
@@ -52,8 +53,8 @@ public class EditPhotoActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        finish();
-        overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
+
+        MyCustomMethods.finishActivityWithFadeTransition(this);
     }
 
     private void setVariables() {
@@ -67,11 +68,11 @@ public class EditPhotoActivity extends AppCompatActivity {
     }
 
     private void setOnClickListeners() {
-        goBack.setOnClickListener(v -> onBackPressed());
+        goBack.setOnClickListener((final View v) -> onBackPressed());
 
-        chooseFileButton.setOnClickListener(v -> openFileChooser());
+        chooseFileButton.setOnClickListener((final View v) -> openFileChooser());
 
-        uploadFileButton.setOnClickListener(v -> uploadFile());
+        uploadFileButton.setOnClickListener((final View v) -> uploadFile());
     }
 
     private void setInitialProgressBar() {
@@ -110,7 +111,7 @@ public class EditPhotoActivity extends AppCompatActivity {
 
                 storageReference.child(MyCustomVariables.getFirebaseAuth().getUid())
                         .putFile(imageUri)
-                        .addOnSuccessListener(taskSnapshot -> {
+                        .addOnSuccessListener((final UploadTask.TaskSnapshot taskSnapshot) -> {
                             final Handler handler = new Handler();
 
                             handler.postDelayed(() -> {
@@ -152,8 +153,9 @@ public class EditPhotoActivity extends AppCompatActivity {
                                 }
                             }
                         })
-                        .addOnFailureListener(e -> MyCustomMethods.showShortMessage(this, e.getMessage()))
-                        .addOnProgressListener(taskSnapshot -> {
+                        .addOnFailureListener((final Exception e) ->
+                                MyCustomMethods.showShortMessage(this, e.getMessage()))
+                        .addOnProgressListener((final UploadTask.TaskSnapshot taskSnapshot) -> {
                             final long taskSnapshotBytesTransferred = taskSnapshot.getBytesTransferred();
 
                             final float taskSnapshotTotalByteCount = (float) taskSnapshot.getTotalByteCount();

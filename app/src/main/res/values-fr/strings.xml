@@ -118,7 +118,7 @@
     <string name="login_no_account">Vous n\'avez pas de compte?&#160;</string>
     <string name="login_incorrect_username_password">Identifiant ou mot de passe incorrect</string>
     <string name="login_email_not_valid">L\'email n\'est pas valide</string>
-    <string name="login_verify_email">Veuillez vérifier votre email</string>
+    <string name="verify_email">Veuillez vérifier votre email</string>
     <string name="minute">Minute</string>
     <string name="money_error1">Veuillez sélectionner une option</string>
     <string name="money_error4">La valeur ne doit pas être vide</string>
@@ -203,4 +203,9 @@
     <string name="proceed">Procéder</string>
     <string name="delete_error">La suppression n’a pas pu être effectuée</string>
     <string name="delete_transaction">Êtes-vous sûr de vouloir supprimer cette transaction ?</string>
+    <string name="update_profile">Mettre à jour le profil</string>
+    <string name="time">Temps</string>
+    <string name="profile_updated_successfully">Mise à jour du profil réussie</string>
+    <string name="please_complete_all_fields">Veuillez compléter tous les champs s\'il vous plaît</string>
+    <string name="press_again_exit">Appuyez à nouveau pour quitter</string>
 </resources>

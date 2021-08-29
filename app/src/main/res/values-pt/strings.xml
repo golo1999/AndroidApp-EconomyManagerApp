@@ -125,7 +125,7 @@
     <string name="login_no_account">Não tem uma conta?&#160;</string>
     <string name="login_incorrect_username_password">Usuário ou senha incorretos</string>
     <string name="login_email_not_valid">O endereço de email não é válido</string>
-    <string name="login_verify_email">Por favor, verifique seu e-mail</string>
+    <string name="verify_email">Por favor, verifique seu e-mail</string>
     <string name="minute">Minuto</string>
     <string name="money_error1">Por favor selecione uma opção</string>
     <string name="money_error4">O valor não deve estar vazio</string>
@@ -203,4 +203,9 @@
     <string name="proceed">Prosseguir</string>
     <string name="delete_error">A exclusão não pôde ser realizada</string>
     <string name="delete_transaction">Tem certeza de que deseja excluir esta transação?</string>
+    <string name="update_profile">Atualizar perfil</string>
+    <string name="time">Tempo</string>
+    <string name="profile_updated_successfully">Perfil atualizado com sucesso</string>
+    <string name="please_complete_all_fields">Preencha todos os campos por favor</string>
+    <string name="press_again_exit">Pressione novamente para sair</string>
 </resources>

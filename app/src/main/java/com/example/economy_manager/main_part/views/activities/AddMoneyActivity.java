@@ -30,7 +30,9 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
 
-public class AddMoneyActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener {
+public class AddMoneyActivity
+        extends AppCompatActivity implements
+        DatePickerDialog.OnDateSetListener {
     private AddMoneyViewModel viewModel;
     private TextView dateText;
     private EditText valueField;
@@ -199,8 +201,6 @@ public class AddMoneyActivity extends AppCompatActivity implements DatePickerDia
         if (!viewModel.getTransactionDate().equals(date)) {
             viewModel.setTransactionDate(date);
         }
-
-        MyCustomMethods.showShortMessage(this, viewModel.getTransactionDate().toString());
 
         dateText.setText(formattedDate);
     }

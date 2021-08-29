@@ -110,7 +110,6 @@
     <string name="login_no_account">Don\'t have an account? Sign up here</string>
     <string name="login_incorrect_username_password">Incorrect username or password</string>
     <string name="login_email_not_valid">Email address is not valid</string>
-    <string name="login_verify_email">Please verify your email</string>
     <string name="minute">Minute</string>
     <string name="money_error1">Please select an option</string>
     <string name="money_error4">Value should not be empty</string>
@@ -139,8 +138,10 @@
     <string name="note">Note</string>
     <string name="ok" translatable="false">OK</string>
     <string name="password">Password</string>
+    <string name="please_complete_all_fields">Please complete all fields</string>
     <string name="press_again_exit">Press again to exit</string>
     <string name="proceed">"Proceed "</string>
+    <string name="profile_updated_successfully">Profile updated successfully</string>
     <string name="rate_app">Rate the app</string>
     <string name="remaining_monthly_income">Remaining monthly income</string>
     <string name="reset_database">Reset database</string>
@@ -190,6 +191,7 @@
     <string name="subtract_money_taxi">Taxi</string>
     <string name="subtract_money_toiletry">Toiletry</string>
     <string name="subtract_money_transport">Transport</string>
+    <string name="time">Time</string>
     <string name="time_date_and">&#32;and&#32;</string>
     <string name="time_date_hour">Hour should be between 0 and 23</string>
     <string name="time_date_minute">Minute should be between 0 and 59</string>
@@ -206,6 +208,7 @@
     <string name="update_profile">Update profile</string>
     <string name="upload">Upload</string>
     <string name="value">Value</string>
+    <string name="verify_email">Please verify your email</string>
     <string name="year">Year</string>
     <string name="add_money_note_length_error">The note should have maximum 15 characters</string>
     <string name="edit_account_country_select_country" translatable="false">" "</string>

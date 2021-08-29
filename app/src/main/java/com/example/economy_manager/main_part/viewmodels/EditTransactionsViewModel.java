@@ -11,21 +11,21 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 
 public class EditTransactionsViewModel extends ViewModel {
-    private UserDetails userDetails;
-    private Fragment editSpecificTransactionFragment;
     private String activityTitle;
+    private Fragment editSpecificTransactionFragment;
+    private EditTransactionsRecyclerViewAdapter editTransactionsRecyclerViewAdapter;
     private Transaction selectedTransaction;
     private int selectedTransactionListPosition;
-    private EditTransactionsRecyclerViewAdapter editTransactionsRecyclerViewAdapter;
     private LocalDate transactionDate = LocalDate.now();
     private LocalTime transactionTime = LocalTime.now();
+    private UserDetails userDetails;
 
-    public UserDetails getUserDetails() {
-        return userDetails;
+    public String getActivityTitle() {
+        return activityTitle;
     }
 
-    public void setUserDetails(UserDetails userDetails) {
-        this.userDetails = userDetails;
+    public void setActivityTitle(String activityTitle) {
+        this.activityTitle = activityTitle;
     }
 
     public Fragment getEditSpecificTransactionFragment() {
@@ -36,12 +36,12 @@ public class EditTransactionsViewModel extends ViewModel {
         this.editSpecificTransactionFragment = editSpecificTransactionFragment;
     }
 
-    public String getActivityTitle() {
-        return activityTitle;
+    public EditTransactionsRecyclerViewAdapter getEditTransactionsRecyclerViewAdapter() {
+        return editTransactionsRecyclerViewAdapter;
     }
 
-    public void setActivityTitle(String activityTitle) {
-        this.activityTitle = activityTitle;
+    public void setEditTransactionsRecyclerViewAdapter(EditTransactionsRecyclerViewAdapter editTransactionsRecyclerViewAdapter) {
+        this.editTransactionsRecyclerViewAdapter = editTransactionsRecyclerViewAdapter;
     }
 
     public Transaction getSelectedTransaction() {
@@ -60,14 +60,6 @@ public class EditTransactionsViewModel extends ViewModel {
         this.selectedTransactionListPosition = selectedTransactionListPosition;
     }
 
-    public EditTransactionsRecyclerViewAdapter getEditTransactionsRecyclerViewAdapter() {
-        return editTransactionsRecyclerViewAdapter;
-    }
-
-    public void setEditTransactionsRecyclerViewAdapter(EditTransactionsRecyclerViewAdapter editTransactionsRecyclerViewAdapter) {
-        this.editTransactionsRecyclerViewAdapter = editTransactionsRecyclerViewAdapter;
-    }
-
     public LocalDate getTransactionDate() {
         return transactionDate;
     }
@@ -82,5 +74,13 @@ public class EditTransactionsViewModel extends ViewModel {
 
     public void setTransactionTime(LocalTime transactionTime) {
         this.transactionTime = transactionTime;
+    }
+
+    public UserDetails getUserDetails() {
+        return userDetails;
+    }
+
+    public void setUserDetails(UserDetails userDetails) {
+        this.userDetails = userDetails;
     }
 }
