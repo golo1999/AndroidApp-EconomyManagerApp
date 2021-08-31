@@ -49,7 +49,7 @@
     <string name="edit_transactions_title">Tranzacțiile lunare</string>
     <string name="bottom_nav_main_screen_balance">Balanță</string>
     <string name="bottom_nav_main_screen_sign_out">Deconectare</string>
-    <string name="Expenses">Cheltuieli</string>
+    <string name="expenses">Cheltuieli</string>
     <string name="forgot_reset">Resetați parola</string>
     <string name="greet_good_morning">Bună dimineața!</string>
     <string name="greet_good_evening">Bună seara!</string>
@@ -208,4 +208,8 @@
     <string name="profile_updated_successfully">Profilul a fost actualizat cu succes</string>
     <string name="press_again_exit">Apăsați din nou pentru a ieși</string>
     <string name="please_complete_all_fields">Vă rugăm să completați toate câmpurile</string>
+    <string name="please_try_again">Vă rugăm să încercați din nou</string>
+    <string name="login_successful">Autentificare reușită</string>
+    <string name="facebook_authentication_failed">Autentificarea Facebook a eșuat</string>
+    <string name="google_authentication_failed">Autentificarea Google a eșuat</string>
 </resources>

@@ -52,7 +52,7 @@
     <string name="edit_photo_select_file">Bitte wählen Sie zuerst eine Datei aus</string>
     <string name="edit_specific_transaction_title">Bestimmte Transaktion bearbeiten</string>
     <string name="expense">Ausgabe</string>
-    <string name="Expenses">Ausgaben</string>
+    <string name="expenses">Ausgaben</string>
     <string name="edit_transactions_title">Monatliche Transaktionen</string>
     <string name="minute">Minute</string>
     <string name="forgot_reset">Passwort zurücksetzen</string>
@@ -208,4 +208,8 @@
     <string name="profile_updated_successfully">Profil erfolgreich aktualisiert</string>
     <string name="please_complete_all_fields">Bitte fülle alle Felder aus</string>
     <string name="press_again_exit">Zum Beenden erneut drücken</string>
+    <string name="please_try_again">Bitte versuche es erneut</string>
+    <string name="login_successful">Anmeldung erfolgreich</string>
+    <string name="facebook_authentication_failed">Facebook-Authentifizierung fehlgeschlagen</string>
+    <string name="google_authentication_failed">Google-Authentifizierung fehlgeschlagen</string>
 </resources>

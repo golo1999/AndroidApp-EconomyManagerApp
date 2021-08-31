@@ -89,7 +89,7 @@
     <string name="edit_account_enter_valid_birth_date">Por favor digite uma data de nascimento válida</string>
     <string name="edit_account_incorrect_phone_number">Número de telefone incorreto</string>
     <string name="expense">Despesa</string>
-    <string name="Expenses">Despesas</string>
+    <string name="expenses">Despesas</string>
     <string name="email">Email</string>
     <string name="month_january">Janeiro</string>
     <string name="month_february">Fevereiro</string>
@@ -208,4 +208,8 @@
     <string name="profile_updated_successfully">Perfil atualizado com sucesso</string>
     <string name="please_complete_all_fields">Preencha todos os campos por favor</string>
     <string name="press_again_exit">Pressione novamente para sair</string>
+    <string name="please_try_again">Por favor, tente novamente</string>
+    <string name="login_successful">Login bem sucedido</string>
+    <string name="facebook_authentication_failed">A autenticação do Facebook falhou</string>
+    <string name="google_authentication_failed">A autenticação do Google falhou</string>
 </resources>

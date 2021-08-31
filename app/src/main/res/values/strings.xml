@@ -92,11 +92,14 @@
     <string name="edit_transactions_title">Monthly transactions</string>
     <string name="email">Email</string>
     <string name="expense">Expense</string>
-    <string name="Expenses">Expenses</string>
+    <string name="expenses">Expenses</string>
+    <string name="expenses_chart">Expenses chart</string>
     <string name="facebook_app_id" translatable="false">973649146445611</string>
+    <string name="facebook_authentication_failed">Facebook authentication failed</string>
     <string name="fb_login_protocol_scheme" translatable="false">fb973649146445611</string>
     <string name="forgot_reset">Reset password</string>
     <string name="forgot_password_email_does_not_exist">Email does not exist in the database</string>
+    <string name="google_authentication_failed">Google authentication failed</string>
     <string name="greet_good_morning">Good morning!</string>
     <string name="greet_good_afternoon">Good afternoon!</string>
     <string name="greet_good_evening">Good evening!</string>
@@ -105,11 +108,12 @@
     <string name="incomes">Incomes</string>
     <string name="last_10_transactions">Last 10 transactions</string>
     <string name="last_week_expenses">Last week expenses</string>
+    <string name="login_email_not_valid">Email address is not valid</string>
     <string name="login_forgot_password">Forgot password</string>
     <string name="login_login">Log in</string>
-    <string name="login_no_account">Don\'t have an account? Sign up here</string>
     <string name="login_incorrect_username_password">Incorrect username or password</string>
-    <string name="login_email_not_valid">Email address is not valid</string>
+    <string name="login_no_account">Don\'t have an account? Sign up here</string>
+    <string name="login_successful">Login successful</string>
     <string name="minute">Minute</string>
     <string name="money_error1">Please select an option</string>
     <string name="money_error4">Value should not be empty</string>
@@ -139,6 +143,7 @@
     <string name="ok" translatable="false">OK</string>
     <string name="password">Password</string>
     <string name="please_complete_all_fields">Please complete all fields</string>
+    <string name="please_try_again">Please try again</string>
     <string name="press_again_exit">Press again to exit</string>
     <string name="proceed">"Proceed "</string>
     <string name="profile_updated_successfully">Profile updated successfully</string>

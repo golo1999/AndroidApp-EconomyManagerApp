@@ -462,9 +462,9 @@ public class EditAccountActivity
             editAccountViewModel.setTransactionDate(date);
         }
 
-        MyCustomMethods.showShortMessage(this, editAccountViewModel.getTransactionDate().toString());
-
-        birthDateText.setText(formattedDate);
+        if (!String.valueOf(birthDateText.getText()).trim().equals(formattedDate)) {
+            birthDateText.setText(formattedDate);
+        }
     }
 
     private void setBirthDateTextStyle(final int color) {

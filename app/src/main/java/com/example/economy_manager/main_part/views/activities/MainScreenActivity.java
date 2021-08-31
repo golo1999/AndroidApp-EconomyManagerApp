@@ -133,8 +133,13 @@ public class MainScreenActivity
     }
 
     private void setDates() {
-        greeting.setText(viewModel.getGreetingMessage(this));
-        date.setText(viewModel.getCurrentDateTranslated());
+        if (!String.valueOf(greeting.getText()).trim().equals(viewModel.getGreetingMessage(this))) {
+            greeting.setText(viewModel.getGreetingMessage(this));
+        }
+
+        if (!String.valueOf(date.getText()).trim().equals(viewModel.getCurrentDateTranslated())) {
+            date.setText(viewModel.getCurrentDateTranslated());
+        }
     }
 
     private void setFragments() {

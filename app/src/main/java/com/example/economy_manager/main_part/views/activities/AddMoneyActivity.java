@@ -146,7 +146,7 @@ public class AddMoneyActivity
                                             .removeValue();
 
                                     MyCustomMethods.showShortMessage(this,
-                                            "Try again");
+                                            getResources().getString(R.string.please_try_again));
                                 });
                     }
                 } else {
@@ -202,6 +202,8 @@ public class AddMoneyActivity
             viewModel.setTransactionDate(date);
         }
 
-        dateText.setText(formattedDate);
+        if (!String.valueOf(dateText.getText()).trim().equals(formattedDate)) {
+            dateText.setText(formattedDate);
+        }
     }
 }

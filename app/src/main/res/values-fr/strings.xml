@@ -105,7 +105,7 @@
     <string name="edit_transactions_title">Transactions mensuelles</string>
     <string name="email">Email</string>
     <string name="expense">Frais</string>
-    <string name="Expenses">Dépenses</string>
+    <string name="expenses">Dépenses</string>
     <string name="forgot_reset">Réinitialiser le mot de passe</string>
     <string name="forgot_password_email_does_not_exist">L\'email n\'existe pas dans la base de données</string>
     <string name="hour">Heure</string>
@@ -208,4 +208,8 @@
     <string name="profile_updated_successfully">Mise à jour du profil réussie</string>
     <string name="please_complete_all_fields">Veuillez compléter tous les champs s\'il vous plaît</string>
     <string name="press_again_exit">Appuyez à nouveau pour quitter</string>
+    <string name="please_try_again">Veuillez réessayer</string>
+    <string name="login_successful">Connexion réussie</string>
+    <string name="facebook_authentication_failed">L\'authentification Facebook a échoué</string>
+    <string name="google_authentication_failed">Échec de l\'authentification Google</string>
 </resources>

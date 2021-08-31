@@ -4,7 +4,6 @@ import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -354,8 +353,7 @@ public class EditSpecificTransactionFragment extends Fragment {
                     final Transaction editedTransaction = new Transaction(selectedTransaction.getId(),
                             editedCategoryIndex, editedTime, editedCategoryType, editedNote, editedValue);
 
-                    // apelarea metodei face ca tranzactia sa fie modificata
-                    Log.d("editedInitialTransaction", transactionHasBeenModified(selectedTransaction).toString());
+                    updateTransaction(selectedTransaction);
 
                     if (!selectedTransaction.equals(editedTransaction) &&
                             viewModel.getEditTransactionsRecyclerViewAdapter() != null) {
@@ -445,7 +443,7 @@ public class EditSpecificTransactionFragment extends Fragment {
         viewModel = new ViewModelProvider((ViewModelStoreOwner) requireContext()).get(EditTransactionsViewModel.class);
     }
 
-    private Transaction transactionHasBeenModified(final @NonNull Transaction initialTransaction) {
+    private void updateTransaction(final @NonNull Transaction initialTransaction) {
         final int selectedYear = viewModel.getTransactionDate().getYear();
 
         final int selectedMonth = viewModel.getTransactionDate().getMonthValue();
@@ -540,6 +538,5 @@ public class EditSpecificTransactionFragment extends Fragment {
                     .setValue(initialTransaction);
         }
 
-        return initialTransaction;
     }
 }

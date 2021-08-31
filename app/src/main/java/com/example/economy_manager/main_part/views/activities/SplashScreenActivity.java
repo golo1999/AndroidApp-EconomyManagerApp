@@ -1,6 +1,5 @@
 package com.example.economy_manager.main_part.views.activities;
 
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 
@@ -12,6 +11,7 @@ import com.example.economy_manager.login_part.LogInActivity;
 import com.example.economy_manager.models.ApplicationSettings;
 import com.example.economy_manager.models.PersonalInformation;
 import com.example.economy_manager.models.UserDetails;
+import com.example.economy_manager.utilities.MyCustomMethods;
 import com.example.economy_manager.utilities.MyCustomVariables;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -86,10 +86,9 @@ public class SplashScreenActivity extends AppCompatActivity {
                             });
                 }
 
-                startActivity(new Intent(SplashScreenActivity.this,
+                MyCustomMethods.goToActivityWithoutTransition(SplashScreenActivity.this,
                         MyCustomVariables.getFirebaseAuth().getCurrentUser() != null ?
-                                MainScreenActivity.class : LogInActivity.class));
-                finish();
+                                MainScreenActivity.class : LogInActivity.class);
             }
         }
 

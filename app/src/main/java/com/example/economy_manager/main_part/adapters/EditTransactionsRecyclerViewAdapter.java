@@ -158,6 +158,7 @@ public class EditTransactionsRecyclerViewAdapter
             transactionDelete.setOnClickListener(view -> {
                 final EditTransactionsRecyclerViewAdapter adapter =
                         (EditTransactionsRecyclerViewAdapter) recyclerView.getAdapter();
+
                 final int positionInList = getBindingAdapterPosition();
 
                 if (adapter != null && positionInList > -1) {

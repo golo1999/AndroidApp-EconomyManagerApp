@@ -46,7 +46,7 @@
     <string name="edit_transactions_title">Transazioni mensili</string>
     <string name="email">E-mail</string>
     <string name="expense">Spesa</string>
-    <string name="Expenses">Spese</string>
+    <string name="expenses">Spese</string>
     <string name="forgot_reset">Resetta la password</string>
     <string name="signup_error7">La password deve contenere almeno 7 caratteri</string>
     <string name="rate_app">Valuta l\'applicazione</string>
@@ -208,4 +208,8 @@
     <string name="profile_updated_successfully">Profilo aggiornato con successo</string>
     <string name="please_complete_all_fields">Per favore completa tutti i campi</string>
     <string name="press_again_exit">Premi di nuovo per uscire</string>
+    <string name="please_try_again">Per favore riprova</string>
+    <string name="login_successful">Accesso riuscito</string>
+    <string name="facebook_authentication_failed">Autenticazione Facebook fallita</string>
+    <string name="google_authentication_failed">Autenticazione Google non riuscita</string>
 </resources>

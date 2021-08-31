@@ -114,7 +114,7 @@
     <string name="edit_account_country_malta">Malta</string>
     <string name="email">Correo electrónico</string>
     <string name="expense">Gasto</string>
-    <string name="Expenses">Gastos</string>
+    <string name="expenses">Gastos</string>
     <string name="forgot_reset">Restablecer la contraseña</string>
     <string name="forgot_password_email_does_not_exist">El correo electrónico no existe en la base de datos</string>
     <string name="greet_good_morning">¡Buenos días!</string>
@@ -207,5 +207,9 @@
     <string name="time">Tiempo</string>
     <string name="profile_updated_successfully">Perfil actualizado con éxito</string>
     <string name="please_complete_all_fields">Porfavor complete todos los campos</string>
-    <string name="press_again_exit">" Presione de nuevo para salir"</string>
+    <string name="press_again_exit">Presione de nuevo para salir</string>
+    <string name="please_try_again">Inténtalo de nuevo</string>
+    <string name="login_successful">Inicio de sesión exitoso</string>
+    <string name="facebook_authentication_failed">" Falló la autenticación de Facebook"</string>
+    <string name="google_authentication_failed">Falló la autenticación de Google</string>
 </resources>

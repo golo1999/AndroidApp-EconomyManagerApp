@@ -291,7 +291,7 @@
                 android:id="@+id/main_screen_money_spent_percentage_text"
                 android:layout_width="0sp"
                 android:layout_height="wrap_content"
-                android:text="Expenses chart"
+                android:text="@string/expenses_chart"
                 android:textSize="20sp"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toTopOf="@id/fragment_money_spent_percentage_container"

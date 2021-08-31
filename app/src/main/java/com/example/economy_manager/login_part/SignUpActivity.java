@@ -91,11 +91,10 @@ public class SignUpActivity extends AppCompatActivity {
                         });
                     }
                 }
-                // if the account can't be created
+                // showing the message & resetting the password field if the user already exists
                 else {
-                    // showing the error: user already exists
                     MyCustomMethods.showShortMessage(this, getResources().getString(R.string.signup_error1));
-                    // resetting the password field
+
                     emptyField(passwordField);
                 }
             });

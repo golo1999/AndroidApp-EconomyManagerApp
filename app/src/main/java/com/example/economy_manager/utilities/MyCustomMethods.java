@@ -57,6 +57,12 @@ public final class MyCustomMethods {
                 direction == 0 ? R.anim.slide_out_right : R.anim.slide_out_left);
     }
 
+    public static void goToActivityWithoutTransition(final @NonNull Activity currentActivity,
+                                                     final @NonNull Class<? extends Activity> nextActivity) {
+        currentActivity.startActivity(new Intent(currentActivity, nextActivity));
+        currentActivity.finish();
+    }
+
     public static void finishActivityWithFadeTransition(final @NonNull Activity currentActivity) {
         currentActivity.finish();
         currentActivity.overridePendingTransition(R.anim.fade_in, R.anim.fade_out);

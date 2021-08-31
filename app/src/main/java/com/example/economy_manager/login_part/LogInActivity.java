@@ -7,7 +7,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -53,7 +52,9 @@ public class LogInActivity extends AppCompatActivity {
     private CallbackManager manager;
     private GoogleSignInClient mGoogleSignInClient;
     private static final int RC_SIGN_IN = 27;
-    private int googleOrFacebookInsideOnActivityResult = 0; // 0 pentru facebook, 1 pentru google
+
+    // 0 for Facebook and 1 for Google
+    private int googleOrFacebookInsideOnActivityResult = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -104,61 +105,62 @@ public class LogInActivity extends AppCompatActivity {
 
     private void validation(final String emailValue,
                             final String passwordValue) {
-        // in cazul in care email-ul este valid si parola are cel putin 7 caractere, incercam sa facem log in
+        // proceeding to login if the email is valid & the password has got at least 7 characters
         if (Patterns.EMAIL_ADDRESS.matcher(emailValue).matches() &&
                 passwordValue.length() >= 7) {
             MyCustomVariables.getFirebaseAuth()
                     .signInWithEmailAndPassword(emailValue, passwordValue)
                     .addOnCompleteListener((final Task<AuthResult> task) -> {
                         MyCustomMethods.closeTheKeyboard(this);
-                        // daca atat email-ul, cat si parola corespund, se face verifica daca emailul este verificat
+                        // verifying if user's email is verified if the credentials match
                         if (task.isSuccessful()) {
                             if (MyCustomVariables.getFirebaseAuth().getCurrentUser() != null) {
                                 if (MyCustomVariables.getFirebaseAuth().getCurrentUser().isEmailVerified()) {
                                     goToTheMainScreen();
                                 } else {
-                                    Toast.makeText(LogInActivity.this, getResources().getString(R.string.verify_email),
-                                            Toast.LENGTH_SHORT).show();
+                                    MyCustomMethods.showShortMessage(LogInActivity.this,
+                                            getResources().getString(R.string.verify_email));
 
                                     passwordField.setText("");
                                 }
                             }
-                        } else {
-                            // in cazul in care atat email-ul, cat si parola sunt valide,
-                            // dar nu corespund informatiilor din baza de date Firebase
+                        }
+                        // removing the entered password & showing message if the credentials don't match
+                        else {
                             MyCustomMethods.showShortMessage(this,
                                     getResources().getString(R.string.login_incorrect_username_password));
-                            passwordField.setText(""); // stergem parola
+
+                            passwordField.setText("");
                         }
                     });
         }
-        // in cazul in care nu se respecta conditia de log in
+        // showing error messages if the login condition isn't respected
         else {
             MyCustomMethods.closeTheKeyboard(this);
-            // daca atat email-ul, cat si parola nu contin niciun caracter
+            // if both the email & the password are empty
             if (emailValue.isEmpty() && passwordValue.isEmpty()) {
                 MyCustomMethods.showShortMessage(this, getResources().getString(R.string.signup_error2));
             }
-            // daca email-ul nu contine niciun caracter
+            // if the email is empty
             else if (emailValue.isEmpty()) {
                 MyCustomMethods.showShortMessage(this, getResources().getString(R.string.signup_error3));
                 passwordField.setText("");
             }
-            // daca parola nu contine niciun caracter
+            // if the password is empty
             else if (passwordValue.isEmpty()) {
                 MyCustomMethods.showShortMessage(this, getResources().getString(R.string.signup_error4));
             }
-            // daca email-ul nu are forma valida si parola este prea scurta
+            // if the email isn't valid & the password is too short
             else if (!Patterns.EMAIL_ADDRESS.matcher(emailValue).matches() && passwordValue.length() < 4) {
                 MyCustomMethods.showShortMessage(this, getResources().getString(R.string.signup_error5));
                 passwordField.setText("");
             }
-            // daca email-ul nu are forma valida, dar parola este in regula
+            // if the email isn't valid & the password is
             else if (!Patterns.EMAIL_ADDRESS.matcher(emailValue).matches()) {
                 MyCustomMethods.showShortMessage(this, getResources().getString(R.string.login_email_not_valid));
                 passwordField.setText("");
             }
-            // daca parola este prea scurta, dar email-ul este in regula
+            // if the email is valid & the password is too short
             else {
                 MyCustomMethods.showShortMessage(this, getResources().getString(R.string.signup_error7));
                 passwordField.setText("");
@@ -216,19 +218,22 @@ public class LogInActivity extends AppCompatActivity {
     }
 
     private void handleFacebookToken(AccessToken accessToken) {
-        AuthCredential credential = FacebookAuthProvider.getCredential(accessToken.getToken());
-        MyCustomVariables.getFirebaseAuth().signInWithCredential(credential).addOnCompleteListener(task -> {
-            if (task.isSuccessful()) {
-                if (MyCustomVariables.getFirebaseAuth().getCurrentUser() != null) {
-                    createPersonalInformationPath();
-                    createApplicationSettingsPath();
-                    goToTheMainScreen();
-                }
-            } else {
-                Toast.makeText(getApplicationContext(), "Facebook authentication failed",
-                        Toast.LENGTH_SHORT).show();
-            }
-        });
+        final AuthCredential credential = FacebookAuthProvider.getCredential(accessToken.getToken());
+
+        MyCustomVariables.getFirebaseAuth()
+                .signInWithCredential(credential)
+                .addOnCompleteListener((final Task<AuthResult> task) -> {
+                    if (task.isSuccessful()) {
+                        if (MyCustomVariables.getFirebaseAuth().getCurrentUser() != null) {
+                            createPersonalInformationPath();
+                            createApplicationSettingsPath();
+                            goToTheMainScreen();
+                        }
+                    } else {
+                        MyCustomMethods.showShortMessage(this,
+                                getResources().getString(R.string.facebook_authentication_failed));
+                    }
+                });
     }
 
     private void setGoogleButtonSize() {
@@ -247,18 +252,22 @@ public class LogInActivity extends AppCompatActivity {
     }
 
     private void firebaseAuthWithGoogle(GoogleSignInAccount account) {
-        AuthCredential credential = GoogleAuthProvider.getCredential(account.getIdToken(), null);
-        MyCustomVariables.getFirebaseAuth().signInWithCredential(credential).addOnCompleteListener(task -> {
-            if (task.isSuccessful()) {
-                if (MyCustomVariables.getFirebaseAuth().getCurrentUser() != null) {
-                    createPersonalInformationPath();
-                    createApplicationSettingsPath();
-                    goToTheMainScreen();
-                }
-            } else {
-                Toast.makeText(getApplicationContext(), "Google authentication failed", Toast.LENGTH_SHORT).show();
-            }
-        });
+        final AuthCredential credential = GoogleAuthProvider.getCredential(account.getIdToken(), null);
+
+        MyCustomVariables.getFirebaseAuth()
+                .signInWithCredential(credential)
+                .addOnCompleteListener((final Task<AuthResult> task) -> {
+                    if (task.isSuccessful()) {
+                        if (MyCustomVariables.getFirebaseAuth().getCurrentUser() != null) {
+                            createPersonalInformationPath();
+                            createApplicationSettingsPath();
+                            goToTheMainScreen();
+                        }
+                    } else {
+                        MyCustomMethods.showShortMessage(this,
+                                getResources().getString(R.string.google_authentication_failed));
+                    }
+                });
     }
 
     private void createPersonalInformationPath() {
@@ -286,9 +295,11 @@ public class LogInActivity extends AppCompatActivity {
     private void goToTheMainScreen() {
         final Intent intent = new Intent(LogInActivity.this, MainScreenActivity.class);
 
-        Toast.makeText(LogInActivity.this, "Login successful", Toast.LENGTH_SHORT).show();
+        MyCustomMethods.showShortMessage(this,
+                getResources().getString(R.string.login_successful));
+
         finishAffinity();
-        startActivity(intent); // incepem activitatea urmatoare
+        startActivity(intent);
         overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
     }
 }

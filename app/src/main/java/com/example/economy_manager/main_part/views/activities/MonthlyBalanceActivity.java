@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.economy_manager.R;
@@ -131,9 +132,9 @@ public class MonthlyBalanceActivity extends AppCompatActivity {
                                     final String dateTranslated = viewModel
                                             .getDateTranslated(MonthlyBalanceActivity.this, dayFromDaysList);
 
-                                    final LinearLayout dayAndSumLayout =
-                                            (LinearLayout) View.inflate(MonthlyBalanceActivity.this,
-                                                    R.layout.monthly_balance_title_linearlayout, null);
+                                    final ConstraintLayout dayAndSumLayout =
+                                            (ConstraintLayout) View.inflate(MonthlyBalanceActivity.this,
+                                                    R.layout.monthly_balance_title_layout, null);
 
                                     final TextView dayText = dayAndSumLayout
                                             .findViewById(R.id.monthly_balance_relative_layout_day);
@@ -226,8 +227,6 @@ public class MonthlyBalanceActivity extends AppCompatActivity {
         final String currentMonthYear = month.trim() + " " + year;
 
         activityTitle.setText(currentMonthYear);
-        activityTitle.setTextSize(20);
-        activityTitle.setTextColor(Color.WHITE);
     }
 
     private void setCenterText() {
