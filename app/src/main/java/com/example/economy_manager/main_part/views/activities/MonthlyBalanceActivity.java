@@ -240,7 +240,8 @@ public class MonthlyBalanceActivity extends AppCompatActivity {
                     .addValueEventListener(new ValueEventListener() {
                         @Override
                         public void onDataChange(final @NonNull DataSnapshot snapshot) {
-                            if (snapshot.exists() && snapshot.hasChild("PersonalTransactions") &&
+                            if (snapshot.exists() &&
+                                    snapshot.hasChild("PersonalTransactions") &&
                                     snapshot.child("PersonalTransactions").hasChildren()) {
                                 int numberOfCurrentMonthTransactions = 0;
 

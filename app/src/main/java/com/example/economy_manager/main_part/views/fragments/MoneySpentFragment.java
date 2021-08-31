@@ -21,7 +21,9 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.Locale;
 
 public class MoneySpentFragment extends Fragment {
@@ -135,16 +137,22 @@ public class MoneySpentFragment extends Fragment {
     }
 
     private boolean wasMadeInTheLastWeek(final @NonNull MyCustomTime transactionTime) {
-        final LocalDateTime oneWeekAgoTime = LocalDateTime.now().minusWeeks(1);
+        final LocalDate oneWeekAgoDate = LocalDate.now().minusDays(8);
+
+        final LocalDateTime oneWeekAgoDateTime = LocalDateTime.of(oneWeekAgoDate, LocalTime.of(23, 59, 59));
+
+        final LocalDate nextDayDate = LocalDate.now().plusDays(1);
+
+        final LocalDateTime nextDayDateTime = LocalDateTime.of(nextDayDate, LocalTime.of(0, 0));
 
         final LocalDateTime transactionTimeParsed = LocalDateTime.of(transactionTime.getYear(),
                 transactionTime.getMonth(), transactionTime.getDay(), transactionTime.getHour(),
                 transactionTime.getMinute(), transactionTime.getSecond());
 
-        final boolean isAfterOneWeekAgo = transactionTimeParsed.isAfter(oneWeekAgoTime);
+        final boolean isAfterOneWeekAgoDate = transactionTimeParsed.isAfter(oneWeekAgoDateTime);
 
-        final boolean isBeforeNow = transactionTimeParsed.isBefore(LocalDateTime.now());
+        final boolean isBeforeCurrentDate = transactionTimeParsed.isBefore(nextDayDateTime);
 
-        return isAfterOneWeekAgo && isBeforeNow;
+        return isAfterOneWeekAgoDate && isBeforeCurrentDate;
     }
 }
