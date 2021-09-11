@@ -172,6 +172,7 @@ public class MainScreenActivity
                                     final Transaction transaction = databaseTransaction.getValue(Transaction.class);
 
                                     if (transaction != null &&
+                                            transaction.getTime().getYear() == LocalDate.now().getYear() &&
                                             transaction.getTime().getMonth() == LocalDate.now().getMonthValue()) {
                                         if (!currentMonthTransactionsExist) {
                                             currentMonthTransactionsExist = true;

@@ -88,6 +88,7 @@ public class TopFiveExpensesFragment extends Fragment {
                                     final Transaction transaction = transactionIterator.getValue(Transaction.class);
 
                                     if (transaction != null && transaction.getTime() != null &&
+                                            transaction.getTime().getYear() == LocalDate.now().getYear() &&
                                             transaction.getTime().getMonth() == LocalDate.now().getMonthValue() &&
                                             transaction.getType() == 0) {
                                         expensesList.add(transaction);

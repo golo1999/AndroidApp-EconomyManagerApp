@@ -99,7 +99,6 @@ public class MonthlyBalanceActivity extends AppCompatActivity {
 
                             final ArrayList<Integer> daysList = new ArrayList<>();
 
-
                             if (snapshot.exists() && snapshot.hasChild("PersonalTransactions") &&
                                     snapshot.child("PersonalTransactions").hasChildren()) {
                                 for (final DataSnapshot databaseTransaction :
@@ -107,6 +106,7 @@ public class MonthlyBalanceActivity extends AppCompatActivity {
                                     final Transaction transaction = databaseTransaction.getValue(Transaction.class);
 
                                     if (transaction != null && transaction.getTime() != null &&
+                                            transaction.getTime().getYear() == LocalDate.now().getYear() &&
                                             transaction.getTime().getMonth() == LocalDate.now().getMonthValue()) {
                                         transactionsList.add(transaction);
 
@@ -250,6 +250,7 @@ public class MonthlyBalanceActivity extends AppCompatActivity {
                                     final Transaction databaseTransaction = transaction.getValue(Transaction.class);
 
                                     if (databaseTransaction != null && databaseTransaction.getTime() != null &&
+                                            databaseTransaction.getTime().getYear() == LocalDate.now().getYear() &&
                                             databaseTransaction.getTime().getMonth() == LocalDate.now().getMonthValue()) {
                                         ++numberOfCurrentMonthTransactions;
                                         break;

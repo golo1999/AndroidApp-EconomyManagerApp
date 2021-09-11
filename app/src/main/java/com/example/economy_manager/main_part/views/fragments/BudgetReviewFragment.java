@@ -90,6 +90,7 @@ public class BudgetReviewFragment extends Fragment {
                                     final Transaction transaction = databaseTransaction.getValue(Transaction.class);
 
                                     if (transaction != null && transaction.getTime() != null &&
+                                            transaction.getTime().getYear() == LocalDate.now().getYear() &&
                                             transaction.getTime().getMonth() == LocalDate.now().getMonthValue()) {
                                         if (transaction.getType() == 1) {
                                             totalMonthlyIncomes += Float.parseFloat(transaction.getValue());
