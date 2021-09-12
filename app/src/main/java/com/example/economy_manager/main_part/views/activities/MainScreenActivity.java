@@ -1,9 +1,11 @@
 package com.example.economy_manager.main_part.views.activities;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
@@ -21,6 +23,8 @@ import com.example.economy_manager.R;
 import com.example.economy_manager.login_part.LogInActivity;
 import com.example.economy_manager.main_part.viewmodels.MainScreenViewModel;
 import com.example.economy_manager.main_part.views.fragments.MoneySpentPercentageFragment;
+import com.example.economy_manager.models.ApplicationSettings;
+import com.example.economy_manager.models.PersonalInformation;
 import com.example.economy_manager.models.Transaction;
 import com.example.economy_manager.models.UserDetails;
 import com.example.economy_manager.utilities.MyCustomMethods;
@@ -31,6 +35,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
+import com.google.gson.Gson;
 
 import java.time.LocalDate;
 import java.util.Timer;
@@ -40,6 +45,7 @@ public class MainScreenActivity
         extends AppCompatActivity
         implements MoneySpentPercentageFragment.MoneySpentPercentageListener {
     private MainScreenViewModel viewModel;
+    private SharedPreferences preferences;
     private ConstraintLayout firebaseDatabaseLoadingProgressBarLayout;
     private FrameLayout moneySpentPercentageLayout;
     private ViewGroup.LayoutParams moneySpentPercentageLayoutParams;
@@ -65,16 +71,6 @@ public class MainScreenActivity
     private Toast backToast;
 
     @Override
-    protected void onCreate(final Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setTimer();
-        setContentView(R.layout.main_screen_activity);
-        setVariables();
-        setFragments();
-        setOnClickListeners();
-    }
-
-    @Override
     public void onBackPressed() {
         if (backPressedTime + 2000 > System.currentTimeMillis()) {
             backToast.cancel();
@@ -89,6 +85,30 @@ public class MainScreenActivity
         }
 
         backPressedTime = System.currentTimeMillis();
+    }
+
+    @Override
+    protected void onCreate(final Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setTimer();
+        setContentView(R.layout.main_screen_activity);
+        setVariables();
+        setFragments();
+        setOnClickListeners();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        setUserDetails();
+        setActivityTheme();
+        setTextsBetweenFragments();
+        setDates();
+        setMoneySpentPercentage();
+
+        if (MyCustomSharedPreferences.retrieveUserDetailsFromSharedPreferences(this) != null) {
+            Log.d("userDetailsMainScreen", MyCustomSharedPreferences.retrieveUserDetailsFromSharedPreferences(this).toString());
+        }
     }
 
     @Override
@@ -111,16 +131,6 @@ public class MainScreenActivity
         }
 
         moneySpentPercentageLayout.setLayoutParams(moneySpentPercentageLayoutParams);
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        setUserDetails();
-        setActivityTheme();
-        setTextsBetweenFragments();
-        setDates();
-        setMoneySpentPercentage();
     }
 
     private void setActivityTheme() {
@@ -282,13 +292,60 @@ public class MainScreenActivity
     }
 
     private void setUserDetails() {
-        final UserDetails userDetails = MyCustomSharedPreferences.retrieveUserDetailsFromSharedPreferences(this);
+        if (MyCustomVariables.getFirebaseAuth().getUid() != null) {
+            if (MyCustomSharedPreferences.retrieveUserDetailsFromSharedPreferences(this) == null) {
+                MyCustomVariables.getDatabaseReference()
+                        .child(MyCustomVariables.getFirebaseAuth().getUid())
+                        .addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(final @NonNull DataSnapshot snapshot) {
+                                if (snapshot.exists() &&
+                                        snapshot.hasChild("ApplicationSettings") &&
+                                        snapshot.hasChild("PersonalInformation")) {
+                                    final ApplicationSettings applicationSettings = snapshot
+                                            .child("ApplicationSettings")
+                                            .getValue(ApplicationSettings.class);
+                                    final PersonalInformation personalInformation = snapshot
+                                            .child("PersonalInformation")
+                                            .getValue(PersonalInformation.class);
 
-        viewModel.setUserDetails(userDetails);
+                                    if (applicationSettings != null &&
+                                            personalInformation != null) {
+                                        final UserDetails details =
+                                                new UserDetails(applicationSettings, personalInformation);
+
+                                        if (!userDetailsAlreadyExistInSharedPreferences(details)) {
+                                            saveUserDetailsToSharedPreferences(details);
+                                        }
+
+                                        if (retrieveUserDetailsFromSharedPreferences() != null) {
+                                            final UserDetails userDetails =
+                                                    retrieveUserDetailsFromSharedPreferences();
+
+                                            MyCustomVariables.setUserDetails(userDetails);
+                                            viewModel.setUserDetails(userDetails);
+                                        }
+                                    }
+                                }
+                            }
+
+                            @Override
+                            public void onCancelled(final @NonNull DatabaseError error) {
+
+                            }
+                        });
+            } else {
+                final UserDetails userDetails =
+                        MyCustomSharedPreferences.retrieveUserDetailsFromSharedPreferences(this);
+
+                viewModel.setUserDetails(userDetails);
+            }
+        }
     }
 
     private void setVariables() {
         viewModel = new ViewModelProvider(this).get(MainScreenViewModel.class);
+        preferences = getSharedPreferences(MyCustomVariables.getSharedPreferencesFileName(), MODE_PRIVATE);
         firebaseDatabaseLoadingProgressBarLayout = findViewById(R.id.main_screen_progress_bar_layout);
         moneySpentPercentageLayout = findViewById(R.id.fragment_money_spent_percentage_container);
         moneySpentPercentageLayoutParams = moneySpentPercentageLayout.getLayoutParams();
@@ -309,5 +366,29 @@ public class MainScreenActivity
         lastTenTransactionsText = findViewById(R.id.main_screen_last_ten_transactions_text);
         topFiveExpensesText = findViewById(R.id.main_screen_top_five_expenses_text);
         pieChartSpentPercentageText = findViewById(R.id.main_screen_money_spent_percentage_text);
+    }
+
+    private void saveUserDetailsToSharedPreferences(final UserDetails details) {
+        SharedPreferences.Editor editor = preferences.edit();
+        Gson gson = new Gson();
+        String json = gson.toJson(details);
+
+        editor.putString("currentUserDetails", json);
+        editor.apply();
+    }
+
+    private UserDetails retrieveUserDetailsFromSharedPreferences() {
+        SharedPreferences preferences =
+                getSharedPreferences(MyCustomVariables.getSharedPreferencesFileName(), MODE_PRIVATE);
+        Gson gson = new Gson();
+        String json = preferences.getString("currentUserDetails", "");
+
+        return gson.fromJson(json, UserDetails.class);
+    }
+
+    private boolean userDetailsAlreadyExistInSharedPreferences(final UserDetails details) {
+        UserDetails userDetailsFromSharedPreferences = retrieveUserDetailsFromSharedPreferences();
+
+        return details.equals(userDetailsFromSharedPreferences);
     }
 }

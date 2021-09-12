@@ -76,7 +76,7 @@ public class EditAccountActivity
         setOnClickListeners();
         setCountrySpinner();
         setGenderSpinner();
-        getPersonalInformation();
+        getAndSetPersonalInformation();
         setSelectedItemColorSpinner(countrySpinner);
         setSelectedItemColorSpinner(genderSpinner);
     }
@@ -91,21 +91,169 @@ public class EditAccountActivity
         setBirthDateText(newTransactionDate);
     }
 
-    private void setVariables() {
-        preferences = getSharedPreferences(MyCustomVariables.getSharedPreferencesFileName(), MODE_PRIVATE);
-        userDetails = MyCustomSharedPreferences.retrieveUserDetailsFromSharedPreferences(this);
-        editAccountViewModel = new EditAccountViewModel(getApplication(), userDetails);
-        goBack = findViewById(R.id.edit_account_remastered_back);
-        firstNameInput = findViewById(R.id.edit_account_remastered_first_name_field);
-        lastNameInput = findViewById(R.id.edit_account_remastered_last_name_field);
-        phoneNumberInput = findViewById(R.id.edit_account_remastered_phone_field);
-        websiteInput = findViewById(R.id.edit_account_remastered_website_field);
-        birthDateText = findViewById(R.id.edit_account_remastered_birth_date_text);
-        careerTitleInput = findViewById(R.id.edit_account_remastered_career_title_field);
-        countrySpinner = findViewById(R.id.edit_account_remastered_country_spinner);
-        genderSpinner = findViewById(R.id.edit_account_remastered_gender_spinner);
-        accountPhoto = findViewById(R.id.edit_account_remastered_photo);
-        updateProfileButton = findViewById(R.id.edit_account_remastered_update_button);
+    private void getAndSetPersonalInformation() {
+        final String accountPhotoImageURL = userDetails != null ?
+                userDetails.getPersonalInformation().getPhotoURL() : "";
+
+        final int accountPhotoPlaceholder = userDetails == null || !userDetails.getApplicationSettings().getDarkTheme() ?
+                R.drawable.ic_person_blue : R.drawable.ic_person_white;
+
+        final int accountPhotoBorderColor = userDetails == null || !userDetails.getApplicationSettings().getDarkTheme() ?
+                getColor(R.color.turkish_sea) : Color.WHITE;
+
+        final String firstNameHint = userDetails == null ||
+                userDetails.getPersonalInformation().getFirstName().trim().isEmpty() ?
+                getResources().getString(R.string.edit_account_first_name).trim() :
+                userDetails.getPersonalInformation().getFirstName().trim();
+
+        final String lastNameHint = userDetails == null ||
+                userDetails.getPersonalInformation().getLastName().trim().isEmpty() ?
+                getResources().getString(R.string.edit_account_last_name).trim() :
+                userDetails.getPersonalInformation().getLastName().trim();
+
+        final String phoneNumberHint = userDetails == null ||
+                userDetails.getPersonalInformation().getPhoneNumber().trim().isEmpty() ?
+                getResources().getString(R.string.edit_account_phone_number).trim() :
+                userDetails.getPersonalInformation().getPhoneNumber().trim();
+
+        final String websiteHint = userDetails == null ||
+                userDetails.getPersonalInformation().getWebsite().trim().isEmpty() ?
+                getResources().getString(R.string.edit_account_website).trim() :
+                userDetails.getPersonalInformation().getWebsite().trim();
+
+        final int countrySpinnerSelection = editAccountViewModel.getPositionInCountryList(getApplication(),
+                userDetails != null ? userDetails.getPersonalInformation().getCountry().trim() : "");
+
+        final int genderSpinnerSelection = editAccountViewModel.getPositionInGenderList(getApplication(),
+                userDetails != null ? userDetails.getPersonalInformation().getGender().trim() : "");
+
+        final String careerTitleHint = userDetails == null ||
+                userDetails.getPersonalInformation().getCareerTitle().trim().isEmpty() ?
+                getResources().getString(R.string.edit_account_career_title).trim() :
+                userDetails.getPersonalInformation().getCareerTitle().trim();
+
+        if (accountPhotoImageURL.trim().isEmpty()) {
+            accountPhoto.setImageResource(accountPhotoPlaceholder);
+        } else {
+            Picasso.get()
+                    .load(accountPhotoImageURL)
+                    .placeholder(accountPhotoPlaceholder)
+                    .fit()
+                    .into(accountPhoto);
+        }
+
+        accountPhoto.setBorderColor(accountPhotoBorderColor);
+
+        firstNameInput.setHint(firstNameHint);
+
+        lastNameInput.setHint(lastNameHint);
+
+        phoneNumberInput.setHint(phoneNumberHint);
+
+        websiteInput.setHint(websiteHint);
+
+        countrySpinner.setSelection(countrySpinnerSelection);
+
+        genderSpinner.setSelection(genderSpinnerSelection);
+
+        setBirthDateText(editAccountViewModel.getUserDetails() == null ||
+                editAccountViewModel.getUserDetails().getPersonalInformation() == null ||
+                editAccountViewModel.getUserDetails().getPersonalInformation().getBirthDate() == null ?
+                LocalDate.now() :
+                LocalDate.of(editAccountViewModel.getUserDetails().getPersonalInformation().getBirthDate().getYear(),
+                        editAccountViewModel.getUserDetails().getPersonalInformation().getBirthDate().getMonth(),
+                        editAccountViewModel.getUserDetails().getPersonalInformation().getBirthDate().getDay()));
+
+        careerTitleInput.setHint(careerTitleHint);
+    }
+
+    private void setBirthDateText(final LocalDate date) {
+        final String formattedDate = MyCustomMethods.getFormattedDate(date);
+
+        if (!editAccountViewModel.getTransactionDate().equals(date)) {
+            editAccountViewModel.setTransactionDate(date);
+        }
+
+        if (!String.valueOf(birthDateText.getText()).trim().equals(formattedDate)) {
+            birthDateText.setText(formattedDate);
+        }
+    }
+
+    private void setBirthDateTextStyle(final int color) {
+        final int drawableStartIcon = color == getColor(R.color.turkish_sea) ?
+                R.drawable.ic_time_blue : R.drawable.ic_time_white;
+
+        birthDateText.setTextColor(color);
+        birthDateText.setCompoundDrawablesRelativeWithIntrinsicBounds(drawableStartIcon, 0, 0, 0);
+    }
+
+    private void setCountrySpinner() {
+        final ArrayAdapter<String> countryAdapter = new ArrayAdapter<String>(this,
+                R.layout.custom_spinner_item,
+                editAccountViewModel.getCountryList()) {
+            @Override
+            public View getDropDownView(final int position,
+                                        final @Nullable View convertView,
+                                        final @NonNull ViewGroup parent) {
+                final View v = super.getDropDownView(position, convertView, parent);
+                // centering spinner's items' text
+                ((TextView) v).setGravity(Gravity.CENTER);
+
+                if (userDetails == null) {
+                    userDetails = MyCustomVariables.getDefaultUserDetails();
+                }
+
+                if (userDetails.getApplicationSettings().getDarkTheme() != darkThemeEnabled) {
+                    darkThemeEnabled = userDetails.getApplicationSettings().getDarkTheme();
+                }
+
+                final int itemsColor = !darkThemeEnabled ? Color.WHITE : Color.BLACK;
+                // setting elements' text color based on the selected theme
+                ((TextView) v).setTextColor(itemsColor);
+
+                return v;
+            }
+        };
+
+        countrySpinner.setAdapter(countryAdapter);
+    }
+
+    private void setEditTextColor(final EditText editText,
+                                  final int color) {
+        editText.setHintTextColor(color);
+        editText.setTextColor(color);
+        editText.setBackgroundTintList(ColorStateList.valueOf(color));
+    }
+
+    private void setGenderSpinner() {
+        final ArrayAdapter<String> genderAdapter = new ArrayAdapter<String>(this,
+                R.layout.custom_spinner_item,
+                editAccountViewModel.getGenderList()) {
+            @Override
+            public View getDropDownView(final int position,
+                                        final @Nullable View convertView,
+                                        final @NonNull ViewGroup parent) {
+                final View v = super.getDropDownView(position, convertView, parent);
+                // centering all spinner's items' text
+                ((TextView) v).setGravity(Gravity.CENTER);
+
+                if (userDetails == null) {
+                    userDetails = MyCustomVariables.getDefaultUserDetails();
+                }
+
+                if (userDetails.getApplicationSettings().getDarkTheme() != darkThemeEnabled) {
+                    darkThemeEnabled = userDetails.getApplicationSettings().getDarkTheme();
+                }
+
+                final int itemsColor = !darkThemeEnabled ? Color.WHITE : Color.BLACK;
+                // setting elements' text color based on the selected theme
+                ((TextView) v).setTextColor(itemsColor);
+
+                return v;
+            }
+        };
+
+        genderSpinner.setAdapter(genderAdapter);
     }
 
     private void setOnClickListeners() {
@@ -148,74 +296,37 @@ public class EditAccountActivity
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
     }
 
-    private void getPersonalInformation() {
-        final String accountPhotoImageURL = userDetails != null ?
-                userDetails.getPersonalInformation().getPhotoURL() : "";
+    /**
+     * Method for styling spinner's first element
+     */
+    private void setSelectedItemColorSpinner(final Spinner spinner) {
+        final AdapterView.OnItemSelectedListener itemSelectedListener = new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(final AdapterView<?> parent,
+                                       final View view,
+                                       final int position,
+                                       final long id) {
+                if (userDetails == null) {
+                    userDetails = MyCustomVariables.getDefaultUserDetails();
+                }
 
-        final int accountPhotoPlaceholder = userDetails == null || !userDetails.getApplicationSettings().getDarkTheme() ?
-                R.drawable.ic_person_blue : R.drawable.ic_person_white;
+                if (userDetails.getApplicationSettings().getDarkTheme() != darkThemeEnabled) {
+                    darkThemeEnabled = userDetails.getApplicationSettings().getDarkTheme();
+                }
 
-        final int accountPhotoBorderColor = userDetails == null || !userDetails.getApplicationSettings().getDarkTheme() ?
-                getColor(R.color.turkish_sea) : Color.WHITE;
+                final int color = !darkThemeEnabled ? getColor(R.color.turkish_sea) : Color.WHITE;
+                // centering spinner's first item's text and setting its color based on the selected theme
+                ((TextView) parent.getChildAt(0)).setTextColor(color);
+                ((TextView) parent.getChildAt(0)).setGravity(Gravity.START);
+            }
 
-        final String firstNameHint =
-                userDetails.getPersonalInformation().getFirstName().trim().isEmpty() || userDetails == null ?
-                        getResources().getString(R.string.edit_account_first_name).trim() :
-                        userDetails.getPersonalInformation().getFirstName().trim();
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
 
-        final String lastNameHint =
-                userDetails.getPersonalInformation().getLastName().trim().isEmpty() || userDetails == null ?
-                        getResources().getString(R.string.edit_account_last_name).trim() :
-                        userDetails.getPersonalInformation().getLastName().trim();
+            }
+        };
 
-        final String phoneNumberHint =
-                userDetails.getPersonalInformation().getPhoneNumber().trim().isEmpty() || userDetails == null ?
-                        getResources().getString(R.string.edit_account_phone_number).trim() :
-                        userDetails.getPersonalInformation().getPhoneNumber().trim();
-
-        final String websiteHint =
-                userDetails.getPersonalInformation().getWebsite().trim().isEmpty() || userDetails == null ?
-                        getResources().getString(R.string.edit_account_website).trim() :
-                        userDetails.getPersonalInformation().getWebsite().trim();
-
-        final int countrySpinnerSelection = editAccountViewModel.getPositionInCountryList(getApplication(),
-                userDetails != null ? userDetails.getPersonalInformation().getCountry().trim() : "");
-
-        final int genderSpinnerSelection = editAccountViewModel.getPositionInGenderList(getApplication(),
-                userDetails != null ? userDetails.getPersonalInformation().getGender().trim() : "");
-
-        final String careerTitleHint =
-                userDetails.getPersonalInformation().getCareerTitle().trim().isEmpty() || userDetails == null ?
-                        getResources().getString(R.string.edit_account_career_title).trim() :
-                        userDetails.getPersonalInformation().getCareerTitle().trim();
-
-        Picasso.get()
-                .load(accountPhotoImageURL)
-                .placeholder(accountPhotoPlaceholder)
-                .fit()
-                .into(accountPhoto);
-
-        accountPhoto.setBorderColor(accountPhotoBorderColor);
-
-        firstNameInput.setHint(firstNameHint);
-
-        lastNameInput.setHint(lastNameHint);
-
-        phoneNumberInput.setHint(phoneNumberHint);
-
-        websiteInput.setHint(websiteHint);
-
-        countrySpinner.setSelection(countrySpinnerSelection);
-
-        genderSpinner.setSelection(genderSpinnerSelection);
-
-        setBirthDateText(editAccountViewModel.getUserDetails().getPersonalInformation().getBirthDate() != null ?
-                LocalDate.of(editAccountViewModel.getUserDetails().getPersonalInformation().getBirthDate().getYear(),
-                        editAccountViewModel.getUserDetails().getPersonalInformation().getBirthDate().getMonth(),
-                        editAccountViewModel.getUserDetails().getPersonalInformation().getBirthDate().getDay()) :
-                LocalDate.now());
-
-        careerTitleInput.setHint(careerTitleHint);
+        spinner.setOnItemSelectedListener(itemSelectedListener);
     }
 
     private void setTheme() {
@@ -249,106 +360,6 @@ public class EditAccountActivity
         setUpdateProfileButtonStyle(darkThemeEnabled);
     }
 
-    private void setEditTextColor(final EditText editText,
-                                  final int color) {
-        editText.setHintTextColor(color);
-        editText.setTextColor(color);
-        editText.setBackgroundTintList(ColorStateList.valueOf(color));
-    }
-
-    private void setCountrySpinner() {
-        final ArrayAdapter<String> countryAdapter = new ArrayAdapter<String>(this,
-                R.layout.custom_spinner_item,
-                editAccountViewModel.getCountryList()) {
-            @Override
-            public View getDropDownView(final int position,
-                                        final @Nullable View convertView,
-                                        final @NonNull ViewGroup parent) {
-                final View v = super.getDropDownView(position, convertView, parent);
-                // centering spinner's items' text
-                ((TextView) v).setGravity(Gravity.CENTER);
-
-                if (userDetails == null) {
-                    userDetails = MyCustomVariables.getDefaultUserDetails();
-                }
-
-                if (userDetails.getApplicationSettings().getDarkTheme() != darkThemeEnabled) {
-                    darkThemeEnabled = userDetails.getApplicationSettings().getDarkTheme();
-                }
-
-                final int itemsColor = !darkThemeEnabled ? Color.WHITE : Color.BLACK;
-                // setting elements' text color based on the selected theme
-                ((TextView) v).setTextColor(itemsColor);
-
-                return v;
-            }
-        };
-
-        countrySpinner.setAdapter(countryAdapter);
-    }
-
-    // styling spinner's first item
-    private void setSelectedItemColorSpinner(final Spinner spinner) {
-        final AdapterView.OnItemSelectedListener itemSelectedListener = new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(final AdapterView<?> parent,
-                                       final View view,
-                                       final int position,
-                                       final long id) {
-                if (userDetails == null) {
-                    userDetails = MyCustomVariables.getDefaultUserDetails();
-                }
-
-                if (userDetails.getApplicationSettings().getDarkTheme() != darkThemeEnabled) {
-                    darkThemeEnabled = userDetails.getApplicationSettings().getDarkTheme();
-                }
-
-                final int color = !darkThemeEnabled ? getColor(R.color.turkish_sea) : Color.WHITE;
-                // centering spinner's first item's text and setting its color based on the selected theme
-                ((TextView) parent.getChildAt(0)).setTextColor(color);
-                ((TextView) parent.getChildAt(0)).setGravity(Gravity.START);
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        };
-
-        spinner.setOnItemSelectedListener(itemSelectedListener);
-    }
-
-    private void setGenderSpinner() {
-        final ArrayAdapter<String> genderAdapter = new ArrayAdapter<String>(this,
-                R.layout.custom_spinner_item,
-                editAccountViewModel.getGenderList()) {
-            @Override
-            public View getDropDownView(final int position,
-                                        final @Nullable View convertView,
-                                        final @NonNull ViewGroup parent) {
-                final View v = super.getDropDownView(position, convertView, parent);
-                // centering all spinner's items' text
-                ((TextView) v).setGravity(Gravity.CENTER);
-
-                if (userDetails == null) {
-                    userDetails = MyCustomVariables.getDefaultUserDetails();
-                }
-
-                if (userDetails.getApplicationSettings().getDarkTheme() != darkThemeEnabled) {
-                    darkThemeEnabled = userDetails.getApplicationSettings().getDarkTheme();
-                }
-
-                final int itemsColor = !darkThemeEnabled ? Color.WHITE : Color.BLACK;
-                // setting elements' text color based on the selected theme
-                ((TextView) v).setTextColor(itemsColor);
-
-                return v;
-            }
-        };
-
-        genderSpinner.setAdapter(genderAdapter);
-    }
-
     private void setUpdateProfileButtonStyle(final boolean darkThemeEnabled) {
         final int buttonBackground = darkThemeEnabled ? R.drawable.button_white_border : R.drawable.button_blue_border;
 
@@ -358,26 +369,43 @@ public class EditAccountActivity
         updateProfileButton.setTextColor(buttonTextColor);
     }
 
+    private void setVariables() {
+        preferences = getSharedPreferences(MyCustomVariables.getSharedPreferencesFileName(), MODE_PRIVATE);
+        userDetails = MyCustomSharedPreferences.retrieveUserDetailsFromSharedPreferences(this);
+        editAccountViewModel = new EditAccountViewModel(getApplication(), userDetails);
+        goBack = findViewById(R.id.edit_account_remastered_back);
+        firstNameInput = findViewById(R.id.edit_account_remastered_first_name_field);
+        lastNameInput = findViewById(R.id.edit_account_remastered_last_name_field);
+        phoneNumberInput = findViewById(R.id.edit_account_remastered_phone_field);
+        websiteInput = findViewById(R.id.edit_account_remastered_website_field);
+        birthDateText = findViewById(R.id.edit_account_remastered_birth_date_text);
+        careerTitleInput = findViewById(R.id.edit_account_remastered_career_title_field);
+        countrySpinner = findViewById(R.id.edit_account_remastered_country_spinner);
+        genderSpinner = findViewById(R.id.edit_account_remastered_gender_spinner);
+        accountPhoto = findViewById(R.id.edit_account_remastered_photo);
+        updateProfileButton = findViewById(R.id.edit_account_remastered_update_button);
+    }
+
     private PersonalInformation validation(final PersonalInformation initialPersonalInformation) {
-        final String enteredFirstName = !String.valueOf(firstNameInput.getText()).trim().equals("") ?
+        final String enteredFirstName = !String.valueOf(firstNameInput.getText()).trim().isEmpty() ?
                 String.valueOf(firstNameInput.getText()).trim() :
                 !String.valueOf(firstNameInput.getHint()).trim()
                         .equals(getResources().getString(R.string.edit_account_first_name)) ?
                         String.valueOf(firstNameInput.getHint()).trim() : "";
 
-        final String enteredLastName = !String.valueOf(lastNameInput.getText()).trim().equals("") ?
+        final String enteredLastName = !String.valueOf(lastNameInput.getText()).trim().isEmpty() ?
                 String.valueOf(lastNameInput.getText()).trim() :
                 !String.valueOf(lastNameInput.getHint()).trim()
                         .equals(getResources().getString(R.string.edit_account_last_name)) ?
                         String.valueOf(lastNameInput.getHint()).trim() : "";
 
-        final String enteredPhoneNumber = !String.valueOf(phoneNumberInput.getText()).trim().equals("") ?
+        final String enteredPhoneNumber = !String.valueOf(phoneNumberInput.getText()).trim().isEmpty() ?
                 String.valueOf(phoneNumberInput.getText()).trim() :
                 !String.valueOf(phoneNumberInput.getHint()).trim()
                         .equals(getResources().getString(R.string.edit_account_phone_number)) ?
                         String.valueOf(phoneNumberInput.getHint()).trim() : "";
 
-        final String enteredWebsite = !String.valueOf(websiteInput.getText()).trim().equals("") ?
+        final String enteredWebsite = !String.valueOf(websiteInput.getText()).trim().isEmpty() ?
                 String.valueOf(websiteInput.getText()).trim() :
                 !String.valueOf(websiteInput.getHint()).trim()
                         .equals(getResources().getString(R.string.edit_account_website)) ?
@@ -401,7 +429,7 @@ public class EditAccountActivity
 
         final BirthDate enteredBirthDate = new BirthDate(birthDateYear, birthDateMonth, birthDateDay);
 
-        final String enteredCareerTitle = !String.valueOf(careerTitleInput.getText()).trim().equals("") ?
+        final String enteredCareerTitle = !String.valueOf(careerTitleInput.getText()).trim().isEmpty() ?
                 String.valueOf(careerTitleInput.getText()).trim() :
                 !String.valueOf(careerTitleInput.getHint()).trim()
                         .equals(getResources().getString(R.string.edit_account_career_title)) ?
@@ -453,25 +481,5 @@ public class EditAccountActivity
                 genderIsOK &&
                 careerTitleIsOK ?
                 editedPersonalInformation : null;
-    }
-
-    private void setBirthDateText(final LocalDate date) {
-        final String formattedDate = MyCustomMethods.getFormattedDate(date);
-
-        if (!editAccountViewModel.getTransactionDate().equals(date)) {
-            editAccountViewModel.setTransactionDate(date);
-        }
-
-        if (!String.valueOf(birthDateText.getText()).trim().equals(formattedDate)) {
-            birthDateText.setText(formattedDate);
-        }
-    }
-
-    private void setBirthDateTextStyle(final int color) {
-        final int drawableStartIcon = color == getColor(R.color.turkish_sea) ?
-                R.drawable.ic_time_blue : R.drawable.ic_time_white;
-
-        birthDateText.setTextColor(color);
-        birthDateText.setCompoundDrawablesRelativeWithIntrinsicBounds(drawableStartIcon, 0, 0, 0);
     }
 }

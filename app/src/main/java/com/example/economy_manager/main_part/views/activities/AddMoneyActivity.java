@@ -13,6 +13,7 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.DialogFragment;
 import androidx.lifecycle.ViewModelProvider;
@@ -70,94 +71,58 @@ public class AddMoneyActivity
         setDateText(newTransactionDate);
     }
 
-    private void setVariables() {
-        viewModel = new ViewModelProvider(this).get(AddMoneyViewModel.class);
-        dateText = findViewById(R.id.add_money_date);
-        valueField = findViewById(R.id.add_money_value_field);
-        noteField = findViewById(R.id.add_money_note_field);
-        radioGroup = findViewById(R.id.add_money_radio_group);
-        cancelButton = findViewById(R.id.add_money_cancel_button);
-        saveChangesButton = findViewById(R.id.add_money_save_button);
-    }
+    private void addTransactionToDatabase(final int selectedID,
+                                          final @NonNull String userID) {
+        final RadioButton radioButton = findViewById(selectedID);
 
-    private void setOnClickListeners() {
-        cancelButton.setOnClickListener((final View v) -> onBackPressed());
+        final int transactionCategoryIndex = Transaction.getIndexFromCategory(Types.
+                getTypeInEnglish(this, String.valueOf(radioButton.getText()).trim()));
 
-        dateText.setOnClickListener((final View v) -> {
-            final DialogFragment datePickerFragment = new DatePickerFragment(viewModel.getTransactionDate());
+        final Transaction newTransaction = !String.valueOf(noteField.getText()).trim().isEmpty() ?
+                new Transaction(transactionCategoryIndex,
+                        1,
+                        String.valueOf(noteField.getText()).trim(),
+                        String.valueOf(valueField.getText()).trim()) :
+                new Transaction(transactionCategoryIndex,
+                        1,
+                        String.valueOf(valueField.getText()).trim());
 
-            datePickerFragment.show(getSupportFragmentManager(), "date_picker");
-        });
+        // setting transaction's time
+        final LocalDate newTransactionDate = viewModel.getTransactionDate();
 
-        saveChangesButton.setOnClickListener((final View v) -> {
-            final int selectedID = radioGroup.getCheckedRadioButtonId();
-
-            MyCustomMethods.closeTheKeyboard(AddMoneyActivity.this);
-            // if there was any radio button checked
-            if (selectedID != -1 &&
-                    MyCustomVariables.getFirebaseAuth().getUid() != null) {
-                if (!String.valueOf(valueField.getText()).trim().isEmpty()) {
-                    if (MyCustomVariables.getFirebaseAuth().getUid() != null) {
-                        final RadioButton radioButton = findViewById(selectedID);
-
-                        final int transactionCategoryIndex = Transaction.getIndexFromCategory(Types.
-                                getTypeInEnglish(this, String.valueOf(radioButton.getText()).trim()));
-
-                        final Transaction newTransaction = !String.valueOf(noteField.getText()).trim().equals("") ?
-                                new Transaction(transactionCategoryIndex,
-                                        1,
-                                        String.valueOf(noteField.getText()).trim(),
-                                        String.valueOf(valueField.getText()).trim()) :
-                                new Transaction(transactionCategoryIndex,
-                                        1,
-                                        String.valueOf(valueField.getText()).trim());
-
-                        // setting transaction's time
-                        final LocalDate newTransactionDate = viewModel.getTransactionDate();
-
-                        newTransaction.setTime(new MyCustomTime(newTransactionDate.getYear(),
-                                newTransactionDate.getMonthValue(),
-                                String.valueOf(newTransactionDate.getMonth()),
-                                newTransactionDate.getDayOfMonth(),
-                                String.valueOf(newTransactionDate.getDayOfWeek()),
-                                0,
-                                0,
-                                0));
+        newTransaction.setTime(new MyCustomTime(newTransactionDate.getYear(),
+                newTransactionDate.getMonthValue(),
+                String.valueOf(newTransactionDate.getMonth()),
+                newTransactionDate.getDayOfMonth(),
+                String.valueOf(newTransactionDate.getDayOfWeek()),
+                0,
+                0,
+                0));
 
 
-                        MyCustomVariables.getDatabaseReference()
-                                .child(MyCustomVariables.getFirebaseAuth().getUid())
-                                .child("PersonalTransactions")
-                                .child(newTransaction.getId())
-                                .setValue(newTransaction)
-                                .addOnSuccessListener((final Void aVoid) -> {
-                                    MyCustomMethods.showShortMessage(this,
-                                            getResources().getString(R.string.income) + " " +
-                                                    getResources().getString(R.string.add_money_added_successfully));
+        MyCustomVariables.getDatabaseReference()
+                .child(userID)
+                .child("PersonalTransactions")
+                .child(newTransaction.getId())
+                .setValue(newTransaction)
+                .addOnSuccessListener((final Void aVoid) -> {
+                    MyCustomMethods.showShortMessage(this,
+                            getResources().getString(R.string.income) + " " +
+                                    getResources().getString(R.string.add_money_added_successfully));
 
-                                    finish();
-                                    overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
-                                })
-                                .addOnFailureListener((final Exception e) -> {
-                                    MyCustomVariables.getDatabaseReference()
-                                            .child(MyCustomVariables.getFirebaseAuth().getUid())
-                                            .child("PersonalTransactions")
-                                            .child(newTransaction.getId())
-                                            .removeValue();
+                    finish();
+                    overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
+                })
+                .addOnFailureListener((final Exception e) -> {
+                    MyCustomVariables.getDatabaseReference()
+                            .child(userID)
+                            .child("PersonalTransactions")
+                            .child(newTransaction.getId())
+                            .removeValue();
 
-                                    MyCustomMethods.showShortMessage(this,
-                                            getResources().getString(R.string.please_try_again));
-                                });
-                    }
-                } else {
-                    MyCustomMethods.showShortMessage(this, getResources().getString(R.string.money_error4));
-                }
-            }
-            // if there wasn't a radio button checked
-            else {
-                MyCustomMethods.showShortMessage(this, getResources().getString(R.string.money_error1));
-            }
-        });
+                    MyCustomMethods.showShortMessage(this,
+                            getResources().getString(R.string.please_try_again));
+                });
     }
 
     private void createRadioButtons() {
@@ -165,11 +130,19 @@ public class AddMoneyActivity
 
         final String depositsText = viewModel.getDepositsText(this);
 
+        final int depositsValue = R.id.add_money_radio_button_deposits;
+
         final String independentSourcesText = viewModel.getIndependentSourcesText(this);
+
+        final int independentSourcesValue = R.id.add_money_radio_button_independent_sources;
 
         final String salaryText = viewModel.getSalaryText(this);
 
+        final int salaryValue = R.id.add_money_radio_button_salary;
+
         final String savingText = viewModel.getSavingText(this);
+
+        final int savingValue = R.id.add_money_radio_button_saving;
 
         buttonTextArray.add(depositsText);
         buttonTextArray.add(independentSourcesText);
@@ -180,9 +153,9 @@ public class AddMoneyActivity
 
         for (int i = 0; i < buttonTextArray.size(); i++) {
             final int ID = buttonTextArray.get(i).equals(depositsText) ?
-                    R.id.add_money_radio_button_deposits : buttonTextArray.get(i).equals(independentSourcesText) ?
-                    R.id.add_money_radio_button_independent_sources : buttonTextArray.get(i).equals(salaryText) ?
-                    R.id.add_money_radio_button_salary : R.id.add_money_radio_button_saving;
+                    depositsValue : buttonTextArray.get(i).equals(independentSourcesText) ?
+                    independentSourcesValue : buttonTextArray.get(i).equals(salaryText) ?
+                    salaryValue : savingValue;
 
             radioButton1[i] = new RadioButton(this);
             radioButton1[i].setText(buttonTextArray.get(i));
@@ -205,5 +178,46 @@ public class AddMoneyActivity
         if (!String.valueOf(dateText.getText()).trim().equals(formattedDate)) {
             dateText.setText(formattedDate);
         }
+    }
+
+    private void setOnClickListeners() {
+        cancelButton.setOnClickListener((final View v) -> onBackPressed());
+
+        dateText.setOnClickListener((final View v) -> {
+            final DialogFragment datePickerFragment = new DatePickerFragment(viewModel.getTransactionDate());
+
+            datePickerFragment.show(getSupportFragmentManager(), "date_picker");
+        });
+
+        saveChangesButton.setOnClickListener((final View v) -> {
+            final int selectedID = radioGroup.getCheckedRadioButtonId();
+
+            MyCustomMethods.closeTheKeyboard(AddMoneyActivity.this);
+            // if there was any radio button checked
+            if (selectedID != -1 &&
+                    MyCustomVariables.getFirebaseAuth().getUid() != null) {
+                if (!String.valueOf(valueField.getText()).trim().isEmpty()) {
+                    final String userID = MyCustomVariables.getFirebaseAuth().getUid();
+
+                    addTransactionToDatabase(selectedID, userID);
+                } else {
+                    MyCustomMethods.showShortMessage(this, getResources().getString(R.string.money_error4));
+                }
+            }
+            // if there wasn't a radio button checked
+            else {
+                MyCustomMethods.showShortMessage(this, getResources().getString(R.string.money_error1));
+            }
+        });
+    }
+
+    private void setVariables() {
+        viewModel = new ViewModelProvider(this).get(AddMoneyViewModel.class);
+        dateText = findViewById(R.id.add_money_date);
+        valueField = findViewById(R.id.add_money_value_field);
+        noteField = findViewById(R.id.add_money_note_field);
+        radioGroup = findViewById(R.id.add_money_radio_group);
+        cancelButton = findViewById(R.id.add_money_cancel_button);
+        saveChangesButton = findViewById(R.id.add_money_save_button);
     }
 }

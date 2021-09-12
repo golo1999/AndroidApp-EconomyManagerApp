@@ -15,7 +15,6 @@ import androidx.fragment.app.Fragment;
 import com.example.economy_manager.R;
 import com.example.economy_manager.models.Transaction;
 import com.example.economy_manager.models.UserDetails;
-import com.example.economy_manager.utilities.MyCustomMethods;
 import com.example.economy_manager.utilities.MyCustomSharedPreferences;
 import com.example.economy_manager.utilities.MyCustomVariables;
 import com.example.economy_manager.utilities.Types;
@@ -86,10 +85,6 @@ public class MoneySpentPercentageFragment extends Fragment {
         final View v = inflater.inflate(R.layout.money_spent_percentage_fragment, container, false);
 
         setVariables(v);
-
-        pieChart.setOnClickListener(view -> {
-            MyCustomMethods.showShortMessage(requireContext(), "ez");
-        });
 
         return v;
     }

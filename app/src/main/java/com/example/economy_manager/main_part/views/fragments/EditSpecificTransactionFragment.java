@@ -66,7 +66,7 @@ public class EditSpecificTransactionFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(@NonNull final LayoutInflater inflater,
+    public View onCreateView(final @NonNull LayoutInflater inflater,
                              final ViewGroup container,
                              final Bundle savedInstanceState) {
         return inflater.inflate(R.layout.edit_specific_transaction_fragment, container, false);
@@ -165,6 +165,69 @@ public class EditSpecificTransactionFragment extends Fragment {
 
         typeSpinner.setAdapter(typesAdapter);
         typeSpinner.setOnItemSelectedListener(listener);
+    }
+
+    private void modifyTransactionIntoDatabase() {
+        final Transaction selectedTransaction = viewModel.getSelectedTransaction();
+
+        if (selectedTransaction != null) {
+            final String editedNote = !String.valueOf(noteField.getText()).trim().isEmpty() ?
+                    String.valueOf(noteField.getText()).trim() : selectedTransaction.getNote();
+
+            final String editedValue = !String.valueOf(valueField.getText()).trim().isEmpty() ?
+                    String.valueOf(valueField.getText()).trim() : selectedTransaction.getValue();
+
+            final int parsedCategoryIndex = Transaction.getIndexFromCategory(Types.
+                    getTypeInEnglish(requireContext(), String.valueOf(typeSpinner.getSelectedItem()).trim()));
+
+            final int editedCategoryIndex = parsedCategoryIndex >= 0 && parsedCategoryIndex <= 18 &&
+                    parsedCategoryIndex != selectedTransaction.getCategory() ?
+                    parsedCategoryIndex : selectedTransaction.getCategory();
+
+            final int selectedYear = viewModel.getTransactionDate().getYear();
+
+            final int selectedMonth = viewModel.getTransactionDate().getMonthValue();
+
+            final int selectedDay = viewModel.getTransactionDate().getDayOfMonth();
+
+            final int selectedHour = viewModel.getTransactionTime().getHour();
+
+            final int selectedMinute = viewModel.getTransactionTime().getMinute();
+
+            final int selectedSecond =
+                    (selectedYear != selectedTransaction.getTime().getYear() &&
+                            selectedMonth != selectedTransaction.getTime().getMonth() &&
+                            selectedDay != selectedTransaction.getTime().getDay() &&
+                            selectedHour != selectedTransaction.getTime().getHour() &&
+                            selectedMinute != selectedTransaction.getTime().getMinute()) ?
+                            LocalDateTime.now().getSecond() : selectedTransaction.getTime().getSecond();
+
+            final LocalDate selectedLocalDate =
+                    LocalDate.of(selectedYear, selectedMonth, selectedDay);
+
+            final MyCustomTime editedTime = new MyCustomTime(selectedYear,
+                    selectedMonth,
+                    String.valueOf(selectedLocalDate.getMonth()),
+                    selectedDay,
+                    String.valueOf(selectedLocalDate.getDayOfWeek()),
+                    selectedHour,
+                    selectedMinute,
+                    selectedSecond);
+
+            final int editedCategoryType = (editedCategoryIndex >= 0 && editedCategoryIndex <= 3) ? 1 : 0;
+
+            final Transaction editedTransaction = new Transaction(selectedTransaction.getId(),
+                    editedCategoryIndex, editedTime, editedCategoryType, editedNote, editedValue);
+
+            updateTransaction(selectedTransaction);
+
+            if (!selectedTransaction.equals(editedTransaction) &&
+                    viewModel.getEditTransactionsRecyclerViewAdapter() != null) {
+                final int selectedTransactionListPosition = viewModel.getSelectedTransactionListPosition();
+
+                viewModel.getEditTransactionsRecyclerViewAdapter().notifyItemChanged(selectedTransactionListPosition);
+            }
+        }
     }
 
     private void populateTransactionTypesList(final @NonNull ArrayList<String> list) {
@@ -271,7 +334,8 @@ public class EditSpecificTransactionFragment extends Fragment {
         final String editSpecificTransactionText =
                 requireContext().getResources().getString(R.string.edit_specific_transaction_title).trim();
 
-        if (viewModel.getActivityTitle() == null || !viewModel.getActivityTitle().equals(editSpecificTransactionText)) {
+        if (viewModel.getActivityTitle() == null ||
+                !viewModel.getActivityTitle().equals(editSpecificTransactionText)) {
             viewModel.setActivityTitle(editSpecificTransactionText);
         }
 
@@ -302,65 +366,7 @@ public class EditSpecificTransactionFragment extends Fragment {
             MyCustomMethods.closeTheKeyboard(requireActivity());
 
             if (MyCustomVariables.getUserDetails() != null) {
-                Transaction selectedTransaction = viewModel.getSelectedTransaction();
-
-                if (selectedTransaction != null) {
-                    final String editedNote = !String.valueOf(noteField.getText()).trim().isEmpty() ?
-                            String.valueOf(noteField.getText()).trim() : selectedTransaction.getNote();
-
-                    final String editedValue = !String.valueOf(valueField.getText()).trim().isEmpty() ?
-                            String.valueOf(valueField.getText()).trim() : selectedTransaction.getValue();
-
-                    final int parsedCategoryIndex = Transaction.getIndexFromCategory(Types.
-                            getTypeInEnglish(requireContext(), String.valueOf(typeSpinner.getSelectedItem()).trim()));
-
-                    final int editedCategoryIndex = parsedCategoryIndex >= 0 && parsedCategoryIndex <= 18 &&
-                            parsedCategoryIndex != selectedTransaction.getCategory() ?
-                            parsedCategoryIndex : selectedTransaction.getCategory();
-
-                    final int selectedYear = viewModel.getTransactionDate().getYear();
-
-                    final int selectedMonth = viewModel.getTransactionDate().getMonthValue();
-
-                    final int selectedDay = viewModel.getTransactionDate().getDayOfMonth();
-
-                    final int selectedHour = viewModel.getTransactionTime().getHour();
-
-                    final int selectedMinute = viewModel.getTransactionTime().getMinute();
-
-                    final int selectedSecond =
-                            (selectedYear != selectedTransaction.getTime().getYear() &&
-                                    selectedMonth != selectedTransaction.getTime().getMonth() &&
-                                    selectedDay != selectedTransaction.getTime().getDay() &&
-                                    selectedHour != selectedTransaction.getTime().getHour() &&
-                                    selectedMinute != selectedTransaction.getTime().getMinute()) ?
-                                    LocalDateTime.now().getSecond() : selectedTransaction.getTime().getSecond();
-
-                    final LocalDate selectedLocalDate =
-                            LocalDate.of(selectedYear, selectedMonth, selectedDay);
-
-                    final MyCustomTime editedTime = new MyCustomTime(selectedYear,
-                            selectedMonth,
-                            String.valueOf(selectedLocalDate.getMonth()),
-                            selectedDay,
-                            String.valueOf(selectedLocalDate.getDayOfWeek()),
-                            selectedHour,
-                            selectedMinute,
-                            selectedSecond);
-
-                    final int editedCategoryType = (editedCategoryIndex >= 0 && editedCategoryIndex <= 3) ? 1 : 0;
-
-                    final Transaction editedTransaction = new Transaction(selectedTransaction.getId(),
-                            editedCategoryIndex, editedTime, editedCategoryType, editedNote, editedValue);
-
-                    updateTransaction(selectedTransaction);
-
-                    if (!selectedTransaction.equals(editedTransaction) &&
-                            viewModel.getEditTransactionsRecyclerViewAdapter() != null) {
-                        viewModel.getEditTransactionsRecyclerViewAdapter()
-                                .notifyItemChanged(viewModel.getSelectedTransactionListPosition());
-                    }
-                }
+                modifyTransactionIntoDatabase();
             }
 
             requireActivity().onBackPressed();

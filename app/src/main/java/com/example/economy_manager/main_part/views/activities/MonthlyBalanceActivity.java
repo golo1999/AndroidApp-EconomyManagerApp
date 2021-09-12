@@ -146,8 +146,9 @@ public class MonthlyBalanceActivity extends AppCompatActivity {
                                     dayText.setText(dateTranslated);
                                     dayText.setTextSize(25);
 
-                                    dayText.setTextColor(viewModel.getUserDetails()
-                                            .getApplicationSettings().getDarkTheme() ? Color.YELLOW : Color.BLUE);
+                                    dayText.setTextColor(viewModel.getUserDetails() == null ||
+                                            !viewModel.getUserDetails().getApplicationSettings().getDarkTheme()
+                                            ? Color.BLUE : Color.YELLOW);
 
                                     for (final Transaction transactionsListIterator : transactionsList) {
                                         if (dayFromDaysList == transactionsListIterator.getTime().getDay()) {
@@ -173,12 +174,12 @@ public class MonthlyBalanceActivity extends AppCompatActivity {
                                                     String.valueOf(Transaction.getTypeFromIndexInEnglish(transactionsListIterator
                                                             .getCategory()))));
 
-                                            typeText.setTextColor(viewModel.getUserDetails()
-                                                    .getApplicationSettings().getDarkTheme() ?
-                                                    Color.WHITE : Color.BLACK);
-                                            valueText.setTextColor(viewModel.getUserDetails()
-                                                    .getApplicationSettings().getDarkTheme() ?
-                                                    Color.WHITE : Color.BLACK);
+                                            typeText.setTextColor(viewModel.getUserDetails() == null ||
+                                                    !viewModel.getUserDetails().getApplicationSettings().getDarkTheme() ?
+                                                    Color.BLACK : Color.WHITE);
+                                            valueText.setTextColor(viewModel.getUserDetails() == null ||
+                                                    !viewModel.getUserDetails().getApplicationSettings().getDarkTheme() ?
+                                                    Color.BLACK : Color.WHITE);
 
                                             typeText.setTextSize(19);
 
@@ -271,7 +272,7 @@ public class MonthlyBalanceActivity extends AppCompatActivity {
                         }
                     });
 
-            centerText.setTextColor(!darkThemeEnabled ? Color.parseColor("#195190") : Color.WHITE);
+            centerText.setTextColor(!darkThemeEnabled ? getColor(R.color.turkish_sea) : Color.WHITE);
             centerText.setTextSize(20);
         }
     }

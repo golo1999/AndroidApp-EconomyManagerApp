@@ -59,6 +59,14 @@ public class SettingsActivity extends AppCompatActivity
     private SwitchCompat darkThemeSwitch;
 
     @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        saveSelectedCurrency();
+        finish();
+        overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
+    }
+
+    @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.settings_activity);
@@ -75,34 +83,319 @@ public class SettingsActivity extends AppCompatActivity
     }
 
     @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-        saveSelectedCurrency();
-        finish();
-        overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
+    public void changePassword(final String oldPassword,
+                               final String newPassword) {
+        if (!oldPassword.trim().isEmpty() &&
+                !newPassword.trim().isEmpty()) {
+            final FirebaseUser user = MyCustomVariables.getFirebaseAuth().getCurrentUser();
+
+            if (user != null &&
+                    MyCustomVariables.getFirebaseAuth().getUid() != null) {
+                final String email = user.getEmail();
+
+                if (email != null) {
+                    final AuthCredential credential = EmailAuthProvider.getCredential(email, oldPassword);
+
+                    user.reauthenticate(credential).addOnCompleteListener((final Task<Void> task) -> {
+                        if (task.isSuccessful()) {
+                            user.updatePassword(newPassword).addOnCompleteListener((final Task<Void> task1) -> {
+                                if (task1.isSuccessful()) {
+                                    MyCustomMethods.showShortMessage(this,
+                                            getResources().getString(R.string.settings_password_updated));
+                                }
+                            });
+                        } else {
+                            MyCustomMethods.showShortMessage(this,
+                                    getResources().getString(R.string.settings_email_password_no_match));
+                        }
+                    });
+                }
+            }
+        } else if (oldPassword.trim().isEmpty() &&
+                newPassword.trim().isEmpty()) {
+            MyCustomMethods.showShortMessage(this,
+                    getResources().getString(R.string.settings_passwords_not_empty));
+        } else if (oldPassword.trim().isEmpty()) {
+            MyCustomMethods.showShortMessage(this,
+                    getResources().getString(R.string.settings_old_password_not_empty));
+        } else {
+            MyCustomMethods.showShortMessage(this,
+                    getResources().getString(R.string.settings_new_password_not_empty));
+        }
+
+        MyCustomMethods.closeTheKeyboard(this);
     }
 
-    private void setVariables() {
-        userDetails = MyCustomSharedPreferences.retrieveUserDetailsFromSharedPreferences(this);
-        preferences = getSharedPreferences(MyCustomVariables.getSharedPreferencesFileName(), MODE_PRIVATE);
-        goBack = findViewById(R.id.settings_back);
-        rateAppButton = findViewById(R.id.settings_rate_button);
-        changePasswordButton = findViewById(R.id.settings_change_password_button);
-        resetDatabaseButton = findViewById(R.id.settings_delete_database);
-        deleteAccountButton = findViewById(R.id.settings_delete_button);
-        currencySelectorSpinner = findViewById(R.id.settings_currency_spinner);
-        currencyText = findViewById(R.id.settings_currency_text);
-        themeText = findViewById(R.id.settings_theme_text);
-        darkThemeSwitch = findViewById(R.id.settings_dark_theme_switch);
+    @Override
+    public void deleteAccount() {
+        if (MyCustomVariables.getFirebaseAuth().getCurrentUser() != null) {
+            // initializing credentials for Facebook authentication
+            AuthCredential credential = FacebookAuthProvider
+                    .getCredential(String.valueOf(AccessToken.getCurrentAccessToken()));
+
+            // if the authentication provider is Google
+            if (MyCustomVariables.getFirebaseAuth()
+                    .getCurrentUser()
+                    .getProviderData()
+                    .get(MyCustomVariables.getFirebaseAuth().getCurrentUser().getProviderData().size() - 1)
+                    .getProviderId()
+                    .equals("google.com")) {
+                final GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(this);
+
+                if (account != null) {
+                    credential = GoogleAuthProvider.getCredential(account.getIdToken(), null);
+                }
+            }
+
+            MyCustomVariables.getFirebaseAuth()
+                    .getCurrentUser()
+                    .reauthenticate(credential)
+                    .addOnCompleteListener((final Task<Void> task) -> {
+                        if (MyCustomVariables.getFirebaseAuth().getUid() != null) {
+                            MyCustomVariables.getDatabaseReference()
+                                    .child(MyCustomVariables.getFirebaseAuth().getUid())
+                                    .child("PersonalTransactions")
+                                    .removeValue();
+                        }
+
+                        MyCustomVariables.getFirebaseAuth()
+                                .getCurrentUser()
+                                .delete()
+                                .addOnCompleteListener((final Task<Void> task1) -> {
+                                    MyCustomVariables.getFirebaseAuth().signOut();
+                                    finishAffinity();
+                                    startActivity(new Intent(SettingsActivity.this, LogInActivity.class));
+                                    overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+
+                                    MyCustomMethods.showShortMessage(this,
+                                            getResources().getString(R.string.settings_account_deleted));
+                                });
+                    });
+        }
     }
 
-    private void setTheme() {
+    @Override
+    public void getTypedPasswordAndDeleteTheAccount(final String password) {
+        if (!password.trim().isEmpty()) {
+            final FirebaseUser user = MyCustomVariables.getFirebaseAuth().getCurrentUser();
+
+            if (user != null &&
+                    MyCustomVariables.getFirebaseAuth().getUid() != null) {
+                final String email = user.getEmail();
+
+                if (email != null) {
+                    final AuthCredential credential = EmailAuthProvider.getCredential(email, password);
+
+                    user.reauthenticate(credential).addOnCompleteListener((final Task<Void> task) -> {
+                        if (task.isSuccessful()) {
+                            MyCustomVariables.getDatabaseReference()
+                                    .child(MyCustomVariables.getFirebaseAuth().getUid())
+                                    .removeValue();
+
+                            user.delete().addOnCompleteListener((final Task<Void> task1) -> {
+                                MyCustomVariables.getFirebaseAuth().signOut();
+                                finishAffinity();
+                                startActivity(new Intent(SettingsActivity.this, LogInActivity.class));
+                                overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+
+                                MyCustomMethods.showShortMessage(this,
+                                        getResources().getString(R.string.settings_account_deleted));
+                            });
+                        } else
+                            MyCustomMethods.showShortMessage(this,
+                                    getResources().getString(R.string.settings_email_password_no_match));
+                        MyCustomMethods.closeTheKeyboard(this);
+                    });
+                }
+            }
+        } else {
+            MyCustomMethods.showShortMessage(this, getResources().getString(R.string.signup_error4));
+        }
+    }
+
+    @Override
+    public void getTypedPasswordAndResetTheDatabase(final String password) {
+        if (!password.trim().isEmpty()) {
+            final FirebaseUser user = MyCustomVariables.getFirebaseAuth().getCurrentUser();
+
+            if (user != null &&
+                    MyCustomVariables.getFirebaseAuth().getUid() != null) {
+                final String email = user.getEmail();
+
+                if (email != null) {
+                    final AuthCredential credential = EmailAuthProvider.getCredential(email, password);
+
+                    user.reauthenticate(credential).addOnCompleteListener((final Task<Void> task) -> {
+                        if (task.isSuccessful()) {
+                            MyCustomVariables.getDatabaseReference()
+                                    .child(MyCustomVariables.getFirebaseAuth().getUid())
+                                    .child("PersonalTransactions")
+                                    .removeValue();
+
+                            MyCustomMethods.showShortMessage(this,
+                                    getResources().getString(R.string.settings_database_reset));
+                        } else {
+                            MyCustomMethods.showShortMessage(this,
+                                    getResources().getString(R.string.settings_email_password_no_match));
+                        }
+
+                        MyCustomMethods.closeTheKeyboard(this);
+                    });
+                }
+            }
+        } else {
+            MyCustomMethods.showShortMessage(this, getResources().getString(R.string.signup_error4));
+        }
+    }
+
+    @Override
+    public void resetDatabase() {
+        if (MyCustomVariables.getFirebaseAuth().getUid() != null &&
+                MyCustomVariables.getFirebaseAuth().getCurrentUser() != null) {
+            // initializing credentials for Facebook authentication
+            AuthCredential credential = FacebookAuthProvider
+                    .getCredential(String.valueOf(AccessToken.getCurrentAccessToken()));
+
+            // if the authentication provider is Google
+            if (MyCustomVariables.getFirebaseAuth().getCurrentUser()
+                    .getProviderData()
+                    .get(MyCustomVariables.getFirebaseAuth().getCurrentUser().getProviderData().size() - 1)
+                    .getProviderId()
+                    .equals("google.com")) {
+                final GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(this);
+
+                if (account != null) {
+                    credential = GoogleAuthProvider.getCredential(account.getIdToken(), null);
+                }
+            }
+
+            MyCustomVariables.getFirebaseAuth()
+                    .getCurrentUser()
+                    .reauthenticate(credential)
+                    .addOnCompleteListener((final Task<Void> task) -> {
+                        if (task.isSuccessful()) {
+                            MyCustomVariables.getDatabaseReference()
+                                    .child(MyCustomVariables.getFirebaseAuth().getUid())
+                                    .child("PersonalTransactions")
+                                    .removeValue();
+
+                            MyCustomMethods.showShortMessage(this,
+                                    getResources().getString(R.string.settings_database_reset));
+                        } else {
+                            MyCustomMethods.showShortMessage(this,
+                                    getResources().getString(R.string.settings_email_password_no_match));
+                            MyCustomMethods.closeTheKeyboard(this);
+                        }
+                    });
+        }
+    }
+
+    private void createCurrencySelectorSpinner() {
+        final String[] currencyList = getResources().getStringArray(R.array.currencies);
+
+        final ArrayAdapter<String> currencyAdapter = new ArrayAdapter<String>(this,
+                R.layout.custom_spinner_item, currencyList) {
+            @Override
+            public View getDropDownView(final int position,
+                                        final @Nullable View convertView,
+                                        final @NonNull ViewGroup parent) {
+                final View v = super.getDropDownView(position, convertView, parent);
+
+                ((TextView) v).setGravity(Gravity.CENTER);
+                setCurrencySelectorSpinnerTheme(v);
+
+                return v;
+            }
+        };
+
+        currencySelectorSpinner.setAdapter(currencyAdapter);
+    }
+
+    private void hideButtons() {
+        final FirebaseUser user = MyCustomVariables.getFirebaseAuth().getCurrentUser();
+
+        if (user != null) {
+            final String authProvider = user
+                    .getProviderData()
+                    .get(user.getProviderData().size() - 1)
+                    .getProviderId();
+
+            if (authProvider.equals("google.com") || authProvider.equals("facebook.com")) {
+                changePasswordButton.setVisibility(View.GONE);
+            }
+        }
+    }
+
+    private void saveSelectedCurrency() {
+        final String selectedCurrency = String.valueOf(currencySelectorSpinner.getSelectedItem());
+
+        final String currencySymbol = selectedCurrency.equals("AUD") ?
+                "A$" : selectedCurrency.equals("BRL") ?
+                "R$" : selectedCurrency.equals("CAD") ?
+                "C$" : selectedCurrency.equals("CHF") ?
+                "CHF" : selectedCurrency.equals("CNY") ?
+                "元" : selectedCurrency.equals("EUR") ?
+                "€" : selectedCurrency.equals("GBP") ?
+                "£" : selectedCurrency.equals("INR") ?
+                "₹" : selectedCurrency.equals("JPY") ?
+                "¥" : selectedCurrency.equals("RON") ?
+                "RON" : selectedCurrency.equals("RUB") ?
+                "₽" : "$";
+
+        if (MyCustomVariables.getFirebaseAuth().getUid() != null &&
+                userDetails != null &&
+                !userDetails.getApplicationSettings().getCurrency().equals(selectedCurrency)) {
+            userDetails.getApplicationSettings().setCurrency(selectedCurrency);
+            MyCustomSharedPreferences.saveUserDetailsToSharedPreferences(preferences, userDetails);
+            MyCustomVariables.setUserDetails(userDetails);
+
+            MyCustomVariables.getDatabaseReference()
+                    .child(MyCustomVariables.getFirebaseAuth().getUid())
+                    .child("ApplicationSettings")
+                    .child("currency")
+                    .setValue(selectedCurrency);
+
+            MyCustomVariables.getDatabaseReference()
+                    .child(MyCustomVariables.getFirebaseAuth().getUid())
+                    .child("ApplicationSettings")
+                    .child("currencySymbol")
+                    .setValue(currencySymbol);
+        }
+    }
+
+    private void setAllButtonsStyle() {
+        setButtonStyle(rateAppButton,
+                userDetails != null && userDetails.getApplicationSettings().getDarkTheme());
+        setButtonStyle(changePasswordButton,
+                userDetails != null && userDetails.getApplicationSettings().getDarkTheme());
+        setButtonStyle(resetDatabaseButton,
+                userDetails != null && userDetails.getApplicationSettings().getDarkTheme());
+        setButtonStyle(deleteAccountButton,
+                userDetails != null && userDetails.getApplicationSettings().getDarkTheme());
+    }
+
+    private void setButtonStyle(final Button button,
+                                final boolean darkThemeEnabled) {
+        button.setBackgroundResource(!darkThemeEnabled ? R.drawable.button_blue_border : R.drawable.button_white_border);
+        button.setTextColor(getColor(!darkThemeEnabled ? R.color.turkish_sea : R.color.white));
+    }
+
+    private void setCurrencySelectorSpinnerTheme(final View v) {
         final boolean darkThemeEnabled = userDetails != null ?
                 userDetails.getApplicationSettings().getDarkTheme() :
                 MyCustomVariables.getDefaultUserDetails().getApplicationSettings().getDarkTheme();
 
-        getWindow().setBackgroundDrawableResource(!darkThemeEnabled ?
-                R.drawable.ic_white_gradient_tobacco_ad : R.drawable.ic_black_gradient_night_shift);
+        final int itemsColor = !darkThemeEnabled ? Color.WHITE : Color.BLACK;
+        // setting elements' text color based on the selected theme
+        ((TextView) v).setTextColor(itemsColor);
+    }
+
+    private void setDarkThemeSwitch(final SwitchCompat darkThemeSwitch) {
+        final boolean darkThemeEnabled = userDetails != null ?
+                userDetails.getApplicationSettings().getDarkTheme() :
+                MyCustomVariables.getDefaultUserDetails().getApplicationSettings().getDarkTheme();
+
+        darkThemeSwitch.setChecked(darkThemeEnabled);
     }
 
     private void setOnClickListeners() {
@@ -191,6 +484,39 @@ public class SettingsActivity extends AppCompatActivity
         });
     }
 
+    /**
+     * Method for styling spinner's first item
+     */
+    private void setSelectedItemColorSpinner() {
+        AdapterView.OnItemSelectedListener itemSelectedListener = new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(final AdapterView<?> parent,
+                                       final View view,
+                                       final int position,
+                                       long id) {
+                if (MyCustomVariables.getFirebaseAuth().getUid() != null) {
+                    final boolean darkThemeEnabled = userDetails != null ?
+                            userDetails.getApplicationSettings().getDarkTheme() :
+                            MyCustomVariables.getDefaultUserDetails().getApplicationSettings().getDarkTheme();
+
+                    final int color = !darkThemeEnabled ? getColor(R.color.turkish_sea) : Color.WHITE;
+                    // the first element will have the text aligned to its start and
+                    // the color based on the selected theme
+                    ((TextView) parent.getChildAt(0)).setTextColor(color);
+                    ((TextView) parent.getChildAt(0)).setGravity(Gravity.END);
+                    ((TextView) parent.getChildAt(0)).setTypeface(null, Typeface.BOLD);
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        };
+
+        currencySelectorSpinner.setOnItemSelectedListener(itemSelectedListener);
+    }
+
     private void setSpinners() {
         final boolean darkThemeEnabled = userDetails != null ?
                 userDetails.getApplicationSettings().getDarkTheme() :
@@ -240,214 +566,6 @@ public class SettingsActivity extends AppCompatActivity
         });
     }
 
-    @Override
-    public void changePassword(final String oldPassword,
-                               final String newPassword) {
-        if (!oldPassword.trim().isEmpty() &&
-                !newPassword.trim().isEmpty()) {
-            final FirebaseUser user = MyCustomVariables.getFirebaseAuth().getCurrentUser();
-
-            if (user != null &&
-                    MyCustomVariables.getFirebaseAuth().getUid() != null) {
-                final String email = user.getEmail();
-
-                if (email != null) {
-                    final AuthCredential credential = EmailAuthProvider.getCredential(email, oldPassword);
-
-                    user.reauthenticate(credential).addOnCompleteListener((final Task<Void> task) -> {
-                        if (task.isSuccessful()) {
-                            user.updatePassword(newPassword).addOnCompleteListener((final Task<Void> task1) -> {
-                                if (task1.isSuccessful()) {
-                                    MyCustomMethods.showShortMessage(this,
-                                            getResources().getString(R.string.settings_password_updated));
-                                }
-                            });
-                        } else {
-                            MyCustomMethods.showShortMessage(this,
-                                    getResources().getString(R.string.settings_email_password_no_match));
-                        }
-                    });
-                }
-            }
-        } else if (oldPassword.trim().isEmpty() &&
-                newPassword.trim().isEmpty()) {
-            MyCustomMethods.showShortMessage(this,
-                    getResources().getString(R.string.settings_passwords_not_empty));
-        } else if (oldPassword.trim().isEmpty()) {
-            MyCustomMethods.showShortMessage(this,
-                    getResources().getString(R.string.settings_old_password_not_empty));
-        } else {
-            MyCustomMethods.showShortMessage(this,
-                    getResources().getString(R.string.settings_new_password_not_empty));
-        }
-
-        MyCustomMethods.closeTheKeyboard(this);
-    }
-
-    @Override
-    public void getTypedPasswordAndDeleteTheAccount(final String password) {
-        if (!password.trim().isEmpty()) {
-            final FirebaseUser user = MyCustomVariables.getFirebaseAuth().getCurrentUser();
-
-            if (user != null &&
-                    MyCustomVariables.getFirebaseAuth().getUid() != null) {
-                final String email = user.getEmail();
-
-                if (email != null) {
-                    final AuthCredential credential = EmailAuthProvider.getCredential(email, password);
-
-                    user.reauthenticate(credential).addOnCompleteListener((final Task<Void> task) -> {
-                        if (task.isSuccessful()) {
-                            MyCustomVariables.getDatabaseReference()
-                                    .child(MyCustomVariables.getFirebaseAuth().getUid())
-                                    .removeValue();
-
-                            user.delete().addOnCompleteListener((final Task<Void> task1) -> {
-                                MyCustomVariables.getFirebaseAuth().signOut();
-                                finishAffinity();
-                                startActivity(new Intent(SettingsActivity.this, LogInActivity.class));
-                                overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
-
-                                MyCustomMethods.showShortMessage(this,
-                                        getResources().getString(R.string.settings_account_deleted));
-                            });
-                        } else
-                            MyCustomMethods.showShortMessage(this,
-                                    getResources().getString(R.string.settings_email_password_no_match));
-                        MyCustomMethods.closeTheKeyboard(this);
-                    });
-                }
-            }
-        } else {
-            MyCustomMethods.showShortMessage(this, getResources().getString(R.string.signup_error4));
-        }
-    }
-
-    @Override
-    public void deleteAccount() {
-        if (MyCustomVariables.getFirebaseAuth().getCurrentUser() != null) {
-            // initializing credentials for Facebook authentication
-            AuthCredential credential = FacebookAuthProvider
-                    .getCredential(String.valueOf(AccessToken.getCurrentAccessToken()));
-
-            // if the authentication provider is Google
-            if (MyCustomVariables.getFirebaseAuth()
-                    .getCurrentUser()
-                    .getProviderData()
-                    .get(MyCustomVariables.getFirebaseAuth().getCurrentUser().getProviderData().size() - 1)
-                    .getProviderId()
-                    .equals("google.com")) {
-                final GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(this);
-
-                if (account != null) {
-                    credential = GoogleAuthProvider.getCredential(account.getIdToken(), null);
-                }
-            }
-
-            MyCustomVariables.getFirebaseAuth()
-                    .getCurrentUser()
-                    .reauthenticate(credential)
-                    .addOnCompleteListener((final Task<Void> task) -> {
-                        if (MyCustomVariables.getFirebaseAuth().getUid() != null) {
-                            MyCustomVariables.getDatabaseReference()
-                                    .child(MyCustomVariables.getFirebaseAuth().getUid())
-                                    .child("PersonalTransactions")
-                                    .removeValue();
-                        }
-
-                        MyCustomVariables.getFirebaseAuth()
-                                .getCurrentUser()
-                                .delete()
-                                .addOnCompleteListener((final Task<Void> task1) -> {
-                                    MyCustomVariables.getFirebaseAuth().signOut();
-                                    finishAffinity();
-                                    startActivity(new Intent(SettingsActivity.this, LogInActivity.class));
-                                    overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
-
-                                    MyCustomMethods.showShortMessage(this,
-                                            getResources().getString(R.string.settings_account_deleted));
-                                });
-                    });
-        }
-    }
-
-    @Override
-    public void getTypedPasswordAndResetTheDatabase(final String password) {
-        if (!password.trim().isEmpty()) {
-            final FirebaseUser user = MyCustomVariables.getFirebaseAuth().getCurrentUser();
-
-            if (user != null &&
-                    MyCustomVariables.getFirebaseAuth().getUid() != null) {
-                final String email = user.getEmail();
-
-                if (email != null) {
-                    final AuthCredential credential = EmailAuthProvider.getCredential(email, password);
-
-                    user.reauthenticate(credential).addOnCompleteListener((final Task<Void> task) -> {
-                        if (task.isSuccessful()) {
-                            MyCustomVariables.getDatabaseReference()
-                                    .child(MyCustomVariables.getFirebaseAuth().getUid())
-                                    .child("PersonalTransactions")
-                                    .removeValue();
-
-                            MyCustomMethods.showShortMessage(this,
-                                    getResources().getString(R.string.settings_database_reset));
-                        } else {
-                            MyCustomMethods.showShortMessage(this,
-                                    getResources().getString(R.string.settings_email_password_no_match));
-                        }
-
-                        MyCustomMethods.closeTheKeyboard(this);
-                    });
-                }
-            }
-        } else {
-            MyCustomMethods.showShortMessage(this, getResources().getString(R.string.signup_error4));
-        }
-    }
-
-    @Override
-    public void resetDatabase() {
-        if (MyCustomVariables.getFirebaseAuth().getUid() != null &&
-                MyCustomVariables.getFirebaseAuth().getCurrentUser() != null) {
-            // initializing credentials for Facebook authentication
-            AuthCredential credential = FacebookAuthProvider
-                    .getCredential(String.valueOf(AccessToken.getCurrentAccessToken()));
-
-            // if the authentication provider is Google
-            if (MyCustomVariables.getFirebaseAuth().getCurrentUser()
-                    .getProviderData()
-                    .get(MyCustomVariables.getFirebaseAuth().getCurrentUser().getProviderData().size() - 1)
-                    .getProviderId()
-                    .equals("google.com")) {
-                final GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(this);
-
-                if (account != null) {
-                    credential = GoogleAuthProvider.getCredential(account.getIdToken(), null);
-                }
-            }
-
-            MyCustomVariables.getFirebaseAuth()
-                    .getCurrentUser()
-                    .reauthenticate(credential)
-                    .addOnCompleteListener((final Task<Void> task) -> {
-                        if (task.isSuccessful()) {
-                            MyCustomVariables.getDatabaseReference()
-                                    .child(MyCustomVariables.getFirebaseAuth().getUid())
-                                    .child("PersonalTransactions")
-                                    .removeValue();
-
-                            MyCustomMethods.showShortMessage(this,
-                                    getResources().getString(R.string.settings_database_reset));
-                        } else {
-                            MyCustomMethods.showShortMessage(this,
-                                    getResources().getString(R.string.settings_email_password_no_match));
-                            MyCustomMethods.closeTheKeyboard(this);
-                        }
-                    });
-        }
-    }
-
     private void setTexts() {
         final boolean checked = userDetails != null ?
                 userDetails.getApplicationSettings().getDarkTheme() :
@@ -459,142 +577,26 @@ public class SettingsActivity extends AppCompatActivity
         currencyText.setTextColor(color);
     }
 
-    private void createCurrencySelectorSpinner() {
-        final String[] currencyList = getResources().getStringArray(R.array.currencies);
-
-        final ArrayAdapter<String> currencyAdapter = new ArrayAdapter<String>(this,
-                R.layout.custom_spinner_item, currencyList) {
-            @Override
-            public View getDropDownView(final int position,
-                                        final @Nullable View convertView,
-                                        final @NonNull ViewGroup parent) {
-                final View v = super.getDropDownView(position, convertView, parent);
-
-                ((TextView) v).setGravity(Gravity.CENTER);
-                setCurrencySelectorSpinnerTheme(v);
-
-                return v;
-            }
-        };
-
-        currencySelectorSpinner.setAdapter(currencyAdapter);
-    }
-
-    private void setCurrencySelectorSpinnerTheme(final View v) {
+    private void setTheme() {
         final boolean darkThemeEnabled = userDetails != null ?
                 userDetails.getApplicationSettings().getDarkTheme() :
                 MyCustomVariables.getDefaultUserDetails().getApplicationSettings().getDarkTheme();
 
-        final int itemsColor = !darkThemeEnabled ? Color.WHITE : Color.BLACK;
-        // setting elements' text color based on the selected theme
-        ((TextView) v).setTextColor(itemsColor);
+        getWindow().setBackgroundDrawableResource(!darkThemeEnabled ?
+                R.drawable.ic_white_gradient_tobacco_ad : R.drawable.ic_black_gradient_night_shift);
     }
 
-    // styling spinner's first element
-    private void setSelectedItemColorSpinner() {
-        AdapterView.OnItemSelectedListener itemSelectedListener = new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(final AdapterView<?> parent,
-                                       final View view,
-                                       final int position,
-                                       long id) {
-                if (MyCustomVariables.getFirebaseAuth().getUid() != null) {
-                    final boolean darkThemeEnabled = userDetails != null ?
-                            userDetails.getApplicationSettings().getDarkTheme() :
-                            MyCustomVariables.getDefaultUserDetails().getApplicationSettings().getDarkTheme();
-
-                    final int color = !darkThemeEnabled ? getColor(R.color.turkish_sea) : Color.WHITE;
-                    // the first element will have the text aligned to its start and
-                    // the color based on the selected theme
-                    ((TextView) parent.getChildAt(0)).setTextColor(color);
-                    ((TextView) parent.getChildAt(0)).setGravity(Gravity.END);
-                    ((TextView) parent.getChildAt(0)).setTypeface(null, Typeface.BOLD);
-                }
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        };
-
-        currencySelectorSpinner.setOnItemSelectedListener(itemSelectedListener);
-    }
-
-    private void setDarkThemeSwitch(final SwitchCompat darkThemeSwitch) {
-        final boolean darkThemeEnabled = userDetails != null ?
-                userDetails.getApplicationSettings().getDarkTheme() :
-                MyCustomVariables.getDefaultUserDetails().getApplicationSettings().getDarkTheme();
-
-        darkThemeSwitch.setChecked(darkThemeEnabled);
-    }
-
-    private void hideButtons() {
-        final FirebaseUser user = MyCustomVariables.getFirebaseAuth().getCurrentUser();
-
-        if (user != null) {
-            final String authProvider = user
-                    .getProviderData()
-                    .get(user.getProviderData().size() - 1)
-                    .getProviderId();
-
-            if (authProvider.equals("google.com") || authProvider.equals("facebook.com")) {
-                changePasswordButton.setVisibility(View.GONE);
-            }
-        }
-    }
-
-    private void saveSelectedCurrency() {
-        final String selectedCurrency = String.valueOf(currencySelectorSpinner.getSelectedItem());
-
-        final String currencySymbol = selectedCurrency.equals("AUD") ?
-                "A$" : selectedCurrency.equals("BRL") ?
-                "R$" : selectedCurrency.equals("CAD") ?
-                "C$" : selectedCurrency.equals("CHF") ?
-                "CHF" : selectedCurrency.equals("CNY") ?
-                "元" : selectedCurrency.equals("EUR") ?
-                "€" : selectedCurrency.equals("GBP") ?
-                "£" : selectedCurrency.equals("INR") ?
-                "₹" : selectedCurrency.equals("JPY") ?
-                "¥" : selectedCurrency.equals("RON") ?
-                "RON" : selectedCurrency.equals("RUB") ?
-                "₽" : "$";
-
-        if (MyCustomVariables.getFirebaseAuth().getUid() != null &&
-                userDetails != null &&
-                !userDetails.getApplicationSettings().getCurrency().equals(selectedCurrency)) {
-            userDetails.getApplicationSettings().setCurrency(selectedCurrency);
-            MyCustomSharedPreferences.saveUserDetailsToSharedPreferences(preferences, userDetails);
-            MyCustomVariables.setUserDetails(userDetails);
-
-            MyCustomVariables.getDatabaseReference()
-                    .child(MyCustomVariables.getFirebaseAuth().getUid())
-                    .child("ApplicationSettings")
-                    .child("currency")
-                    .setValue(selectedCurrency);
-
-            MyCustomVariables.getDatabaseReference()
-                    .child(MyCustomVariables.getFirebaseAuth().getUid())
-                    .child("ApplicationSettings")
-                    .child("currencySymbol")
-                    .setValue(currencySymbol);
-        }
-    }
-
-    private void setAllButtonsStyle() {
-        setButtonStyle(rateAppButton,
-                userDetails != null && userDetails.getApplicationSettings().getDarkTheme());
-        setButtonStyle(changePasswordButton,
-                userDetails != null && userDetails.getApplicationSettings().getDarkTheme());
-        setButtonStyle(resetDatabaseButton,
-                userDetails != null && userDetails.getApplicationSettings().getDarkTheme());
-        setButtonStyle(deleteAccountButton,
-                userDetails != null && userDetails.getApplicationSettings().getDarkTheme());
-    }
-
-    private void setButtonStyle(final Button button,
-                                final boolean darkThemeEnabled) {
-        button.setBackgroundResource(!darkThemeEnabled ? R.drawable.button_blue_border : R.drawable.button_white_border);
-        button.setTextColor(getColor(!darkThemeEnabled ? R.color.turkish_sea : R.color.white));
+    private void setVariables() {
+        userDetails = MyCustomSharedPreferences.retrieveUserDetailsFromSharedPreferences(this);
+        preferences = getSharedPreferences(MyCustomVariables.getSharedPreferencesFileName(), MODE_PRIVATE);
+        goBack = findViewById(R.id.settings_back);
+        rateAppButton = findViewById(R.id.settings_rate_button);
+        changePasswordButton = findViewById(R.id.settings_change_password_button);
+        resetDatabaseButton = findViewById(R.id.settings_delete_database);
+        deleteAccountButton = findViewById(R.id.settings_delete_button);
+        currencySelectorSpinner = findViewById(R.id.settings_currency_spinner);
+        currencyText = findViewById(R.id.settings_currency_text);
+        themeText = findViewById(R.id.settings_theme_text);
+        darkThemeSwitch = findViewById(R.id.settings_dark_theme_switch);
     }
 }
