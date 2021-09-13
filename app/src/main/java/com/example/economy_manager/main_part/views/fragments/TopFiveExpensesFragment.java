@@ -16,6 +16,7 @@ import androidx.lifecycle.ViewModelStoreOwner;
 import com.example.economy_manager.R;
 import com.example.economy_manager.main_part.viewmodels.MainScreenViewModel;
 import com.example.economy_manager.models.Transaction;
+import com.example.economy_manager.utilities.Languages;
 import com.example.economy_manager.utilities.MyCustomMethods;
 import com.example.economy_manager.utilities.MyCustomVariables;
 import com.example.economy_manager.utilities.Types;
@@ -154,7 +155,7 @@ public class TopFiveExpensesFragment extends Fragment {
                     final TextView valueFromChildLayout =
                             childLayout.findViewById(R.id.top_five_expenses_constraint_layout_value);
 
-                    final String valueWithCurrency = Locale.getDefault().getDisplayLanguage().equals("English") ?
+                    final String valueWithCurrency = Locale.getDefault().getDisplayLanguage().equals(Languages.getEnglishLanguage()) ?
                             currencySymbol + transaction.getValue() : transaction.getValue() + " " + currencySymbol;
 
                     final String translatedType = Types.getTranslatedType(requireContext(),

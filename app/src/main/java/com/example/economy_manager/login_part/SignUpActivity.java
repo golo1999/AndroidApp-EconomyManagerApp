@@ -3,6 +3,7 @@ package com.example.economy_manager.login_part;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Patterns;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -11,15 +12,12 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.economy_manager.R;
 import com.example.economy_manager.models.ApplicationSettings;
-import com.example.economy_manager.models.BirthDate;
 import com.example.economy_manager.models.PersonalInformation;
 import com.example.economy_manager.models.UserDetails;
 import com.example.economy_manager.utilities.MyCustomMethods;
 import com.example.economy_manager.utilities.MyCustomSharedPreferences;
 import com.example.economy_manager.utilities.MyCustomVariables;
 import com.google.firebase.auth.FirebaseUser;
-
-import java.time.LocalDate;
 
 public class SignUpActivity extends AppCompatActivity {
     private SharedPreferences preferences;
@@ -40,8 +38,7 @@ public class SignUpActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        finish();
-        overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
+        MyCustomMethods.finishActivityWithSlideTransition(this, 0);
     }
 
     private void setVariables() {
@@ -53,9 +50,9 @@ public class SignUpActivity extends AppCompatActivity {
     }
 
     private void setOnClickListeners() {
-        logIn.setOnClickListener(v -> onBackPressed());
+        logIn.setOnClickListener((final View view) -> onBackPressed());
 
-        signUpButton.setOnClickListener(v -> {
+        signUpButton.setOnClickListener((final View view) -> {
             // saving the trimmed email's value
             final String enteredEmailValue = String.valueOf(emailField.getText()).trim();
             // saving the password's value
@@ -140,28 +137,28 @@ public class SignUpActivity extends AppCompatActivity {
     }
 
     private void createPersonalInformationPath() {
-        final PersonalInformation information = new PersonalInformation("", "",
-                "", "", "", "",
-                new BirthDate(LocalDate.now()), "", "");
+        final PersonalInformation information = new PersonalInformation();
+        final String currentUserID = MyCustomVariables.getFirebaseAuth().getUid();
 
         userDetails.setPersonalInformation(information);
 
-        if (MyCustomVariables.getFirebaseAuth().getUid() != null) {
+        if (currentUserID != null) {
             MyCustomVariables.getDatabaseReference()
-                    .child(MyCustomVariables.getFirebaseAuth().getUid())
+                    .child(currentUserID)
                     .child("PersonalInformation")
                     .setValue(information);
         }
     }
 
     private void createApplicationSettingsPath() {
-        final ApplicationSettings settings = new ApplicationSettings("GBP");
+        final ApplicationSettings settings = new ApplicationSettings();
+        final String currentUserID = MyCustomVariables.getFirebaseAuth().getUid();
 
         userDetails.setApplicationSettings(settings);
 
-        if (MyCustomVariables.getFirebaseAuth().getUid() != null) {
+        if (currentUserID != null) {
             MyCustomVariables.getDatabaseReference()
-                    .child(MyCustomVariables.getFirebaseAuth().getUid())
+                    .child(currentUserID)
                     .child("ApplicationSettings")
                     .setValue(settings);
         }

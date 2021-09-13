@@ -133,6 +133,7 @@
     <string name="month_november">November</string>
     <string name="month_december">December</string>
     <string name="monthly_balance">Monthly balance</string>
+    <string name="no_changes_have_been_made">No changes have been made</string>
     <string name="no_money_last_week">No money spent last week</string>
     <string name="no_money_records_month">No money records this month</string>
     <string name="no_money_records_yet">No money records yet</string>

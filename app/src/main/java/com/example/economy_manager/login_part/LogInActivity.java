@@ -14,7 +14,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.economy_manager.R;
 import com.example.economy_manager.main_part.views.activities.MainScreenActivity;
 import com.example.economy_manager.models.ApplicationSettings;
-import com.example.economy_manager.models.BirthDate;
 import com.example.economy_manager.models.PersonalInformation;
 import com.example.economy_manager.utilities.MyCustomMethods;
 import com.example.economy_manager.utilities.MyCustomVariables;
@@ -38,7 +37,6 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.GoogleAuthProvider;
 
-import java.time.LocalDate;
 import java.util.Arrays;
 
 public class LogInActivity extends AppCompatActivity {
@@ -84,23 +82,27 @@ public class LogInActivity extends AppCompatActivity {
     }
 
     private void setOnClickListeners() {
-        signUp.setOnClickListener((final View v) -> {
-            MyCustomMethods.goToActivityInDirection(LogInActivity.this, SignUpActivity.class, 1);
-        });
+        signUp.setOnClickListener((final View v) ->
+                MyCustomMethods.goToActivityWithSlideTransition(LogInActivity.this,
+                        SignUpActivity.class, 1));
 
-        facebookLogInButton.setOnClickListener(v -> buttonClickLoginFacebook());
+        facebookLogInButton.setOnClickListener((final View view) -> buttonClickLoginFacebook());
 
-        forgotPassword.setOnClickListener((final View v) -> {
-            MyCustomMethods.goToActivityInDirection(LogInActivity.this, ForgotPasswordActivity.class, 0);
-        });
+        forgotPassword.setOnClickListener((final View v) ->
+                MyCustomMethods.goToActivityWithSlideTransition(LogInActivity.this,
+                        ForgotPasswordActivity.class, 0));
 
         googleLogInButton.setOnClickListener((final View v) -> {
             googleOrFacebookInsideOnActivityResult = 1;
             googleSignIn();
         });
 
-        logInButton.setOnClickListener((final View v) -> validation(String.valueOf(emailField.getText()).trim(),
-                String.valueOf(passwordField.getText())));
+        logInButton.setOnClickListener((final View v) -> {
+            final String enteredEmail = String.valueOf(emailField.getText()).trim();
+            final String enteredPassword = String.valueOf(passwordField.getText());
+
+            validation(enteredEmail, enteredPassword);
+        });
     }
 
     private void validation(final String emailValue,
@@ -271,35 +273,31 @@ public class LogInActivity extends AppCompatActivity {
     }
 
     private void createPersonalInformationPath() {
-        final PersonalInformation information = new PersonalInformation("", "", "",
-                "", "", "", new BirthDate(LocalDate.now()), "", "");
-        if (MyCustomVariables.getFirebaseAuth().getUid() != null) {
+        final PersonalInformation information = new PersonalInformation();
+        final String currentUserID = MyCustomVariables.getFirebaseAuth().getUid();
+
+        if (currentUserID != null) {
             MyCustomVariables.getDatabaseReference()
-                    .child(MyCustomVariables.getFirebaseAuth().getUid())
+                    .child(currentUserID)
                     .child("PersonalInformation")
                     .setValue(information);
         }
     }
 
     private void createApplicationSettingsPath() {
-        final ApplicationSettings settings = new ApplicationSettings("GBP");
+        final ApplicationSettings settings = new ApplicationSettings();
+        final String currentUserID = MyCustomVariables.getFirebaseAuth().getUid();
 
-        if (MyCustomVariables.getFirebaseAuth().getUid() != null) {
+        if (currentUserID != null) {
             MyCustomVariables.getDatabaseReference()
-                    .child(MyCustomVariables.getFirebaseAuth().getUid())
+                    .child(currentUserID)
                     .child("ApplicationSettings")
                     .setValue(settings);
         }
     }
 
     private void goToTheMainScreen() {
-        final Intent intent = new Intent(LogInActivity.this, MainScreenActivity.class);
-
-        MyCustomMethods.showShortMessage(this,
-                getResources().getString(R.string.login_successful));
-
-        finishAffinity();
-        startActivity(intent);
-        overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+        MyCustomMethods.showShortMessage(this, getResources().getString(R.string.login_successful));
+        MyCustomMethods.signInWithFadeTransition(LogInActivity.this, MainScreenActivity.class);
     }
 }

@@ -4,8 +4,9 @@ import android.content.Context;
 
 import androidx.lifecycle.ViewModel;
 
-import com.example.economy_manager.utilities.Months;
 import com.example.economy_manager.models.UserDetails;
+import com.example.economy_manager.utilities.Languages;
+import com.example.economy_manager.utilities.Months;
 
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -42,14 +43,14 @@ public class MonthlyBalanceViewModel extends ViewModel {
     }
 
     public String getDayPrefix(final int dayFromDaysList) {
-        return Locale.getDefault().getDisplayLanguage().equals("Deutsch") ?
+        return Locale.getDefault().getDisplayLanguage().equals(Languages.getGermanLanguage()) ?
                 // german
                 "der" :
-                Locale.getDefault().getDisplayLanguage().equals("español") ||
-                        Locale.getDefault().getDisplayLanguage().equals("português") ?
+                Locale.getDefault().getDisplayLanguage().equals(Languages.getSpanishLanguage()) ||
+                        Locale.getDefault().getDisplayLanguage().equals(Languages.getPortugueseLanguage()) ?
                         // spanish or portuguese
                         "de" :
-                        Locale.getDefault().getDisplayLanguage().equals("italiano") ?
+                        Locale.getDefault().getDisplayLanguage().equals(Languages.getItalianLanguage()) ?
                                 // italian
                                 "il" :
                                 // everything else
@@ -74,19 +75,19 @@ public class MonthlyBalanceViewModel extends ViewModel {
     }
 
     public String getDateTranslated(final Context context, final int dayFromDaysList) {
-        return Locale.getDefault().getDisplayLanguage().equals("Deutsch") ?
+        return Locale.getDefault().getDisplayLanguage().equals(Languages.getGermanLanguage()) ?
                 // german
                 getDayPrefix(dayFromDaysList) + " " + dayFromDaysList + " " + getTranslatedMonth(context) :
-                Locale.getDefault().getDisplayLanguage().equals("español") ||
-                        Locale.getDefault().getDisplayLanguage().equals("português") ?
+                Locale.getDefault().getDisplayLanguage().equals(Languages.getSpanishLanguage()) ||
+                        Locale.getDefault().getDisplayLanguage().equals(Languages.getPortugueseLanguage()) ?
                         // spanish or portuguese
                         dayFromDaysList + " " + getDayPrefix(dayFromDaysList) + " " +
                                 getTranslatedMonth(context).toLowerCase() :
-                        Locale.getDefault().getDisplayLanguage().equals("français") ||
-                                Locale.getDefault().getDisplayLanguage().equals("română") ?
+                        Locale.getDefault().getDisplayLanguage().equals(Languages.getFrenchLanguage()) ||
+                                Locale.getDefault().getDisplayLanguage().equals(Languages.getRomanianLanguage()) ?
                                 // french or romanian
                                 dayFromDaysList + " " + getTranslatedMonth(context).toLowerCase() :
-                                Locale.getDefault().getDisplayLanguage().equals("italiano") ?
+                                Locale.getDefault().getDisplayLanguage().equals(Languages.getItalianLanguage()) ?
                                         // italian
                                         getDayPrefix(dayFromDaysList) + " " +
                                                 dayFromDaysList + " " + getTranslatedMonth(context).toLowerCase() :

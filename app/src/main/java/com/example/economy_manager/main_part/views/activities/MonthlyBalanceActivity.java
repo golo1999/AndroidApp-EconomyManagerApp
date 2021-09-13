@@ -53,8 +53,7 @@ public class MonthlyBalanceActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        finish();
-        overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+        MyCustomMethods.finishActivityWithFadeTransition(this);
     }
 
     private void setVariables() {

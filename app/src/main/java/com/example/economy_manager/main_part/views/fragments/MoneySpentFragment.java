@@ -15,6 +15,7 @@ import com.example.economy_manager.R;
 import com.example.economy_manager.main_part.viewmodels.MainScreenViewModel;
 import com.example.economy_manager.models.MyCustomTime;
 import com.example.economy_manager.models.Transaction;
+import com.example.economy_manager.utilities.Languages;
 import com.example.economy_manager.utilities.MyCustomMethods;
 import com.example.economy_manager.utilities.MyCustomVariables;
 import com.google.firebase.database.DataSnapshot;
@@ -112,7 +113,7 @@ public class MoneySpentFragment extends Fragment {
                                 }
 
                                 final boolean languageIsEnglish =
-                                        Locale.getDefault().getDisplayLanguage().equals("English");
+                                        Locale.getDefault().getDisplayLanguage().equals(Languages.getEnglishLanguage());
 
                                 final String youSpentText = languageIsEnglish ?
                                         // english

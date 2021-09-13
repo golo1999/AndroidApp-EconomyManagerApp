@@ -2,7 +2,6 @@ package com.example.economy_manager.main_part.views.activities;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -66,8 +65,6 @@ public class SplashScreenActivity extends AppCompatActivity {
                                             final UserDetails details =
                                                     new UserDetails(applicationSettings, personalInformation);
 
-                                            Log.d("userDetailsNewSet", details.toString());
-
                                             if (!userDetailsAlreadyExistInSharedPreferences(details)) {
                                                 saveUserDetailsToSharedPreferences(details);
                                             }
@@ -78,8 +75,6 @@ public class SplashScreenActivity extends AppCompatActivity {
 
                                                 MyCustomVariables.setUserDetails(userDetails);
                                             }
-
-                                            Log.d("userDetailsFromMCV", MyCustomVariables.getUserDetails().toString());
                                         }
                                     }
                                 }

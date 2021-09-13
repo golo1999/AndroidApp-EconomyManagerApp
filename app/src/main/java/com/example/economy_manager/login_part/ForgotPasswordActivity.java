@@ -1,6 +1,5 @@
 package com.example.economy_manager.login_part;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Patterns;
 import android.view.View;
@@ -34,8 +33,7 @@ public class ForgotPasswordActivity
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        finish();
-        overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+        MyCustomMethods.finishActivityWithSlideTransition(this, 1);
     }
 
     private void setVariables() {
@@ -61,8 +59,8 @@ public class ForgotPasswordActivity
         }
         // if the clicked button is the one for registration
         else if (clickedButtonId == signUp.getId()) {
-            startActivity(new Intent(ForgotPasswordActivity.this, SignUpActivity.class));
-            overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+            MyCustomMethods.goToActivityWithSlideTransition(ForgotPasswordActivity.this,
+                    SignUpActivity.class, 1);
         }
         // if the clicked button is the one for forgot password
         else if (clickedButtonId == forgotButton.getId()) {
@@ -80,8 +78,8 @@ public class ForgotPasswordActivity
                         if (task.isSuccessful()) {
                             MyCustomMethods.showLongMessage(this,
                                     getResources().getString(R.string.verify_email));
-                            finish();
-                            overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+                            MyCustomMethods.finishActivityWithSlideTransition(ForgotPasswordActivity.this,
+                                    1);
                         } else {
                             MyCustomMethods.showShortMessage(this,
                                     getResources().getString(R.string.forgot_password_email_does_not_exist));

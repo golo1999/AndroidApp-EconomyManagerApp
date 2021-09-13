@@ -5,13 +5,14 @@ import android.content.Context;
 import androidx.lifecycle.ViewModel;
 
 import com.example.economy_manager.R;
-import com.example.economy_manager.models.UserDetails;
 import com.example.economy_manager.main_part.views.fragments.BudgetReviewFragment;
 import com.example.economy_manager.main_part.views.fragments.LastTenTransactionsFragment;
 import com.example.economy_manager.main_part.views.fragments.MoneySpentFragment;
 import com.example.economy_manager.main_part.views.fragments.MoneySpentPercentageFragment;
 import com.example.economy_manager.main_part.views.fragments.ShowSavingsFragment;
 import com.example.economy_manager.main_part.views.fragments.TopFiveExpensesFragment;
+import com.example.economy_manager.models.UserDetails;
+import com.example.economy_manager.utilities.Languages;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -27,16 +28,16 @@ public class MainScreenViewModel extends ViewModel {
     private final MoneySpentPercentageFragment moneySpentPercentageFragment = MoneySpentPercentageFragment.newInstance();
     private final Calendar currentTime = Calendar.getInstance();
     private final int currentHour = currentTime.get(Calendar.HOUR_OF_DAY);
-    private final String datePrefix = Locale.getDefault().getDisplayLanguage().equals("Deutsch") ?
+    private final String datePrefix = Locale.getDefault().getDisplayLanguage().equals(Languages.getGermanLanguage()) ?
             // german
-            "der" : Locale.getDefault().getDisplayLanguage().equals("italiano") ?
+            "der" : Locale.getDefault().getDisplayLanguage().equals(Languages.getItalianLanguage()) ?
             // italian
-            "il" : Locale.getDefault().getDisplayLanguage().equals("português") ?
+            "il" : Locale.getDefault().getDisplayLanguage().equals(Languages.getPortugueseLanguage()) ?
             // portuguese
             "de" :
             // every other language
             "";
-    private final String daySuffix = !Locale.getDefault().getDisplayLanguage().equals("English") ?
+    private final String daySuffix = !Locale.getDefault().getDisplayLanguage().equals(Languages.getEnglishLanguage()) ?
             // every other language but english
             "" :
             // english
@@ -49,44 +50,44 @@ public class MainScreenViewModel extends ViewModel {
                     "rd" :
                     // every other day
                     "th";
-    private final String separator = Locale.getDefault().getDisplayLanguage().equals("español") ?
+    private final String separator = Locale.getDefault().getDisplayLanguage().equals(Languages.getSpanishLanguage()) ?
             // spanish
             "de" :
             // every other language but spanish
             "";
     private final SimpleDateFormat monthFormat = new SimpleDateFormat("LLLL",
-            Locale.getDefault().getDisplayLanguage().equals("Deutsch") ?
+            Locale.getDefault().getDisplayLanguage().equals(Languages.getGermanLanguage()) ?
                     //german
-                    Locale.GERMAN : Locale.getDefault().getDisplayLanguage().equals("español") ?
+                    Locale.GERMAN : Locale.getDefault().getDisplayLanguage().equals(Languages.getSpanishLanguage()) ?
                     // spanish
-                    Locale.forLanguageTag("es-ES") : Locale.getDefault().getDisplayLanguage().equals("français") ?
+                    Locale.forLanguageTag("es-ES") : Locale.getDefault().getDisplayLanguage().equals(Languages.getFrenchLanguage()) ?
                     // french
-                    Locale.FRENCH : Locale.getDefault().getDisplayLanguage().equals("italiano") ?
+                    Locale.FRENCH : Locale.getDefault().getDisplayLanguage().equals(Languages.getItalianLanguage()) ?
                     // italian
-                    Locale.ITALIAN : Locale.getDefault().getDisplayLanguage().equals("português") ?
+                    Locale.ITALIAN : Locale.getDefault().getDisplayLanguage().equals(Languages.getPortugueseLanguage()) ?
                     // portuguese
-                    Locale.forLanguageTag("pt-PT") : Locale.getDefault().getDisplayLanguage().equals("română") ?
+                    Locale.forLanguageTag("pt-PT") : Locale.getDefault().getDisplayLanguage().equals(Languages.getRomanianLanguage()) ?
                     // romanian
                     Locale.forLanguageTag("ro-RO") :
                     // every other language
                     Locale.ENGLISH);
-    private final String currentDateTranslated = Locale.getDefault().getDisplayLanguage().equals("Deutsch") ||
-            Locale.getDefault().getDisplayLanguage().equals("italiano") ||
-            Locale.getDefault().getDisplayLanguage().equals("română") ?
+    private final String currentDateTranslated = Locale.getDefault().getDisplayLanguage().equals(Languages.getGermanLanguage()) ||
+            Locale.getDefault().getDisplayLanguage().equals(Languages.getItalianLanguage()) ||
+            Locale.getDefault().getDisplayLanguage().equals(Languages.getRomanianLanguage()) ?
             // german, italian or romanian
             getDatePrefix() + " " + getCurrentTime().get(Calendar.DAY_OF_MONTH) + " " +
                     getMonthFormat().format(getCurrentTime().getTime()) + " " + getCurrentTime().get(Calendar.YEAR) :
-            Locale.getDefault().getDisplayLanguage().equals("español") ?
+            Locale.getDefault().getDisplayLanguage().equals(Languages.getSpanishLanguage()) ?
                     // spanish
                     getCurrentTime().get(Calendar.DAY_OF_MONTH) + " " + getSeparator() + " " +
                             getMonthFormat().format(getCurrentTime().getTime()) + " " + getSeparator() + " " +
                             getCurrentTime().get(Calendar.YEAR) :
-                    Locale.getDefault().getDisplayLanguage().equals("français") ?
+                    Locale.getDefault().getDisplayLanguage().equals(Languages.getFrenchLanguage()) ?
                             // french
                             getCurrentTime().get(Calendar.DAY_OF_MONTH) + " " +
                                     getMonthFormat().format(getCurrentTime().getTime()) + " " +
                                     getCurrentTime().get(Calendar.YEAR) :
-                            Locale.getDefault().getDisplayLanguage().equals("português") ?
+                            Locale.getDefault().getDisplayLanguage().equals(Languages.getPortugueseLanguage()) ?
                                     // portuguese
                                     getCurrentTime().get(Calendar.DAY_OF_MONTH) + " " + getDatePrefix() + " " +
                                             getMonthFormat().format(getCurrentTime().getTime()) + " " +

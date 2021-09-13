@@ -30,6 +30,7 @@ import com.example.economy_manager.main_part.views.fragments.DatePickerFragment;
 import com.example.economy_manager.models.BirthDate;
 import com.example.economy_manager.models.PersonalInformation;
 import com.example.economy_manager.models.UserDetails;
+import com.example.economy_manager.utilities.Languages;
 import com.example.economy_manager.utilities.MyCustomMethods;
 import com.example.economy_manager.utilities.MyCustomSharedPreferences;
 import com.example.economy_manager.utilities.MyCustomVariables;
@@ -59,16 +60,16 @@ public class EditAccountActivity
     private Spinner genderSpinner;
     private Button updateProfileButton;
     private boolean darkThemeEnabled;
+    private boolean personalInformationHasBeenModified;
 
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        finish();
-        overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
+        MyCustomMethods.finishActivityWithFadeTransition(this);
     }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.edit_account_remastered_activity);
         setVariables();
@@ -81,6 +82,9 @@ public class EditAccountActivity
         setSelectedItemColorSpinner(genderSpinner);
     }
 
+    /**
+     * Method for retrieving the birthdate from the fragment and setting it to the corresponding field
+     */
     @Override
     public void onDateSet(final DatePicker datePicker,
                           final int year,
@@ -91,6 +95,9 @@ public class EditAccountActivity
         setBirthDateText(newTransactionDate);
     }
 
+    /**
+     * Method for retrieving user's personal information from SharedPreferences and filling the fields with the info
+     */
     private void getAndSetPersonalInformation() {
         final String accountPhotoImageURL = userDetails != null ?
                 userDetails.getPersonalInformation().getPhotoURL() : "";
@@ -270,7 +277,8 @@ public class EditAccountActivity
         goBack.setOnClickListener((final View view) -> onBackPressed());
 
         updateProfileButton.setOnClickListener((final View view) -> {
-            final PersonalInformation editedPersonalInformation = validation(userDetails.getPersonalInformation());
+            final PersonalInformation editedPersonalInformation =
+                    personalInformationValidation(userDetails.getPersonalInformation());
             // updating user's new info into the database, into SharedPreferences and into utilities
             if (editedPersonalInformation != null &&
                     MyCustomVariables.getFirebaseAuth().getUid() != null) {
@@ -286,6 +294,9 @@ public class EditAccountActivity
 
                 MyCustomVariables.setUserDetails(userDetails);
 
+                onBackPressed();
+            } else if (!personalInformationHasBeenModified) {
+                MyCustomMethods.showShortMessage(this, getResources().getString(R.string.no_changes_have_been_made));
                 onBackPressed();
             } else {
                 MyCustomMethods.showShortMessage(this,
@@ -386,37 +397,33 @@ public class EditAccountActivity
         updateProfileButton = findViewById(R.id.edit_account_remastered_update_button);
     }
 
-    private PersonalInformation validation(final PersonalInformation initialPersonalInformation) {
+    private PersonalInformation personalInformationValidation(final PersonalInformation initialPersonalInformation) {
         final String enteredFirstName = !String.valueOf(firstNameInput.getText()).trim().isEmpty() ?
                 String.valueOf(firstNameInput.getText()).trim() :
-                !String.valueOf(firstNameInput.getHint()).trim()
-                        .equals(getResources().getString(R.string.edit_account_first_name)) ?
+                !String.valueOf(firstNameInput.getHint()).trim().equals(getResources().getString(R.string.edit_account_first_name)) ?
                         String.valueOf(firstNameInput.getHint()).trim() : "";
 
         final String enteredLastName = !String.valueOf(lastNameInput.getText()).trim().isEmpty() ?
                 String.valueOf(lastNameInput.getText()).trim() :
-                !String.valueOf(lastNameInput.getHint()).trim()
-                        .equals(getResources().getString(R.string.edit_account_last_name)) ?
+                !String.valueOf(lastNameInput.getHint()).trim().equals(getResources().getString(R.string.edit_account_last_name)) ?
                         String.valueOf(lastNameInput.getHint()).trim() : "";
 
         final String enteredPhoneNumber = !String.valueOf(phoneNumberInput.getText()).trim().isEmpty() ?
                 String.valueOf(phoneNumberInput.getText()).trim() :
-                !String.valueOf(phoneNumberInput.getHint()).trim()
-                        .equals(getResources().getString(R.string.edit_account_phone_number)) ?
+                !String.valueOf(phoneNumberInput.getHint()).trim().equals(getResources().getString(R.string.edit_account_phone_number)) ?
                         String.valueOf(phoneNumberInput.getHint()).trim() : "";
 
         final String enteredWebsite = !String.valueOf(websiteInput.getText()).trim().isEmpty() ?
                 String.valueOf(websiteInput.getText()).trim() :
-                !String.valueOf(websiteInput.getHint()).trim()
-                        .equals(getResources().getString(R.string.edit_account_website)) ?
+                !String.valueOf(websiteInput.getHint()).trim().equals(getResources().getString(R.string.edit_account_website)) ?
                         String.valueOf(websiteInput.getHint()).trim() : "";
 
-        final String enteredCountry = Locale.getDefault().getDisplayLanguage().equals("English") ?
+        final String enteredCountry = Locale.getDefault().getDisplayLanguage().equals(Languages.getEnglishLanguage()) ?
                 String.valueOf(countrySpinner.getSelectedItem()).trim() :
                 String.valueOf(editAccountViewModel.getCountryNameInEnglish(getApplication(),
                         String.valueOf(countrySpinner.getSelectedItem()))).trim();
 
-        final String enteredGender = Locale.getDefault().getDisplayLanguage().equals("English") ?
+        final String enteredGender = Locale.getDefault().getDisplayLanguage().equals(Languages.getEnglishLanguage()) ?
                 String.valueOf(genderSpinner.getSelectedItem()).trim() :
                 String.valueOf(editAccountViewModel.getGenderInEnglish(getApplication(),
                         String.valueOf(genderSpinner.getSelectedItem()))).trim();
@@ -471,6 +478,14 @@ public class EditAccountActivity
         final boolean careerTitleIsOK = !enteredCareerTitle.isEmpty() ||
                 !String.valueOf(careerTitleInput.getHint()).trim()
                         .equals(getResources().getString(R.string.edit_account_career_title).trim());
+
+        personalInformationHasBeenModified = (!enteredFirstName.isEmpty() && !enteredFirstName.equals(String.valueOf(firstNameInput.getHint()))) ||
+                (!enteredLastName.isEmpty() && !enteredLastName.equals(String.valueOf(lastNameInput.getHint()))) ||
+                (!enteredPhoneNumber.isEmpty() && !enteredPhoneNumber.equals(String.valueOf(phoneNumberInput.getHint()))) ||
+                (!enteredWebsite.isEmpty() && !enteredWebsite.equals(String.valueOf(websiteInput.getHint()))) ||
+                (!enteredCountry.isEmpty() && !enteredCountry.equals(initialPersonalInformation.getCountry())) ||
+                (!enteredGender.isEmpty() && !enteredGender.equals(initialPersonalInformation.getGender())) ||
+                (!enteredCareerTitle.isEmpty() && !enteredCareerTitle.equals(String.valueOf(careerTitleInput.getHint())));
 
         return !initialPersonalInformation.equals(editedPersonalInformation) &&
                 firstNameIsOK &&

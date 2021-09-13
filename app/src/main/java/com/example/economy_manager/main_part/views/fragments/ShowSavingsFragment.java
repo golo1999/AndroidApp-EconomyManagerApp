@@ -15,6 +15,7 @@ import androidx.lifecycle.ViewModelStoreOwner;
 import com.example.economy_manager.R;
 import com.example.economy_manager.main_part.viewmodels.MainScreenViewModel;
 import com.example.economy_manager.models.Transaction;
+import com.example.economy_manager.utilities.Languages;
 import com.example.economy_manager.utilities.MyCustomMethods;
 import com.example.economy_manager.utilities.MyCustomVariables;
 import com.google.firebase.database.DataSnapshot;
@@ -102,7 +103,7 @@ public class ShowSavingsFragment extends Fragment {
                             totalMonthlySavings =
                                     MyCustomMethods.getRoundedNumberToNDecimalPlaces(totalMonthlySavings, 2);
 
-                            savingsText.setText(!Locale.getDefault().getDisplayLanguage().equals("English") ?
+                            savingsText.setText(!Locale.getDefault().getDisplayLanguage().equals(Languages.getEnglishLanguage()) ?
                                     totalMonthlySavings + " " + currencySymbol : totalMonthlySavings < 0f ?
                                     "-" + currencySymbol + Math.abs(totalMonthlySavings) :
                                     currencySymbol + totalMonthlySavings);
@@ -124,7 +125,7 @@ public class ShowSavingsFragment extends Fragment {
             final float totalMonthlyExpenses = 0f;
             final float totalMonthlySavings = totalMonthlyIncomes - totalMonthlyExpenses;
 
-            savingsText.setText(Locale.getDefault().getDisplayLanguage().equals("English") ?
+            savingsText.setText(Locale.getDefault().getDisplayLanguage().equals(Languages.getEnglishLanguage()) ?
                     currencySymbol + totalMonthlySavings : totalMonthlySavings + " " + currencySymbol);
         }
     }

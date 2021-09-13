@@ -62,8 +62,7 @@ public class SettingsActivity extends AppCompatActivity
     public void onBackPressed() {
         super.onBackPressed();
         saveSelectedCurrency();
-        finish();
-        overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
+        MyCustomMethods.finishActivityWithFadeTransition(this);
     }
 
     @Override

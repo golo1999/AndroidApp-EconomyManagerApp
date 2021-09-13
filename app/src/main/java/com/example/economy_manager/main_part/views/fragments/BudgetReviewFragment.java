@@ -12,6 +12,7 @@ import androidx.fragment.app.Fragment;
 import com.example.economy_manager.R;
 import com.example.economy_manager.models.Transaction;
 import com.example.economy_manager.models.UserDetails;
+import com.example.economy_manager.utilities.Languages;
 import com.example.economy_manager.utilities.MyCustomMethods;
 import com.example.economy_manager.utilities.MyCustomSharedPreferences;
 import com.example.economy_manager.utilities.MyCustomVariables;
@@ -107,10 +108,10 @@ public class BudgetReviewFragment extends Fragment {
                             totalMonthlyExpenses =
                                     MyCustomMethods.getRoundedNumberToNDecimalPlaces(totalMonthlyExpenses, 2);
 
-                            incomesText.setText(Locale.getDefault().getDisplayLanguage().equals("English") ?
+                            incomesText.setText(Locale.getDefault().getDisplayLanguage().equals(Languages.getEnglishLanguage()) ?
                                     currencySymbol + totalMonthlyIncomes : totalMonthlyIncomes + " " + currencySymbol);
 
-                            expensesText.setText(Locale.getDefault().getDisplayLanguage().equals("English") ?
+                            expensesText.setText(Locale.getDefault().getDisplayLanguage().equals(Languages.getEnglishLanguage()) ?
                                     currencySymbol + totalMonthlyExpenses : totalMonthlyExpenses + " " + currencySymbol);
 
                         }
@@ -128,9 +129,9 @@ public class BudgetReviewFragment extends Fragment {
 
             final float totalMonthlyExpenses = 0f;
 
-            incomesText.setText(Locale.getDefault().getDisplayLanguage().equals("English") ?
+            incomesText.setText(Locale.getDefault().getDisplayLanguage().equals(Languages.getEnglishLanguage()) ?
                     currencySymbol + totalMonthlyIncomes : totalMonthlyIncomes + " " + currencySymbol);
-            expensesText.setText(Locale.getDefault().getDisplayLanguage().equals("English") ?
+            expensesText.setText(Locale.getDefault().getDisplayLanguage().equals(Languages.getEnglishLanguage()) ?
                     currencySymbol + totalMonthlyExpenses : totalMonthlyExpenses + " " + currencySymbol);
         }
     }

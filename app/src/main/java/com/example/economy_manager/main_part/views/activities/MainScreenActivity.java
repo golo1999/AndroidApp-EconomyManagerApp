@@ -1,11 +1,9 @@
 package com.example.economy_manager.main_part.views.activities;
 
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
@@ -20,7 +18,6 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.economy_manager.R;
-import com.example.economy_manager.login_part.LogInActivity;
 import com.example.economy_manager.main_part.viewmodels.MainScreenViewModel;
 import com.example.economy_manager.main_part.views.fragments.MoneySpentPercentageFragment;
 import com.example.economy_manager.models.ApplicationSettings;
@@ -105,10 +102,6 @@ public class MainScreenActivity
         setTextsBetweenFragments();
         setDates();
         setMoneySpentPercentage();
-
-        if (MyCustomSharedPreferences.retrieveUserDetailsFromSharedPreferences(this) != null) {
-            Log.d("userDetailsMainScreen", MyCustomSharedPreferences.retrieveUserDetailsFromSharedPreferences(this).toString());
-        }
     }
 
     @Override
@@ -131,6 +124,24 @@ public class MainScreenActivity
         }
 
         moneySpentPercentageLayout.setLayoutParams(moneySpentPercentageLayoutParams);
+    }
+
+    private UserDetails retrieveUserDetailsFromSharedPreferences() {
+        SharedPreferences preferences =
+                getSharedPreferences(MyCustomVariables.getSharedPreferencesFileName(), MODE_PRIVATE);
+        Gson gson = new Gson();
+        String json = preferences.getString("currentUserDetails", "");
+
+        return gson.fromJson(json, UserDetails.class);
+    }
+
+    private void saveUserDetailsToSharedPreferences(final UserDetails details) {
+        SharedPreferences.Editor editor = preferences.edit();
+        Gson gson = new Gson();
+        String json = gson.toJson(details);
+
+        editor.putString("currentUserDetails", json);
+        editor.apply();
     }
 
     private void setActivityTheme() {
@@ -165,9 +176,11 @@ public class MainScreenActivity
     }
 
     private void setMoneySpentPercentage() {
-        if (MyCustomVariables.getFirebaseAuth().getUid() != null) {
+        final String currentUserID = MyCustomVariables.getFirebaseAuth().getUid();
+
+        if (currentUserID != null) {
             MyCustomVariables.getDatabaseReference()
-                    .child(MyCustomVariables.getFirebaseAuth().getUid())
+                    .child(currentUserID)
                     .addValueEventListener(new ValueEventListener() {
                         @Override
                         public void onDataChange(final @NonNull DataSnapshot snapshot) {
@@ -226,35 +239,33 @@ public class MainScreenActivity
 
     private void setOnClickListeners() {
         account.setOnClickListener((final View v) ->
-                MyCustomMethods.goToActivityInDirection(MainScreenActivity.this,
-                        EditAccountActivity.class, 1));
+                MyCustomMethods.goToActivityWithFadeTransition(MainScreenActivity.this,
+                        EditAccountActivity.class));
 
         addButton.setOnClickListener((final View v) ->
-                MyCustomMethods.goToActivityInDirection(MainScreenActivity.this,
-                        AddMoneyActivity.class, 1));
+                MyCustomMethods.goToActivityWithFadeTransition(MainScreenActivity.this,
+                        AddMoneyActivity.class));
 
         balance.setOnClickListener((final View v) ->
-                MyCustomMethods.goToActivityInDirection(MainScreenActivity.this,
-                        MonthlyBalanceActivity.class, 0));
+                MyCustomMethods.goToActivityWithFadeTransition(MainScreenActivity.this,
+                        MonthlyBalanceActivity.class));
 
         edit.setOnClickListener((final View v) ->
-                MyCustomMethods.goToActivityInDirection(MainScreenActivity.this,
-                        EditTransactionsActivity.class, 0));
+                MyCustomMethods.goToActivityWithFadeTransition(MainScreenActivity.this,
+                        EditTransactionsActivity.class));
 
         settings.setOnClickListener((final View v) ->
-                MyCustomMethods.goToActivityInDirection(MainScreenActivity.this,
-                        SettingsActivity.class, 1));
+                MyCustomMethods.goToActivityWithFadeTransition(MainScreenActivity.this,
+                        SettingsActivity.class));
 
         subtractButton.setOnClickListener((final View v) ->
-                MyCustomMethods.goToActivityInDirection(MainScreenActivity.this,
-                        SubtractMoneyActivity.class, 1));
+                MyCustomMethods.goToActivityWithFadeTransition(MainScreenActivity.this,
+                        SubtractMoneyActivity.class));
 
         signOut.setOnClickListener((final View v) -> {
             LoginManager.getInstance().logOut();
             MyCustomVariables.getFirebaseAuth().signOut();
-            finishAffinity();
-            startActivity(new Intent(MainScreenActivity.this, LogInActivity.class));
-            overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+            MyCustomMethods.signOutWithFadeTransition(MainScreenActivity.this);
         });
     }
 
@@ -292,10 +303,12 @@ public class MainScreenActivity
     }
 
     private void setUserDetails() {
-        if (MyCustomVariables.getFirebaseAuth().getUid() != null) {
+        final String currentUserID = MyCustomVariables.getFirebaseAuth().getUid();
+
+        if (currentUserID != null) {
             if (MyCustomSharedPreferences.retrieveUserDetailsFromSharedPreferences(this) == null) {
                 MyCustomVariables.getDatabaseReference()
-                        .child(MyCustomVariables.getFirebaseAuth().getUid())
+                        .child(currentUserID)
                         .addListenerForSingleValueEvent(new ValueEventListener() {
                             @Override
                             public void onDataChange(final @NonNull DataSnapshot snapshot) {
@@ -366,24 +379,6 @@ public class MainScreenActivity
         lastTenTransactionsText = findViewById(R.id.main_screen_last_ten_transactions_text);
         topFiveExpensesText = findViewById(R.id.main_screen_top_five_expenses_text);
         pieChartSpentPercentageText = findViewById(R.id.main_screen_money_spent_percentage_text);
-    }
-
-    private void saveUserDetailsToSharedPreferences(final UserDetails details) {
-        SharedPreferences.Editor editor = preferences.edit();
-        Gson gson = new Gson();
-        String json = gson.toJson(details);
-
-        editor.putString("currentUserDetails", json);
-        editor.apply();
-    }
-
-    private UserDetails retrieveUserDetailsFromSharedPreferences() {
-        SharedPreferences preferences =
-                getSharedPreferences(MyCustomVariables.getSharedPreferencesFileName(), MODE_PRIVATE);
-        Gson gson = new Gson();
-        String json = preferences.getString("currentUserDetails", "");
-
-        return gson.fromJson(json, UserDetails.class);
     }
 
     private boolean userDetailsAlreadyExistInSharedPreferences(final UserDetails details) {

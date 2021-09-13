@@ -57,8 +57,7 @@ public class SubtractMoneyActivity
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        finish();
-        overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
+        MyCustomMethods.finishActivityWithFadeTransition(this);
     }
 
     @Override

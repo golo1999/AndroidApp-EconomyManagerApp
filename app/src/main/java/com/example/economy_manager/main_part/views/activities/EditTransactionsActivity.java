@@ -35,6 +35,7 @@ import com.example.economy_manager.main_part.views.fragments.EditSpecificTransac
 import com.example.economy_manager.models.Transaction;
 import com.example.economy_manager.models.UserDetails;
 import com.example.economy_manager.utilities.Months;
+import com.example.economy_manager.utilities.MyCustomMethods;
 import com.example.economy_manager.utilities.MyCustomSharedPreferences;
 import com.example.economy_manager.utilities.MyCustomVariables;
 import com.google.firebase.database.DataSnapshot;
@@ -81,8 +82,7 @@ public class EditTransactionsActivity
             removeEditSpecificTransactionFragment();
         } else {
             super.onBackPressed();
-            finish();
-            overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+            MyCustomMethods.finishActivityWithFadeTransition(this);
         }
     }
 
@@ -148,13 +148,14 @@ public class EditTransactionsActivity
                                       final EditTransactionsRecyclerViewAdapter adapter,
                                       final int positionInList) {
         final Transaction transactionToDelete = transactionsList.get(positionInList);
+        final String currentUserID = MyCustomVariables.getFirebaseAuth().getUid();
 
         transactionsList.remove(positionInList);
         adapter.notifyItemRemoved(positionInList);
 
-        if (MyCustomVariables.getFirebaseAuth().getUid() != null) {
+        if (currentUserID != null) {
             MyCustomVariables.getDatabaseReference()
-                    .child(MyCustomVariables.getFirebaseAuth().getUid())
+                    .child(currentUserID)
                     .child("PersonalTransactions")
                     .child(transactionToDelete.getId())
                     .removeValue();

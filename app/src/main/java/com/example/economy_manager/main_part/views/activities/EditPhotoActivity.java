@@ -53,7 +53,6 @@ public class EditPhotoActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-
         MyCustomMethods.finishActivityWithFadeTransition(this);
     }
 

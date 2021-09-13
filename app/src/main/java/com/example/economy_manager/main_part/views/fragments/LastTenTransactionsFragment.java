@@ -75,7 +75,7 @@ public class LastTenTransactionsFragment extends Fragment {
             MyCustomVariables.getDatabaseReference().child(MyCustomVariables.getFirebaseAuth().getUid())
                     .addValueEventListener(new ValueEventListener() {
                         @Override
-                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        public void onDataChange(final @NonNull DataSnapshot snapshot) {
                             final ArrayList<Transaction> transactionsList = new ArrayList<>();
                             final String currencySymbol = viewModel.getUserDetails() != null ?
                                     viewModel.getUserDetails().getApplicationSettings().getCurrencySymbol() :
@@ -100,7 +100,7 @@ public class LastTenTransactionsFragment extends Fragment {
                         }
 
                         @Override
-                        public void onCancelled(@NonNull DatabaseError error) {
+                        public void onCancelled(final @NonNull DatabaseError error) {
 
                         }
                     });

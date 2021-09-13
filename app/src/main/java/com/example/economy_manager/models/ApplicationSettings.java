@@ -37,6 +37,7 @@ public class ApplicationSettings {
 
     public void setCurrency(String currency) {
         this.currency = currency;
+
         setCurrencySymbol();
     }
 
