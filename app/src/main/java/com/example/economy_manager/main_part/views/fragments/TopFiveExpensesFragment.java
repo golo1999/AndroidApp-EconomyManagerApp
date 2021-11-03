@@ -76,13 +76,14 @@ public class TopFiveExpensesFragment extends Fragment {
                     .child(MyCustomVariables.getFirebaseAuth().getUid())
                     .addValueEventListener(new ValueEventListener() {
                         @Override
-                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        public void onDataChange(final @NonNull DataSnapshot snapshot) {
                             final ArrayList<Transaction> expensesList = new ArrayList<>();
                             final String currencySymbol = viewModel.getUserDetails() != null ?
                                     viewModel.getUserDetails().getApplicationSettings().getCurrencySymbol() :
                                     MyCustomMethods.getCurrencySymbol();
 
-                            if (snapshot.exists() && snapshot.hasChild("PersonalTransactions") &&
+                            if (snapshot.exists() &&
+                                    snapshot.hasChild("PersonalTransactions") &&
                                     snapshot.child("PersonalTransactions").hasChildren()) {
                                 for (DataSnapshot transactionIterator :
                                         snapshot.child("PersonalTransactions").getChildren()) {
@@ -101,7 +102,7 @@ public class TopFiveExpensesFragment extends Fragment {
                         }
 
                         @Override
-                        public void onCancelled(@NonNull DatabaseError error) {
+                        public void onCancelled(final @NonNull DatabaseError error) {
 
                         }
                     });
@@ -155,8 +156,10 @@ public class TopFiveExpensesFragment extends Fragment {
                     final TextView valueFromChildLayout =
                             childLayout.findViewById(R.id.top_five_expenses_constraint_layout_value);
 
-                    final String valueWithCurrency = Locale.getDefault().getDisplayLanguage().equals(Languages.getEnglishLanguage()) ?
-                            currencySymbol + transaction.getValue() : transaction.getValue() + " " + currencySymbol;
+                    final String valueWithCurrency =
+                            Locale.getDefault().getDisplayLanguage().equals(Languages.getEnglishLanguage()) ?
+                                    currencySymbol + transaction.getValue() :
+                                    transaction.getValue() + " " + currencySymbol;
 
                     final String translatedType = Types.getTranslatedType(requireContext(),
                             String.valueOf(Transaction.getTypeFromIndexInEnglish(transaction.getCategory())));

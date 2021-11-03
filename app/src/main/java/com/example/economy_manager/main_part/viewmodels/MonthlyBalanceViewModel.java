@@ -4,12 +4,15 @@ import android.content.Context;
 
 import androidx.lifecycle.ViewModel;
 
+import com.example.economy_manager.R;
 import com.example.economy_manager.models.UserDetails;
 import com.example.economy_manager.utilities.Languages;
 import com.example.economy_manager.utilities.Months;
+import com.example.economy_manager.utilities.MyCustomVariables;
 
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Locale;
 
@@ -17,6 +20,35 @@ public class MonthlyBalanceViewModel extends ViewModel {
     private UserDetails userDetails;
     private final SimpleDateFormat currentMonthFormat = new SimpleDateFormat("LLLL", Locale.ENGLISH);
     private final Calendar currentTime = Calendar.getInstance();
+
+    public boolean checkIfDayCanBeAddedToList(final ArrayList<Integer> daysList,
+                                              final int dayToBeAdded) {
+        if (!daysList.isEmpty()) {
+            for (final int dayFromList : daysList) {
+                if (dayFromList == dayToBeAdded) {
+                    return false;
+                }
+            }
+        }
+
+        return true;
+    }
+
+    public int getActivityTheme() {
+        final boolean checked = getUserDetails() != null ?
+                getUserDetails().getApplicationSettings().getDarkTheme() :
+                MyCustomVariables.getDefaultUserDetails().getApplicationSettings().getDarkTheme();
+
+        return !checked ? R.drawable.ic_white_gradient_tobacco_ad : R.drawable.ic_black_gradient_night_shift;
+    }
+
+    public String getActivityTitle(final Context context) {
+        final int year = getCurrentYear();
+
+        final String month = Months.getTranslatedMonth(context, getCurrentMonthName());
+
+        return month.trim() + " " + year;
+    }
 
     public UserDetails getUserDetails() {
         return userDetails;

@@ -3,20 +3,20 @@ package com.example.economy_manager.main_part.views.activities;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.economy_manager.R;
+import com.example.economy_manager.databinding.MonthlyBalanceActivityBinding;
 import com.example.economy_manager.main_part.viewmodels.MonthlyBalanceViewModel;
 import com.example.economy_manager.models.Transaction;
 import com.example.economy_manager.models.UserDetails;
-import com.example.economy_manager.utilities.Months;
 import com.example.economy_manager.utilities.MyCustomMethods;
 import com.example.economy_manager.utilities.MyCustomSharedPreferences;
 import com.example.economy_manager.utilities.MyCustomVariables;
@@ -31,21 +31,15 @@ import java.util.Collections;
 import java.util.Locale;
 
 public class MonthlyBalanceActivity extends AppCompatActivity {
+    private MonthlyBalanceActivityBinding binding;
     private MonthlyBalanceViewModel viewModel;
-    private ImageView goBack;
-    private TextView activityTitle;
-    private TextView centerText;
-    private LinearLayout mainLayout;
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.monthly_balance_activity);
         setVariables();
         setUserDetails();
         setActivityTheme();
-        setOnClickListeners();
-        setTitle();
         setCenterText();
         setIncomesAndExpensesInParent();
     }
@@ -57,15 +51,13 @@ public class MonthlyBalanceActivity extends AppCompatActivity {
     }
 
     private void setVariables() {
+        binding = DataBindingUtil.setContentView(this, R.layout.monthly_balance_activity);
         viewModel = new ViewModelProvider(this).get(MonthlyBalanceViewModel.class);
-        goBack = findViewById(R.id.monthly_balance_back);
-        activityTitle = findViewById(R.id.monthly_balance_title);
-        centerText = findViewById(R.id.monthly_balance_center_text);
-        mainLayout = findViewById(R.id.monthly_balance_main_layout);
-    }
 
-    private void setOnClickListeners() {
-        goBack.setOnClickListener(v -> onBackPressed());
+        binding.setActivity(this);
+        binding.setActivityTitle(viewModel.getActivityTitle(this));
+        binding.setContext(this);
+        binding.setViewModel(viewModel);
     }
 
     private void setUserDetails() {
@@ -75,13 +67,7 @@ public class MonthlyBalanceActivity extends AppCompatActivity {
     }
 
     private void setActivityTheme() {
-        final boolean checked = viewModel.getUserDetails() != null ?
-                viewModel.getUserDetails().getApplicationSettings().getDarkTheme() :
-                MyCustomVariables.getDefaultUserDetails().getApplicationSettings().getDarkTheme();
-
-        final int theme = !checked ? R.drawable.ic_white_gradient_tobacco_ad : R.drawable.ic_black_gradient_night_shift;
-
-        getWindow().setBackgroundDrawableResource(theme);
+        getWindow().setBackgroundDrawableResource(viewModel.getActivityTheme());
     }
 
     private void setIncomesAndExpensesInParent() {
@@ -109,7 +95,7 @@ public class MonthlyBalanceActivity extends AppCompatActivity {
                                             transaction.getTime().getMonth() == LocalDate.now().getMonthValue()) {
                                         transactionsList.add(transaction);
 
-                                        if (checkIfDayCanBeAddedToList(daysList, transaction.getTime().getDay())) {
+                                        if (viewModel.checkIfDayCanBeAddedToList(daysList, transaction.getTime().getDay())) {
                                             daysList.add(transaction.getTime().getDay());
                                         }
                                     }
@@ -141,7 +127,7 @@ public class MonthlyBalanceActivity extends AppCompatActivity {
                                     final TextView totalSumText = dayAndSumLayout
                                             .findViewById(R.id.monthly_balance_relative_layout_day_total_sum);
 
-                                    mainLayout.addView(dayAndSumLayout);
+                                    binding.mainLayout.addView(dayAndSumLayout);
                                     dayText.setText(dateTranslated);
                                     dayText.setTextSize(25);
 
@@ -170,8 +156,9 @@ public class MonthlyBalanceActivity extends AppCompatActivity {
                                                     .findViewById(R.id.monthly_balance_relative_layout_value);
 
                                             typeText.setText(Types.getTranslatedType(MonthlyBalanceActivity.this,
-                                                    String.valueOf(Transaction.getTypeFromIndexInEnglish(transactionsListIterator
-                                                            .getCategory()))));
+                                                    String.valueOf(Transaction
+                                                            .getTypeFromIndexInEnglish(transactionsListIterator
+                                                                    .getCategory()))));
 
                                             typeText.setTextColor(viewModel.getUserDetails() == null ||
                                                     !viewModel.getUserDetails().getApplicationSettings().getDarkTheme() ?
@@ -192,7 +179,7 @@ public class MonthlyBalanceActivity extends AppCompatActivity {
                                             valueText.setText(text);
                                             valueText.setTextSize(19);
 
-                                            mainLayout.addView(transactionLayout);
+                                            binding.mainLayout.addView(transactionLayout);
                                         }
                                     }
 
@@ -216,17 +203,6 @@ public class MonthlyBalanceActivity extends AppCompatActivity {
                         }
                     });
         }
-    }
-
-    private void setTitle() {
-        final int year = viewModel.getCurrentYear();
-
-        final String month = Months.getTranslatedMonth(MonthlyBalanceActivity.this,
-                viewModel.getCurrentMonthName());
-
-        final String currentMonthYear = month.trim() + " " + year;
-
-        activityTitle.setText(currentMonthYear);
     }
 
     private void setCenterText() {
@@ -257,11 +233,11 @@ public class MonthlyBalanceActivity extends AppCompatActivity {
                                     }
                                 }
 
-                                centerText.setText(numberOfCurrentMonthTransactions > 0 ?
+                                binding.centerText.setText(numberOfCurrentMonthTransactions > 0 ?
                                         "" : getResources()
                                         .getString(R.string.no_transactions_this_month));
                             } else {
-                                centerText.setText(R.string.no_transactions_yet);
+                                binding.centerText.setText(R.string.no_transactions_yet);
                             }
                         }
 
@@ -271,21 +247,8 @@ public class MonthlyBalanceActivity extends AppCompatActivity {
                         }
                     });
 
-            centerText.setTextColor(!darkThemeEnabled ? getColor(R.color.turkish_sea) : Color.WHITE);
-            centerText.setTextSize(20);
+            binding.centerText.setTextColor(!darkThemeEnabled ? getColor(R.color.turkish_sea) : Color.WHITE);
+            binding.centerText.setTextSize(20);
         }
-    }
-
-    private boolean checkIfDayCanBeAddedToList(final ArrayList<Integer> daysList,
-                                               final int dayToBeAdded) {
-        if (!daysList.isEmpty()) {
-            for (final int dayFromList : daysList) {
-                if (dayFromList == dayToBeAdded) {
-                    return false;
-                }
-            }
-        }
-
-        return true;
     }
 }

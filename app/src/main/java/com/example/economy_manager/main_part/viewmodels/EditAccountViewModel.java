@@ -126,10 +126,119 @@ public class EditAccountViewModel extends AndroidViewModel {
         Collections.sort(genderList);
     }
 
-    private void sortListAscending(final ArrayList<String> list) {
-        if (!list.isEmpty()) {
-            Collections.sort(list);
-        }
+    @Nullable
+    public String getCountryNameInEnglish(final Application app,
+                                          final String countryName) {
+        if (countryName.equals(app.getResources().getString(R.string.edit_account_country_albania)))
+            return "Albania";
+        else if (countryName.equals(app.getResources().getString(R.string.edit_account_country_andorra)))
+            return "Andorra";
+        else if (countryName.equals(app.getResources().getString(R.string.edit_account_country_armenia)))
+            return "Armenia";
+        else if (countryName.equals(app.getResources().getString(R.string.edit_account_country_austria)))
+            return "Austria";
+        else if (countryName.equals(app.getResources().getString(R.string.edit_account_country_azerbaijan)))
+            return "Azerbaijan";
+        else if (countryName.equals(app.getResources().getString(R.string.edit_account_country_belarus)))
+            return "Belarus";
+        else if (countryName.equals(app.getResources().getString(R.string.edit_account_country_belgium)))
+            return "Belgium";
+        else if (countryName.equals(app.getResources().getString(R.string.edit_account_country_bosnia_and_herzegovina)))
+            return "Bosnia and Herzegovina";
+        else if (countryName.equals(app.getResources().getString(R.string.edit_account_country_bulgaria)))
+            return "Bulgaria";
+        else if (countryName.equals(app.getResources().getString(R.string.edit_account_country_croatia)))
+            return "Croatia";
+        else if (countryName.equals(app.getResources().getString(R.string.edit_account_country_cyprus)))
+            return "Cyprus";
+        else if (countryName.equals(app.getResources().getString(R.string.edit_account_country_czech_republic)))
+            return "Czech Republic";
+        else if (countryName.equals(app.getResources().getString(R.string.edit_account_country_denmark)))
+            return "Denmark";
+        else if (countryName.equals(app.getResources().getString(R.string.edit_account_country_estonia)))
+            return "Estonia";
+        else if (countryName.equals(app.getResources().getString(R.string.edit_account_country_finland)))
+            return "Finland";
+        else if (countryName.equals(app.getResources().getString(R.string.edit_account_country_france)))
+            return "France";
+        else if (countryName.equals(app.getResources().getString(R.string.edit_account_country_georgia)))
+            return "Georgia";
+        else if (countryName.equals(app.getResources().getString(R.string.edit_account_country_germany)))
+            return "Germany";
+        else if (countryName.equals(app.getResources().getString(R.string.edit_account_country_greece)))
+            return "Greece";
+        else if (countryName.equals(app.getResources().getString(R.string.edit_account_country_hungary)))
+            return "Hungary";
+        else if (countryName.equals(app.getResources().getString(R.string.edit_account_country_iceland)))
+            return "Iceland";
+        else if (countryName.equals(app.getResources().getString(R.string.edit_account_country_ireland)))
+            return "Ireland";
+        else if (countryName.equals(app.getResources().getString(R.string.edit_account_country_italy)))
+            return "Italy";
+        else if (countryName.equals(app.getResources().getString(R.string.edit_account_country_kazakhstan)))
+            return "Kazakhstan";
+        else if (countryName.equals(app.getResources().getString(R.string.edit_account_country_latvia)))
+            return "Latvia";
+        else if (countryName.equals(app.getResources().getString(R.string.edit_account_country_liechtenstein)))
+            return "Liechtenstein";
+        else if (countryName.equals(app.getResources().getString(R.string.edit_account_country_lithuania)))
+            return "Lithuania";
+        else if (countryName.equals(app.getResources().getString(R.string.edit_account_country_luxembourg)))
+            return "Luxembourg";
+        else if (countryName.equals(app.getResources().getString(R.string.edit_account_country_malta)))
+            return "Malta";
+        else if (countryName.equals(app.getResources().getString(R.string.edit_account_country_moldova)))
+            return "Moldova";
+        else if (countryName.equals(app.getResources().getString(R.string.edit_account_country_monaco)))
+            return "Monaco";
+        else if (countryName.equals(app.getResources().getString(R.string.edit_account_country_montenegro)))
+            return "Montenegro";
+        else if (countryName.equals(app.getResources().getString(R.string.edit_account_country_netherlands)))
+            return "Netherlands";
+        else if (countryName.equals(app.getResources().getString(R.string.edit_account_country_north_macedonia)))
+            return "North Macedonia";
+        else if (countryName.equals(app.getResources().getString(R.string.edit_account_country_norway)))
+            return "Norway";
+        else if (countryName.equals(app.getResources().getString(R.string.edit_account_country_poland)))
+            return "Poland";
+        else if (countryName.equals(app.getResources().getString(R.string.edit_account_country_portugal)))
+            return "Portugal";
+        else if (countryName.equals(app.getResources().getString(R.string.edit_account_country_romania)))
+            return "Romania";
+        else if (countryName.equals(app.getResources().getString(R.string.edit_account_country_russia)))
+            return "Russia";
+        else if (countryName.equals(app.getResources().getString(R.string.edit_account_country_san_marino)))
+            return "San Marino";
+        else if (countryName.equals(app.getResources().getString(R.string.edit_account_country_serbia)))
+            return "Serbia";
+        else if (countryName.equals(app.getResources().getString(R.string.edit_account_country_slovakia)))
+            return "Slovakia";
+        else if (countryName.equals(app.getResources().getString(R.string.edit_account_country_slovenia)))
+            return "Slovenia";
+        else if (countryName.equals(app.getResources().getString(R.string.edit_account_country_spain)))
+            return "Spain";
+        else if (countryName.equals(app.getResources().getString(R.string.edit_account_country_sweden)))
+            return "Sweden";
+        else if (countryName.equals(app.getResources().getString(R.string.edit_account_country_switzerland)))
+            return "Switzerland";
+        else if (countryName.equals(app.getResources().getString(R.string.edit_account_country_turkey)))
+            return "Turkey";
+        else if (countryName.equals(app.getResources().getString(R.string.edit_account_country_ukraine)))
+            return "Ukraine";
+        else if (countryName.equals(app.getResources().getString(R.string.edit_account_country_uk)))
+            return "United Kingdom";
+        else if (countryName.equals(app.getResources().getString(R.string.edit_account_country_vatican_city)))
+            return "Vatican City";
+        else return null;
+    }
+
+    @Nullable
+    public String getGenderInEnglish(final Application app,
+                                     final String gender) {
+        return gender.equals(app.getResources().getString(R.string.edit_account_gender_female)) ?
+                "Female" : gender.equals(app.getResources().getString(R.string.edit_account_gender_male)) ?
+                "Male" : gender.equals(app.getResources().getString(R.string.edit_account_gender_other)) ?
+                "Other" : null;
     }
 
     public int getPositionInCountryList(final Application app,
@@ -346,112 +455,6 @@ public class EditAccountViewModel extends AndroidViewModel {
         return Collections.binarySearch(getCountryList(), translatedCountryName);
     }
 
-    @Nullable
-    public String getCountryNameInEnglish(final Application app,
-                                          final String countryName) {
-        if (countryName.equals(app.getResources().getString(R.string.edit_account_country_albania)))
-            return "Albania";
-        else if (countryName.equals(app.getResources().getString(R.string.edit_account_country_andorra)))
-            return "Andorra";
-        else if (countryName.equals(app.getResources().getString(R.string.edit_account_country_armenia)))
-            return "Armenia";
-        else if (countryName.equals(app.getResources().getString(R.string.edit_account_country_austria)))
-            return "Austria";
-        else if (countryName.equals(app.getResources().getString(R.string.edit_account_country_azerbaijan)))
-            return "Azerbaijan";
-        else if (countryName.equals(app.getResources().getString(R.string.edit_account_country_belarus)))
-            return "Belarus";
-        else if (countryName.equals(app.getResources().getString(R.string.edit_account_country_belgium)))
-            return "Belgium";
-        else if (countryName.equals(app.getResources().getString(R.string.edit_account_country_bosnia_and_herzegovina)))
-            return "Bosnia and Herzegovina";
-        else if (countryName.equals(app.getResources().getString(R.string.edit_account_country_bulgaria)))
-            return "Bulgaria";
-        else if (countryName.equals(app.getResources().getString(R.string.edit_account_country_croatia)))
-            return "Croatia";
-        else if (countryName.equals(app.getResources().getString(R.string.edit_account_country_cyprus)))
-            return "Cyprus";
-        else if (countryName.equals(app.getResources().getString(R.string.edit_account_country_czech_republic)))
-            return "Czech Republic";
-        else if (countryName.equals(app.getResources().getString(R.string.edit_account_country_denmark)))
-            return "Denmark";
-        else if (countryName.equals(app.getResources().getString(R.string.edit_account_country_estonia)))
-            return "Estonia";
-        else if (countryName.equals(app.getResources().getString(R.string.edit_account_country_finland)))
-            return "Finland";
-        else if (countryName.equals(app.getResources().getString(R.string.edit_account_country_france)))
-            return "France";
-        else if (countryName.equals(app.getResources().getString(R.string.edit_account_country_georgia)))
-            return "Georgia";
-        else if (countryName.equals(app.getResources().getString(R.string.edit_account_country_germany)))
-            return "Germany";
-        else if (countryName.equals(app.getResources().getString(R.string.edit_account_country_greece)))
-            return "Greece";
-        else if (countryName.equals(app.getResources().getString(R.string.edit_account_country_hungary)))
-            return "Hungary";
-        else if (countryName.equals(app.getResources().getString(R.string.edit_account_country_iceland)))
-            return "Iceland";
-        else if (countryName.equals(app.getResources().getString(R.string.edit_account_country_ireland)))
-            return "Ireland";
-        else if (countryName.equals(app.getResources().getString(R.string.edit_account_country_italy)))
-            return "Italy";
-        else if (countryName.equals(app.getResources().getString(R.string.edit_account_country_kazakhstan)))
-            return "Kazakhstan";
-        else if (countryName.equals(app.getResources().getString(R.string.edit_account_country_latvia)))
-            return "Latvia";
-        else if (countryName.equals(app.getResources().getString(R.string.edit_account_country_liechtenstein)))
-            return "Liechtenstein";
-        else if (countryName.equals(app.getResources().getString(R.string.edit_account_country_lithuania)))
-            return "Lithuania";
-        else if (countryName.equals(app.getResources().getString(R.string.edit_account_country_luxembourg)))
-            return "Luxembourg";
-        else if (countryName.equals(app.getResources().getString(R.string.edit_account_country_malta)))
-            return "Malta";
-        else if (countryName.equals(app.getResources().getString(R.string.edit_account_country_moldova)))
-            return "Moldova";
-        else if (countryName.equals(app.getResources().getString(R.string.edit_account_country_monaco)))
-            return "Monaco";
-        else if (countryName.equals(app.getResources().getString(R.string.edit_account_country_montenegro)))
-            return "Montenegro";
-        else if (countryName.equals(app.getResources().getString(R.string.edit_account_country_netherlands)))
-            return "Netherlands";
-        else if (countryName.equals(app.getResources().getString(R.string.edit_account_country_north_macedonia)))
-            return "North Macedonia";
-        else if (countryName.equals(app.getResources().getString(R.string.edit_account_country_norway)))
-            return "Norway";
-        else if (countryName.equals(app.getResources().getString(R.string.edit_account_country_poland)))
-            return "Poland";
-        else if (countryName.equals(app.getResources().getString(R.string.edit_account_country_portugal)))
-            return "Portugal";
-        else if (countryName.equals(app.getResources().getString(R.string.edit_account_country_romania)))
-            return "Romania";
-        else if (countryName.equals(app.getResources().getString(R.string.edit_account_country_russia)))
-            return "Russia";
-        else if (countryName.equals(app.getResources().getString(R.string.edit_account_country_san_marino)))
-            return "San Marino";
-        else if (countryName.equals(app.getResources().getString(R.string.edit_account_country_serbia)))
-            return "Serbia";
-        else if (countryName.equals(app.getResources().getString(R.string.edit_account_country_slovakia)))
-            return "Slovakia";
-        else if (countryName.equals(app.getResources().getString(R.string.edit_account_country_slovenia)))
-            return "Slovenia";
-        else if (countryName.equals(app.getResources().getString(R.string.edit_account_country_spain)))
-            return "Spain";
-        else if (countryName.equals(app.getResources().getString(R.string.edit_account_country_sweden)))
-            return "Sweden";
-        else if (countryName.equals(app.getResources().getString(R.string.edit_account_country_switzerland)))
-            return "Switzerland";
-        else if (countryName.equals(app.getResources().getString(R.string.edit_account_country_turkey)))
-            return "Turkey";
-        else if (countryName.equals(app.getResources().getString(R.string.edit_account_country_ukraine)))
-            return "Ukraine";
-        else if (countryName.equals(app.getResources().getString(R.string.edit_account_country_uk)))
-            return "United Kingdom";
-        else if (countryName.equals(app.getResources().getString(R.string.edit_account_country_vatican_city)))
-            return "Vatican City";
-        else return null;
-    }
-
     public int getPositionInGenderList(final Application app,
                                        final String gender) {
         final String translatedGender = gender.equals("Female") ?
@@ -464,12 +467,9 @@ public class EditAccountViewModel extends AndroidViewModel {
         return Collections.binarySearch(getGenderList(), translatedGender);
     }
 
-    @Nullable
-    public String getGenderInEnglish(final Application app,
-                                     final String gender) {
-        return gender.equals(app.getResources().getString(R.string.edit_account_gender_female)) ?
-                "Female" : gender.equals(app.getResources().getString(R.string.edit_account_gender_male)) ?
-                "Male" : gender.equals(app.getResources().getString(R.string.edit_account_gender_other)) ?
-                "Other" : null;
+    private void sortListAscending(final ArrayList<String> list) {
+        if (!list.isEmpty()) {
+            Collections.sort(list);
+        }
     }
 }

@@ -16,7 +16,9 @@
             android:name="com.example.economy_manager.main_part.views.activities.SettingsActivity"
             android:parentActivityName="com.example.economy_manager.main_part.views.activities.MainScreenActivity" />
 
-        <activity android:name="com.example.economy_manager.main_part.views.activities.SplashScreenActivity">
+        <activity
+            android:name="com.example.economy_manager.main_part.views.activities.SplashScreenActivity"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

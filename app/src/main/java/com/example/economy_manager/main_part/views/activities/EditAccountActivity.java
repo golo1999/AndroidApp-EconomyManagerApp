@@ -174,6 +174,128 @@ public class EditAccountActivity
         careerTitleInput.setHint(careerTitleHint);
     }
 
+    private PersonalInformation personalInformationValidation(final PersonalInformation initialPersonalInformation) {
+        final String enteredFirstName = !String.valueOf(firstNameInput.getText()).trim().isEmpty() ?
+                String.valueOf(firstNameInput.getText()).trim() :
+                !String.valueOf(firstNameInput.getHint()).trim().equals(getResources().getString(R.string.edit_account_first_name)) ?
+                        String.valueOf(firstNameInput.getHint()).trim() : "";
+
+        final String enteredLastName = !String.valueOf(lastNameInput.getText()).trim().isEmpty() ?
+                String.valueOf(lastNameInput.getText()).trim() :
+                !String.valueOf(lastNameInput.getHint()).trim().equals(getResources().getString(R.string.edit_account_last_name)) ?
+                        String.valueOf(lastNameInput.getHint()).trim() : "";
+
+        final String enteredPhoneNumber = !String.valueOf(phoneNumberInput.getText()).trim().isEmpty() ?
+                String.valueOf(phoneNumberInput.getText()).trim() :
+                !String.valueOf(phoneNumberInput.getHint()).trim().equals(getResources().getString(R.string.edit_account_phone_number)) ?
+                        String.valueOf(phoneNumberInput.getHint()).trim() : "";
+
+        final String enteredWebsite = !String.valueOf(websiteInput.getText()).trim().isEmpty() ?
+                String.valueOf(websiteInput.getText()).trim() :
+                !String.valueOf(websiteInput.getHint()).trim().equals(getResources().getString(R.string.edit_account_website)) ?
+                        String.valueOf(websiteInput.getHint()).trim() : "";
+
+        final String enteredCountry = Locale.getDefault().getDisplayLanguage().equals(Languages.getEnglishLanguage()) ?
+                String.valueOf(countrySpinner.getSelectedItem()).trim() :
+                String.valueOf(editAccountViewModel.getCountryNameInEnglish(getApplication(),
+                        String.valueOf(countrySpinner.getSelectedItem()))).trim();
+
+        final String enteredGender = Locale.getDefault().getDisplayLanguage().equals(Languages.getEnglishLanguage()) ?
+                String.valueOf(genderSpinner.getSelectedItem()).trim() :
+                String.valueOf(editAccountViewModel.getGenderInEnglish(getApplication(),
+                        String.valueOf(genderSpinner.getSelectedItem()))).trim();
+
+        final int birthDateYear = editAccountViewModel.getTransactionDate().getYear();
+
+        final int birthDateMonth = editAccountViewModel.getTransactionDate().getMonthValue();
+
+        final int birthDateDay = editAccountViewModel.getTransactionDate().getDayOfMonth();
+
+        final BirthDate enteredBirthDate = new BirthDate(birthDateYear, birthDateMonth, birthDateDay);
+
+        final String enteredCareerTitle = !String.valueOf(careerTitleInput.getText()).trim().isEmpty() ?
+                String.valueOf(careerTitleInput.getText()).trim() :
+                !String.valueOf(careerTitleInput.getHint()).trim()
+                        .equals(getResources().getString(R.string.edit_account_career_title)) ?
+                        String.valueOf(careerTitleInput.getHint()).trim() : "";
+
+        final String enteredPhotoURL = initialPersonalInformation.getPhotoURL();
+
+        final PersonalInformation editedPersonalInformation =
+                new PersonalInformation(enteredFirstName,
+                        enteredLastName,
+                        enteredPhoneNumber,
+                        enteredWebsite,
+                        enteredCountry,
+                        enteredGender,
+                        enteredBirthDate,
+                        enteredCareerTitle,
+                        enteredPhotoURL);
+
+        final boolean firstNameIsOK = !enteredFirstName.isEmpty() ||
+                !String.valueOf(firstNameInput.getHint()).trim()
+                        .equals(getResources().getString(R.string.edit_account_first_name).trim());
+
+        final boolean lastNameIsOK = !enteredLastName.isEmpty() ||
+                !String.valueOf(lastNameInput.getHint()).trim()
+                        .equals(getResources().getString(R.string.edit_account_last_name).trim());
+
+        final boolean phoneNumberIsOK = !enteredPhoneNumber.isEmpty() ||
+                !String.valueOf(phoneNumberInput.getHint()).trim()
+                        .equals(getResources().getString(R.string.edit_account_phone_number).trim());
+
+        final boolean websiteIsOK = !enteredWebsite.isEmpty() ||
+                !String.valueOf(websiteInput.getHint()).trim()
+                        .equals(getResources().getString(R.string.edit_account_website).trim());
+
+        final boolean countryNameIsOK = !enteredCountry.isEmpty();
+
+        final boolean genderIsOK = !enteredGender.isEmpty();
+
+        final boolean careerTitleIsOK = !enteredCareerTitle.isEmpty() ||
+                !String.valueOf(careerTitleInput.getHint()).trim()
+                        .equals(getResources().getString(R.string.edit_account_career_title).trim());
+
+        final boolean firstNameHasBeenModified = !enteredFirstName.isEmpty() &&
+                !enteredFirstName.equals(String.valueOf(firstNameInput.getHint()));
+
+        final boolean lastNameHasBeenModified = !enteredLastName.isEmpty() &&
+                !enteredLastName.equals(String.valueOf(lastNameInput.getHint()));
+
+        final boolean phoneNumberHasBeenModified = !enteredPhoneNumber.isEmpty() &&
+                !enteredPhoneNumber.equals(String.valueOf(phoneNumberInput.getHint()));
+
+        final boolean websiteHasBeenModified = !enteredWebsite.isEmpty() &&
+                !enteredWebsite.equals(String.valueOf(websiteInput.getHint()));
+
+        final boolean countryHasBeenModified = !enteredCountry.isEmpty() &&
+                !enteredCountry.equals(initialPersonalInformation.getCountry());
+
+        final boolean genderHasBeenModified = !enteredGender.isEmpty() &&
+                !enteredGender.equals(initialPersonalInformation.getGender());
+
+        final boolean careerTitleHasBeenModified = !enteredCareerTitle.isEmpty() &&
+                !enteredCareerTitle.equals(String.valueOf(careerTitleInput.getHint()));
+
+        personalInformationHasBeenModified = firstNameHasBeenModified ||
+                lastNameHasBeenModified ||
+                phoneNumberHasBeenModified ||
+                websiteHasBeenModified ||
+                countryHasBeenModified ||
+                genderHasBeenModified ||
+                careerTitleHasBeenModified;
+
+        return !initialPersonalInformation.equals(editedPersonalInformation) &&
+                firstNameIsOK &&
+                lastNameIsOK &&
+                phoneNumberIsOK &&
+                websiteIsOK &&
+                countryNameIsOK &&
+                genderIsOK &&
+                careerTitleIsOK ?
+                editedPersonalInformation : null;
+    }
+
     private void setBirthDateText(final LocalDate date) {
         final String formattedDate = MyCustomMethods.getFormattedDate(date);
 
@@ -395,106 +517,5 @@ public class EditAccountActivity
         genderSpinner = findViewById(R.id.edit_account_remastered_gender_spinner);
         accountPhoto = findViewById(R.id.edit_account_remastered_photo);
         updateProfileButton = findViewById(R.id.edit_account_remastered_update_button);
-    }
-
-    private PersonalInformation personalInformationValidation(final PersonalInformation initialPersonalInformation) {
-        final String enteredFirstName = !String.valueOf(firstNameInput.getText()).trim().isEmpty() ?
-                String.valueOf(firstNameInput.getText()).trim() :
-                !String.valueOf(firstNameInput.getHint()).trim().equals(getResources().getString(R.string.edit_account_first_name)) ?
-                        String.valueOf(firstNameInput.getHint()).trim() : "";
-
-        final String enteredLastName = !String.valueOf(lastNameInput.getText()).trim().isEmpty() ?
-                String.valueOf(lastNameInput.getText()).trim() :
-                !String.valueOf(lastNameInput.getHint()).trim().equals(getResources().getString(R.string.edit_account_last_name)) ?
-                        String.valueOf(lastNameInput.getHint()).trim() : "";
-
-        final String enteredPhoneNumber = !String.valueOf(phoneNumberInput.getText()).trim().isEmpty() ?
-                String.valueOf(phoneNumberInput.getText()).trim() :
-                !String.valueOf(phoneNumberInput.getHint()).trim().equals(getResources().getString(R.string.edit_account_phone_number)) ?
-                        String.valueOf(phoneNumberInput.getHint()).trim() : "";
-
-        final String enteredWebsite = !String.valueOf(websiteInput.getText()).trim().isEmpty() ?
-                String.valueOf(websiteInput.getText()).trim() :
-                !String.valueOf(websiteInput.getHint()).trim().equals(getResources().getString(R.string.edit_account_website)) ?
-                        String.valueOf(websiteInput.getHint()).trim() : "";
-
-        final String enteredCountry = Locale.getDefault().getDisplayLanguage().equals(Languages.getEnglishLanguage()) ?
-                String.valueOf(countrySpinner.getSelectedItem()).trim() :
-                String.valueOf(editAccountViewModel.getCountryNameInEnglish(getApplication(),
-                        String.valueOf(countrySpinner.getSelectedItem()))).trim();
-
-        final String enteredGender = Locale.getDefault().getDisplayLanguage().equals(Languages.getEnglishLanguage()) ?
-                String.valueOf(genderSpinner.getSelectedItem()).trim() :
-                String.valueOf(editAccountViewModel.getGenderInEnglish(getApplication(),
-                        String.valueOf(genderSpinner.getSelectedItem()))).trim();
-
-        final int birthDateYear = editAccountViewModel.getTransactionDate().getYear();
-
-        final int birthDateMonth = editAccountViewModel.getTransactionDate().getMonthValue();
-
-        final int birthDateDay = editAccountViewModel.getTransactionDate().getDayOfMonth();
-
-        final BirthDate enteredBirthDate = new BirthDate(birthDateYear, birthDateMonth, birthDateDay);
-
-        final String enteredCareerTitle = !String.valueOf(careerTitleInput.getText()).trim().isEmpty() ?
-                String.valueOf(careerTitleInput.getText()).trim() :
-                !String.valueOf(careerTitleInput.getHint()).trim()
-                        .equals(getResources().getString(R.string.edit_account_career_title)) ?
-                        String.valueOf(careerTitleInput.getHint()).trim() : "";
-
-        final String enteredPhotoURL = initialPersonalInformation.getPhotoURL();
-
-        final PersonalInformation editedPersonalInformation =
-                new PersonalInformation(enteredFirstName,
-                        enteredLastName,
-                        enteredPhoneNumber,
-                        enteredWebsite,
-                        enteredCountry,
-                        enteredGender,
-                        enteredBirthDate,
-                        enteredCareerTitle,
-                        enteredPhotoURL);
-
-        final boolean firstNameIsOK = !enteredFirstName.isEmpty() ||
-                !String.valueOf(firstNameInput.getHint()).trim()
-                        .equals(getResources().getString(R.string.edit_account_first_name).trim());
-
-        final boolean lastNameIsOK = !enteredLastName.isEmpty() ||
-                !String.valueOf(lastNameInput.getHint()).trim()
-                        .equals(getResources().getString(R.string.edit_account_last_name).trim());
-
-        final boolean phoneNumberIsOK = !enteredPhoneNumber.isEmpty() ||
-                !String.valueOf(phoneNumberInput.getHint()).trim()
-                        .equals(getResources().getString(R.string.edit_account_phone_number).trim());
-
-        final boolean websiteIsOK = !enteredWebsite.isEmpty() ||
-                !String.valueOf(websiteInput.getHint()).trim()
-                        .equals(getResources().getString(R.string.edit_account_website).trim());
-
-        final boolean countryNameIsOK = !enteredCountry.isEmpty();
-
-        final boolean genderIsOK = !enteredGender.isEmpty();
-
-        final boolean careerTitleIsOK = !enteredCareerTitle.isEmpty() ||
-                !String.valueOf(careerTitleInput.getHint()).trim()
-                        .equals(getResources().getString(R.string.edit_account_career_title).trim());
-
-        personalInformationHasBeenModified = (!enteredFirstName.isEmpty() && !enteredFirstName.equals(String.valueOf(firstNameInput.getHint()))) ||
-                (!enteredLastName.isEmpty() && !enteredLastName.equals(String.valueOf(lastNameInput.getHint()))) ||
-                (!enteredPhoneNumber.isEmpty() && !enteredPhoneNumber.equals(String.valueOf(phoneNumberInput.getHint()))) ||
-                (!enteredWebsite.isEmpty() && !enteredWebsite.equals(String.valueOf(websiteInput.getHint()))) ||
-                (!enteredCountry.isEmpty() && !enteredCountry.equals(initialPersonalInformation.getCountry())) ||
-                (!enteredGender.isEmpty() && !enteredGender.equals(initialPersonalInformation.getGender())) ||
-                (!enteredCareerTitle.isEmpty() && !enteredCareerTitle.equals(String.valueOf(careerTitleInput.getHint())));
-
-        return !initialPersonalInformation.equals(editedPersonalInformation) &&
-                firstNameIsOK &&
-                lastNameIsOK &&
-                phoneNumberIsOK &&
-                websiteIsOK &&
-                countryNameIsOK &&
-                genderIsOK &&
-                careerTitleIsOK ?
-                editedPersonalInformation : null;
     }
 }

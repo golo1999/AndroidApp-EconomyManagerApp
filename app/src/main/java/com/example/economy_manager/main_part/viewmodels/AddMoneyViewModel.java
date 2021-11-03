@@ -4,10 +4,15 @@ import android.content.Context;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.widget.EditText;
+import android.widget.TextView;
 
+import androidx.fragment.app.DialogFragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.ViewModel;
 
 import com.example.economy_manager.R;
+import com.example.economy_manager.main_part.views.fragments.DatePickerFragment;
+import com.example.economy_manager.utilities.MyCustomMethods;
 
 import java.time.LocalDate;
 
@@ -83,5 +88,28 @@ public class AddMoneyViewModel extends ViewModel {
 
             }
         });
+    }
+
+    public void onDateTextClicked(final FragmentManager fragmentManager) {
+        final DialogFragment datePickerFragment = new DatePickerFragment(getTransactionDate());
+
+        datePickerFragment.show(fragmentManager, "date_picker");
+    }
+
+    public void onSaveButtonClicked() {
+
+    }
+
+    public void setDateText(final LocalDate date,
+                            final TextView dateTextView) {
+        final String formattedDate = MyCustomMethods.getFormattedDate(date);
+
+        if (!getTransactionDate().equals(date)) {
+            setTransactionDate(date);
+        }
+
+        if (!String.valueOf(dateTextView.getText()).trim().equals(formattedDate)) {
+            dateTextView.setText(formattedDate);
+        }
     }
 }

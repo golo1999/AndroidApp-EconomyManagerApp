@@ -42,8 +42,8 @@ public class LastTenTransactionsFragment extends Fragment {
         final LastTenTransactionsFragment fragment = new LastTenTransactionsFragment();
         final Bundle args = new Bundle();
 
-
         fragment.setArguments(args);
+
         return fragment;
     }
 
