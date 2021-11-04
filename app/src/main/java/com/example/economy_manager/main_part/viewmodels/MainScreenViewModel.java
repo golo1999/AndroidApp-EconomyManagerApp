@@ -1,7 +1,10 @@
 package com.example.economy_manager.main_part.viewmodels;
 
+import android.app.Activity;
 import android.content.Context;
+import android.graphics.Color;
 
+import androidx.annotation.NonNull;
 import androidx.lifecycle.ViewModel;
 
 import com.example.economy_manager.R;
@@ -13,6 +16,9 @@ import com.example.economy_manager.main_part.views.fragments.ShowSavingsFragment
 import com.example.economy_manager.main_part.views.fragments.TopFiveExpensesFragment;
 import com.example.economy_manager.models.UserDetails;
 import com.example.economy_manager.utilities.Languages;
+import com.example.economy_manager.utilities.MyCustomMethods;
+import com.example.economy_manager.utilities.MyCustomVariables;
+import com.facebook.login.LoginManager;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -20,14 +26,23 @@ import java.util.Locale;
 
 public class MainScreenViewModel extends ViewModel {
     private UserDetails userDetails;
+
     private final ShowSavingsFragment showSavingsFragment = ShowSavingsFragment.newInstance();
+
     private final BudgetReviewFragment budgetReviewFragment = BudgetReviewFragment.newInstance();
+
     private final MoneySpentFragment moneySpentFragment = MoneySpentFragment.newInstance();
+
     private final LastTenTransactionsFragment lastTenTransactionsFragment = LastTenTransactionsFragment.newInstance();
+
     private final TopFiveExpensesFragment topFiveExpensesFragment = TopFiveExpensesFragment.newInstance();
+
     private final MoneySpentPercentageFragment moneySpentPercentageFragment = MoneySpentPercentageFragment.newInstance();
+
     private final Calendar currentTime = Calendar.getInstance();
+
     private final int currentHour = currentTime.get(Calendar.HOUR_OF_DAY);
+
     private final String datePrefix = Locale.getDefault().getDisplayLanguage().equals(Languages.getGermanLanguage()) ?
             // german
             "der" : Locale.getDefault().getDisplayLanguage().equals(Languages.getItalianLanguage()) ?
@@ -37,6 +52,7 @@ public class MainScreenViewModel extends ViewModel {
             "de" :
             // every other language
             "";
+
     private final String daySuffix = !Locale.getDefault().getDisplayLanguage().equals(Languages.getEnglishLanguage()) ?
             // every other language but english
             "" :
@@ -50,11 +66,13 @@ public class MainScreenViewModel extends ViewModel {
                     "rd" :
                     // every other day
                     "th";
+
     private final String separator = Locale.getDefault().getDisplayLanguage().equals(Languages.getSpanishLanguage()) ?
             // spanish
             "de" :
             // every other language but spanish
             "";
+
     private final SimpleDateFormat monthFormat = new SimpleDateFormat("LLLL",
             Locale.getDefault().getDisplayLanguage().equals(Languages.getGermanLanguage()) ?
                     //german
@@ -71,6 +89,7 @@ public class MainScreenViewModel extends ViewModel {
                     Locale.forLanguageTag("ro-RO") :
                     // every other language
                     Locale.ENGLISH);
+
     private final String currentDateTranslated = Locale.getDefault().getDisplayLanguage().equals(Languages.getGermanLanguage()) ||
             Locale.getDefault().getDisplayLanguage().equals(Languages.getItalianLanguage()) ||
             Locale.getDefault().getDisplayLanguage().equals(Languages.getRomanianLanguage()) ?
@@ -96,6 +115,17 @@ public class MainScreenViewModel extends ViewModel {
                                     getMonthFormat().format(getCurrentTime().getTime()) + " " +
                                             getCurrentTime().get(Calendar.DAY_OF_MONTH) + getDaySuffix() + ", "
                                             + getCurrentTime().get(Calendar.YEAR);
+
+    private int timerCounter = 0;
+
+    public int getActivityTheme() {
+        final boolean darkThemeEnabled = getUserDetails() != null ?
+                getUserDetails().getApplicationSettings().getDarkTheme() :
+                MyCustomVariables.getDefaultUserDetails().getApplicationSettings().getDarkTheme();
+
+        return !darkThemeEnabled ?
+                R.drawable.ic_white_gradient_tobacco_ad : R.drawable.ic_black_gradient_night_shift;
+    }
 
     public UserDetails getUserDetails() {
         return userDetails;
@@ -162,5 +192,36 @@ public class MainScreenViewModel extends ViewModel {
 
     public String getCurrentDateTranslated() {
         return currentDateTranslated;
+    }
+
+    public void goToActivity(final @NonNull Activity currentActivity,
+                             final @NonNull Class<? extends Activity> nextActivity) {
+        MyCustomMethods.goToActivityWithFadeTransition(currentActivity, nextActivity);
+    }
+
+    public int getTextColor(final @NonNull Activity activity) {
+        final boolean darkThemeEnabled = getUserDetails() != null ?
+                getUserDetails().getApplicationSettings().getDarkTheme() :
+                MyCustomVariables.getDefaultUserDetails().getApplicationSettings().getDarkTheme();
+
+        return !darkThemeEnabled ? activity.getColor(R.color.turkish_sea) : Color.WHITE;
+    }
+
+    public void logout(final @NonNull Activity activity) {
+        LoginManager.getInstance().logOut();
+        MyCustomVariables.getFirebaseAuth().signOut();
+        MyCustomMethods.signOutWithFadeTransition(activity);
+    }
+
+    public void onClickHandler() {
+
+    }
+
+    public int getTimerCounter() {
+        return timerCounter;
+    }
+
+    public void setTimerCounter(int timerCounter) {
+        this.timerCounter = timerCounter;
     }
 }

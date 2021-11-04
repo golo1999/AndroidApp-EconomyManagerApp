@@ -6,7 +6,7 @@
 
         <variable
             name="activity"
-            type="com.example.economy_manager.main_part.views.activities.AddMoneyActivity" />
+            type="com.example.economy_manager.main_part.views.activities.AddIncomeActivity" />
 
         <variable
             name="fragmentManager"
@@ -14,7 +14,7 @@
 
         <variable
             name="viewModel"
-            type="com.example.economy_manager.main_part.viewmodels.AddMoneyViewModel" />
+            type="com.example.economy_manager.main_part.viewmodels.AddIncomeViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -23,10 +23,10 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@drawable/ic_green_gradient_presentation_excitement"
-        tools:context=".main_part.views.activities.AddMoneyActivity">
+        tools:context=".main_part.views.activities.AddIncomeActivity">
 
         <ScrollView
-            android:id="@+id/add_money_scroll_view"
+            android:id="@+id/scrollView"
             android:layout_width="0sp"
             android:layout_height="0sp"
             android:fillViewport="true"
@@ -41,7 +41,7 @@
                 android:orientation="vertical">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/add_money_top_layout"
+                    android:id="@+id/topLayout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="20sp"
@@ -49,7 +49,7 @@
                     android:focusableInTouchMode="true">
 
                     <TextView
-                        android:id="@+id/add_money_title"
+                        android:id="@+id/title"
                         android:layout_width="0sp"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="10sp"
@@ -78,7 +78,7 @@
                         app:layout_constraintBottom_toTopOf="@id/valueField"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/add_money_title"
+                        app:layout_constraintTop_toBottomOf="@id/title"
                         tools:text="@string/date" />
 
                     <EditText
@@ -130,7 +130,7 @@
                     android:orientation="vertical" />
 
                 <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/add_money_bottom_layout"
+                    android:id="@+id/bottomLayout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="20sp">

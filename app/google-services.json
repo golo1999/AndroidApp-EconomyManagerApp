@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "236665611938-5a2htvjqsp425v0hkisapetpnk3816um.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.economy_manager",
+            "certificate_hash": "37e24639c0feae100ad17b4ef54c8f68afe07740"
+          }
+        },
+        {
           "client_id": "236665611938-1kbke01jbeuq0pfa5n5n4ggt279qrkaj.apps.googleusercontent.com",
           "client_type": 3
         }

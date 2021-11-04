@@ -7,7 +7,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.economy_manager.R;
-import com.example.economy_manager.login_part.LogInActivity;
+import com.example.economy_manager.login_part.views.LogInActivity;
 import com.example.economy_manager.models.ApplicationSettings;
 import com.example.economy_manager.models.PersonalInformation;
 import com.example.economy_manager.models.UserDetails;

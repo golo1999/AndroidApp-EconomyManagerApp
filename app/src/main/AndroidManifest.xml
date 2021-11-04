@@ -45,26 +45,26 @@
             android:parentActivityName="com.example.economy_manager.main_part.views.activities.MainScreenActivity" />
 
         <activity
-            android:name="com.example.economy_manager.main_part.views.activities.SubtractMoneyActivity"
+            android:name="com.example.economy_manager.main_part.views.activities.AddExpenseActivity"
             android:parentActivityName="com.example.economy_manager.main_part.views.activities.MainScreenActivity"
             android:windowSoftInputMode="stateAlwaysHidden" />
 
         <activity
-            android:name="com.example.economy_manager.main_part.views.activities.AddMoneyActivity"
+            android:name="com.example.economy_manager.main_part.views.activities.AddIncomeActivity"
             android:parentActivityName="com.example.economy_manager.main_part.views.activities.MainScreenActivity"
             android:windowSoftInputMode="stateAlwaysHidden" />
 
         <activity
-            android:name="com.example.economy_manager.login_part.LogInActivity"
+            android:name="com.example.economy_manager.login_part.views.LogInActivity"
             android:parentActivityName="com.example.economy_manager.main_part.views.activities.SplashScreenActivity" />
 
         <activity
-            android:name="com.example.economy_manager.login_part.ForgotPasswordActivity"
-            android:parentActivityName="com.example.economy_manager.login_part.LogInActivity" />
+            android:name="com.example.economy_manager.login_part.views.ForgotPasswordActivity"
+            android:parentActivityName="com.example.economy_manager.login_part.views.LogInActivity" />
 
         <activity
-            android:name="com.example.economy_manager.login_part.SignUpActivity"
-            android:parentActivityName="com.example.economy_manager.login_part.LogInActivity" />
+            android:name="com.example.economy_manager.login_part.views.SignUpActivity"
+            android:parentActivityName="com.example.economy_manager.login_part.views.LogInActivity" />
 
         <activity android:name="com.example.economy_manager.main_part.views.activities.MainScreenActivity" />
 

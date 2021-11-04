@@ -1,156 +1,183 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@drawable/ic_blue_gradient_jack_dorseys_stock"
-    tools:context=".login_part.LogInActivity">
+<layout>
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/login_login"
-        android:textAlignment="center"
-        android:textColor="@color/SecondColor"
-        android:textSize="30sp"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@id/login_layout"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+    <data>
 
-    <TextView
-        android:id="@+id/login_incorrect_login"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textColor="@color/red"
-        android:textSize="18sp"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@+id/login_layout"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        <variable
+            name="activity"
+            type="com.example.economy_manager.login_part.views.LogInActivity" />
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/login_layout"
-        android:layout_width="0sp"
-        android:layout_height="wrap_content"
-        android:focusable="true"
-        android:focusableInTouchMode="true"
-        android:orientation="vertical"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintWidth_percent=".8">
+        <variable
+            name="forgotPasswordActivity"
+            type="Class&lt;com.example.economy_manager.login_part.views.ForgotPasswordActivity>" />
 
-        <EditText
-            android:id="@+id/login_email"
-            android:layout_width="0sp"
+        <variable
+            name="signUpActivity"
+            type="Class&lt;com.example.economy_manager.login_part.views.SignUpActivity>" />
+
+        <variable
+            name="viewModel"
+            type="com.example.economy_manager.login_part.viewmodels.LogInViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/ic_blue_gradient_jack_dorseys_stock"
+        tools:context=".login_part.views.LogInActivity">
+
+        <TextView
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:autofillHints="AUTOFILL_HINT_USERNAME"
-            android:background="@drawable/button_white_border"
-            android:drawableStart="@drawable/ic_email"
-            android:drawablePadding="10sp"
-            android:hint="@string/email"
-            android:inputType="textEmailAddress"
-            android:padding="10sp"
-            android:textColor="@color/white"
-            android:textColorHint="@color/white"
-            android:textCursorDrawable="@null"
-            android:textSize="18sp"
+            android:text="@string/login_login"
+            android:textAlignment="center"
+            android:textColor="@color/SecondColor"
+            android:textSize="30sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toTopOf="@id/login_layout"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <EditText
-            android:id="@+id/login_password"
-            android:layout_width="0sp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20sp"
-            android:autofillHints="AUTOFILL_HINT_PASSWORD"
-            android:background="@drawable/button_white_border"
-            android:drawableStart="@drawable/ic_password"
-            android:drawablePadding="10sp"
-            android:hint="@string/password"
-            android:inputType="textPassword"
-            android:padding="10sp"
-            android:textColor="@color/white"
-            android:textColorHint="@color/white"
-            android:textCursorDrawable="@null"
-            android:textSize="18sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/login_email" />
-
         <TextView
-            android:id="@+id/login_forgot_password"
-            android:layout_width="0sp"
+            android:id="@+id/login_incorrect_login"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20sp"
-            android:text="@string/login_forgot_password"
-            android:textAlignment="center"
-            android:textColor="@color/white"
+            android:textColor="@color/red"
             android:textSize="18sp"
             android:textStyle="bold"
+            app:layout_constraintBottom_toTopOf="@+id/login_layout"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/login_password" />
+            app:layout_constraintStart_toStartOf="parent" />
 
-        <Button
-            android:id="@+id/login_button"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/login_layout"
             android:layout_width="0sp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20sp"
-            android:background="@drawable/button_white_border"
-            android:padding="10sp"
-            android:stateListAnimator="@null"
-            android:text="@string/login_login"
-            android:textAlignment="center"
-            android:textColor="@color/white"
-            android:textSize="18sp"
-            android:textStyle="bold"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/login_forgot_password" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintWidth_percent=".8">
 
-        <com.facebook.login.widget.LoginButton
-            android:id="@+id/login_button_facebook"
-            android:layout_width="0sp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="20sp"
-            android:paddingTop="10sp"
-            android:paddingBottom="10sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/login_button" />
+            <EditText
+                android:id="@+id/emailField"
+                android:layout_width="0sp"
+                android:layout_height="wrap_content"
+                android:autofillHints="AUTOFILL_HINT_USERNAME"
+                android:background="@drawable/button_white_border"
+                android:drawableStart="@drawable/ic_email"
+                android:drawablePadding="10sp"
+                android:hint="@string/email"
+                android:inputType="textEmailAddress"
+                android:padding="10sp"
+                android:text="@={viewModel.enteredEmail}"
+                android:textColor="@color/white"
+                android:textColorHint="@color/white"
+                android:textCursorDrawable="@null"
+                android:textSize="18sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
-        <com.google.android.gms.common.SignInButton
-            android:id="@+id/login_button_google"
-            android:layout_width="0sp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="20sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/login_button_facebook" />
+            <EditText
+                android:id="@+id/passwordField"
+                android:layout_width="0sp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20sp"
+                android:autofillHints="AUTOFILL_HINT_PASSWORD"
+                android:background="@drawable/button_white_border"
+                android:drawableStart="@drawable/ic_password"
+                android:drawablePadding="10sp"
+                android:hint="@string/password"
+                android:inputType="textPassword"
+                android:padding="10sp"
+                android:text="@={viewModel.enteredPassword}"
+                android:textColor="@color/white"
+                android:textColorHint="@color/white"
+                android:textCursorDrawable="@null"
+                android:textSize="18sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/emailField" />
 
-        <TextView
-            android:id="@+id/login_create_account"
-            android:layout_width="0sp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20sp"
-            android:text="@string/login_no_account"
-            android:textAlignment="center"
-            android:textColor="@color/white"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/login_button_google" />
+            <TextView
+                android:id="@+id/forgotPasswordText"
+                android:layout_width="0sp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20sp"
+                android:onClick="@{() -> viewModel.goToActivityInDirection(activity, forgotPasswordActivity, 0)}"
+                android:text="@string/login_forgot_password"
+                android:textAlignment="center"
+                android:textColor="@color/white"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/passwordField" />
+
+            <Button
+                android:id="@+id/logInButton"
+                android:layout_width="0sp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20sp"
+                android:background="@drawable/button_white_border"
+                android:onClick="@{() -> viewModel.onLogInButtonClicked(activity, viewModel.enteredEmail, viewModel.enteredPassword)}"
+                android:padding="10sp"
+                android:stateListAnimator="@null"
+                android:text="@string/login_login"
+                android:textAlignment="center"
+                android:textColor="@color/white"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/forgotPasswordText" />
+
+            <com.facebook.login.widget.LoginButton
+                android:id="@+id/facebookLogInButton"
+                android:layout_width="0sp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="20sp"
+                android:paddingTop="10sp"
+                android:paddingBottom="10sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/logInButton" />
+
+            <com.google.android.gms.common.SignInButton
+                android:id="@+id/googleLogInButton"
+                android:layout_width="0sp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="20sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/facebookLogInButton" />
+
+            <TextView
+                android:id="@+id/createAccountText"
+                android:layout_width="0sp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20sp"
+                android:onClick="@{() -> viewModel.goToActivityInDirection(activity, signUpActivity, 1)}"
+                android:text="@string/login_no_account"
+                android:textAlignment="center"
+                android:textColor="@color/white"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/googleLogInButton" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

@@ -1,17 +1,17 @@
-package com.example.economy_manager.login_part;
+package com.example.economy_manager.login_part.views;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Patterns;
 import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.databinding.DataBindingUtil;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.example.economy_manager.R;
+import com.example.economy_manager.databinding.LogInActivityBinding;
+import com.example.economy_manager.login_part.viewmodels.LogInViewModel;
 import com.example.economy_manager.main_part.views.activities.MainScreenActivity;
 import com.example.economy_manager.models.ApplicationSettings;
 import com.example.economy_manager.models.PersonalInformation;
@@ -24,7 +24,6 @@ import com.facebook.FacebookException;
 import com.facebook.FacebookSdk;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
-import com.facebook.login.widget.LoginButton;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -40,13 +39,8 @@ import com.google.firebase.auth.GoogleAuthProvider;
 import java.util.Arrays;
 
 public class LogInActivity extends AppCompatActivity {
-    private TextView signUp;
-    private TextView forgotPassword;
-    private Button logInButton;
-    private LoginButton facebookLogInButton;
-    private SignInButton googleLogInButton;
-    private EditText emailField;
-    private EditText passwordField;
+    private LogInActivityBinding binding;
+    private LogInViewModel viewModel;
     private CallbackManager manager;
     private GoogleSignInClient mGoogleSignInClient;
     private static final int RC_SIGN_IN = 27;
@@ -57,7 +51,6 @@ public class LogInActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.log_in_activity);
         setVariables();
         setGoogleButtonSize();
         setGoogleRequest();
@@ -72,106 +65,28 @@ public class LogInActivity extends AppCompatActivity {
     }
 
     private void setVariables() {
-        signUp = findViewById(R.id.login_create_account);
-        forgotPassword = findViewById(R.id.login_forgot_password);
-        logInButton = findViewById(R.id.login_button);
-        emailField = findViewById(R.id.login_email);
-        passwordField = findViewById(R.id.login_password);
-        facebookLogInButton = findViewById(R.id.login_button_facebook);
-        googleLogInButton = findViewById(R.id.login_button_google);
+        binding = DataBindingUtil.setContentView(this, R.layout.log_in_activity);
+        viewModel = new ViewModelProvider(this).get(LogInViewModel.class);
+
+        binding.setActivity(this);
+        binding.setForgotPasswordActivity(ForgotPasswordActivity.class);
+        binding.setSignUpActivity(SignUpActivity.class);
+        binding.setViewModel(viewModel);
     }
 
     private void setOnClickListeners() {
-        signUp.setOnClickListener((final View v) ->
-                MyCustomMethods.goToActivityWithSlideTransition(LogInActivity.this,
-                        SignUpActivity.class, 1));
+        binding.facebookLogInButton.setOnClickListener((final View view) -> onFacebookLogInButtonClicked());
 
-        facebookLogInButton.setOnClickListener((final View view) -> buttonClickLoginFacebook());
-
-        forgotPassword.setOnClickListener((final View v) ->
-                MyCustomMethods.goToActivityWithSlideTransition(LogInActivity.this,
-                        ForgotPasswordActivity.class, 0));
-
-        googleLogInButton.setOnClickListener((final View v) -> {
+        binding.googleLogInButton.setOnClickListener((final View v) -> {
             googleOrFacebookInsideOnActivityResult = 1;
             googleSignIn();
         });
-
-        logInButton.setOnClickListener((final View v) -> {
-            final String enteredEmail = String.valueOf(emailField.getText()).trim();
-            final String enteredPassword = String.valueOf(passwordField.getText());
-
-            validation(enteredEmail, enteredPassword);
-        });
-    }
-
-    private void validation(final String emailValue,
-                            final String passwordValue) {
-        // proceeding to login if the email is valid & the password has got at least 7 characters
-        if (Patterns.EMAIL_ADDRESS.matcher(emailValue).matches() &&
-                passwordValue.length() >= 7) {
-            MyCustomVariables.getFirebaseAuth()
-                    .signInWithEmailAndPassword(emailValue, passwordValue)
-                    .addOnCompleteListener((final Task<AuthResult> task) -> {
-                        MyCustomMethods.closeTheKeyboard(this);
-                        // verifying if user's email is verified if the credentials match
-                        if (task.isSuccessful()) {
-                            if (MyCustomVariables.getFirebaseAuth().getCurrentUser() != null) {
-                                if (MyCustomVariables.getFirebaseAuth().getCurrentUser().isEmailVerified()) {
-                                    goToTheMainScreen();
-                                } else {
-                                    MyCustomMethods.showShortMessage(LogInActivity.this,
-                                            getResources().getString(R.string.verify_email));
-
-                                    passwordField.setText("");
-                                }
-                            }
-                        }
-                        // removing the entered password & showing message if the credentials don't match
-                        else {
-                            MyCustomMethods.showShortMessage(this,
-                                    getResources().getString(R.string.login_incorrect_username_password));
-
-                            passwordField.setText("");
-                        }
-                    });
-        }
-        // showing error messages if the login condition isn't respected
-        else {
-            MyCustomMethods.closeTheKeyboard(this);
-            // if both the email & the password are empty
-            if (emailValue.isEmpty() && passwordValue.isEmpty()) {
-                MyCustomMethods.showShortMessage(this, getResources().getString(R.string.signup_error2));
-            }
-            // if the email is empty
-            else if (emailValue.isEmpty()) {
-                MyCustomMethods.showShortMessage(this, getResources().getString(R.string.signup_error3));
-                passwordField.setText("");
-            }
-            // if the password is empty
-            else if (passwordValue.isEmpty()) {
-                MyCustomMethods.showShortMessage(this, getResources().getString(R.string.signup_error4));
-            }
-            // if the email isn't valid & the password is too short
-            else if (!Patterns.EMAIL_ADDRESS.matcher(emailValue).matches() && passwordValue.length() < 4) {
-                MyCustomMethods.showShortMessage(this, getResources().getString(R.string.signup_error5));
-                passwordField.setText("");
-            }
-            // if the email isn't valid & the password is
-            else if (!Patterns.EMAIL_ADDRESS.matcher(emailValue).matches()) {
-                MyCustomMethods.showShortMessage(this, getResources().getString(R.string.login_email_not_valid));
-                passwordField.setText("");
-            }
-            // if the email is valid & the password is too short
-            else {
-                MyCustomMethods.showShortMessage(this, getResources().getString(R.string.signup_error7));
-                passwordField.setText("");
-            }
-        }
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+    protected void onActivityResult(final int requestCode,
+                                    final int resultCode,
+                                    final @Nullable Intent data) {
         manager.onActivityResult(requestCode, resultCode, data);
         super.onActivityResult(requestCode, resultCode, data);
 
@@ -197,10 +112,10 @@ public class LogInActivity extends AppCompatActivity {
     private void initializeFacebookLogin() {
         FacebookSdk.sdkInitialize(getApplicationContext());
         manager = CallbackManager.Factory.create();
-        facebookLogInButton.setReadPermissions(Arrays.asList("email", "public_profile"));
+        binding.facebookLogInButton.setReadPermissions(Arrays.asList("email", "public_profile"));
     }
 
-    private void buttonClickLoginFacebook() {
+    private void onFacebookLogInButtonClicked() {
         LoginManager.getInstance().registerCallback(manager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
@@ -239,12 +154,12 @@ public class LogInActivity extends AppCompatActivity {
     }
 
     private void setGoogleButtonSize() {
-        googleLogInButton.setSize(SignInButton.SIZE_STANDARD);
+        binding.googleLogInButton.setSize(SignInButton.SIZE_STANDARD);
     }
 
     private void setGoogleRequest() {
         GoogleSignInOptions signInOptions = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestIdToken(getString(R.string.default_web_client_id)).requestEmail().build();
+                .requestIdToken("236665611938-1kbke01jbeuq0pfa5n5n4ggt279qrkaj.apps.googleusercontent.com").requestEmail().build();
         mGoogleSignInClient = GoogleSignIn.getClient(this, signInOptions);
     }
 

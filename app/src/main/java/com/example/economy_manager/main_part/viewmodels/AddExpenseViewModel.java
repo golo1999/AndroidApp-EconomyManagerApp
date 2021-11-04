@@ -12,11 +12,10 @@ import androidx.lifecycle.ViewModel;
 
 import com.example.economy_manager.R;
 import com.example.economy_manager.main_part.views.fragments.DatePickerFragment;
-import com.example.economy_manager.utilities.MyCustomMethods;
 
 import java.time.LocalDate;
 
-public class AddMoneyViewModel extends ViewModel {
+public class AddExpenseViewModel extends ViewModel {
     private LocalDate transactionDate = LocalDate.now();
 
     public LocalDate getTransactionDate() {
@@ -27,20 +26,64 @@ public class AddMoneyViewModel extends ViewModel {
         this.transactionDate = transactionDate;
     }
 
-    public String getDepositsText(final Context context) {
-        return context.getResources().getString(R.string.add_money_deposits).trim();
+    public String getBillsText(final Context context) {
+        return context.getResources().getString(R.string.subtract_money_bills).trim();
     }
 
-    public String getIndependentSourcesText(final Context context) {
-        return context.getResources().getString(R.string.add_money_independent_sources).trim();
+    public String getCarText(final Context context) {
+        return context.getResources().getString(R.string.subtract_money_car).trim();
     }
 
-    public String getSalaryText(final Context context) {
-        return context.getResources().getString(R.string.salary).trim();
+    public String getClothesText(final Context context) {
+        return context.getResources().getString(R.string.subtract_money_clothes).trim();
     }
 
-    public String getSavingText(final Context context) {
-        return context.getResources().getString(R.string.saving).trim();
+    public String getCommunicationsText(final Context context) {
+        return context.getResources().getString(R.string.subtract_money_communications).trim();
+    }
+
+    public String getEatingOutText(final Context context) {
+        return context.getResources().getString(R.string.subtract_money_eating_out).trim();
+    }
+
+    public String getEntertainmentText(final Context context) {
+        return context.getResources().getString(R.string.subtract_money_entertainment).trim();
+    }
+
+    public String getFoodText(final Context context) {
+        return context.getResources().getString(R.string.subtract_money_food).trim();
+    }
+
+    public String getGiftsText(final Context context) {
+        return context.getResources().getString(R.string.subtract_money_gifts).trim();
+    }
+
+    public String getHealthText(final Context context) {
+        return context.getResources().getString(R.string.subtract_money_health).trim();
+    }
+
+    public String getHouseText(final Context context) {
+        return context.getResources().getString(R.string.subtract_money_house).trim();
+    }
+
+    public String getPetsText(final Context context) {
+        return context.getResources().getString(R.string.subtract_money_pets).trim();
+    }
+
+    public String getSportsText(final Context context) {
+        return context.getResources().getString(R.string.subtract_money_sports).trim();
+    }
+
+    public String getTaxiText(final Context context) {
+        return context.getResources().getString(R.string.subtract_money_taxi).trim();
+    }
+
+    public String getToiletryText(final Context context) {
+        return context.getResources().getString(R.string.subtract_money_toiletry).trim();
+    }
+
+    public String getTransportText(final Context context) {
+        return context.getResources().getString(R.string.subtract_money_transport).trim();
     }
 
     // method for limiting the number to only two decimals
@@ -76,7 +119,8 @@ public class AddMoneyViewModel extends ViewModel {
                     // if we add more than two decimals
                     if (textLength - positionOfComma > 3) {
                         // putting only the first two decimals
-                        field.setText(String.valueOf(field.getText()).substring(0, positionOfComma + 3));
+                        field.setText(String.valueOf(field.getText())
+                                .substring(0, positionOfComma + 3));
                         // putting the cursor at the end
                         field.setSelection(String.valueOf(field.getText()).length());
                     }
@@ -94,22 +138,5 @@ public class AddMoneyViewModel extends ViewModel {
         final DialogFragment datePickerFragment = new DatePickerFragment(getTransactionDate());
 
         datePickerFragment.show(fragmentManager, "date_picker");
-    }
-
-    public void onSaveButtonClicked() {
-
-    }
-
-    public void setDateText(final LocalDate date,
-                            final TextView dateTextView) {
-        final String formattedDate = MyCustomMethods.getFormattedDate(date);
-
-        if (!getTransactionDate().equals(date)) {
-            setTransactionDate(date);
-        }
-
-        if (!String.valueOf(dateTextView.getText()).trim().equals(formattedDate)) {
-            dateTextView.setText(formattedDate);
-        }
     }
 }

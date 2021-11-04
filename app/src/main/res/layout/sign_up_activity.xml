@@ -1,110 +1,128 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@drawable/ic_blue_gradient_jack_dorseys_stock"
-    tools:context=".login_part.LogInActivity">
+<layout>
 
-    <TextView
-        android:layout_width="0sp"
-        android:layout_height="wrap_content"
-        android:text="@string/signup_signup"
-        android:textAlignment="center"
-        android:textColor="@color/SecondColor"
-        android:textSize="30sp"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@id/signup_layout"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintWidth_percent=".8" />
+    <data>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/signup_layout"
-        android:layout_width="0sp"
-        android:layout_height="wrap_content"
-        android:focusable="true"
-        android:focusableInTouchMode="true"
-        android:orientation="vertical"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintWidth_percent=".8">
+        <variable
+            name="activity"
+            type="com.example.economy_manager.login_part.views.SignUpActivity" />
 
-        <EditText
-            android:id="@+id/signup_email"
-            android:layout_width="0sp"
-            android:layout_height="wrap_content"
-            android:autofillHints="AUTOFILL_HINT_USERNAME"
-            android:background="@drawable/button_white_border"
-            android:drawableStart="@drawable/ic_email"
-            android:drawablePadding="10sp"
-            android:hint="@string/email"
-            android:inputType="textEmailAddress"
-            android:padding="10sp"
-            android:textColor="@color/white"
-            android:textColorHint="@color/white"
-            android:textCursorDrawable="@null"
-            android:textSize="18sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+        <variable
+            name="viewModel"
+            type="com.example.economy_manager.login_part.viewmodels.SignUpViewModel" />
+    </data>
 
-        <EditText
-            android:id="@+id/signup_password"
-            android:layout_width="0sp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20sp"
-            android:autofillHints="AUTOFILL_HINT_PASSWORD"
-            android:background="@drawable/button_white_border"
-            android:drawableStart="@drawable/ic_password"
-            android:drawablePadding="10sp"
-            android:hint="@string/password"
-            android:inputType="textPassword"
-            android:padding="10sp"
-            android:textColor="@color/white"
-            android:textColorHint="@color/white"
-            android:textCursorDrawable="@null"
-            android:textSize="18sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/signup_email" />
-
-        <Button
-            android:id="@+id/signup_button"
-            android:layout_width="0sp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20sp"
-            android:background="@drawable/button_white_border"
-            android:padding="10sp"
-            android:stateListAnimator="@null"
-            android:text="@string/signup_signup"
-            android:textAlignment="center"
-            android:textColor="@color/white"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/signup_password" />
+    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/ic_blue_gradient_jack_dorseys_stock"
+        tools:context=".login_part.views.LogInActivity">
 
         <TextView
-            android:id="@+id/signup_login"
             android:layout_width="0sp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20sp"
-            android:text="@string/already_have_account"
+            android:text="@string/signup_signup"
             android:textAlignment="center"
-            android:textColor="@color/white"
-            android:textSize="18sp"
+            android:textColor="@color/SecondColor"
+            android:textSize="30sp"
             android:textStyle="bold"
+            app:layout_constraintBottom_toTopOf="@id/signup_layout"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/signup_button" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintWidth_percent=".8" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/signup_layout"
+            android:layout_width="0sp"
+            android:layout_height="wrap_content"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintWidth_percent=".8">
+
+            <EditText
+                android:id="@+id/emailField"
+                android:layout_width="0sp"
+                android:layout_height="wrap_content"
+                android:autofillHints="AUTOFILL_HINT_USERNAME"
+                android:background="@drawable/button_white_border"
+                android:drawableStart="@drawable/ic_email"
+                android:drawablePadding="10sp"
+                android:hint="@string/email"
+                android:inputType="textEmailAddress"
+                android:padding="10sp"
+                android:text="@={viewModel.enteredEmail}"
+                android:textColor="@color/white"
+                android:textColorHint="@color/white"
+                android:textCursorDrawable="@null"
+                android:textSize="18sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <EditText
+                android:id="@+id/passwordField"
+                android:layout_width="0sp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20sp"
+                android:autofillHints="AUTOFILL_HINT_PASSWORD"
+                android:background="@drawable/button_white_border"
+                android:drawableStart="@drawable/ic_password"
+                android:drawablePadding="10sp"
+                android:hint="@string/password"
+                android:inputType="textPassword"
+                android:padding="10sp"
+                android:text="@={viewModel.enteredPassword}"
+                android:textColor="@color/white"
+                android:textColorHint="@color/white"
+                android:textCursorDrawable="@null"
+                android:textSize="18sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/emailField" />
+
+            <Button
+                android:id="@+id/signUpButton"
+                android:layout_width="0sp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20sp"
+                android:background="@drawable/button_white_border"
+                android:onClick="@{() -> viewModel.onSignUpButtonClicked(activity, viewModel.enteredEmail, viewModel.enteredPassword)}"
+                android:padding="10sp"
+                android:stateListAnimator="@null"
+                android:text="@string/signup_signup"
+                android:textAlignment="center"
+                android:textColor="@color/white"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/passwordField" />
+
+            <TextView
+                android:id="@+id/loginText"
+                android:layout_width="0sp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20sp"
+                android:onClick="@{() -> activity.onBackPressed()}"
+                android:text="@string/already_have_account"
+                android:textAlignment="center"
+                android:textColor="@color/white"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/signUpButton" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

@@ -2,33 +2,26 @@ package com.example.economy_manager.main_part.views.activities;
 
 import android.content.SharedPreferences;
 import android.content.res.Resources;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
-import android.widget.ImageView;
-import android.widget.ProgressBar;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.economy_manager.R;
+import com.example.economy_manager.databinding.MainScreenActivityBinding;
 import com.example.economy_manager.main_part.viewmodels.MainScreenViewModel;
 import com.example.economy_manager.main_part.views.fragments.MoneySpentPercentageFragment;
 import com.example.economy_manager.models.ApplicationSettings;
 import com.example.economy_manager.models.PersonalInformation;
 import com.example.economy_manager.models.Transaction;
 import com.example.economy_manager.models.UserDetails;
-import com.example.economy_manager.utilities.MyCustomMethods;
 import com.example.economy_manager.utilities.MyCustomSharedPreferences;
 import com.example.economy_manager.utilities.MyCustomVariables;
-import com.facebook.login.LoginManager;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
@@ -41,29 +34,10 @@ import java.util.TimerTask;
 public class MainScreenActivity
         extends AppCompatActivity
         implements MoneySpentPercentageFragment.MoneySpentPercentageListener {
+    private MainScreenActivityBinding binding;
     private MainScreenViewModel viewModel;
     private SharedPreferences preferences;
-    private ConstraintLayout firebaseDatabaseLoadingProgressBarLayout;
-    private FrameLayout moneySpentPercentageLayout;
     private ViewGroup.LayoutParams moneySpentPercentageLayoutParams;
-    private ProgressBar firebaseDatabaseLoadingProgressBar;
-    private TextView greeting;
-    private TextView date;
-    private FloatingActionButton addButton;
-    private FloatingActionButton subtractButton;
-    private ImageView signOut;
-    private ImageView edit;
-    private ImageView balance;
-    private TextView moneySpentPercentageText;
-    private ImageView account;
-    private ImageView settings;
-    private TextView remainingMonthlyIncomeText;
-    private TextView monthlyBalanceText;
-    private TextView lastWeekExpensesText;
-    private TextView lastTenTransactionsText;
-    private TextView topFiveExpensesText;
-    private TextView pieChartSpentPercentageText;
-    private int timerCounter = 0;
     private long backPressedTime;
     private Toast backToast;
 
@@ -88,10 +62,8 @@ public class MainScreenActivity
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setTimer();
-        setContentView(R.layout.main_screen_activity);
         setVariables();
         setFragments();
-        setOnClickListeners();
     }
 
     @Override
@@ -110,7 +82,7 @@ public class MainScreenActivity
             moneySpentPercentageLayoutParams.height = ViewGroup.LayoutParams.WRAP_CONTENT;
         }
 
-        moneySpentPercentageLayout.setLayoutParams(moneySpentPercentageLayoutParams);
+        binding.expensesChartContainer.setLayoutParams(moneySpentPercentageLayoutParams);
     }
 
     @Override
@@ -123,7 +95,7 @@ public class MainScreenActivity
             moneySpentPercentageLayoutParams.height = percentageScreenHeight;
         }
 
-        moneySpentPercentageLayout.setLayoutParams(moneySpentPercentageLayoutParams);
+        binding.expensesChartContainer.setLayoutParams(moneySpentPercentageLayoutParams);
     }
 
     private UserDetails retrieveUserDetailsFromSharedPreferences() {
@@ -145,21 +117,16 @@ public class MainScreenActivity
     }
 
     private void setActivityTheme() {
-        final boolean darkThemeEnabled = viewModel.getUserDetails() != null ?
-                viewModel.getUserDetails().getApplicationSettings().getDarkTheme() :
-                MyCustomVariables.getDefaultUserDetails().getApplicationSettings().getDarkTheme();
-
-        getWindow().setBackgroundDrawableResource(!darkThemeEnabled ?
-                R.drawable.ic_white_gradient_tobacco_ad : R.drawable.ic_black_gradient_night_shift);
+        getWindow().setBackgroundDrawableResource(viewModel.getActivityTheme());
     }
 
     private void setDates() {
-        if (!String.valueOf(greeting.getText()).trim().equals(viewModel.getGreetingMessage(this))) {
-            greeting.setText(viewModel.getGreetingMessage(this));
+        if (!String.valueOf(binding.greetingText.getText()).trim().equals(viewModel.getGreetingMessage(this))) {
+            binding.greetingText.setText(viewModel.getGreetingMessage(this));
         }
 
-        if (!String.valueOf(date.getText()).trim().equals(viewModel.getCurrentDateTranslated())) {
-            date.setText(viewModel.getCurrentDateTranslated());
+        if (!String.valueOf(binding.dateText.getText()).trim().equals(viewModel.getCurrentDateTranslated())) {
+            binding.dateText.setText(viewModel.getCurrentDateTranslated());
         }
     }
 
@@ -171,7 +138,7 @@ public class MainScreenActivity
                 .replace(R.id.fragment_money_spent_container, viewModel.getFragmentMoneySpent())
                 .replace(R.id.fragment_last_ten_transactions_container, viewModel.getFragmentLastTenTransactions())
                 .replace(R.id.fragment_top_five_expenses_container, viewModel.getFragmentTopFiveExpenses())
-                .replace(R.id.fragment_money_spent_percentage_container, viewModel.getFragmentMoneySpentPercentage())
+                .replace(R.id.expensesChartContainer, viewModel.getFragmentMoneySpentPercentage())
                 .commit();
     }
 
@@ -220,13 +187,13 @@ public class MainScreenActivity
                                                         + getResources().getString(R.string.money_spent_percentage) :
                                         getResources().getString(R.string.no_money_records_month);
 
-                                moneySpentPercentageText.setText(percentageText);
+                                binding.moneySpentPercentageText.setText(percentageText);
                             } else {
-                                moneySpentPercentageText.setText(getResources().getString(R.string.no_money_records_yet));
+                                binding.moneySpentPercentageText.setText(getResources().getString(R.string.no_money_records_yet));
                             }
 
-                            firebaseDatabaseLoadingProgressBar.setVisibility(View.GONE);
-                            firebaseDatabaseLoadingProgressBarLayout.setVisibility(View.GONE);
+                            binding.firebaseLoadingProgressBar.setVisibility(View.GONE);
+                            binding.firebaseLoadingProgressBarLayout.setVisibility(View.GONE);
                         }
 
                         @Override
@@ -237,51 +204,15 @@ public class MainScreenActivity
         }
     }
 
-    private void setOnClickListeners() {
-        account.setOnClickListener((final View v) ->
-                MyCustomMethods.goToActivityWithFadeTransition(MainScreenActivity.this,
-                        EditAccountActivity.class));
-
-        addButton.setOnClickListener((final View v) ->
-                MyCustomMethods.goToActivityWithFadeTransition(MainScreenActivity.this,
-                        AddMoneyActivity.class));
-
-        balance.setOnClickListener((final View v) ->
-                MyCustomMethods.goToActivityWithFadeTransition(MainScreenActivity.this,
-                        MonthlyBalanceActivity.class));
-
-        edit.setOnClickListener((final View v) ->
-                MyCustomMethods.goToActivityWithFadeTransition(MainScreenActivity.this,
-                        EditTransactionsActivity.class));
-
-        settings.setOnClickListener((final View v) ->
-                MyCustomMethods.goToActivityWithFadeTransition(MainScreenActivity.this,
-                        SettingsActivity.class));
-
-        subtractButton.setOnClickListener((final View v) ->
-                MyCustomMethods.goToActivityWithFadeTransition(MainScreenActivity.this,
-                        SubtractMoneyActivity.class));
-
-        signOut.setOnClickListener((final View v) -> {
-            LoginManager.getInstance().logOut();
-            MyCustomVariables.getFirebaseAuth().signOut();
-            MyCustomMethods.signOutWithFadeTransition(MainScreenActivity.this);
-        });
-    }
-
     private void setTextsBetweenFragments() {
-        final boolean darkThemeEnabled = viewModel.getUserDetails() != null ?
-                viewModel.getUserDetails().getApplicationSettings().getDarkTheme() :
-                MyCustomVariables.getDefaultUserDetails().getApplicationSettings().getDarkTheme();
+        final int color = viewModel.getTextColor(this);
 
-        final int color = !darkThemeEnabled ? getColor(R.color.turkish_sea) : Color.WHITE;
-
-        remainingMonthlyIncomeText.setTextColor(color);
-        monthlyBalanceText.setTextColor(color);
-        lastWeekExpensesText.setTextColor(color);
-        lastTenTransactionsText.setTextColor(color);
-        topFiveExpensesText.setTextColor(color);
-        pieChartSpentPercentageText.setTextColor(color);
+        binding.remainingMonthlyIncomeText.setTextColor(color);
+        binding.monthlyBalanceText.setTextColor(color);
+        binding.lastWeekExpensesText.setTextColor(color);
+        binding.lastTenTransactionsText.setTextColor(color);
+        binding.topFiveExpensesText.setTextColor(color);
+        binding.expensesChartText.setTextColor(color);
     }
 
     private void setTimer() {
@@ -291,10 +222,10 @@ public class MainScreenActivity
             @Override
             public void run() {
                 runOnUiThread(() -> {
-                    ++timerCounter;
+                    viewModel.setTimerCounter(viewModel.getTimerCounter() + 1);
 
                     // stopping the timer after one second
-                    if (timerCounter == 1) {
+                    if (viewModel.getTimerCounter() == 1) {
                         timer.cancel();
                     }
                 });
@@ -357,28 +288,19 @@ public class MainScreenActivity
     }
 
     private void setVariables() {
+        binding = DataBindingUtil.setContentView(this, R.layout.main_screen_activity);
         viewModel = new ViewModelProvider(this).get(MainScreenViewModel.class);
         preferences = getSharedPreferences(MyCustomVariables.getSharedPreferencesFileName(), MODE_PRIVATE);
-        firebaseDatabaseLoadingProgressBarLayout = findViewById(R.id.main_screen_progress_bar_layout);
-        moneySpentPercentageLayout = findViewById(R.id.fragment_money_spent_percentage_container);
-        moneySpentPercentageLayoutParams = moneySpentPercentageLayout.getLayoutParams();
-        firebaseDatabaseLoadingProgressBar = findViewById(R.id.main_screen_progress_bar);
-        greeting = findViewById(R.id.main_screen_greeting_text);
-        date = findViewById(R.id.main_screen_date_text);
-        addButton = findViewById(R.id.main_screen_fab_add);
-        subtractButton = findViewById(R.id.main_screen_fab_subtract);
-        signOut = findViewById(R.id.main_screen_sign_out);
-        edit = findViewById(R.id.main_screen_edit);
-        balance = findViewById(R.id.main_screen_balance);
-        moneySpentPercentageText = findViewById(R.id.main_screen_current_money_text);
-        account = findViewById(R.id.main_screen_account);
-        settings = findViewById(R.id.main_screen_settings);
-        remainingMonthlyIncomeText = findViewById(R.id.main_screen_remaining_income_text);
-        monthlyBalanceText = findViewById(R.id.main_screen_monthly_balance_text);
-        lastWeekExpensesText = findViewById(R.id.main_screen_last_week_spent_text);
-        lastTenTransactionsText = findViewById(R.id.main_screen_last_ten_transactions_text);
-        topFiveExpensesText = findViewById(R.id.main_screen_top_five_expenses_text);
-        pieChartSpentPercentageText = findViewById(R.id.main_screen_money_spent_percentage_text);
+        moneySpentPercentageLayoutParams = binding.expensesChartContainer.getLayoutParams();
+
+        binding.setActivity(this);
+        binding.setAddExpenseActivity(AddExpenseActivity.class);
+        binding.setAddIncomeActivity(AddIncomeActivity.class);
+        binding.setEditAccountActivity(EditAccountActivity.class);
+        binding.setEditTransactionsActivity(EditTransactionsActivity.class);
+        binding.setMonthlyBalanceActivity(MonthlyBalanceActivity.class);
+        binding.setSettingsActivity(SettingsActivity.class);
+        binding.setViewModel(viewModel);
     }
 
     private boolean userDetailsAlreadyExistInSharedPreferences(final UserDetails details) {

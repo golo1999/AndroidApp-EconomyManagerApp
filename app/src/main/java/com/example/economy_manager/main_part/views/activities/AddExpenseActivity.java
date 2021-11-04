@@ -14,8 +14,8 @@ import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.economy_manager.R;
-import com.example.economy_manager.databinding.AddMoneyActivityBinding;
-import com.example.economy_manager.main_part.viewmodels.AddMoneyViewModel;
+import com.example.economy_manager.databinding.AddExpenseActivityBinding;
+import com.example.economy_manager.main_part.viewmodels.AddExpenseViewModel;
 import com.example.economy_manager.models.MyCustomTime;
 import com.example.economy_manager.models.Transaction;
 import com.example.economy_manager.utilities.MyCustomMethods;
@@ -26,10 +26,12 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
 
-public class AddMoneyActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener {
-    private AddMoneyActivityBinding binding;
-    private AddMoneyViewModel viewModel;
-    private final RadioButton[] optionsArray = new RadioButton[4];
+public class AddExpenseActivity
+        extends AppCompatActivity
+        implements DatePickerDialog.OnDateSetListener {
+    private AddExpenseActivityBinding binding;
+    private AddExpenseViewModel viewModel;
+    private final RadioButton[] optionsArray = new RadioButton[15];
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
@@ -61,15 +63,16 @@ public class AddMoneyActivity extends AppCompatActivity implements DatePickerDia
         final RadioButton radioButton = findViewById(selectedID);
 
         final int transactionCategoryIndex = Transaction.getIndexFromCategory(Types.
-                getTypeInEnglish(this, String.valueOf(radioButton.getText()).trim()));
+                getTypeInEnglish(AddExpenseActivity.this,
+                        String.valueOf(radioButton.getText()).trim()));
 
         final Transaction newTransaction = !String.valueOf(binding.noteField.getText()).trim().isEmpty() ?
                 new Transaction(transactionCategoryIndex,
-                        1,
+                        0,
                         String.valueOf(binding.noteField.getText()).trim(),
                         String.valueOf(binding.valueField.getText()).trim()) :
                 new Transaction(transactionCategoryIndex,
-                        1,
+                        0,
                         String.valueOf(binding.valueField.getText()).trim());
 
         // setting transaction's time
@@ -84,7 +87,6 @@ public class AddMoneyActivity extends AppCompatActivity implements DatePickerDia
                 0,
                 0));
 
-
         MyCustomVariables.getDatabaseReference()
                 .child(userID)
                 .child("PersonalTransactions")
@@ -92,9 +94,8 @@ public class AddMoneyActivity extends AppCompatActivity implements DatePickerDia
                 .setValue(newTransaction)
                 .addOnSuccessListener((final Void aVoid) -> {
                     MyCustomMethods.showShortMessage(this,
-                            getResources().getString(R.string.income) + " " +
+                            getResources().getString(R.string.expense) + " " +
                                     getResources().getString(R.string.add_money_added_successfully));
-
                     finish();
                     overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
                 })
@@ -113,34 +114,100 @@ public class AddMoneyActivity extends AppCompatActivity implements DatePickerDia
     private void createRadioButtons() {
         final ArrayList<String> buttonTextArray = new ArrayList<>();
 
-        final String depositsText = viewModel.getDepositsText(this);
+        final String billsText = viewModel.getBillsText(this);
 
-        final int depositsValue = R.id.add_money_radio_button_deposits;
+        final int billsValue = R.id.add_money_radio_button_bills;
 
-        final String independentSourcesText = viewModel.getIndependentSourcesText(this);
+        final String carText = viewModel.getCarText(this);
 
-        final int independentSourcesValue = R.id.add_money_radio_button_independent_sources;
+        final int carValue = R.id.add_money_radio_button_car;
 
-        final String salaryText = viewModel.getSalaryText(this);
+        final String clothesText = viewModel.getClothesText(this);
 
-        final int salaryValue = R.id.add_money_radio_button_salary;
+        final int clothesValue = R.id.add_money_radio_button_clothes;
 
-        final String savingText = viewModel.getSavingText(this);
+        final String communicationsText = viewModel.getCommunicationsText(this);
 
-        final int savingValue = R.id.add_money_radio_button_saving;
+        final int communicationsValue = R.id.add_money_radio_button_communications;
 
-        buttonTextArray.add(depositsText);
-        buttonTextArray.add(independentSourcesText);
-        buttonTextArray.add(salaryText);
-        buttonTextArray.add(savingText);
+        final String eatingOutText = viewModel.getEatingOutText(this);
+
+        final int eatingOutValue = R.id.add_money_radio_button_eating_out;
+
+        final String entertainmentText = viewModel.getEntertainmentText(this);
+
+        final int entertainmentValue = R.id.add_money_radio_button_entertainment;
+
+        final String foodText = viewModel.getFoodText(this);
+
+        final int foodValue = R.id.add_money_radio_button_food;
+
+        final String giftsText = viewModel.getGiftsText(this);
+
+        final int giftsValue = R.id.add_money_radio_button_gifts;
+
+        final String healthText = viewModel.getHealthText(this);
+
+        final int healthValue = R.id.add_money_radio_button_health;
+
+        final String houseText = viewModel.getHouseText(this);
+
+        final int houseValue = R.id.add_money_radio_button_house;
+
+        final String petsText = viewModel.getPetsText(this);
+
+        final int petsValue = R.id.add_money_radio_button_pets;
+
+        final String sportsText = viewModel.getSportsText(this);
+
+        final int sportsValue = R.id.add_money_radio_button_sports;
+
+        final String taxiText = viewModel.getTaxiText(this);
+
+        final int taxiValue = R.id.add_money_radio_button_taxi;
+
+        final String toiletryText = viewModel.getToiletryText(this);
+
+        final int toiletryValue = R.id.add_money_radio_button_toiletry;
+
+        final String transportText = viewModel.getTransportText(this);
+
+        final int transportValue = R.id.add_money_radio_button_transport;
+
+        buttonTextArray.add(billsText);
+        buttonTextArray.add(carText);
+        buttonTextArray.add(clothesText);
+        buttonTextArray.add(communicationsText);
+        buttonTextArray.add(eatingOutText);
+        buttonTextArray.add(entertainmentText);
+        buttonTextArray.add(foodText);
+        buttonTextArray.add(giftsText);
+        buttonTextArray.add(healthText);
+        buttonTextArray.add(houseText);
+        buttonTextArray.add(petsText);
+        buttonTextArray.add(sportsText);
+        buttonTextArray.add(taxiText);
+        buttonTextArray.add(toiletryText);
+        buttonTextArray.add(transportText);
 
         Collections.sort(buttonTextArray);
 
         for (int i = 0; i < buttonTextArray.size(); i++) {
-            final int ID = buttonTextArray.get(i).equals(depositsText) ?
-                    depositsValue : buttonTextArray.get(i).equals(independentSourcesText) ?
-                    independentSourcesValue : buttonTextArray.get(i).equals(salaryText) ?
-                    salaryValue : savingValue;
+            final int ID = buttonTextArray.get(i).equals(billsText) ?
+                    billsValue : buttonTextArray.get(i).equals(carText) ?
+                    carValue : buttonTextArray.get(i).equals(clothesText) ?
+                    clothesValue : buttonTextArray.get(i).equals(communicationsText) ?
+                    communicationsValue : buttonTextArray.get(i).equals(eatingOutText) ?
+                    eatingOutValue : buttonTextArray.get(i).equals(entertainmentText) ?
+                    entertainmentValue : buttonTextArray.get(i).equals(foodText) ?
+                    foodValue : buttonTextArray.get(i).equals(giftsText) ?
+                    giftsValue : buttonTextArray.get(i).equals(healthText) ?
+                    healthValue : buttonTextArray.get(i).equals(houseText) ?
+                    houseValue : buttonTextArray.get(i).equals(petsText) ?
+                    petsValue : buttonTextArray.get(i).equals(sportsText) ?
+                    sportsValue : buttonTextArray.get(i).equals(taxiText) ?
+                    taxiValue : buttonTextArray.get(i).equals(toiletryText) ?
+                    toiletryValue : transportValue;
 
             optionsArray[i] = new RadioButton(this);
 
@@ -158,7 +225,7 @@ public class AddMoneyActivity extends AppCompatActivity implements DatePickerDia
     public void onSaveButtonClicked() {
         final int selectedID = binding.optionsLayout.getCheckedRadioButtonId();
 
-        MyCustomMethods.closeTheKeyboard(AddMoneyActivity.this);
+        MyCustomMethods.closeTheKeyboard(AddExpenseActivity.this);
         // if there was any radio button checked
         if (selectedID != -1 && MyCustomVariables.getFirebaseAuth().getUid() != null) {
             if (!String.valueOf(binding.valueField.getText()).trim().isEmpty()) {
@@ -168,9 +235,7 @@ public class AddMoneyActivity extends AppCompatActivity implements DatePickerDia
             } else {
                 MyCustomMethods.showShortMessage(this, getResources().getString(R.string.money_error4));
             }
-        }
-        // if there wasn't a radio button checked
-        else {
+        } else {
             MyCustomMethods.showShortMessage(this, getResources().getString(R.string.money_error1));
         }
     }
@@ -188,8 +253,8 @@ public class AddMoneyActivity extends AppCompatActivity implements DatePickerDia
     }
 
     private void setVariables() {
-        binding = DataBindingUtil.setContentView(this, R.layout.add_money_activity);
-        viewModel = new ViewModelProvider(this).get(AddMoneyViewModel.class);
+        binding = DataBindingUtil.setContentView(this, R.layout.add_expense_activity);
+        viewModel = new ViewModelProvider(this).get(AddExpenseViewModel.class);
 
         binding.setActivity(this);
         binding.setFragmentManager(getSupportFragmentManager());

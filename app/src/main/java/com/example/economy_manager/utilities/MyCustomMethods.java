@@ -11,7 +11,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 
 import com.example.economy_manager.R;
-import com.example.economy_manager.login_part.LogInActivity;
+import com.example.economy_manager.login_part.views.LogInActivity;
 
 import java.time.LocalDate;
 import java.time.LocalTime;

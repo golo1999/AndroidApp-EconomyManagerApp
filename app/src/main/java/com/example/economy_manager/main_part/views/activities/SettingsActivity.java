@@ -26,7 +26,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SwitchCompat;
 
 import com.example.economy_manager.R;
-import com.example.economy_manager.login_part.LogInActivity;
+import com.example.economy_manager.login_part.views.LogInActivity;
 import com.example.economy_manager.main_part.dialogs.ChangePasswordCustomDialog;
 import com.example.economy_manager.main_part.dialogs.DeleteAccountCustomDialog;
 import com.example.economy_manager.models.UserDetails;
