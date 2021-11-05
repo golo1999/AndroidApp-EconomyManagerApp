@@ -1,183 +1,211 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+<layout>
 
-    <ScrollView
-        android:layout_width="0sp"
-        android:layout_height="0sp"
-        android:fillViewport="true"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+    <data>
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+        <variable
+            name="activity"
+            type="com.example.economy_manager.main_part.views.activities.EditAccountActivity" />
+
+        <variable
+            name="fragmentManager"
+            type="androidx.fragment.app.FragmentManager" />
+
+        <variable
+            name="viewModel"
+            type="com.example.economy_manager.main_part.viewmodels.EditAccountViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ScrollView
+            android:layout_width="0sp"
+            android:layout_height="0sp"
+            android:fillViewport="true"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
             <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/edit_account_remastered_top_layout"
-                android:layout_width="0sp"
-                android:layout_height="wrap_content"
-                android:background="#A2A2A1"
-                android:focusable="true"
-                android:focusableInTouchMode="true"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
 
-                <ImageView
-                    android:id="@+id/edit_account_remastered_back"
-                    android:layout_width="wrap_content"
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/topLayout"
+                    android:layout_width="0sp"
                     android:layout_height="wrap_content"
-                    android:layout_margin="5sp"
-                    android:src="@drawable/ic_back"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    android:background="#A2A2A1"
+                    android:focusable="true"
+                    android:focusableInTouchMode="true"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <ImageView
+                        android:id="@+id/goBack"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="5sp"
+                        android:onClick="@{() -> activity.onBackPressed()}"
+                        android:src="@drawable/ic_back"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:id="@+id/title"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="20sp"
+                        android:text="@string/edit_account"
+                        android:textAlignment="center"
+                        android:textColor="@color/white"
+                        android:textSize="20sp"
+                        android:textStyle="bold"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintLeft_toRightOf="@id/goBack"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/photo"
+                    android:layout_width="0sp"
+                    android:layout_height="0sp"
+                    android:layout_marginTop="20sp"
+                    app:civ_border_width="10sp"
+                    app:layout_constraintDimensionRatio="1:1"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/topLayout"
+                    app:layout_constraintWidth_percent=".4"
+                    tools:src="@drawable/ic_add_photo" />
+
+                <EditText
+                    android:id="@+id/firstNameField"
+                    android:layout_width="0sp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20sp"
+                    android:inputType="textPersonName"
+                    android:textSize="18sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/photo"
+                    app:layout_constraintWidth_percent=".8"
+                    tools:text="@string/edit_account_first_name" />
+
+                <EditText
+                    android:id="@+id/lastNameField"
+                    android:layout_width="0sp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20sp"
+                    android:inputType="textPersonName"
+                    android:textSize="18sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/firstNameField"
+                    app:layout_constraintWidth_percent=".8"
+                    tools:text="@string/edit_account_last_name" />
+
+                <EditText
+                    android:id="@+id/phoneField"
+                    android:layout_width="0sp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20sp"
+                    android:inputType="phone"
+                    android:textSize="18sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/lastNameField"
+                    app:layout_constraintWidth_percent=".8"
+                    tools:text="@string/edit_account_phone_number" />
+
+                <EditText
+                    android:id="@+id/websiteField"
+                    android:layout_width="0sp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20sp"
+                    android:inputType="text"
+                    android:textSize="18sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/phoneField"
+                    app:layout_constraintWidth_percent=".8"
+                    tools:text="@string/edit_account_website" />
+
+                <Spinner
+                    android:id="@+id/countrySpinner"
+                    android:layout_width="0sp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/websiteField"
+                    app:layout_constraintWidth_percent=".8" />
+
+                <Spinner
+                    android:id="@+id/genderSpinner"
+                    android:layout_width="0sp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/countrySpinner"
+                    app:layout_constraintWidth_percent=".8" />
 
                 <TextView
-                    android:id="@+id/edit_account_remastered_top_text"
-                    android:layout_width="wrap_content"
+                    android:id="@+id/birthDateText"
+                    android:layout_width="0sp"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="20sp"
+                    android:drawablePadding="10sp"
+                    android:onClick="@{() -> viewModel.onBirthDateTextClicked(fragmentManager)}"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/genderSpinner"
+                    app:layout_constraintWidth_percent=".8"
+                    tools:text="@string/edit_account_birth_date" />
+
+                <EditText
+                    android:id="@+id/careerTitleField"
+                    android:layout_width="0sp"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="20sp"
-                    android:text="@string/edit_account"
-                    android:textAlignment="center"
-                    android:textColor="@color/white"
-                    android:textSize="20sp"
+                    android:layout_marginTop="20sp"
+                    android:inputType="text"
+                    android:textSize="18sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/birthDateText"
+                    app:layout_constraintWidth_percent=".8"
+                    tools:text="@string/edit_account_career_title" />
+
+                <Button
+                    android:id="@+id/updateProfileButton"
+                    android:layout_width="0sp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginVertical="20sp"
+                    android:padding="10sp"
+                    android:stateListAnimator="@null"
+                    android:text="@string/update_profile"
+                    android:textSize="18sp"
                     android:textStyle="bold"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintLeft_toRightOf="@id/edit_account_remastered_back"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/careerTitleField"
+                    app:layout_constraintWidth_percent=".8" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
-            <de.hdodenhof.circleimageview.CircleImageView
-                android:id="@+id/edit_account_remastered_photo"
-                android:layout_width="0sp"
-                android:layout_height="0sp"
-                android:layout_marginTop="20sp"
-                app:civ_border_width="10sp"
-                app:layout_constraintDimensionRatio="1:1"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/edit_account_remastered_top_layout"
-                app:layout_constraintWidth_percent=".4" />
+        </ScrollView>
 
-            <EditText
-                android:id="@+id/edit_account_remastered_first_name_field"
-                android:layout_width="0sp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20sp"
-                android:inputType="textPersonName"
-                android:textSize="18sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/edit_account_remastered_photo"
-                app:layout_constraintWidth_percent=".8" />
-
-            <EditText
-                android:id="@+id/edit_account_remastered_last_name_field"
-                android:layout_width="0sp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20sp"
-                android:inputType="textPersonName"
-                android:textSize="18sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/edit_account_remastered_first_name_field"
-                app:layout_constraintWidth_percent=".8" />
-
-            <EditText
-                android:id="@+id/edit_account_remastered_phone_field"
-                android:layout_width="0sp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20sp"
-                android:inputType="phone"
-                android:textSize="18sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/edit_account_remastered_last_name_field"
-                app:layout_constraintWidth_percent=".8" />
-
-            <EditText
-                android:id="@+id/edit_account_remastered_website_field"
-                android:layout_width="0sp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20sp"
-                android:inputType="text"
-                android:textSize="18sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/edit_account_remastered_phone_field"
-                app:layout_constraintWidth_percent=".8" />
-
-            <Spinner
-                android:id="@+id/edit_account_remastered_country_spinner"
-                android:layout_width="0sp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/edit_account_remastered_website_field"
-                app:layout_constraintWidth_percent=".8" />
-
-            <Spinner
-                android:id="@+id/edit_account_remastered_gender_spinner"
-                android:layout_width="0sp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/edit_account_remastered_country_spinner"
-                app:layout_constraintWidth_percent=".8" />
-
-            <TextView
-                android:id="@+id/edit_account_remastered_birth_date_text"
-                android:layout_width="0sp"
-                android:layout_height="match_parent"
-                android:layout_marginTop="20sp"
-                android:drawablePadding="10sp"
-                android:textSize="18sp"
-                android:textStyle="bold"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/edit_account_remastered_gender_spinner"
-                app:layout_constraintWidth_percent=".8" />
-
-            <EditText
-                android:id="@+id/edit_account_remastered_career_title_field"
-                android:layout_width="0sp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20sp"
-                android:inputType="text"
-                android:textSize="18sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/edit_account_remastered_birth_date_text"
-                app:layout_constraintWidth_percent=".8" />
-
-            <Button
-                android:id="@+id/edit_account_remastered_update_button"
-                android:layout_width="0sp"
-                android:layout_height="wrap_content"
-                android:layout_marginVertical="20sp"
-                android:padding="10sp"
-                android:stateListAnimator="@null"
-                android:text="@string/update_profile"
-                android:textSize="18sp"
-                android:textStyle="bold"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/edit_account_remastered_career_title_field"
-                app:layout_constraintWidth_percent=".8" />
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-    </ScrollView>
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

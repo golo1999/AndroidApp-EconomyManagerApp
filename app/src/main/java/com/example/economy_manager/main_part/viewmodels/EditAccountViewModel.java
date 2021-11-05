@@ -1,17 +1,22 @@
 package com.example.economy_manager.main_part.viewmodels;
 
 import android.app.Application;
+import android.content.Context;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.fragment.app.DialogFragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.AndroidViewModel;
 
 import com.example.economy_manager.R;
+import com.example.economy_manager.main_part.views.fragments.DatePickerFragment;
 import com.example.economy_manager.models.UserDetails;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 
 public class EditAccountViewModel extends AndroidViewModel {
     private UserDetails userDetails;
@@ -455,6 +460,73 @@ public class EditAccountViewModel extends AndroidViewModel {
         return Collections.binarySearch(getCountryList(), translatedCountryName);
     }
 
+    public HashMap<String, Object> getPersonalInformation(final @NonNull Context context) {
+        final HashMap<String, Object> personalInformationMap = new HashMap<>();
+
+        final Object photoURL = getUserDetails() != null ?
+                getUserDetails().getPersonalInformation().getPhotoURL() : "";
+
+        final Object firstName = getUserDetails() == null ||
+                getUserDetails().getPersonalInformation().getFirstName().trim().isEmpty() ?
+                context.getResources().getString(R.string.edit_account_first_name).trim() :
+                getUserDetails().getPersonalInformation().getFirstName().trim();
+
+        final Object lastName = getUserDetails() == null ||
+                getUserDetails().getPersonalInformation().getLastName().trim().isEmpty() ?
+                context.getResources().getString(R.string.edit_account_last_name).trim() :
+                getUserDetails().getPersonalInformation().getLastName().trim();
+
+        final Object phoneNumber = getUserDetails() == null ||
+                getUserDetails().getPersonalInformation().getPhoneNumber().trim().isEmpty() ?
+                context.getResources().getString(R.string.edit_account_phone_number).trim() :
+                getUserDetails().getPersonalInformation().getPhoneNumber().trim();
+
+        final Object website = getUserDetails() == null ||
+                getUserDetails().getPersonalInformation().getWebsite().trim().isEmpty() ?
+                context.getResources().getString(R.string.edit_account_website).trim() :
+                getUserDetails().getPersonalInformation().getWebsite().trim();
+
+        final Object countrySpinnerSelection = getPositionInCountryList(getApplication(),
+                getUserDetails() != null ? getUserDetails().getPersonalInformation().getCountry().trim() : "");
+
+        final Object genderSpinnerSelection = getPositionInGenderList(getApplication(),
+                getUserDetails() != null ? getUserDetails().getPersonalInformation().getGender().trim() : "");
+
+        final Object birthDate = getUserDetails() == null ||
+                getUserDetails().getPersonalInformation() == null ||
+                getUserDetails().getPersonalInformation().getBirthDate() == null ?
+                LocalDate.now() :
+                LocalDate.of(getUserDetails().getPersonalInformation().getBirthDate().getYear(),
+                        getUserDetails().getPersonalInformation().getBirthDate().getMonth(),
+                        getUserDetails().getPersonalInformation().getBirthDate().getDay());
+
+        final Object careerTitle = getUserDetails() == null ||
+                getUserDetails().getPersonalInformation().getCareerTitle().trim().isEmpty() ?
+                context.getResources().getString(R.string.edit_account_career_title).trim() :
+                getUserDetails().getPersonalInformation().getCareerTitle().trim();
+
+
+        personalInformationMap.put("photoURL", photoURL);
+
+        personalInformationMap.put("firstName", firstName);
+
+        personalInformationMap.put("lastName", lastName);
+
+        personalInformationMap.put("phoneNumber", phoneNumber);
+
+        personalInformationMap.put("website", website);
+
+        personalInformationMap.put("countrySpinnerSelection", countrySpinnerSelection);
+
+        personalInformationMap.put("genderSpinnerSelection", genderSpinnerSelection);
+
+        personalInformationMap.put("birthDate", birthDate);
+
+        personalInformationMap.put("careerTitle", careerTitle);
+
+        return personalInformationMap;
+    }
+
     public int getPositionInGenderList(final Application app,
                                        final String gender) {
         final String translatedGender = gender.equals("Female") ?
@@ -465,6 +537,12 @@ public class EditAccountViewModel extends AndroidViewModel {
                                 app.getResources().getString(R.string.edit_account_gender_other) : " ";
 
         return Collections.binarySearch(getGenderList(), translatedGender);
+    }
+
+    public void onBirthDateTextClicked(final FragmentManager fragmentManager) {
+        final DialogFragment datePickerFragment = new DatePickerFragment(getTransactionDate());
+
+        datePickerFragment.show(fragmentManager, "date_picker");
     }
 
     private void sortListAscending(final ArrayList<String> list) {

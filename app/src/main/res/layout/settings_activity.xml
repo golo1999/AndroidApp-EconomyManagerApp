@@ -1,189 +1,212 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".main_part.views.activities.SettingsActivity">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/settings_top_layout"
-        android:layout_width="0sp"
-        android:layout_height="wrap_content"
-        android:background="#A2A2A1"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+<layout>
 
-        <ImageView
-            android:id="@+id/settings_back"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="5sp"
-            android:src="@drawable/ic_back"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+    <data>
 
-        <TextView
-            android:id="@+id/settings_top_text"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="20sp"
-            android:text="@string/settings_text"
-            android:textAlignment="center"
-            android:textColor="@color/white"
-            android:textSize="20sp"
-            android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintLeft_toRightOf="@id/settings_back"
-            app:layout_constraintTop_toTopOf="parent" />
+        <variable
+            name="activity"
+            type="com.example.economy_manager.main_part.views.activities.SettingsActivity" />
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+        <variable
+            name="fragmentManager"
+            type="androidx.fragment.app.FragmentManager" />
 
-    <ScrollView
-        android:layout_width="0sp"
-        android:layout_height="0sp"
-        android:fillViewport="true"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/settings_top_layout">
+        <variable
+            name="viewModel"
+            type="com.example.economy_manager.main_part.viewmodels.SettingsViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".main_part.views.activities.SettingsActivity">
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:id="@+id/topLayout"
+            android:layout_width="0sp"
+            android:layout_height="wrap_content"
+            android:background="#A2A2A1"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/settings_theme_layout"
-                android:layout_width="0sp"
+            <ImageView
+                android:id="@+id/goBack"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="20sp"
-                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_margin="5sp"
+                android:onClick="@{() -> activity.onBackPressed()}"
+                android:src="@drawable/ic_back"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintWidth_percent=".9">
+                app:layout_constraintTop_toTopOf="parent" />
 
-                <TextView
-                    android:id="@+id/settings_theme_text"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/settings_dark_theme"
-                    android:textAlignment="center"
-                    android:textSize="20sp"
-                    android:textStyle="bold"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <com.google.android.material.switchmaterial.SwitchMaterial
-                    android:id="@+id/settings_dark_theme_switch"
-                    android:layout_width="0sp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="10sp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toEndOf="@id/settings_theme_text"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/settings_currency_layout"
-                android:layout_width="0sp"
+            <TextView
+                android:id="@+id/title"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="20sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/settings_theme_layout"
-                app:layout_constraintWidth_percent=".9">
-
-                <TextView
-                    android:id="@+id/settings_currency_text"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/settings_currency"
-                    android:textAlignment="center"
-                    android:textSize="20sp"
-                    android:textStyle="bold"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <Spinner
-                    android:id="@+id/settings_currency_spinner"
-                    android:layout_width="0sp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="10sp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toEndOf="@id/settings_currency_text"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-            <Button
-                android:id="@+id/settings_rate_button"
-                android:layout_width="0sp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="30sp"
-                android:padding="10sp"
-                android:stateListAnimator="@null"
-                android:text="@string/rate_app"
-                android:textSize="18sp"
+                android:layout_marginStart="20sp"
+                android:text="@string/settings_text"
+                android:textAlignment="center"
+                android:textColor="@color/white"
+                android:textSize="20sp"
                 android:textStyle="bold"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/settings_currency_layout"
-                app:layout_constraintWidth_percent=".9" />
-
-            <Button
-                android:id="@+id/settings_change_password_button"
-                android:layout_width="0sp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20sp"
-                android:padding="10sp"
-                android:stateListAnimator="@null"
-                android:text="@string/change_password"
-                android:textSize="18sp"
-                android:textStyle="bold"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/settings_rate_button"
-                app:layout_constraintWidth_percent=".9" />
-
-            <Button
-                android:id="@+id/settings_delete_database"
-                android:layout_width="0sp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20sp"
-                android:padding="10sp"
-                android:stateListAnimator="@null"
-                android:text="@string/reset_database"
-                android:textSize="18sp"
-                android:textStyle="bold"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/settings_change_password_button"
-                app:layout_constraintWidth_percent=".9" />
-
-            <Button
-                android:id="@+id/settings_delete_button"
-                android:layout_width="0sp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20sp"
-                android:padding="10sp"
-                android:stateListAnimator="@null"
-                android:text="@string/delete_account"
-                android:textSize="18sp"
-                android:textStyle="bold"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/settings_delete_database"
-                app:layout_constraintWidth_percent=".9" />
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toRightOf="@id/goBack"
+                app:layout_constraintTop_toTopOf="parent" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-    </ScrollView>
+        <ScrollView
+            android:layout_width="0sp"
+            android:layout_height="0sp"
+            android:fillViewport="true"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/topLayout">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/themeLayout"
+                    android:layout_width="0sp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintWidth_percent=".9">
+
+                    <TextView
+                        android:id="@+id/themeText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/settings_dark_theme"
+                        android:textAlignment="center"
+                        android:textSize="20sp"
+                        android:textStyle="bold"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <com.google.android.material.switchmaterial.SwitchMaterial
+                        android:id="@+id/themeSwitch"
+                        android:layout_width="0sp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10sp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@id/themeText"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/currencyLayout"
+                    android:layout_width="0sp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/themeLayout"
+                    app:layout_constraintWidth_percent=".9">
+
+                    <TextView
+                        android:id="@+id/currencyText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/settings_currency"
+                        android:textAlignment="center"
+                        android:textSize="20sp"
+                        android:textStyle="bold"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <Spinner
+                        android:id="@+id/currencySpinner"
+                        android:layout_width="0sp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10sp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@id/currencyText"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <Button
+                    android:id="@+id/rateButton"
+                    android:layout_width="0sp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="30sp"
+                    android:padding="10sp"
+                    android:stateListAnimator="@null"
+                    android:text="@string/rate_app"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/currencyLayout"
+                    app:layout_constraintWidth_percent=".9" />
+
+                <Button
+                    android:id="@+id/changePasswordButton"
+                    android:layout_width="0sp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20sp"
+                    android:onClick="@{(view) -> viewModel.onChangePasswordButtonClicked(fragmentManager, view)}"
+                    android:padding="10sp"
+                    android:stateListAnimator="@null"
+                    android:text="@string/change_password"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/rateButton"
+                    app:layout_constraintWidth_percent=".9" />
+
+                <Button
+                    android:id="@+id/resetDatabaseButton"
+                    android:layout_width="0sp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20sp"
+                    android:onClick="@{(view) -> viewModel.onResetDatabaseButtonClicked(fragmentManager, view)}"
+                    android:padding="10sp"
+                    android:stateListAnimator="@null"
+                    android:text="@string/reset_database"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/changePasswordButton"
+                    app:layout_constraintWidth_percent=".9" />
+
+                <Button
+                    android:id="@+id/deleteAccountButton"
+                    android:layout_width="0sp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20sp"
+                    android:onClick="@{(view) -> viewModel.onDeleteAccountButtonClicked(fragmentManager, view)}"
+                    android:padding="10sp"
+                    android:stateListAnimator="@null"
+                    android:text="@string/delete_account"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/resetDatabaseButton"
+                    app:layout_constraintWidth_percent=".9" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </ScrollView>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

@@ -6,49 +6,27 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
-import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.ProgressBar;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.databinding.DataBindingUtil;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.example.economy_manager.R;
+import com.example.economy_manager.databinding.EditPhotoActivityBinding;
+import com.example.economy_manager.main_part.viewmodels.EditPhotoViewModel;
 import com.example.economy_manager.models.UserDetails;
 import com.example.economy_manager.utilities.MyCustomMethods;
 import com.example.economy_manager.utilities.MyCustomSharedPreferences;
 import com.example.economy_manager.utilities.MyCustomVariables;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.google.gson.Gson;
-import com.squareup.picasso.Picasso;
 
 public class EditPhotoActivity extends AppCompatActivity {
+    private EditPhotoActivityBinding binding;
+    private EditPhotoViewModel viewModel;
     private SharedPreferences preferences;
-    private ImageView goBack;
-    private ImageView uploadedFile;
-    private ProgressBar progressBar;
-    private Uri imageUri;
-    private Button chooseFileButton;
-    private Button uploadFileButton;
-    private StorageReference storageReference;
-    private static final int PICK_IMAGE_REQUEST = 2;
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.edit_photo_activity);
-        setVariables();
-        setOnClickListeners();
-        setInitialProgressBar();
-        setPhoto();
-    }
 
     @Override
     public void onBackPressed() {
@@ -56,34 +34,12 @@ public class EditPhotoActivity extends AppCompatActivity {
         MyCustomMethods.finishActivityWithFadeTransition(this);
     }
 
-    private void setVariables() {
-        preferences = getSharedPreferences(MyCustomVariables.getSharedPreferencesFileName(), MODE_PRIVATE);
-        goBack = findViewById(R.id.edit_photo_back);
-        progressBar = findViewById(R.id.edit_photo_progress_bar);
-        chooseFileButton = findViewById(R.id.edit_photo_choose_file);
-        uploadFileButton = findViewById(R.id.edit_photo_upload_file);
-        uploadedFile = findViewById(R.id.edit_photo_file_uploaded);
-        storageReference = FirebaseStorage.getInstance().getReference();
-    }
-
-    private void setOnClickListeners() {
-        goBack.setOnClickListener((final View v) -> onBackPressed());
-
-        chooseFileButton.setOnClickListener((final View v) -> openFileChooser());
-
-        uploadFileButton.setOnClickListener((final View v) -> uploadFile());
-    }
-
-    private void setInitialProgressBar() {
-        progressBar.setVisibility(View.INVISIBLE);
-    }
-
-    private void openFileChooser() {
-        final Intent intent = new Intent();
-
-        intent.setType("image/*");
-        intent.setAction(Intent.ACTION_GET_CONTENT);
-        startActivityForResult(intent, PICK_IMAGE_REQUEST);
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setVariables();
+        setInitialProgressBar();
+        viewModel.showPhoto(binding.uploadedPhoto);
     }
 
     @Override
@@ -92,30 +48,52 @@ public class EditPhotoActivity extends AppCompatActivity {
                                     final @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (requestCode == PICK_IMAGE_REQUEST &&
+        if (requestCode == viewModel.getRequestId() &&
                 data != null &&
                 data.getData() != null) {
             final int screenWidthPixels = (int) (0.75 * getResources().getDisplayMetrics().widthPixels);
 
-            imageUri = data.getData();
-            uploadedFile.setImageURI(imageUri);
-            uploadedFile.getLayoutParams().width = screenWidthPixels;
+            viewModel.setImageUri(data.getData());
+            binding.uploadedPhoto.setImageURI(viewModel.getImageUri());
+            binding.uploadedPhoto.getLayoutParams().width = screenWidthPixels;
         }
     }
 
-    private void uploadFile() {
-        if (imageUri != null) {
-            if (MyCustomVariables.getFirebaseAuth().getUid() != null) {
-                progressBar.setVisibility(View.VISIBLE);
+    private UserDetails retrieveUserDetailsFromSharedPreferences() {
+        SharedPreferences preferences =
+                getSharedPreferences(MyCustomVariables.getSharedPreferencesFileName(), MODE_PRIVATE);
+        Gson gson = new Gson();
+        String json = preferences.getString("currentUserDetails", "");
 
-                storageReference.child(MyCustomVariables.getFirebaseAuth().getUid())
-                        .putFile(imageUri)
+        return gson.fromJson(json, UserDetails.class);
+    }
+
+    private void setInitialProgressBar() {
+        binding.progressBar.setVisibility(View.INVISIBLE);
+    }
+
+    private void setVariables() {
+        binding = DataBindingUtil.setContentView(this, R.layout.edit_photo_activity);
+        viewModel = new ViewModelProvider(this).get(EditPhotoViewModel.class);
+        preferences = getSharedPreferences(MyCustomVariables.getSharedPreferencesFileName(), MODE_PRIVATE);
+
+        binding.setActivity(this);
+        binding.setViewModel(viewModel);
+    }
+
+    public void uploadFile() {
+        if (viewModel.getImageUri() != null) {
+            if (MyCustomVariables.getFirebaseAuth().getUid() != null) {
+                binding.progressBar.setVisibility(View.VISIBLE);
+
+                viewModel.getStorageReference().child(MyCustomVariables.getFirebaseAuth().getUid())
+                        .putFile(viewModel.getImageUri())
                         .addOnSuccessListener((final UploadTask.TaskSnapshot taskSnapshot) -> {
                             final Handler handler = new Handler();
 
                             handler.postDelayed(() -> {
-                                progressBar.setProgress(0);
-                                progressBar.setVisibility(View.INVISIBLE);
+                                binding.progressBar.setProgress(0);
+                                binding.progressBar.setVisibility(View.INVISIBLE);
                             }, 500);
 
                             MyCustomMethods.showShortMessage(this,
@@ -161,52 +139,12 @@ public class EditPhotoActivity extends AppCompatActivity {
 
                             final float progress = 100 * taskSnapshotBytesTransferred / taskSnapshotTotalByteCount;
 
-                            progressBar.setProgress((int) progress);
+                            binding.progressBar.setProgress((int) progress);
                         });
             }
         } else {
             MyCustomMethods.showShortMessage(this, getResources().getString(R.string.edit_photo_select_file));
         }
-    }
-
-    private void setPhoto() {
-        if (MyCustomVariables.getFirebaseAuth().getUid() != null) {
-            MyCustomVariables.getDatabaseReference()
-                    .child(MyCustomVariables.getFirebaseAuth().getUid())
-                    .child("PersonalInformation")
-                    .addListenerForSingleValueEvent(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(final @NonNull DataSnapshot snapshot) {
-                            if (snapshot.hasChild("photoURL")) {
-                                final String URL = String.valueOf(snapshot.child("photoURL").getValue());
-
-                                if (!URL.trim().isEmpty()) {
-                                    Picasso.get()
-                                            .load(URL)
-                                            .placeholder(R.drawable.ic_add_photo)
-                                            .fit()
-                                            .into(uploadedFile);
-                                } else {
-                                    uploadedFile.setImageResource(R.drawable.ic_add_photo);
-                                }
-                            }
-                        }
-
-                        @Override
-                        public void onCancelled(final @NonNull DatabaseError error) {
-
-                        }
-                    });
-        }
-    }
-
-    private UserDetails retrieveUserDetailsFromSharedPreferences() {
-        SharedPreferences preferences =
-                getSharedPreferences(MyCustomVariables.getSharedPreferencesFileName(), MODE_PRIVATE);
-        Gson gson = new Gson();
-        String json = preferences.getString("currentUserDetails", "");
-
-        return gson.fromJson(json, UserDetails.class);
     }
 
     private boolean userDetailsAlreadyExistInSharedPreferences(final UserDetails details) {
