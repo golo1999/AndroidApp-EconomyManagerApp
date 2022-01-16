@@ -1,162 +1,165 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    app:cardCornerRadius="20sp"
-    app:cardElevation="0sp"
-    tools:context=".main_part.views.fragments.MoneySpentPercentageFragment">
+<layout>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        app:cardCornerRadius="20sp"
+        app:cardElevation="0sp"
+        tools:context=".feature.moneyspentpercentage.MoneySpentPercentageFragment">
 
-        <TextView
-            android:id="@+id/money_spent_percentage_no_expenses_text"
-            android:layout_width="0sp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:padding="20sp"
-            android:text="@string/top_5_expenses_no_expenses_this_month"
-            android:textAlignment="center"
-            android:textColor="@color/turkish_sea"
-            android:textSize="20sp"
-            android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
-        <org.eazegraph.lib.charts.PieChart
-            android:id="@+id/money_spent_percentage_pie_chart"
-            android:layout_width="0sp"
-            android:layout_height="match_parent"
-            android:padding="20sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/money_spent_percentage_details_layout"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            <TextView
+                android:id="@+id/noExpensesMadeText"
+                android:layout_width="0sp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:padding="20sp"
+                android:text="@string/top_5_expenses_no_expenses_this_month"
+                android:textAlignment="center"
+                android:textColor="@color/turkish_sea"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
-        <LinearLayout
-            android:id="@+id/money_spent_percentage_details_layout"
-            android:layout_width="0sp"
-            android:layout_height="wrap_content"
-            android:gravity="center_vertical"
-            android:orientation="vertical"
-            android:padding="20sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/money_spent_percentage_pie_chart"
-            app:layout_constraintTop_toTopOf="parent">
+            <org.eazegraph.lib.charts.PieChart
+                android:id="@+id/pieChart"
+                android:layout_width="0sp"
+                android:layout_height="match_parent"
+                android:padding="20sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/detailsLayout"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
-<!--            <LinearLayout-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:layout_gravity="center_vertical"-->
-<!--                android:orientation="horizontal">-->
+            <LinearLayout
+                android:id="@+id/detailsLayout"
+                android:layout_width="0sp"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="vertical"
+                android:padding="20sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/pieChart"
+                app:layout_constraintTop_toTopOf="parent">
 
-<!--                <View-->
-<!--                    android:layout_width="20sp"-->
-<!--                    android:layout_height="20sp"-->
-<!--                    android:background="@color/expenses_transport" />-->
+                <!--            <LinearLayout-->
+                <!--                android:layout_width="match_parent"-->
+                <!--                android:layout_height="wrap_content"-->
+                <!--                android:layout_gravity="center_vertical"-->
+                <!--                android:orientation="horizontal">-->
 
-<!--                <TextView-->
-<!--                    android:layout_width="wrap_content"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:paddingStart="10sp"-->
-<!--                    android:paddingEnd="0sp"-->
-<!--                    android:text="Transport (69%)" />-->
+                <!--                <View-->
+                <!--                    android:layout_width="20sp"-->
+                <!--                    android:layout_height="20sp"-->
+                <!--                    android:background="@color/expenses_transport" />-->
 
-<!--            </LinearLayout>-->
+                <!--                <TextView-->
+                <!--                    android:layout_width="wrap_content"-->
+                <!--                    android:layout_height="wrap_content"-->
+                <!--                    android:paddingStart="10sp"-->
+                <!--                    android:paddingEnd="0sp"-->
+                <!--                    android:text="Transport (69%)" />-->
 
-<!--            <LinearLayout-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:layout_gravity="center_vertical"-->
-<!--                android:layout_marginTop="5sp"-->
-<!--                android:orientation="horizontal">-->
+                <!--            </LinearLayout>-->
 
-<!--                <View-->
-<!--                    android:layout_width="20sp"-->
-<!--                    android:layout_height="20sp"-->
-<!--                    android:background="@color/expenses_bills" />-->
+                <!--            <LinearLayout-->
+                <!--                android:layout_width="match_parent"-->
+                <!--                android:layout_height="wrap_content"-->
+                <!--                android:layout_gravity="center_vertical"-->
+                <!--                android:layout_marginTop="5sp"-->
+                <!--                android:orientation="horizontal">-->
 
-<!--                <TextView-->
-<!--                    android:layout_width="wrap_content"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:paddingStart="10sp"-->
-<!--                    android:paddingEnd="0sp"-->
-<!--                    android:text="Bills (24%)" />-->
+                <!--                <View-->
+                <!--                    android:layout_width="20sp"-->
+                <!--                    android:layout_height="20sp"-->
+                <!--                    android:background="@color/expenses_bills" />-->
 
-<!--            </LinearLayout>-->
+                <!--                <TextView-->
+                <!--                    android:layout_width="wrap_content"-->
+                <!--                    android:layout_height="wrap_content"-->
+                <!--                    android:paddingStart="10sp"-->
+                <!--                    android:paddingEnd="0sp"-->
+                <!--                    android:text="Bills (24%)" />-->
 
-<!--            <LinearLayout-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:layout_gravity="center_vertical"-->
-<!--                android:layout_marginTop="5sp"-->
-<!--                android:orientation="horizontal">-->
+                <!--            </LinearLayout>-->
 
-<!--                <View-->
-<!--                    android:layout_width="20sp"-->
-<!--                    android:layout_height="20sp"-->
-<!--                    android:background="@color/expenses_health" />-->
+                <!--            <LinearLayout-->
+                <!--                android:layout_width="match_parent"-->
+                <!--                android:layout_height="wrap_content"-->
+                <!--                android:layout_gravity="center_vertical"-->
+                <!--                android:layout_marginTop="5sp"-->
+                <!--                android:orientation="horizontal">-->
 
-<!--                <TextView-->
-<!--                    android:layout_width="wrap_content"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:paddingStart="10sp"-->
-<!--                    android:paddingEnd="0sp"-->
-<!--                    android:text="Health" />-->
+                <!--                <View-->
+                <!--                    android:layout_width="20sp"-->
+                <!--                    android:layout_height="20sp"-->
+                <!--                    android:background="@color/expenses_health" />-->
 
-<!--            </LinearLayout>-->
+                <!--                <TextView-->
+                <!--                    android:layout_width="wrap_content"-->
+                <!--                    android:layout_height="wrap_content"-->
+                <!--                    android:paddingStart="10sp"-->
+                <!--                    android:paddingEnd="0sp"-->
+                <!--                    android:text="Health" />-->
 
-<!--            <LinearLayout-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:layout_gravity="center_vertical"-->
-<!--                android:layout_marginTop="5sp"-->
-<!--                android:orientation="horizontal">-->
+                <!--            </LinearLayout>-->
 
-<!--                <View-->
-<!--                    android:layout_width="20sp"-->
-<!--                    android:layout_height="20sp"-->
-<!--                    android:background="@color/red" />-->
+                <!--            <LinearLayout-->
+                <!--                android:layout_width="match_parent"-->
+                <!--                android:layout_height="wrap_content"-->
+                <!--                android:layout_gravity="center_vertical"-->
+                <!--                android:layout_marginTop="5sp"-->
+                <!--                android:orientation="horizontal">-->
 
-<!--                <TextView-->
-<!--                    android:layout_width="wrap_content"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:paddingStart="10sp"-->
-<!--                    android:paddingEnd="0sp"-->
-<!--                    android:text="abcd123" />-->
+                <!--                <View-->
+                <!--                    android:layout_width="20sp"-->
+                <!--                    android:layout_height="20sp"-->
+                <!--                    android:background="@color/red" />-->
 
-<!--            </LinearLayout>-->
+                <!--                <TextView-->
+                <!--                    android:layout_width="wrap_content"-->
+                <!--                    android:layout_height="wrap_content"-->
+                <!--                    android:paddingStart="10sp"-->
+                <!--                    android:paddingEnd="0sp"-->
+                <!--                    android:text="abcd123" />-->
 
-<!--            <LinearLayout-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:layout_gravity="center_vertical"-->
-<!--                android:layout_marginTop="5sp"-->
-<!--                android:orientation="horizontal">-->
+                <!--            </LinearLayout>-->
 
-<!--                <View-->
-<!--                    android:layout_width="20sp"-->
-<!--                    android:layout_height="20sp"-->
-<!--                    android:background="@color/red" />-->
+                <!--            <LinearLayout-->
+                <!--                android:layout_width="match_parent"-->
+                <!--                android:layout_height="wrap_content"-->
+                <!--                android:layout_gravity="center_vertical"-->
+                <!--                android:layout_marginTop="5sp"-->
+                <!--                android:orientation="horizontal">-->
 
-<!--                <TextView-->
-<!--                    android:layout_width="wrap_content"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:paddingStart="10sp"-->
-<!--                    android:paddingEnd="0sp"-->
-<!--                    android:text="abcd123" />-->
+                <!--                <View-->
+                <!--                    android:layout_width="20sp"-->
+                <!--                    android:layout_height="20sp"-->
+                <!--                    android:background="@color/red" />-->
 
-<!--            </LinearLayout>-->
+                <!--                <TextView-->
+                <!--                    android:layout_width="wrap_content"-->
+                <!--                    android:layout_height="wrap_content"-->
+                <!--                    android:paddingStart="10sp"-->
+                <!--                    android:paddingEnd="0sp"-->
+                <!--                    android:text="abcd123" />-->
 
-        </LinearLayout>
+                <!--            </LinearLayout>-->
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+            </LinearLayout>
 
-</androidx.cardview.widget.CardView>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.cardview.widget.CardView>
+</layout>

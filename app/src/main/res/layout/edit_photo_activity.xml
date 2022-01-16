@@ -6,11 +6,11 @@
 
         <variable
             name="activity"
-            type="com.example.economy_manager.main_part.views.activities.EditPhotoActivity" />
+            type="com.example.economy_manager.feature.editphoto.EditPhotoActivity" />
 
         <variable
             name="viewModel"
-            type="com.example.economy_manager.main_part.viewmodels.EditPhotoViewModel" />
+            type="com.example.economy_manager.feature.editphoto.EditPhotoViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -19,7 +19,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@drawable/ic_yellow_gradient_soda"
-        tools:context=".main_part.views.activities.EditPhotoActivity">
+        tools:context=".feature.editphoto.EditPhotoActivity">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/topLayout"

@@ -52,7 +52,7 @@
         <entry key="..\:/AndroidStudioApps/3/app/src/main/res/drawable/ic_yellow_gradient_soda.xml" value="0.3828125" />
         <entry key="..\:/AndroidStudioApps/3/app/src/main/res/drawable/rounded_corners_item.xml" value="0.3828125" />
         <entry key="..\:/AndroidStudioApps/3/app/src/main/res/layout/add_expense_activity.xml" value="0.1" />
-        <entry key="..\:/AndroidStudioApps/3/app/src/main/res/layout/add_income_activity.xml" value="0.1" />
+        <entry key="..\:/AndroidStudioApps/3/app/src/main/res/layout/add_income_activity.xml" value="0.33" />
         <entry key="..\:/AndroidStudioApps/3/app/src/main/res/layout/add_money_activity.xml" value="0.33" />
         <entry key="..\:/AndroidStudioApps/3/app/src/main/res/layout/budget_review_cardview.xml" value="0.36666666666666664" />
         <entry key="..\:/AndroidStudioApps/3/app/src/main/res/layout/custom_dialog_linearlayout.xml" value="0.36666666666666664" />
@@ -61,7 +61,7 @@
         <entry key="..\:/AndroidStudioApps/3/app/src/main/res/layout/edit_account_remastered_activity.xml" value="0.36666666666666664" />
         <entry key="..\:/AndroidStudioApps/3/app/src/main/res/layout/edit_photo_activity.xml" value="0.33" />
         <entry key="..\:/AndroidStudioApps/3/app/src/main/res/layout/edit_specific_transaction_activity.xml" value="0.3134057971014493" />
-        <entry key="..\:/AndroidStudioApps/3/app/src/main/res/layout/edit_specific_transaction_fragment.xml" value="0.3211050724637681" />
+        <entry key="..\:/AndroidStudioApps/3/app/src/main/res/layout/edit_specific_transaction_fragment.xml" value="0.29707792207792205" />
         <entry key="..\:/AndroidStudioApps/3/app/src/main/res/layout/edit_transactions_activity.xml" value="0.3278985507246377" />
         <entry key="..\:/AndroidStudioApps/3/app/src/main/res/layout/favorite_expenses_category_fragment.xml" value="0.36666666666666664" />
         <entry key="..\:/AndroidStudioApps/3/app/src/main/res/layout/forgot_password_activity.xml" value="0.36666666666666664" />

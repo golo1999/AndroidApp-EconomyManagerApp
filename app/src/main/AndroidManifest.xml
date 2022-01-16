@@ -13,11 +13,11 @@
         android:theme="@style/Theme.AppCompat.DayNight.NoActionBar">
 
         <activity
-            android:name="com.example.economy_manager.main_part.views.activities.SettingsActivity"
-            android:parentActivityName="com.example.economy_manager.main_part.views.activities.MainScreenActivity" />
+            android:name="com.example.economy_manager.feature.settings.SettingsActivity"
+            android:parentActivityName="com.example.economy_manager.feature.mainscreen.MainScreenActivity" />
 
         <activity
-            android:name="com.example.economy_manager.main_part.views.activities.SplashScreenActivity"
+            android:name="com.example.economy_manager.feature.splashscreen.SplashScreenActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -26,47 +26,47 @@
             </intent-filter>
         </activity>
 
-        <activity android:name="com.example.economy_manager.main_part.views.activities.EditSpecificTransactionActivity" />
+        <activity android:name="com.example.economy_manager.feature.editspecifictransaction.EditSpecificTransactionActivity" />
 
         <activity
-            android:name="com.example.economy_manager.main_part.views.activities.EditPhotoActivity"
-            android:parentActivityName="com.example.economy_manager.main_part.views.activities.EditAccountActivity" />
+            android:name="com.example.economy_manager.feature.editphoto.EditPhotoActivity"
+            android:parentActivityName="com.example.economy_manager.feature.editaccount.EditAccountActivity" />
 
         <activity
-            android:name="com.example.economy_manager.main_part.views.activities.EditAccountActivity"
-            android:parentActivityName="com.example.economy_manager.main_part.views.activities.MainScreenActivity" />
+            android:name="com.example.economy_manager.feature.editaccount.EditAccountActivity"
+            android:parentActivityName="com.example.economy_manager.feature.mainscreen.MainScreenActivity" />
 
         <activity
-            android:name="com.example.economy_manager.main_part.views.activities.MonthlyBalanceActivity"
-            android:parentActivityName="com.example.economy_manager.main_part.views.activities.MainScreenActivity" />
+            android:name="com.example.economy_manager.feature.monthlybalance.MonthlyBalanceActivity"
+            android:parentActivityName="com.example.economy_manager.feature.mainscreen.MainScreenActivity" />
 
         <activity
-            android:name="com.example.economy_manager.main_part.views.activities.EditTransactionsActivity"
-            android:parentActivityName="com.example.economy_manager.main_part.views.activities.MainScreenActivity" />
+            android:name="com.example.economy_manager.feature.edittransactions.EditTransactionsActivity"
+            android:parentActivityName="com.example.economy_manager.feature.mainscreen.MainScreenActivity" />
 
         <activity
-            android:name="com.example.economy_manager.main_part.views.activities.AddExpenseActivity"
-            android:parentActivityName="com.example.economy_manager.main_part.views.activities.MainScreenActivity"
+            android:name="com.example.economy_manager.feature.addexpense.AddExpenseActivity"
+            android:parentActivityName="com.example.economy_manager.feature.mainscreen.MainScreenActivity"
             android:windowSoftInputMode="stateAlwaysHidden" />
 
         <activity
-            android:name="com.example.economy_manager.main_part.views.activities.AddIncomeActivity"
-            android:parentActivityName="com.example.economy_manager.main_part.views.activities.MainScreenActivity"
+            android:name="com.example.economy_manager.feature.addincome.AddIncomeActivity"
+            android:parentActivityName="com.example.economy_manager.feature.mainscreen.MainScreenActivity"
             android:windowSoftInputMode="stateAlwaysHidden" />
 
         <activity
-            android:name="com.example.economy_manager.login_part.views.LogInActivity"
-            android:parentActivityName="com.example.economy_manager.main_part.views.activities.SplashScreenActivity" />
+            android:name="com.example.economy_manager.feature.login.LogInActivity"
+            android:parentActivityName="com.example.economy_manager.feature.splashscreen.SplashScreenActivity" />
 
         <activity
-            android:name="com.example.economy_manager.login_part.views.ForgotPasswordActivity"
-            android:parentActivityName="com.example.economy_manager.login_part.views.LogInActivity" />
+            android:name="com.example.economy_manager.feature.forgotpassword.ForgotPasswordActivity"
+            android:parentActivityName="com.example.economy_manager.feature.login.LogInActivity" />
 
         <activity
-            android:name="com.example.economy_manager.login_part.views.SignUpActivity"
-            android:parentActivityName="com.example.economy_manager.login_part.views.LogInActivity" />
+            android:name="com.example.economy_manager.feature.register.SignUpActivity"
+            android:parentActivityName="com.example.economy_manager.feature.login.LogInActivity" />
 
-        <activity android:name="com.example.economy_manager.main_part.views.activities.MainScreenActivity" />
+        <activity android:name="com.example.economy_manager.feature.mainscreen.MainScreenActivity" />
 
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"

@@ -6,19 +6,19 @@
 
         <variable
             name="activity"
-            type="com.example.economy_manager.login_part.views.LogInActivity" />
+            type="com.example.economy_manager.feature.login.LogInActivity" />
 
         <variable
             name="forgotPasswordActivity"
-            type="Class&lt;com.example.economy_manager.login_part.views.ForgotPasswordActivity>" />
+            type="com.example.economy_manager.feature.forgotpassword.ForgotPasswordActivity" />
 
         <variable
             name="signUpActivity"
-            type="Class&lt;com.example.economy_manager.login_part.views.SignUpActivity>" />
+            type="com.example.economy_manager.feature.register.SignUpActivity" />
 
         <variable
             name="viewModel"
-            type="com.example.economy_manager.login_part.viewmodels.LogInViewModel" />
+            type="com.example.economy_manager.feature.login.LogInViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -27,7 +27,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@drawable/ic_blue_gradient_jack_dorseys_stock"
-        tools:context=".login_part.views.LogInActivity">
+        tools:context=".feature.login.LogInActivity">
 
         <TextView
             android:layout_width="wrap_content"

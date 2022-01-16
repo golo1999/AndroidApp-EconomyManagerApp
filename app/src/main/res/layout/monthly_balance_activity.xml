@@ -8,7 +8,7 @@
 
         <variable
             name="activity"
-            type="com.example.economy_manager.main_part.views.activities.MonthlyBalanceActivity" />
+            type="com.example.economy_manager.feature.monthlybalance.MonthlyBalanceActivity" />
 
         <variable
             name="activityTitle"
@@ -20,13 +20,13 @@
 
         <variable
             name="viewModel"
-            type="com.example.economy_manager.main_part.viewmodels.MonthlyBalanceViewModel" />
+            type="com.example.economy_manager.feature.monthlybalance.MonthlyBalanceViewModel" />
     </data>
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".main_part.views.activities.MonthlyBalanceActivity">
+        tools:context=".feature.monthlybalance.MonthlyBalanceActivity">
 
         <TextView
             android:id="@+id/centerText"

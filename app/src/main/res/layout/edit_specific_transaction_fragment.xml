@@ -1,128 +1,153 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".main_part.views.fragments.EditSpecificTransactionFragment">
+<layout>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/edit_specific_transaction_top_layout"
-        android:layout_width="0sp"
-        android:layout_height="wrap_content"
-        android:background="#A2A2A1"
-        android:paddingVertical="5sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+    <data>
 
-        <ImageView
-            android:id="@+id/edit_specific_transaction_back"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_back"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+        <variable
+            name="activity"
+            type="com.example.economy_manager.feature.edittransactions.EditTransactionsActivity" />
 
-        <TextView
-            android:id="@+id/edit_specific_transaction_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="20sp"
-            android:textAlignment="center"
-            android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/edit_specific_transaction_back"
-            app:layout_constraintTop_toTopOf="parent" />
+        <variable
+            name="fragmentManager"
+            type="androidx.fragment.app.FragmentManager" />
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+        <variable
+            name="viewModel"
+            type="com.example.economy_manager.feature.edittransactions.EditTransactionsViewModel" />
+    </data>
 
-    <androidx.core.widget.NestedScrollView
-        android:layout_width="0sp"
-        android:layout_height="0sp"
-        android:fillViewport="true"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/edit_specific_transaction_top_layout">
+    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".feature.editspecifictransaction.EditSpecificTransactionFragment">
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
+            android:id="@+id/topLayout"
+            android:layout_width="0sp"
             android:layout_height="wrap_content"
-            android:focusable="true"
-            android:focusableInTouchMode="true">
+            android:background="#A2A2A1"
+            android:paddingVertical="5sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
-            <LinearLayout
-                android:layout_width="0sp"
-                android:layout_height="match_parent"
-                android:orientation="vertical"
-                android:paddingVertical="20sp"
+            <ImageView
+                android:id="@+id/goBack"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="@{() -> activity.onBackPressed()}"
+                android:src="@drawable/ic_back"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20sp"
+                android:textAlignment="center"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/goBack"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintWidth_percent=".8">
-
-                <EditText
-                    android:id="@+id/edit_specific_transaction_note_field"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:inputType="text"
-                    android:maxLines="1" />
-
-                <EditText
-                    android:id="@+id/edit_specific_transaction_value_field"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="20sp"
-                    android:inputType="numberDecimal" />
-
-                <TextView
-                    android:id="@+id/edit_specific_transaction_date_text"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="20sp"
-                    android:drawablePadding="10sp"
-                    android:hint="@string/date"
-                    android:textSize="18sp"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:id="@+id/edit_specific_transaction_time_text"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="20sp"
-                    android:drawablePadding="10sp"
-                    android:hint="@string/time"
-                    android:textSize="18sp"
-                    android:textStyle="bold" />
-
-                <Spinner
-                    android:id="@+id/edit_specific_transaction_type_spinner"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="20sp"
-                    android:paddingStart="0sp"
-                    android:paddingEnd="0sp"
-                    android:theme="@style/Spinner" />
-
-                <Button
-                    android:id="@+id/edit_specific_transaction_save_button"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="20sp"
-                    android:padding="10sp"
-                    android:stateListAnimator="@null"
-                    android:text="@string/save_changes"
-                    android:textSize="18sp"
-                    android:textStyle="bold" />
-
-            </LinearLayout>
+                tools:text="@string/edit_specific_transaction_title" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-    </androidx.core.widget.NestedScrollView>
+        <androidx.core.widget.NestedScrollView
+            android:layout_width="0sp"
+            android:layout_height="0sp"
+            android:fillViewport="true"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/topLayout">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:focusable="true"
+                android:focusableInTouchMode="true">
+
+                <LinearLayout
+                    android:layout_width="0sp"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:paddingVertical="20sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintWidth_percent=".8">
+
+                    <EditText
+                        android:id="@+id/noteField"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="text"
+                        android:maxLines="1"
+                        tools:text="@string/note" />
+
+                    <EditText
+                        android:id="@+id/valueField"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="20sp"
+                        android:inputType="numberDecimal"
+                        tools:text="@string/value" />
+
+                    <TextView
+                        android:id="@+id/dateText"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="20sp"
+                        android:drawablePadding="10sp"
+                        android:hint="@string/date"
+                        android:onClick="@{() -> viewModel.onDateTextClickedInFragment(fragmentManager)}"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/timeText"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="20sp"
+                        android:drawablePadding="10sp"
+                        android:hint="@string/time"
+                        android:onClick="@{() -> viewModel.onTimeTextClickedInFragment(fragmentManager)}"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
+
+                    <Spinner
+                        android:id="@+id/typeSpinner"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="20sp"
+                        android:paddingStart="0sp"
+                        android:paddingEnd="0sp"
+                        android:theme="@style/Spinner" />
+
+                    <Button
+                        android:id="@+id/saveChangesButton"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="20sp"
+                        android:onClick="@{() -> viewModel.onSaveChangesButtonClicked(activity)}"
+                        android:padding="10sp"
+                        android:stateListAnimator="@null"
+                        android:text="@string/save_changes"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
+
+                </LinearLayout>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </androidx.core.widget.NestedScrollView>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
