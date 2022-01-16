@@ -10,27 +10,27 @@
 
         <variable
             name="addExpenseActivity"
-            type="com.example.economy_manager.feature.addexpense.AddExpenseActivity" />
+            type="Class&lt;com.example.economy_manager.feature.addexpense.AddExpenseActivity>" />
 
         <variable
             name="addIncomeActivity"
-            type="com.example.economy_manager.feature.addincome.AddIncomeActivity" />
+            type="Class&lt;com.example.economy_manager.feature.addincome.AddIncomeActivity>" />
 
         <variable
             name="editAccountActivity"
-            type="com.example.economy_manager.feature.editaccount.EditAccountActivity" />
+            type="Class&lt;com.example.economy_manager.feature.editaccount.EditAccountActivity>" />
 
         <variable
             name="editTransactionsActivity"
-            type="com.example.economy_manager.feature.edittransactions.EditTransactionsActivity" />
+            type="Class&lt;com.example.economy_manager.feature.edittransactions.EditTransactionsActivity>" />
 
         <variable
             name="monthlyBalanceActivity"
-            type="com.example.economy_manager.feature.monthlybalance.MonthlyBalanceActivity" />
+            type="Class&lt;com.example.economy_manager.feature.monthlybalance.MonthlyBalanceActivity>" />
 
         <variable
             name="settingsActivity"
-            type="com.example.economy_manager.feature.settings.SettingsActivity" />
+            type="Class&lt;com.example.economy_manager.feature.settings.SettingsActivity>" />
 
         <variable
             name="viewModel"

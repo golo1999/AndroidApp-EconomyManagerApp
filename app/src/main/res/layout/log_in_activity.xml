@@ -10,11 +10,11 @@
 
         <variable
             name="forgotPasswordActivity"
-            type="com.example.economy_manager.feature.forgotpassword.ForgotPasswordActivity" />
+            type="Class&lt;com.example.economy_manager.feature.forgotpassword.ForgotPasswordActivity>" />
 
         <variable
             name="signUpActivity"
-            type="com.example.economy_manager.feature.register.SignUpActivity" />
+            type="Class&lt;com.example.economy_manager.feature.register.SignUpActivity>" />
 
         <variable
             name="viewModel"
