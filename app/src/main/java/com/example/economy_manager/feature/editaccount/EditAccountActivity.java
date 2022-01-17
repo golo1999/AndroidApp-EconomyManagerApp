@@ -89,10 +89,10 @@ public class EditAccountActivity
 
         final String accountPhotoImageURL = String.valueOf(retrievedPersonalInformation.get("photoURL"));
 
-        final int accountPhotoPlaceholder = userDetails == null || !userDetails.getApplicationSettings().getDarkTheme() ?
+        final int accountPhotoPlaceholder = userDetails == null || !userDetails.getApplicationSettings().isDarkThemeEnabled() ?
                 R.drawable.ic_person_blue : R.drawable.ic_person_white;
 
-        final int accountPhotoBorderColor = userDetails == null || !userDetails.getApplicationSettings().getDarkTheme() ?
+        final int accountPhotoBorderColor = userDetails == null || !userDetails.getApplicationSettings().isDarkThemeEnabled() ?
                 getColor(R.color.turkish_sea) : Color.WHITE;
 
         final String firstNameHint = String.valueOf(retrievedPersonalInformation.get("firstName"));
@@ -163,12 +163,12 @@ public class EditAccountActivity
                 !String.valueOf(binding.websiteField.getHint()).trim().equals(getResources().getString(R.string.edit_account_website)) ?
                         String.valueOf(binding.websiteField.getHint()).trim() : "";
 
-        final String enteredCountry = Locale.getDefault().getDisplayLanguage().equals(Languages.getEnglishLanguage()) ?
+        final String enteredCountry = Locale.getDefault().getDisplayLanguage().equals(Languages.getENGLISH_LANGUAGE()) ?
                 String.valueOf(binding.countrySpinner.getSelectedItem()).trim() :
                 String.valueOf(viewModel.getCountryNameInEnglish(getApplication(),
                         String.valueOf(binding.countrySpinner.getSelectedItem()))).trim();
 
-        final String enteredGender = Locale.getDefault().getDisplayLanguage().equals(Languages.getEnglishLanguage()) ?
+        final String enteredGender = Locale.getDefault().getDisplayLanguage().equals(Languages.getENGLISH_LANGUAGE()) ?
                 String.valueOf(binding.genderSpinner.getSelectedItem()).trim() :
                 String.valueOf(viewModel.getGenderInEnglish(getApplication(),
                         String.valueOf(binding.genderSpinner.getSelectedItem()))).trim();
@@ -300,8 +300,8 @@ public class EditAccountActivity
                     userDetails = MyCustomVariables.getDefaultUserDetails();
                 }
 
-                if (userDetails.getApplicationSettings().getDarkTheme() != darkThemeEnabled) {
-                    darkThemeEnabled = userDetails.getApplicationSettings().getDarkTheme();
+                if (userDetails.getApplicationSettings().isDarkThemeEnabled() != darkThemeEnabled) {
+                    darkThemeEnabled = userDetails.getApplicationSettings().isDarkThemeEnabled();
                 }
 
                 final int itemsColor = !darkThemeEnabled ? Color.WHITE : Color.BLACK;
@@ -338,8 +338,8 @@ public class EditAccountActivity
                     userDetails = MyCustomVariables.getDefaultUserDetails();
                 }
 
-                if (userDetails.getApplicationSettings().getDarkTheme() != darkThemeEnabled) {
-                    darkThemeEnabled = userDetails.getApplicationSettings().getDarkTheme();
+                if (userDetails.getApplicationSettings().isDarkThemeEnabled() != darkThemeEnabled) {
+                    darkThemeEnabled = userDetails.getApplicationSettings().isDarkThemeEnabled();
                 }
 
                 final int itemsColor = !darkThemeEnabled ? Color.WHITE : Color.BLACK;
@@ -424,8 +424,8 @@ public class EditAccountActivity
                     userDetails = MyCustomVariables.getDefaultUserDetails();
                 }
 
-                if (userDetails.getApplicationSettings().getDarkTheme() != darkThemeEnabled) {
-                    darkThemeEnabled = userDetails.getApplicationSettings().getDarkTheme();
+                if (userDetails.getApplicationSettings().isDarkThemeEnabled() != darkThemeEnabled) {
+                    darkThemeEnabled = userDetails.getApplicationSettings().isDarkThemeEnabled();
                 }
 
                 final int color = !darkThemeEnabled ? getColor(R.color.turkish_sea) : Color.WHITE;
@@ -445,8 +445,8 @@ public class EditAccountActivity
 
     private void setTheme() {
         darkThemeEnabled = userDetails != null ?
-                userDetails.getApplicationSettings().getDarkTheme() :
-                MyCustomVariables.getDefaultUserDetails().getApplicationSettings().getDarkTheme();
+                userDetails.getApplicationSettings().isDarkThemeEnabled() :
+                MyCustomVariables.getDefaultUserDetails().getApplicationSettings().isDarkThemeEnabled();
 
         final int theme = !darkThemeEnabled ?
                 R.drawable.ic_white_gradient_tobacco_ad : R.drawable.ic_black_gradient_night_shift;

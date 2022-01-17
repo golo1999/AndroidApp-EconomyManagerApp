@@ -46,7 +46,7 @@ public class MonthsSpinnerAdapter_NOT_WORKING extends ArrayAdapter<String> {
         ((TextView) convertView).setGravity(Gravity.CENTER);
 
         if (userDetails != null) {
-            final boolean darkThemeEnabled = userDetails.getApplicationSettings().getDarkTheme();
+            final boolean darkThemeEnabled = userDetails.getApplicationSettings().isDarkThemeEnabled();
             final int itemsColor = !darkThemeEnabled ? Color.WHITE : Color.BLACK;
 
             // setting text color based on the selected theme

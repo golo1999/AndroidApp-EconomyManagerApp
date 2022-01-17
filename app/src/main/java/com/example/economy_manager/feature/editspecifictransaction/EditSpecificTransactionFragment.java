@@ -21,12 +21,12 @@ import androidx.lifecycle.ViewModelStoreOwner;
 
 import com.example.economy_manager.R;
 import com.example.economy_manager.databinding.EditSpecificTransactionFragmentBinding;
-import com.example.economy_manager.utility.TransactionTypesSpinnerAdapter;
-import com.example.economy_manager.feature.edittransactions.EditTransactionsViewModel;
 import com.example.economy_manager.feature.edittransactions.EditTransactionsActivity;
+import com.example.economy_manager.feature.edittransactions.EditTransactionsViewModel;
 import com.example.economy_manager.model.Transaction;
 import com.example.economy_manager.utility.MyCustomMethods;
 import com.example.economy_manager.utility.MyCustomVariables;
+import com.example.economy_manager.utility.TransactionTypesSpinnerAdapter;
 import com.example.economy_manager.utility.Types;
 
 import java.time.LocalDate;
@@ -67,7 +67,7 @@ public class EditSpecificTransactionFragment extends Fragment {
                               final @Nullable Bundle savedInstanceState) {
         setFragmentTheme();
         setSaveChangesButtonStyle(viewModel.getUserDetails() != null &&
-                viewModel.getUserDetails().getApplicationSettings().getDarkTheme());
+                viewModel.getUserDetails().getApplicationSettings().isDarkThemeEnabled());
         setDateText(viewModel.getUserDetails() != null ?
                 LocalDate.of(viewModel.getSelectedTransaction().getTime().getYear(),
                         viewModel.getSelectedTransaction().getTime().getMonth(),
@@ -97,8 +97,8 @@ public class EditSpecificTransactionFragment extends Fragment {
                                        final int position,
                                        final long id) {
                 final boolean darkTheme = MyCustomVariables.getUserDetails() != null ?
-                        MyCustomVariables.getUserDetails().getApplicationSettings().getDarkTheme() :
-                        MyCustomVariables.getDefaultUserDetails().getApplicationSettings().getDarkTheme();
+                        MyCustomVariables.getUserDetails().getApplicationSettings().isDarkThemeEnabled() :
+                        MyCustomVariables.getDefaultUserDetails().getApplicationSettings().isDarkThemeEnabled();
 
                 final int textColor = !darkTheme ? requireContext().getColor(R.color.turkish_sea) : Color.WHITE;
 
@@ -157,8 +157,8 @@ public class EditSpecificTransactionFragment extends Fragment {
 
     private void setFragmentTheme() {
         final boolean darkTheme = MyCustomVariables.getUserDetails() != null ?
-                MyCustomVariables.getUserDetails().getApplicationSettings().getDarkTheme() :
-                MyCustomVariables.getDefaultUserDetails().getApplicationSettings().getDarkTheme();
+                MyCustomVariables.getUserDetails().getApplicationSettings().isDarkThemeEnabled() :
+                MyCustomVariables.getDefaultUserDetails().getApplicationSettings().isDarkThemeEnabled();
 
         final int color = !darkTheme ? requireContext().getColor(R.color.turkish_sea) : Color.WHITE;
 

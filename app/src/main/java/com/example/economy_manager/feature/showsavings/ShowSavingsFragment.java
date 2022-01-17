@@ -104,7 +104,7 @@ public class ShowSavingsFragment extends Fragment {
                                     MyCustomMethods.getRoundedNumberToNDecimalPlaces(totalMonthlySavings, 2);
 
                             final String savingsText =
-                                    !Locale.getDefault().getDisplayLanguage().equals(Languages.getEnglishLanguage()) ?
+                                    !Locale.getDefault().getDisplayLanguage().equals(Languages.getENGLISH_LANGUAGE()) ?
                                             totalMonthlySavings + " " + currencySymbol : totalMonthlySavings < 0f ?
                                             "-" + currencySymbol + Math.abs(totalMonthlySavings) :
                                             currencySymbol + totalMonthlySavings;
@@ -129,7 +129,7 @@ public class ShowSavingsFragment extends Fragment {
             final float totalMonthlySavings = totalMonthlyIncomes - totalMonthlyExpenses;
 
             final String savingsText =
-                    Locale.getDefault().getDisplayLanguage().equals(Languages.getEnglishLanguage()) ?
+                    Locale.getDefault().getDisplayLanguage().equals(Languages.getENGLISH_LANGUAGE()) ?
                             currencySymbol + totalMonthlySavings : totalMonthlySavings + " " + currencySymbol;
 
             binding.showSavingsText.setText(savingsText);

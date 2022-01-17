@@ -70,7 +70,7 @@ public class EditTransactionsRecyclerViewAdapter
                 String.valueOf(Transaction.getTypeFromIndexInEnglish(transaction.getCategory())));
         final String currencySymbol = userDetails != null ?
                 userDetails.getApplicationSettings().getCurrencySymbol() : MyCustomMethods.getCurrencySymbol();
-        final boolean darkThemeEnabled = userDetails != null && userDetails.getApplicationSettings().getDarkTheme();
+        final boolean darkThemeEnabled = userDetails != null && userDetails.getApplicationSettings().isDarkThemeEnabled();
         final String transactionPriceText = Locale.getDefault().getDisplayLanguage().equals("English") ?
                 currencySymbol + transaction.getValue() : transaction.getValue() + " " + currencySymbol;
 

@@ -241,7 +241,7 @@ public class EditSpecificTransactionActivity extends AppCompatActivity {
                 ((TextView) v).setGravity(Gravity.CENTER);
 
                 if (viewModel.getUserDetails() != null) {
-                    final boolean darkTheme = viewModel.getUserDetails().getApplicationSettings().getDarkTheme();
+                    final boolean darkTheme = viewModel.getUserDetails().getApplicationSettings().isDarkThemeEnabled();
                     final int itemsColor = !darkTheme ? Color.WHITE : Color.BLACK;
 
                     // setting items' text color based on the selected theme
@@ -256,7 +256,7 @@ public class EditSpecificTransactionActivity extends AppCompatActivity {
             @Override
             public void onItemSelected(final AdapterView<?> parent, View view, int position, long id) {
                 if (viewModel.getUserDetails() != null) {
-                    final boolean darkTheme = viewModel.getUserDetails().getApplicationSettings().getDarkTheme();
+                    final boolean darkTheme = viewModel.getUserDetails().getApplicationSettings().isDarkThemeEnabled();
                     final int textColor = !darkTheme ? Color.parseColor("#195190") : Color.WHITE;
 
                     ((TextView) parent.getChildAt(0)).setTextColor(textColor);
@@ -298,7 +298,7 @@ public class EditSpecificTransactionActivity extends AppCompatActivity {
 
     private void setTheme() {
         if (viewModel.getUserDetails() != null) {
-            final boolean darkTheme = viewModel.getUserDetails().getApplicationSettings().getDarkTheme();
+            final boolean darkTheme = viewModel.getUserDetails().getApplicationSettings().isDarkThemeEnabled();
             final int color = !darkTheme ? Color.parseColor("#195190") : Color.WHITE;
             final int backgroundTheme = !darkTheme ?
                     R.drawable.ic_white_gradient_tobacco_ad : R.drawable.ic_black_gradient_night_shift;

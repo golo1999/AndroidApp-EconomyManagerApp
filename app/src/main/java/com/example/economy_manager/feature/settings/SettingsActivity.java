@@ -118,13 +118,13 @@ public class SettingsActivity extends AppCompatActivity
 
     private void setAllButtonsStyle() {
         setButtonStyle(binding.rateButton, viewModel.getUserDetails() != null &&
-                viewModel.getUserDetails().getApplicationSettings().getDarkTheme());
+                viewModel.getUserDetails().getApplicationSettings().isDarkThemeEnabled());
         setButtonStyle(binding.changePasswordButton, viewModel.getUserDetails() != null &&
-                viewModel.getUserDetails().getApplicationSettings().getDarkTheme());
+                viewModel.getUserDetails().getApplicationSettings().isDarkThemeEnabled());
         setButtonStyle(binding.resetDatabaseButton, viewModel.getUserDetails() != null &&
-                viewModel.getUserDetails().getApplicationSettings().getDarkTheme());
+                viewModel.getUserDetails().getApplicationSettings().isDarkThemeEnabled());
         setButtonStyle(binding.deleteAccountButton, viewModel.getUserDetails() != null &&
-                viewModel.getUserDetails().getApplicationSettings().getDarkTheme());
+                viewModel.getUserDetails().getApplicationSettings().isDarkThemeEnabled());
     }
 
     private void setButtonStyle(final Button button,
@@ -135,8 +135,8 @@ public class SettingsActivity extends AppCompatActivity
 
     public void setCurrencySelectorSpinnerTheme(final View v) {
         final boolean darkThemeEnabled = viewModel.getUserDetails() != null ?
-                viewModel.getUserDetails().getApplicationSettings().getDarkTheme() :
-                MyCustomVariables.getDefaultUserDetails().getApplicationSettings().getDarkTheme();
+                viewModel.getUserDetails().getApplicationSettings().isDarkThemeEnabled() :
+                MyCustomVariables.getDefaultUserDetails().getApplicationSettings().isDarkThemeEnabled();
 
         final int itemsColor = !darkThemeEnabled ? Color.WHITE : Color.BLACK;
         // setting elements' text color based on the selected theme
@@ -145,8 +145,8 @@ public class SettingsActivity extends AppCompatActivity
 
     private void setDarkThemeSwitch(final SwitchCompat darkThemeSwitch) {
         final boolean darkThemeEnabled = viewModel.getUserDetails() != null ?
-                viewModel.getUserDetails().getApplicationSettings().getDarkTheme() :
-                MyCustomVariables.getDefaultUserDetails().getApplicationSettings().getDarkTheme();
+                viewModel.getUserDetails().getApplicationSettings().isDarkThemeEnabled() :
+                MyCustomVariables.getDefaultUserDetails().getApplicationSettings().isDarkThemeEnabled();
 
         darkThemeSwitch.setChecked(darkThemeEnabled);
     }
@@ -182,8 +182,8 @@ public class SettingsActivity extends AppCompatActivity
 
     private void setSpinners() {
         final boolean darkThemeEnabled = viewModel.getUserDetails() != null ?
-                viewModel.getUserDetails().getApplicationSettings().getDarkTheme() :
-                MyCustomVariables.getDefaultUserDetails().getApplicationSettings().getDarkTheme();
+                viewModel.getUserDetails().getApplicationSettings().isDarkThemeEnabled() :
+                MyCustomVariables.getDefaultUserDetails().getApplicationSettings().isDarkThemeEnabled();
 
         final String currency = viewModel.getUserDetails() != null ?
                 viewModel.getUserDetails().getApplicationSettings().getCurrency() : MyCustomVariables.getDefaultCurrency();
@@ -220,7 +220,7 @@ public class SettingsActivity extends AppCompatActivity
                         .child("darkTheme")
                         .setValue(isChecked);
 
-                viewModel.getUserDetails().getApplicationSettings().setDarkTheme(isChecked);
+                viewModel.getUserDetails().getApplicationSettings().setDarkThemeEnabled(isChecked);
                 MyCustomSharedPreferences.saveUserDetailsToSharedPreferences(preferences, viewModel.getUserDetails());
 
                 MyCustomVariables.setUserDetails(viewModel.getUserDetails());

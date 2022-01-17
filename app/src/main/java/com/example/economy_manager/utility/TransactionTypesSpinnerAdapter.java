@@ -30,8 +30,8 @@ public class TransactionTypesSpinnerAdapter extends ArrayAdapter<String> {
         final View dropDownView = super.getDropDownView(position, convertView, parent);
 
         final boolean darkTheme = MyCustomVariables.getUserDetails() != null ?
-                MyCustomVariables.getUserDetails().getApplicationSettings().getDarkTheme() :
-                MyCustomVariables.getDefaultUserDetails().getApplicationSettings().getDarkTheme();
+                MyCustomVariables.getUserDetails().getApplicationSettings().isDarkThemeEnabled() :
+                MyCustomVariables.getDefaultUserDetails().getApplicationSettings().isDarkThemeEnabled();
 
         final int itemsColor = !darkTheme ? Color.WHITE : Color.BLACK;
 

@@ -131,7 +131,7 @@ public class MonthlyBalanceActivity extends AppCompatActivity {
                                     dayText.setTextSize(25);
 
                                     dayText.setTextColor(viewModel.getUserDetails() == null ||
-                                            !viewModel.getUserDetails().getApplicationSettings().getDarkTheme()
+                                            !viewModel.getUserDetails().getApplicationSettings().isDarkThemeEnabled()
                                             ? Color.BLUE : Color.YELLOW);
 
                                     for (final Transaction transactionsListIterator : transactionsList) {
@@ -160,10 +160,10 @@ public class MonthlyBalanceActivity extends AppCompatActivity {
                                                                     .getCategory()))));
 
                                             typeText.setTextColor(viewModel.getUserDetails() == null ||
-                                                    !viewModel.getUserDetails().getApplicationSettings().getDarkTheme() ?
+                                                    !viewModel.getUserDetails().getApplicationSettings().isDarkThemeEnabled() ?
                                                     Color.BLACK : Color.WHITE);
                                             valueText.setTextColor(viewModel.getUserDetails() == null ||
-                                                    !viewModel.getUserDetails().getApplicationSettings().getDarkTheme() ?
+                                                    !viewModel.getUserDetails().getApplicationSettings().isDarkThemeEnabled() ?
                                                     Color.BLACK : Color.WHITE);
 
                                             typeText.setTextSize(19);
@@ -207,8 +207,8 @@ public class MonthlyBalanceActivity extends AppCompatActivity {
     private void setCenterText() {
         if (MyCustomVariables.getFirebaseAuth().getUid() != null) {
             final boolean darkThemeEnabled = viewModel.getUserDetails() != null ?
-                    viewModel.getUserDetails().getApplicationSettings().getDarkTheme() :
-                    MyCustomVariables.getDefaultUserDetails().getApplicationSettings().getDarkTheme();
+                    viewModel.getUserDetails().getApplicationSettings().isDarkThemeEnabled() :
+                    MyCustomVariables.getDefaultUserDetails().getApplicationSettings().isDarkThemeEnabled();
 
             MyCustomVariables.getDatabaseReference()
                     .child(MyCustomVariables.getFirebaseAuth().getUid())

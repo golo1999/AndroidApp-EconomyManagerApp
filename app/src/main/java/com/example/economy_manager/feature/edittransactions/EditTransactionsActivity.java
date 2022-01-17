@@ -220,8 +220,8 @@ public class EditTransactionsActivity
                 final View v = super.getDropDownView(position, convertView, parent);
 
                 final boolean darkThemeEnabled = userDetails != null ?
-                        userDetails.getApplicationSettings().getDarkTheme() :
-                        MyCustomVariables.getDefaultUserDetails().getApplicationSettings().getDarkTheme();
+                        userDetails.getApplicationSettings().isDarkThemeEnabled() :
+                        MyCustomVariables.getDefaultUserDetails().getApplicationSettings().isDarkThemeEnabled();
 
                 final int itemsColor = !darkThemeEnabled ? Color.WHITE : Color.BLACK;
                 // all spinner elements are aligned to center
@@ -306,8 +306,8 @@ public class EditTransactionsActivity
                 final View v = super.getDropDownView(position, convertView, parent);
 
                 final boolean darkThemeEnabled = userDetails != null ?
-                        userDetails.getApplicationSettings().getDarkTheme() :
-                        MyCustomVariables.getDefaultUserDetails().getApplicationSettings().getDarkTheme();
+                        userDetails.getApplicationSettings().isDarkThemeEnabled() :
+                        MyCustomVariables.getDefaultUserDetails().getApplicationSettings().isDarkThemeEnabled();
 
                 final int itemsColor = !darkThemeEnabled ? Color.WHITE : Color.BLACK;
                 // all spinner elements are aligned to center
@@ -527,8 +527,8 @@ public class EditTransactionsActivity
                             }
 
                             final boolean darkThemeEnabled = userDetails != null ?
-                                    userDetails.getApplicationSettings().getDarkTheme() :
-                                    MyCustomVariables.getDefaultUserDetails().getApplicationSettings().getDarkTheme();
+                                    userDetails.getApplicationSettings().isDarkThemeEnabled() :
+                                    MyCustomVariables.getDefaultUserDetails().getApplicationSettings().isDarkThemeEnabled();
 
                             binding.centerText.setTextColor(!darkThemeEnabled ? getColor(R.color.turkish_sea) : Color.WHITE);
                             binding.centerText.setTextSize(20);
@@ -549,7 +549,8 @@ public class EditTransactionsActivity
 
         getSupportFragmentManager()
                 .beginTransaction()
-                .replace(binding.editSpecificTransactionFragmentLayout.getId(), viewModel.getEditSpecificTransactionFragment())
+                .replace(binding.editSpecificTransactionFragmentLayout.getId(),
+                        viewModel.getEditSpecificTransactionFragment())
                 .commit();
 
         binding.mainLayout.setVisibility(View.INVISIBLE);
@@ -563,8 +564,8 @@ public class EditTransactionsActivity
 
     private void setTheme() {
         final boolean darkThemeEnabled = userDetails != null ?
-                userDetails.getApplicationSettings().getDarkTheme() :
-                MyCustomVariables.getDefaultUserDetails().getApplicationSettings().getDarkTheme();
+                userDetails.getApplicationSettings().isDarkThemeEnabled() :
+                MyCustomVariables.getDefaultUserDetails().getApplicationSettings().isDarkThemeEnabled();
 
         final int theme = !darkThemeEnabled ?
                 R.drawable.ic_white_gradient_tobacco_ad : R.drawable.ic_black_gradient_night_shift;

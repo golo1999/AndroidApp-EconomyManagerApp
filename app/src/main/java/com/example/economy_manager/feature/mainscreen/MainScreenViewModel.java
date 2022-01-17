@@ -58,17 +58,17 @@ public class MainScreenViewModel extends ViewModel {
 
     private final int currentHour = currentTime.get(Calendar.HOUR_OF_DAY);
 
-    private final String datePrefix = Locale.getDefault().getDisplayLanguage().equals(Languages.getGermanLanguage()) ?
+    private final String datePrefix = Locale.getDefault().getDisplayLanguage().equals(Languages.getGERMAN_LANGUAGE()) ?
             // german
-            "der" : Locale.getDefault().getDisplayLanguage().equals(Languages.getItalianLanguage()) ?
+            "der" : Locale.getDefault().getDisplayLanguage().equals(Languages.getITALIAN_LANGUAGE()) ?
             // italian
-            "il" : Locale.getDefault().getDisplayLanguage().equals(Languages.getPortugueseLanguage()) ?
+            "il" : Locale.getDefault().getDisplayLanguage().equals(Languages.getPORTUGUESE_LANGUAGE()) ?
             // portuguese
             "de" :
             // every other language
             "";
 
-    private final String daySuffix = !Locale.getDefault().getDisplayLanguage().equals(Languages.getEnglishLanguage()) ?
+    private final String daySuffix = !Locale.getDefault().getDisplayLanguage().equals(Languages.getENGLISH_LANGUAGE()) ?
             // every other language but english
             "" :
             // english
@@ -82,46 +82,46 @@ public class MainScreenViewModel extends ViewModel {
                     // every other day
                     "th";
 
-    private final String separator = Locale.getDefault().getDisplayLanguage().equals(Languages.getSpanishLanguage()) ?
+    private final String separator = Locale.getDefault().getDisplayLanguage().equals(Languages.getSPANISH_LANGUAGE()) ?
             // spanish
             "de" :
             // every other language but spanish
             "";
 
     private final SimpleDateFormat monthFormat = new SimpleDateFormat("LLLL",
-            Locale.getDefault().getDisplayLanguage().equals(Languages.getGermanLanguage()) ?
+            Locale.getDefault().getDisplayLanguage().equals(Languages.getGERMAN_LANGUAGE()) ?
                     //german
-                    Locale.GERMAN : Locale.getDefault().getDisplayLanguage().equals(Languages.getSpanishLanguage()) ?
+                    Locale.GERMAN : Locale.getDefault().getDisplayLanguage().equals(Languages.getSPANISH_LANGUAGE()) ?
                     // spanish
-                    Locale.forLanguageTag("es-ES") : Locale.getDefault().getDisplayLanguage().equals(Languages.getFrenchLanguage()) ?
+                    Locale.forLanguageTag("es-ES") : Locale.getDefault().getDisplayLanguage().equals(Languages.getFRENCH_LANGUAGE()) ?
                     // french
-                    Locale.FRENCH : Locale.getDefault().getDisplayLanguage().equals(Languages.getItalianLanguage()) ?
+                    Locale.FRENCH : Locale.getDefault().getDisplayLanguage().equals(Languages.getITALIAN_LANGUAGE()) ?
                     // italian
-                    Locale.ITALIAN : Locale.getDefault().getDisplayLanguage().equals(Languages.getPortugueseLanguage()) ?
+                    Locale.ITALIAN : Locale.getDefault().getDisplayLanguage().equals(Languages.getPORTUGUESE_LANGUAGE()) ?
                     // portuguese
-                    Locale.forLanguageTag("pt-PT") : Locale.getDefault().getDisplayLanguage().equals(Languages.getRomanianLanguage()) ?
+                    Locale.forLanguageTag("pt-PT") : Locale.getDefault().getDisplayLanguage().equals(Languages.getROMANIAN_LANGUAGE()) ?
                     // romanian
                     Locale.forLanguageTag("ro-RO") :
                     // every other language
                     Locale.ENGLISH);
 
-    private final String currentDateTranslated = Locale.getDefault().getDisplayLanguage().equals(Languages.getGermanLanguage()) ||
-            Locale.getDefault().getDisplayLanguage().equals(Languages.getItalianLanguage()) ||
-            Locale.getDefault().getDisplayLanguage().equals(Languages.getRomanianLanguage()) ?
+    private final String currentDateTranslated = Locale.getDefault().getDisplayLanguage().equals(Languages.getGERMAN_LANGUAGE()) ||
+            Locale.getDefault().getDisplayLanguage().equals(Languages.getITALIAN_LANGUAGE()) ||
+            Locale.getDefault().getDisplayLanguage().equals(Languages.getROMANIAN_LANGUAGE()) ?
             // german, italian or romanian
             getDatePrefix() + " " + getCurrentTime().get(Calendar.DAY_OF_MONTH) + " " +
                     getMonthFormat().format(getCurrentTime().getTime()) + " " + getCurrentTime().get(Calendar.YEAR) :
-            Locale.getDefault().getDisplayLanguage().equals(Languages.getSpanishLanguage()) ?
+            Locale.getDefault().getDisplayLanguage().equals(Languages.getSPANISH_LANGUAGE()) ?
                     // spanish
                     getCurrentTime().get(Calendar.DAY_OF_MONTH) + " " + getSeparator() + " " +
                             getMonthFormat().format(getCurrentTime().getTime()) + " " + getSeparator() + " " +
                             getCurrentTime().get(Calendar.YEAR) :
-                    Locale.getDefault().getDisplayLanguage().equals(Languages.getFrenchLanguage()) ?
+                    Locale.getDefault().getDisplayLanguage().equals(Languages.getFRENCH_LANGUAGE()) ?
                             // french
                             getCurrentTime().get(Calendar.DAY_OF_MONTH) + " " +
                                     getMonthFormat().format(getCurrentTime().getTime()) + " " +
                                     getCurrentTime().get(Calendar.YEAR) :
-                            Locale.getDefault().getDisplayLanguage().equals(Languages.getPortugueseLanguage()) ?
+                            Locale.getDefault().getDisplayLanguage().equals(Languages.getPORTUGUESE_LANGUAGE()) ?
                                     // portuguese
                                     getCurrentTime().get(Calendar.DAY_OF_MONTH) + " " + getDatePrefix() + " " +
                                             getMonthFormat().format(getCurrentTime().getTime()) + " " +
@@ -135,8 +135,8 @@ public class MainScreenViewModel extends ViewModel {
 
     public int getActivityTheme() {
         final boolean darkThemeEnabled = getUserDetails() != null ?
-                getUserDetails().getApplicationSettings().getDarkTheme() :
-                MyCustomVariables.getDefaultUserDetails().getApplicationSettings().getDarkTheme();
+                getUserDetails().getApplicationSettings().isDarkThemeEnabled() :
+                MyCustomVariables.getDefaultUserDetails().getApplicationSettings().isDarkThemeEnabled();
 
         return !darkThemeEnabled ?
                 R.drawable.ic_white_gradient_tobacco_ad : R.drawable.ic_black_gradient_night_shift;
@@ -230,8 +230,8 @@ public class MainScreenViewModel extends ViewModel {
 
     public int getTextColor(final @NonNull Activity activity) {
         final boolean darkThemeEnabled = getUserDetails() != null ?
-                getUserDetails().getApplicationSettings().getDarkTheme() :
-                MyCustomVariables.getDefaultUserDetails().getApplicationSettings().getDarkTheme();
+                getUserDetails().getApplicationSettings().isDarkThemeEnabled() :
+                MyCustomVariables.getDefaultUserDetails().getApplicationSettings().isDarkThemeEnabled();
 
         return !darkThemeEnabled ? activity.getColor(R.color.turkish_sea) : Color.WHITE;
     }

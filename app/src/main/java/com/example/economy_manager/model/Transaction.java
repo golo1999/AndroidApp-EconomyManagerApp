@@ -3,9 +3,11 @@ package com.example.economy_manager.model;
 import androidx.annotation.NonNull;
 
 import java.time.LocalDateTime;
-import java.util.Objects;
 import java.util.UUID;
 
+import lombok.Data;
+
+@Data
 public class Transaction {
     private static final String[] categoryList = new String[]{"Deposits", "Independent sources", "Salary", "Saving",
             "Bills", "Car", "Clothes", "Communications", "Eating out", "Entertainment", "Food", "Gifts", "Health",
@@ -87,84 +89,8 @@ public class Transaction {
         return typeName.equals("Income") ? 1 : 0;
     }
 
-    public String getId() {
-        return id;
-    }
-
     @NonNull
     private String generateRandomID() {
         return String.valueOf(UUID.randomUUID());
-    }
-
-    public int getCategory() {
-        return category;
-    }
-
-    public void setCategory(int category) {
-        this.category = category;
-    }
-
-    public MyCustomTime getTime() {
-        return time;
-    }
-
-    public void setTime(MyCustomTime time) {
-        this.time = time;
-    }
-
-    public int getType() {
-        return type;
-    }
-
-    public void setType(int type) {
-        this.type = type;
-    }
-
-    public String getNote() {
-        return note;
-    }
-
-    public void setNote(String note) {
-        this.note = note;
-    }
-
-    public String getValue() {
-        return value;
-    }
-
-    public void setValue(String value) {
-        this.value = value;
-    }
-
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Transaction that = (Transaction) o;
-        return category == that.category &&
-                type == that.type &&
-                id.equals(that.id) &&
-                time.equals(that.time) &&
-                Objects.equals(note, that.note) &&
-                value.equals(that.value);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, category, time, type, note, value);
-    }
-
-    @NonNull
-    @Override
-    public String toString() {
-        return "Transaction{" +
-                "id='" + id + '\'' +
-                ", category=" + category +
-                ", time=" + time +
-                ", type=" + type +
-                ", note='" + note + '\'' +
-                ", value='" + value + '\'' +
-                '}';
     }
 }

@@ -53,12 +53,12 @@ public final class MyCustomMethods {
     public static String getCurrencySymbol() {
         final String displayLanguage = Locale.getDefault().getDisplayLanguage();
 
-        return displayLanguage.equals(Languages.getGermanLanguage()) ||
-                displayLanguage.equals(Languages.getSpanishLanguage()) ||
-                displayLanguage.equals(Languages.getFrenchLanguage()) ||
-                displayLanguage.equals(Languages.getItalianLanguage()) ||
-                displayLanguage.equals(Languages.getPortugueseLanguage()) ?
-                "€" : displayLanguage.equals(Languages.getRomanianLanguage()) ?
+        return displayLanguage.equals(Languages.getGERMAN_LANGUAGE()) ||
+                displayLanguage.equals(Languages.getSPANISH_LANGUAGE()) ||
+                displayLanguage.equals(Languages.getFRENCH_LANGUAGE()) ||
+                displayLanguage.equals(Languages.getITALIAN_LANGUAGE()) ||
+                displayLanguage.equals(Languages.getPORTUGUESE_LANGUAGE()) ?
+                "€" : displayLanguage.equals(Languages.getROMANIAN_LANGUAGE()) ?
                 "RON" : "£";
     }
 

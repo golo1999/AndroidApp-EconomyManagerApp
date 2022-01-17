@@ -36,8 +36,8 @@ public class MonthlyBalanceViewModel extends ViewModel {
 
     public int getActivityTheme() {
         final boolean checked = getUserDetails() != null ?
-                getUserDetails().getApplicationSettings().getDarkTheme() :
-                MyCustomVariables.getDefaultUserDetails().getApplicationSettings().getDarkTheme();
+                getUserDetails().getApplicationSettings().isDarkThemeEnabled() :
+                MyCustomVariables.getDefaultUserDetails().getApplicationSettings().isDarkThemeEnabled();
 
         return !checked ? R.drawable.ic_white_gradient_tobacco_ad : R.drawable.ic_black_gradient_night_shift;
     }
@@ -75,14 +75,14 @@ public class MonthlyBalanceViewModel extends ViewModel {
     }
 
     public String getDayPrefix(final int dayFromDaysList) {
-        return Locale.getDefault().getDisplayLanguage().equals(Languages.getGermanLanguage()) ?
+        return Locale.getDefault().getDisplayLanguage().equals(Languages.getGERMAN_LANGUAGE()) ?
                 // german
                 "der" :
-                Locale.getDefault().getDisplayLanguage().equals(Languages.getSpanishLanguage()) ||
-                        Locale.getDefault().getDisplayLanguage().equals(Languages.getPortugueseLanguage()) ?
+                Locale.getDefault().getDisplayLanguage().equals(Languages.getSPANISH_LANGUAGE()) ||
+                        Locale.getDefault().getDisplayLanguage().equals(Languages.getPORTUGUESE_LANGUAGE()) ?
                         // spanish or portuguese
                         "de" :
-                        Locale.getDefault().getDisplayLanguage().equals(Languages.getItalianLanguage()) ?
+                        Locale.getDefault().getDisplayLanguage().equals(Languages.getITALIAN_LANGUAGE()) ?
                                 // italian
                                 "il" :
                                 // everything else
@@ -107,19 +107,19 @@ public class MonthlyBalanceViewModel extends ViewModel {
     }
 
     public String getDateTranslated(final Context context, final int dayFromDaysList) {
-        return Locale.getDefault().getDisplayLanguage().equals(Languages.getGermanLanguage()) ?
+        return Locale.getDefault().getDisplayLanguage().equals(Languages.getGERMAN_LANGUAGE()) ?
                 // german
                 getDayPrefix(dayFromDaysList) + " " + dayFromDaysList + " " + getTranslatedMonth(context) :
-                Locale.getDefault().getDisplayLanguage().equals(Languages.getSpanishLanguage()) ||
-                        Locale.getDefault().getDisplayLanguage().equals(Languages.getPortugueseLanguage()) ?
+                Locale.getDefault().getDisplayLanguage().equals(Languages.getSPANISH_LANGUAGE()) ||
+                        Locale.getDefault().getDisplayLanguage().equals(Languages.getPORTUGUESE_LANGUAGE()) ?
                         // spanish or portuguese
                         dayFromDaysList + " " + getDayPrefix(dayFromDaysList) + " " +
                                 getTranslatedMonth(context).toLowerCase() :
-                        Locale.getDefault().getDisplayLanguage().equals(Languages.getFrenchLanguage()) ||
-                                Locale.getDefault().getDisplayLanguage().equals(Languages.getRomanianLanguage()) ?
+                        Locale.getDefault().getDisplayLanguage().equals(Languages.getFRENCH_LANGUAGE()) ||
+                                Locale.getDefault().getDisplayLanguage().equals(Languages.getROMANIAN_LANGUAGE()) ?
                                 // french or romanian
                                 dayFromDaysList + " " + getTranslatedMonth(context).toLowerCase() :
-                                Locale.getDefault().getDisplayLanguage().equals(Languages.getItalianLanguage()) ?
+                                Locale.getDefault().getDisplayLanguage().equals(Languages.getITALIAN_LANGUAGE()) ?
                                         // italian
                                         getDayPrefix(dayFromDaysList) + " " +
                                                 dayFromDaysList + " " + getTranslatedMonth(context).toLowerCase() :

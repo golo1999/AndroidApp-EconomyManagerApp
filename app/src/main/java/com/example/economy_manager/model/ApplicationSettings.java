@@ -1,15 +1,14 @@
 package com.example.economy_manager.model;
 
-import androidx.annotation.NonNull;
-
 import com.example.economy_manager.utility.MyCustomVariables;
 
-import java.util.Objects;
+import lombok.Data;
 
+@Data
 public class ApplicationSettings {
     private String currency;
     private String currencySymbol;
-    private boolean darkTheme;
+    private boolean darkThemeEnabled;
 
     public ApplicationSettings() {
         // Required empty public constructor
@@ -17,32 +16,16 @@ public class ApplicationSettings {
     }
 
     public ApplicationSettings(final String currency) {
-        this.darkTheme = false;
+        this.darkThemeEnabled = false;
         this.currency = currency;
 
         setCurrencySymbol();
-    }
-
-    public boolean getDarkTheme() {
-        return darkTheme;
-    }
-
-    public void setDarkTheme(boolean theme) {
-        this.darkTheme = theme;
-    }
-
-    public String getCurrency() {
-        return currency;
     }
 
     public void setCurrency(String currency) {
         this.currency = currency;
 
         setCurrencySymbol();
-    }
-
-    public String getCurrencySymbol() {
-        return currencySymbol;
     }
 
     public void setCurrencySymbol() {
@@ -60,30 +43,5 @@ public class ApplicationSettings {
                 "¥" : currency.equals("RON") ?
                 "RON" : currency.equals("RUB") ?
                 "₽" : "$";
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        ApplicationSettings that = (ApplicationSettings) o;
-        return darkTheme == that.darkTheme &&
-                Objects.equals(currency, that.currency) &&
-                currencySymbol.equals(that.currencySymbol);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(currency, currencySymbol, darkTheme);
-    }
-
-    @NonNull
-    @Override
-    public String toString() {
-        return "ApplicationSettings{" +
-                "currency='" + currency + '\'' +
-                ", currencySymbol='" + currencySymbol + '\'' +
-                ", darkTheme=" + darkTheme +
-                '}';
     }
 }

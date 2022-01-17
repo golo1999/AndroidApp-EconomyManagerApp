@@ -107,12 +107,12 @@ public class BudgetReviewFragment extends Fragment {
                                     MyCustomMethods.getRoundedNumberToNDecimalPlaces(totalMonthlyExpenses, 2);
 
                             final String totalMonthlyIncomesText =
-                                    Locale.getDefault().getDisplayLanguage().equals(Languages.getEnglishLanguage()) ?
+                                    Locale.getDefault().getDisplayLanguage().equals(Languages.getENGLISH_LANGUAGE()) ?
                                             currencySymbol + totalMonthlyIncomes :
                                             totalMonthlyIncomes + " " + currencySymbol;
 
                             final String totalMonthlyExpensesText =
-                                    Locale.getDefault().getDisplayLanguage().equals(Languages.getEnglishLanguage()) ?
+                                    Locale.getDefault().getDisplayLanguage().equals(Languages.getENGLISH_LANGUAGE()) ?
                                             currencySymbol + totalMonthlyExpenses :
                                             totalMonthlyExpenses + " " + currencySymbol;
 
@@ -136,11 +136,11 @@ public class BudgetReviewFragment extends Fragment {
             final float totalMonthlyExpenses = 0f;
 
             final String totalMonthlyIncomesText =
-                    Locale.getDefault().getDisplayLanguage().equals(Languages.getEnglishLanguage()) ?
+                    Locale.getDefault().getDisplayLanguage().equals(Languages.getENGLISH_LANGUAGE()) ?
                             currencySymbol + totalMonthlyIncomes : totalMonthlyIncomes + " " + currencySymbol;
 
             final String totalMonthlyExpensesText =
-                    Locale.getDefault().getDisplayLanguage().equals(Languages.getEnglishLanguage()) ?
+                    Locale.getDefault().getDisplayLanguage().equals(Languages.getENGLISH_LANGUAGE()) ?
                             currencySymbol + totalMonthlyExpenses : totalMonthlyExpenses + " " + currencySymbol;
 
             binding.incomesValue.setText(totalMonthlyIncomesText);

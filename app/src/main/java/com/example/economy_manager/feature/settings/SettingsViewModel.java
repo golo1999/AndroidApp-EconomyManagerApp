@@ -180,16 +180,16 @@ public class SettingsViewModel extends AndroidViewModel {
 
     public int getTextColor(final Context context) {
         final boolean checked = getUserDetails() != null ?
-                getUserDetails().getApplicationSettings().getDarkTheme() :
-                MyCustomVariables.getDefaultUserDetails().getApplicationSettings().getDarkTheme();
+                getUserDetails().getApplicationSettings().isDarkThemeEnabled() :
+                MyCustomVariables.getDefaultUserDetails().getApplicationSettings().isDarkThemeEnabled();
 
         return !checked ? context.getColor(R.color.turkish_sea) : Color.WHITE;
     }
 
     public int getTheme() {
         final boolean darkThemeEnabled = getUserDetails() != null ?
-                getUserDetails().getApplicationSettings().getDarkTheme() :
-                MyCustomVariables.getDefaultUserDetails().getApplicationSettings().getDarkTheme();
+                getUserDetails().getApplicationSettings().isDarkThemeEnabled() :
+                MyCustomVariables.getDefaultUserDetails().getApplicationSettings().isDarkThemeEnabled();
 
         return !darkThemeEnabled ? R.drawable.ic_white_gradient_tobacco_ad : R.drawable.ic_black_gradient_night_shift;
     }
