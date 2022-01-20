@@ -109,7 +109,7 @@ public class MoneySpentFragment extends Fragment {
                                 }
 
                                 final boolean languageIsEnglish =
-                                        Locale.getDefault().getDisplayLanguage().equals(Languages.getENGLISH_LANGUAGE());
+                                        Locale.getDefault().getDisplayLanguage().equals(Languages.ENGLISH_LANGUAGE);
 
                                 final String youSpentText = languageIsEnglish ?
                                         // english

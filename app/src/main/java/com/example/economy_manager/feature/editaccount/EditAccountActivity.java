@@ -163,12 +163,12 @@ public class EditAccountActivity
                 !String.valueOf(binding.websiteField.getHint()).trim().equals(getResources().getString(R.string.edit_account_website)) ?
                         String.valueOf(binding.websiteField.getHint()).trim() : "";
 
-        final String enteredCountry = Locale.getDefault().getDisplayLanguage().equals(Languages.getENGLISH_LANGUAGE()) ?
+        final String enteredCountry = Locale.getDefault().getDisplayLanguage().equals(Languages.ENGLISH_LANGUAGE) ?
                 String.valueOf(binding.countrySpinner.getSelectedItem()).trim() :
                 String.valueOf(viewModel.getCountryNameInEnglish(getApplication(),
                         String.valueOf(binding.countrySpinner.getSelectedItem()))).trim();
 
-        final String enteredGender = Locale.getDefault().getDisplayLanguage().equals(Languages.getENGLISH_LANGUAGE()) ?
+        final String enteredGender = Locale.getDefault().getDisplayLanguage().equals(Languages.ENGLISH_LANGUAGE) ?
                 String.valueOf(binding.genderSpinner.getSelectedItem()).trim() :
                 String.valueOf(viewModel.getGenderInEnglish(getApplication(),
                         String.valueOf(binding.genderSpinner.getSelectedItem()))).trim();

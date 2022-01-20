@@ -156,7 +156,7 @@ public class TopFiveExpensesFragment extends Fragment {
                             childLayout.findViewById(R.id.valueText);
 
                     final String valueWithCurrency =
-                            Locale.getDefault().getDisplayLanguage().equals(Languages.getENGLISH_LANGUAGE()) ?
+                            Locale.getDefault().getDisplayLanguage().equals(Languages.ENGLISH_LANGUAGE) ?
                                     currencySymbol + transaction.getValue() :
                                     transaction.getValue() + " " + currencySymbol;
 
