@@ -28,6 +28,8 @@ import com.example.economy_manager.feature.editphoto.EditPhotoActivity;
 import com.example.economy_manager.model.BirthDate;
 import com.example.economy_manager.model.PersonalInformation;
 import com.example.economy_manager.model.UserDetails;
+import com.example.economy_manager.utility.Countries;
+import com.example.economy_manager.utility.Genders;
 import com.example.economy_manager.utility.Languages;
 import com.example.economy_manager.utility.MyCustomMethods;
 import com.example.economy_manager.utility.MyCustomSharedPreferences;
@@ -165,12 +167,12 @@ public class EditAccountActivity
 
         final String enteredCountry = Locale.getDefault().getDisplayLanguage().equals(Languages.ENGLISH_LANGUAGE) ?
                 String.valueOf(binding.countrySpinner.getSelectedItem()).trim() :
-                String.valueOf(viewModel.getCountryNameInEnglish(getApplication(),
+                String.valueOf(Countries.getCountryNameInEnglish(getApplication(),
                         String.valueOf(binding.countrySpinner.getSelectedItem()))).trim();
 
         final String enteredGender = Locale.getDefault().getDisplayLanguage().equals(Languages.ENGLISH_LANGUAGE) ?
                 String.valueOf(binding.genderSpinner.getSelectedItem()).trim() :
-                String.valueOf(viewModel.getGenderInEnglish(getApplication(),
+                String.valueOf(Genders.getGenderInEnglish(getApplication(),
                         String.valueOf(binding.genderSpinner.getSelectedItem()))).trim();
 
         final int birthDateYear = viewModel.getTransactionDate().getYear();
