@@ -68,8 +68,8 @@ public class EditTransactionsViewModel extends ViewModel {
         return editTransactionsRecyclerViewAdapter;
     }
 
-    public void setEditTransactionsRecyclerViewAdapter(EditTransactionsRecyclerViewAdapter editTransactionsRecyclerViewAdapter) {
-        this.editTransactionsRecyclerViewAdapter = editTransactionsRecyclerViewAdapter;
+    public void setEditTransactionsRecyclerViewAdapter(EditTransactionsRecyclerViewAdapter recyclerViewAdapter) {
+        this.editTransactionsRecyclerViewAdapter = recyclerViewAdapter;
     }
 
     public Transaction getSelectedTransaction() {
@@ -374,7 +374,7 @@ public class EditTransactionsViewModel extends ViewModel {
         if (hasBeenModified && MyCustomVariables.getFirebaseAuth().getUid() != null) {
             MyCustomVariables.getDatabaseReference()
                     .child(MyCustomVariables.getFirebaseAuth().getUid())
-                    .child("PersonalTransactions")
+                    .child("personalTransactions")
                     .child(initialTransaction.getId())
                     .setValue(initialTransaction);
         }

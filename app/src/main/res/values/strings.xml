@@ -4,6 +4,7 @@
     <string name="add_money_independent_sources">Independent sources</string>
     <string name="add_money_title">New income</string>
     <string name="already_have_account">Already have an account? Log in here</string>
+    <string name="and">and</string>
     <string name="app_name" translatable="false">Economy Manager</string>
     <string name="bottom_nav_main_screen_account">Account</string>
     <string name="bottom_nav_main_screen_edit">Transactions</string>
@@ -108,7 +109,7 @@
     <string name="incomes">Incomes</string>
     <string name="last_10_transactions">Last 10 transactions</string>
     <string name="last_week_expenses">Last week expenses</string>
-    <string name="login_email_not_valid">Email address is not valid</string>
+    <string name="email_not_valid">Email address is not valid</string>
     <string name="login_forgot_password">Forgot password</string>
     <string name="login_login">Log in</string>
     <string name="login_incorrect_username_password">Incorrect username or password</string>
@@ -172,6 +173,7 @@
     <string name="settings_reset_database">Are you sure you want to reset the database?</string>
     <string name="settings_warning">Warning</string>
     <string name="settings_yes">Yes</string>
+    <string name="should_have_characters">%s should have %d characters</string>
     <string name="signup_error1">Email already exists</string>
     <string name="signup_error2">Email and password should not be empty</string>
     <string name="signup_error3">Email should not be empty</string>
@@ -215,6 +217,7 @@
     <string name="upload">Upload</string>
     <string name="value">Value</string>
     <string name="verify_email">Please verify your email</string>
+    <string name="whitespace">&#160;</string>
     <string name="year">Year</string>
     <string name="add_money_note_length_error">The note should have maximum 15 characters</string>
     <string name="edit_account_country_select_country" translatable="false">" "</string>

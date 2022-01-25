@@ -70,7 +70,7 @@
     <string name="login_no_account">Non hai un account?&#160;</string>
     <string name="login_incorrect_username_password">Nome utente o password errati</string>
     <string name="forgot_password_email_does_not_exist">L\'email non esiste nel le base dei dati</string>
-    <string name="login_email_not_valid">Email non valido</string>
+    <string name="email_not_valid">Email non valido</string>
     <string name="minute">Minuto</string>
     <string name="money_error1">Per favore selezionate un\'opzione</string>
     <string name="no_transactions_yet">Nessuna transazione ancora effettuata</string>

@@ -15,9 +15,9 @@ import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.AndroidViewModel;
 
 import com.example.economy_manager.R;
-import com.example.economy_manager.feature.login.LogInActivity;
 import com.example.economy_manager.dialog.ChangePasswordCustomDialog;
 import com.example.economy_manager.dialog.DeleteAccountCustomDialog;
+import com.example.economy_manager.feature.login.LogInActivity;
 import com.example.economy_manager.model.UserDetails;
 import com.example.economy_manager.utility.MyCustomMethods;
 import com.example.economy_manager.utility.MyCustomSharedPreferences;
@@ -382,13 +382,13 @@ public class SettingsViewModel extends AndroidViewModel {
 
             MyCustomVariables.getDatabaseReference()
                     .child(userId)
-                    .child("ApplicationSettings")
+                    .child("applicationSettings")
                     .child("currency")
                     .setValue(selectedCurrency);
 
             MyCustomVariables.getDatabaseReference()
                     .child(userId)
-                    .child("ApplicationSettings")
+                    .child("applicationSettings")
                     .child("currencySymbol")
                     .setValue(currencySymbol);
         }

@@ -18,6 +18,7 @@ import com.example.economy_manager.databinding.MoneySpentPercentageFragmentBindi
 import com.example.economy_manager.feature.mainscreen.MainScreenViewModel;
 import com.example.economy_manager.model.Transaction;
 import com.example.economy_manager.model.UserDetails;
+import com.example.economy_manager.utility.MyCustomMethods;
 import com.example.economy_manager.utility.MyCustomSharedPreferences;
 import com.example.economy_manager.utility.MyCustomVariables;
 import com.google.firebase.database.DataSnapshot;
@@ -112,10 +113,10 @@ public class MoneySpentPercentageFragment extends Fragment {
                         @Override
                         public void onDataChange(final @NonNull DataSnapshot snapshot) {
                             if (snapshot.exists() &&
-                                    snapshot.hasChild("PersonalTransactions") &&
-                                    snapshot.child("PersonalTransactions").hasChildren()) {
+                                    snapshot.hasChild("personalTransactions") &&
+                                    snapshot.child("personalTransactions").hasChildren()) {
                                 final Iterable<DataSnapshot> personalTransactions =
-                                        snapshot.child("PersonalTransactions").getChildren();
+                                        snapshot.child("personalTransactions").getChildren();
 
                                 final int currentMonthIndex = LocalDate.now().getMonthValue();
 
@@ -174,7 +175,7 @@ public class MoneySpentPercentageFragment extends Fragment {
                                     binding.noExpensesMadeText.setVisibility(View.GONE);
                                     binding.pieChart.setVisibility(View.VISIBLE);
 
-                                    transactionTypesMap = viewModel.getSortedMapDescendingByValue(transactionTypesMap);
+                                    MyCustomMethods.sortMapDescendingByValue(transactionTypesMap);
                                     setPieChartData(transactionTypesMap, currentMonthExpensesTotal.get());
                                 } else {
                                     listener.onEmptyPieChart();

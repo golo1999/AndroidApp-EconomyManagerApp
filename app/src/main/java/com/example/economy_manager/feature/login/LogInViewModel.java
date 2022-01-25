@@ -101,7 +101,7 @@ public class LogInViewModel extends ViewModel {
             }
             // if the email isn't valid & the password is
             else if (!Patterns.EMAIL_ADDRESS.matcher(emailValue).matches()) {
-                MyCustomMethods.showShortMessage(activity, activity.getResources().getString(R.string.login_email_not_valid));
+                MyCustomMethods.showShortMessage(activity, activity.getResources().getString(R.string.email_not_valid));
                 setEnteredPassword("");
             }
             // if the email is valid & the password is too short

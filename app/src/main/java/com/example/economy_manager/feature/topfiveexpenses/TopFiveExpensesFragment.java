@@ -82,10 +82,10 @@ public class TopFiveExpensesFragment extends Fragment {
                                     MyCustomMethods.getCurrencySymbol();
 
                             if (snapshot.exists() &&
-                                    snapshot.hasChild("PersonalTransactions") &&
-                                    snapshot.child("PersonalTransactions").hasChildren()) {
+                                    snapshot.hasChild("personalTransactions") &&
+                                    snapshot.child("personalTransactions").hasChildren()) {
                                 for (DataSnapshot transactionIterator :
-                                        snapshot.child("PersonalTransactions").getChildren()) {
+                                        snapshot.child("personalTransactions").getChildren()) {
                                     final Transaction transaction = transactionIterator.getValue(Transaction.class);
 
                                     if (transaction != null && transaction.getTime() != null &&

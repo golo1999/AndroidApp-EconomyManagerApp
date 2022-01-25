@@ -50,7 +50,7 @@ public class EditPhotoViewModel extends ViewModel {
         if (MyCustomVariables.getFirebaseAuth().getUid() != null) {
             MyCustomVariables.getDatabaseReference()
                     .child(MyCustomVariables.getFirebaseAuth().getUid())
-                    .child("PersonalInformation")
+                    .child("personalInformation")
                     .addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(final @NonNull DataSnapshot snapshot) {

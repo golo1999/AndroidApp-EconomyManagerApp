@@ -88,7 +88,7 @@ public class AddIncomeActivity
 
         MyCustomVariables.getDatabaseReference()
                 .child(userID)
-                .child("PersonalTransactions")
+                .child("personalTransactions")
                 .child(newTransaction.getId())
                 .setValue(newTransaction)
                 .addOnSuccessListener((final Void aVoid) -> {
@@ -102,7 +102,7 @@ public class AddIncomeActivity
                 .addOnFailureListener((final Exception e) -> {
                     MyCustomVariables.getDatabaseReference()
                             .child(userID)
-                            .child("PersonalTransactions")
+                            .child("personalTransactions")
                             .child(newTransaction.getId())
                             .removeValue();
 

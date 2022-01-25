@@ -1,6 +1,6 @@
 package com.example.economy_manager.utility;
 
-import android.app.Application;
+import android.app.Activity;
 
 import androidx.annotation.Nullable;
 
@@ -15,30 +15,30 @@ public final class Genders {
     }
 
     @Nullable
-    public static String getGenderInEnglish(final Application app,
+    public static String getGenderInEnglish(final Activity activity,
                                             final String gender) {
-        return gender.equals(app.getResources().getString(R.string.edit_account_gender_female)) ?
-                "Female" : gender.equals(app.getResources().getString(R.string.edit_account_gender_male)) ?
-                "Male" : gender.equals(app.getResources().getString(R.string.edit_account_gender_other)) ?
+        return gender.equals(activity.getResources().getString(R.string.edit_account_gender_female)) ?
+                "Female" : gender.equals(activity.getResources().getString(R.string.edit_account_gender_male)) ?
+                "Male" : gender.equals(activity.getResources().getString(R.string.edit_account_gender_other)) ?
                 "Other" : null;
     }
 
-    public static int getPositionInGenderList(final Application app,
+    public static int getPositionInGenderList(final Activity activity,
                                               ArrayList<String> gendersList,
                                               final String gender) {
         final String translatedGender = gender.equals("Female") ?
-                app.getResources().getString(R.string.edit_account_gender_female) : gender.equals("Male") ?
-                app.getResources().getString(R.string.edit_account_gender_male) : gender.equals("Other") ?
-                app.getResources().getString(R.string.edit_account_gender_other) : " ";
+                activity.getResources().getString(R.string.edit_account_gender_female) : gender.equals("Male") ?
+                activity.getResources().getString(R.string.edit_account_gender_male) : gender.equals("Other") ?
+                activity.getResources().getString(R.string.edit_account_gender_other) : " ";
 
         return Collections.binarySearch(gendersList, translatedGender);
     }
 
-    public static void populateList(final Application app,
+    public static void populateList(final Activity activity,
                                     final ArrayList<String> gendersList) {
-        gendersList.add(app.getResources().getString(R.string.edit_account_gender_female));
-        gendersList.add(app.getResources().getString(R.string.edit_account_gender_male));
-        gendersList.add(app.getResources().getString(R.string.edit_account_gender_other));
-        gendersList.add(app.getResources().getString(R.string.edit_account_gender_select));
+        gendersList.add(activity.getResources().getString(R.string.edit_account_gender_female));
+        gendersList.add(activity.getResources().getString(R.string.edit_account_gender_male));
+        gendersList.add(activity.getResources().getString(R.string.edit_account_gender_other));
+        gendersList.add(activity.getResources().getString(R.string.edit_account_gender_select));
     }
 }

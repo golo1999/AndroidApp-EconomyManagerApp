@@ -44,7 +44,7 @@ public class ForgotPasswordViewModel extends ViewModel {
         } else {
             MyCustomMethods.showShortMessage(currentActivity, emailText.isEmpty() ?
                     currentActivity.getResources().getString(R.string.signup_error3) :
-                    currentActivity.getResources().getString(R.string.login_email_not_valid));
+                    currentActivity.getResources().getString(R.string.email_not_valid));
         }
     }
 

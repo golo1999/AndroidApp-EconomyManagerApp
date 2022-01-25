@@ -5,7 +5,6 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.widget.EditText;
 
-import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.ViewModel;
 
@@ -134,8 +133,6 @@ public class AddExpenseViewModel extends ViewModel {
     }
 
     public void onDateTextClicked(final FragmentManager fragmentManager) {
-        final DialogFragment datePickerFragment = new DatePickerFragment(getTransactionDate());
-
-        datePickerFragment.show(fragmentManager, "date_picker");
+        new DatePickerFragment(getTransactionDate()).show(fragmentManager, "date_picker");
     }
 }

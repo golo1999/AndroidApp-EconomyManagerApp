@@ -141,7 +141,7 @@ public class EditTransactionsActivity
         if (currentUserID != null) {
             MyCustomVariables.getDatabaseReference()
                     .child(currentUserID)
-                    .child("PersonalTransactions")
+                    .child("personalTransactions")
                     .child(transactionToDelete.getId())
                     .removeValue();
         }
@@ -388,7 +388,7 @@ public class EditTransactionsActivity
         if (MyCustomVariables.getFirebaseAuth().getUid() != null) {
             MyCustomVariables.getDatabaseReference()
                     .child(MyCustomVariables.getFirebaseAuth().getUid())
-                    .child("PersonalTransactions")
+                    .child("personalTransactions")
                     .addValueEventListener(new ValueEventListener() {
                         @Override
                         public void onDataChange(final @NonNull DataSnapshot snapshot) {

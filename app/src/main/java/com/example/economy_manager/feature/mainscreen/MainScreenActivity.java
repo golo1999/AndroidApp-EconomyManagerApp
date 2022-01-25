@@ -1,6 +1,5 @@
 package com.example.economy_manager.feature.mainscreen;
 
-import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.view.View;
@@ -18,19 +17,17 @@ import com.example.economy_manager.feature.addexpense.AddExpenseActivity;
 import com.example.economy_manager.feature.addincome.AddIncomeActivity;
 import com.example.economy_manager.feature.editaccount.EditAccountActivity;
 import com.example.economy_manager.feature.edittransactions.EditTransactionsActivity;
+import com.example.economy_manager.feature.moneyspentpercentage.MoneySpentPercentageFragment;
 import com.example.economy_manager.feature.monthlybalance.MonthlyBalanceActivity;
 import com.example.economy_manager.feature.settings.SettingsActivity;
-import com.example.economy_manager.feature.moneyspentpercentage.MoneySpentPercentageFragment;
-import com.example.economy_manager.model.ApplicationSettings;
-import com.example.economy_manager.model.PersonalInformation;
 import com.example.economy_manager.model.Transaction;
 import com.example.economy_manager.model.UserDetails;
+import com.example.economy_manager.utility.MyCustomMethods;
 import com.example.economy_manager.utility.MyCustomSharedPreferences;
 import com.example.economy_manager.utility.MyCustomVariables;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
-import com.google.gson.Gson;
 
 import java.time.LocalDate;
 import java.util.Timer;
@@ -41,7 +38,6 @@ public class MainScreenActivity
         implements MoneySpentPercentageFragment.MoneySpentPercentageListener {
     private MainScreenActivityBinding binding;
     private MainScreenViewModel viewModel;
-    private SharedPreferences preferences;
     private ViewGroup.LayoutParams moneySpentPercentageLayoutParams;
     private long backPressedTime;
     private Toast backToast;
@@ -103,24 +99,6 @@ public class MainScreenActivity
         binding.expensesChartContainer.setLayoutParams(moneySpentPercentageLayoutParams);
     }
 
-    private UserDetails retrieveUserDetailsFromSharedPreferences() {
-        SharedPreferences preferences =
-                getSharedPreferences(MyCustomVariables.getSharedPreferencesFileName(), MODE_PRIVATE);
-        Gson gson = new Gson();
-        String json = preferences.getString("currentUserDetails", "");
-
-        return gson.fromJson(json, UserDetails.class);
-    }
-
-    private void saveUserDetailsToSharedPreferences(final UserDetails details) {
-        SharedPreferences.Editor editor = preferences.edit();
-        Gson gson = new Gson();
-        String json = gson.toJson(details);
-
-        editor.putString("currentUserDetails", json);
-        editor.apply();
-    }
-
     private void setActivityTheme() {
         getWindow().setBackgroundDrawableResource(viewModel.getActivityTheme());
     }
@@ -143,6 +121,7 @@ public class MainScreenActivity
                 .replace(R.id.fragment_money_spent_container, viewModel.getFragmentMoneySpent())
                 .replace(R.id.fragment_last_ten_transactions_container, viewModel.getFragmentLastTenTransactions())
                 .replace(R.id.fragment_top_five_expenses_container, viewModel.getFragmentTopFiveExpenses())
+                .replace(R.id.favoriteExpensesCategoryContainer, viewModel.getFavoriteExpensesCategoryFragment())
                 .replace(R.id.expensesChartContainer, viewModel.getFragmentMoneySpentPercentage())
                 .commit();
     }
@@ -160,10 +139,10 @@ public class MainScreenActivity
                             float totalMonthlyExpenses = 0f;
                             boolean currentMonthTransactionsExist = false;
 
-                            if (snapshot.exists() && snapshot.hasChild("PersonalTransactions") &&
-                                    snapshot.child("PersonalTransactions").hasChildren()) {
+                            if (snapshot.exists() && snapshot.hasChild("personalTransactions") &&
+                                    snapshot.child("personalTransactions").hasChildren()) {
                                 for (final DataSnapshot databaseTransaction :
-                                        snapshot.child("PersonalTransactions").getChildren()) {
+                                        snapshot.child("personalTransactions").getChildren()) {
                                     final Transaction transaction = databaseTransaction.getValue(Transaction.class);
 
                                     if (transaction != null &&
@@ -217,6 +196,7 @@ public class MainScreenActivity
         binding.lastWeekExpensesText.setTextColor(color);
         binding.lastTenTransactionsText.setTextColor(color);
         binding.topFiveExpensesText.setTextColor(color);
+        binding.favoriteExpensesCategoryText.setTextColor(color);
         binding.expensesChartText.setTextColor(color);
     }
 
@@ -248,28 +228,26 @@ public class MainScreenActivity
                         .addListenerForSingleValueEvent(new ValueEventListener() {
                             @Override
                             public void onDataChange(final @NonNull DataSnapshot snapshot) {
-                                if (snapshot.exists() &&
-                                        snapshot.hasChild("ApplicationSettings") &&
-                                        snapshot.hasChild("PersonalInformation")) {
-                                    final ApplicationSettings applicationSettings = snapshot
-                                            .child("ApplicationSettings")
-                                            .getValue(ApplicationSettings.class);
-                                    final PersonalInformation personalInformation = snapshot
-                                            .child("PersonalInformation")
-                                            .getValue(PersonalInformation.class);
+                                if (snapshot.exists()) {
+                                    final UserDetails details = snapshot.getValue(UserDetails.class);
 
-                                    if (applicationSettings != null &&
-                                            personalInformation != null) {
-                                        final UserDetails details =
-                                                new UserDetails(applicationSettings, personalInformation);
-
-                                        if (!userDetailsAlreadyExistInSharedPreferences(details)) {
-                                            saveUserDetailsToSharedPreferences(details);
+                                    if (details != null &&
+                                            details.getApplicationSettings() != null &&
+                                            details.getPersonalInformation() != null) {
+                                        if (MyCustomMethods.
+                                                objectExistsInSharedPreferences(MainScreenActivity.this,
+                                                        "currentUserDetails", UserDetails.class, details)) {
+                                            MyCustomMethods.
+                                                    saveObjectToSharedPreferences(MainScreenActivity.this,
+                                                            details, "currentUserDetails");
                                         }
 
-                                        if (retrieveUserDetailsFromSharedPreferences() != null) {
-                                            final UserDetails userDetails =
-                                                    retrieveUserDetailsFromSharedPreferences();
+                                        if (MyCustomMethods.
+                                                retrieveObjectFromSharedPreferences(MainScreenActivity.this,
+                                                        "currentUserDetails", UserDetails.class) != null) {
+                                            final UserDetails userDetails = MyCustomMethods.
+                                                    retrieveObjectFromSharedPreferences(MainScreenActivity.this,
+                                                            "currentUserDetails", UserDetails.class);
 
                                             MyCustomVariables.setUserDetails(userDetails);
                                             viewModel.setUserDetails(userDetails);
@@ -292,10 +270,12 @@ public class MainScreenActivity
         }
     }
 
+    /**
+     * Method for setting activity & layout variables
+     */
     private void setVariables() {
         binding = DataBindingUtil.setContentView(this, R.layout.main_screen_activity);
         viewModel = new ViewModelProvider(this).get(MainScreenViewModel.class);
-        preferences = getSharedPreferences(MyCustomVariables.getSharedPreferencesFileName(), MODE_PRIVATE);
         moneySpentPercentageLayoutParams = binding.expensesChartContainer.getLayoutParams();
 
         binding.setActivity(this);
@@ -306,11 +286,5 @@ public class MainScreenActivity
         binding.setMonthlyBalanceActivity(MonthlyBalanceActivity.class);
         binding.setSettingsActivity(SettingsActivity.class);
         binding.setViewModel(viewModel);
-    }
-
-    private boolean userDetailsAlreadyExistInSharedPreferences(final UserDetails details) {
-        UserDetails userDetailsFromSharedPreferences = retrieveUserDetailsFromSharedPreferences();
-
-        return details.equals(userDetailsFromSharedPreferences);
     }
 }

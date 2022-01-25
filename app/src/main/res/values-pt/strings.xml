@@ -124,7 +124,7 @@
     <string name="login_login">Conectar</string>
     <string name="login_no_account">Não tem uma conta?&#160;</string>
     <string name="login_incorrect_username_password">Usuário ou senha incorretos</string>
-    <string name="login_email_not_valid">O endereço de email não é válido</string>
+    <string name="email_not_valid">O endereço de email não é válido</string>
     <string name="verify_email">Por favor, verifique seu e-mail</string>
     <string name="minute">Minuto</string>
     <string name="money_error1">Por favor selecione uma opção</string>

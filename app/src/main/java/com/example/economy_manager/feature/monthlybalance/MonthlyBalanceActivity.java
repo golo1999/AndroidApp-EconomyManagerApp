@@ -83,10 +83,10 @@ public class MonthlyBalanceActivity extends AppCompatActivity {
 
                             final ArrayList<Integer> daysList = new ArrayList<>();
 
-                            if (snapshot.exists() && snapshot.hasChild("PersonalTransactions") &&
-                                    snapshot.child("PersonalTransactions").hasChildren()) {
+                            if (snapshot.exists() && snapshot.hasChild("personalTransactions") &&
+                                    snapshot.child("personalTransactions").hasChildren()) {
                                 for (final DataSnapshot databaseTransaction :
-                                        snapshot.child("PersonalTransactions").getChildren()) {
+                                        snapshot.child("personalTransactions").getChildren()) {
                                     final Transaction transaction = databaseTransaction.getValue(Transaction.class);
 
                                     if (transaction != null && transaction.getTime() != null &&
@@ -216,12 +216,12 @@ public class MonthlyBalanceActivity extends AppCompatActivity {
                         @Override
                         public void onDataChange(final @NonNull DataSnapshot snapshot) {
                             if (snapshot.exists() &&
-                                    snapshot.hasChild("PersonalTransactions") &&
-                                    snapshot.child("PersonalTransactions").hasChildren()) {
+                                    snapshot.hasChild("personalTransactions") &&
+                                    snapshot.child("personalTransactions").hasChildren()) {
                                 int numberOfCurrentMonthTransactions = 0;
 
                                 for (final DataSnapshot transaction :
-                                        snapshot.child("PersonalTransactions").getChildren()) {
+                                        snapshot.child("personalTransactions").getChildren()) {
                                     final Transaction databaseTransaction = transaction.getValue(Transaction.class);
 
                                     if (databaseTransaction != null && databaseTransaction.getTime() != null &&

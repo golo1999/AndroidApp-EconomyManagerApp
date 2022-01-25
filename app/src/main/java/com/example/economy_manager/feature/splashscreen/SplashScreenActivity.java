@@ -1,6 +1,5 @@
 package com.example.economy_manager.feature.splashscreen;
 
-import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -12,15 +11,12 @@ import com.example.economy_manager.R;
 import com.example.economy_manager.databinding.SplashScreenActivityBinding;
 import com.example.economy_manager.feature.login.LogInActivity;
 import com.example.economy_manager.feature.mainscreen.MainScreenActivity;
-import com.example.economy_manager.model.ApplicationSettings;
-import com.example.economy_manager.model.PersonalInformation;
 import com.example.economy_manager.model.UserDetails;
 import com.example.economy_manager.utility.MyCustomMethods;
 import com.example.economy_manager.utility.MyCustomVariables;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
-import com.google.gson.Gson;
 
 public class SplashScreenActivity extends AppCompatActivity {
     private SplashScreenActivityBinding binding;
@@ -39,16 +35,8 @@ public class SplashScreenActivity extends AppCompatActivity {
         viewModel = new ViewModelProvider(this).get(SplashScreenViewModel.class);
     }
 
-    private void startSplashScreen() {
-        launcher.start();
-    }
-
     public class LogoLauncher extends Thread {
-        private SharedPreferences preferences;
-
         public void run() {
-            preferences = getSharedPreferences(MyCustomVariables.getSharedPreferencesFileName(), MODE_PRIVATE);
-
             try {
                 sleep(2000);
             } catch (InterruptedException e) {
@@ -61,30 +49,24 @@ public class SplashScreenActivity extends AppCompatActivity {
                             .addListenerForSingleValueEvent(new ValueEventListener() {
                                 @Override
                                 public void onDataChange(final @NonNull DataSnapshot snapshot) {
-                                    if (snapshot.exists() &&
-                                            snapshot.hasChild("ApplicationSettings") &&
-                                            snapshot.hasChild("PersonalInformation")) {
-                                        final ApplicationSettings applicationSettings = snapshot
-                                                .child("ApplicationSettings")
-                                                .getValue(ApplicationSettings.class);
-                                        final PersonalInformation personalInformation = snapshot
-                                                .child("PersonalInformation")
-                                                .getValue(PersonalInformation.class);
+                                    if (snapshot.exists()) {
+                                        final UserDetails details = snapshot.getValue(UserDetails.class);
 
-                                        if (applicationSettings != null &&
-                                                personalInformation != null) {
-                                            final UserDetails details =
-                                                    new UserDetails(applicationSettings, personalInformation);
-
-                                            if (!userDetailsAlreadyExistInSharedPreferences(details)) {
-                                                saveUserDetailsToSharedPreferences(details);
+                                        if (details != null) {
+                                            if (MyCustomMethods.
+                                                    objectExistsInSharedPreferences(SplashScreenActivity.this,
+                                                            "currentUserDetails", UserDetails.class, details)) {
+                                                MyCustomMethods.
+                                                        saveObjectToSharedPreferences(SplashScreenActivity.this,
+                                                                details, "currentUserDetails");
                                             }
 
-                                            if (retrieveUserDetailsFromSharedPreferences() != null) {
-                                                final UserDetails userDetails =
-                                                        retrieveUserDetailsFromSharedPreferences();
+                                            final UserDetails retrievedUserDetails = MyCustomMethods.
+                                                    retrieveObjectFromSharedPreferences(SplashScreenActivity.this,
+                                                            "currentUserDetails", UserDetails.class);
 
-                                                MyCustomVariables.setUserDetails(userDetails);
+                                            if (retrievedUserDetails != null) {
+                                                MyCustomVariables.setUserDetails(retrievedUserDetails);
                                             }
                                         }
                                     }
@@ -101,30 +83,6 @@ public class SplashScreenActivity extends AppCompatActivity {
                         MyCustomVariables.getFirebaseAuth().getCurrentUser() != null ?
                                 MainScreenActivity.class : LogInActivity.class);
             }
-        }
-
-        private void saveUserDetailsToSharedPreferences(final UserDetails details) {
-            SharedPreferences.Editor editor = preferences.edit();
-            Gson gson = new Gson();
-            String json = gson.toJson(details);
-
-            editor.putString("currentUserDetails", json);
-            editor.apply();
-        }
-
-        private UserDetails retrieveUserDetailsFromSharedPreferences() {
-            SharedPreferences preferences =
-                    getSharedPreferences(MyCustomVariables.getSharedPreferencesFileName(), MODE_PRIVATE);
-            Gson gson = new Gson();
-            String json = preferences.getString("currentUserDetails", "");
-
-            return gson.fromJson(json, UserDetails.class);
-        }
-
-        private boolean userDetailsAlreadyExistInSharedPreferences(final UserDetails details) {
-            UserDetails userDetailsFromSharedPreferences = retrieveUserDetailsFromSharedPreferences();
-
-            return details.equals(userDetailsFromSharedPreferences);
         }
     }
 }

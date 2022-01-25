@@ -34,7 +34,6 @@ import com.example.economy_manager.utility.Languages;
 import com.example.economy_manager.utility.MyCustomMethods;
 import com.example.economy_manager.utility.MyCustomSharedPreferences;
 import com.example.economy_manager.utility.MyCustomVariables;
-import com.google.android.gms.tasks.Task;
 import com.squareup.picasso.Picasso;
 
 import java.time.LocalDate;
@@ -66,8 +65,8 @@ public class EditAccountActivity
         setCountrySpinner();
         setGenderSpinner();
         getAndSetPersonalInformation();
-        setSelectedItemColorSpinner(binding.countrySpinner);
-        setSelectedItemColorSpinner(binding.genderSpinner);
+        setSpinnerOnSelectedItemListener(binding.countrySpinner, "COUNTRY_SPINNER");
+        setSpinnerOnSelectedItemListener(binding.genderSpinner, "GENDER_SPINNER");
     }
 
     /**
@@ -167,12 +166,12 @@ public class EditAccountActivity
 
         final String enteredCountry = Locale.getDefault().getDisplayLanguage().equals(Languages.ENGLISH_LANGUAGE) ?
                 String.valueOf(binding.countrySpinner.getSelectedItem()).trim() :
-                String.valueOf(Countries.getCountryNameInEnglish(getApplication(),
+                String.valueOf(Countries.getCountryNameInEnglish(this,
                         String.valueOf(binding.countrySpinner.getSelectedItem()))).trim();
 
         final String enteredGender = Locale.getDefault().getDisplayLanguage().equals(Languages.ENGLISH_LANGUAGE) ?
                 String.valueOf(binding.genderSpinner.getSelectedItem()).trim() :
-                String.valueOf(Genders.getGenderInEnglish(getApplication(),
+                String.valueOf(Genders.getGenderInEnglish(this,
                         String.valueOf(binding.genderSpinner.getSelectedItem()))).trim();
 
         final int birthDateYear = viewModel.getTransactionDate().getYear();
@@ -289,7 +288,7 @@ public class EditAccountActivity
     private void setCountrySpinner() {
         final ArrayAdapter<String> countryAdapter = new ArrayAdapter<String>(this,
                 R.layout.custom_spinner_item,
-                viewModel.getCountryList()) {
+                viewModel.getCountriesList()) {
             @Override
             public View getDropDownView(final int position,
                                         final @Nullable View convertView,
@@ -327,7 +326,7 @@ public class EditAccountActivity
     private void setGenderSpinner() {
         final ArrayAdapter<String> genderAdapter = new ArrayAdapter<String>(this,
                 R.layout.custom_spinner_item,
-                viewModel.getGenderList()) {
+                viewModel.getGendersList()) {
             @Override
             public View getDropDownView(final int position,
                                         final @Nullable View convertView,
@@ -360,54 +359,54 @@ public class EditAccountActivity
                 MyCustomMethods.goToActivityWithFadeTransition(EditAccountActivity.this,
                         EditPhotoActivity.class));
 
-        binding.updateProfileButton.setOnClickListener((final View view) -> {
-            final PersonalInformation editedPersonalInformation =
-                    personalInformationValidation(userDetails.getPersonalInformation());
-
-            if (editedPersonalInformation != null && MyCustomVariables.getFirebaseAuth().getUid() != null) {
-                final boolean firstNameIsEmpty = editedPersonalInformation.getFirstName().trim().isEmpty();
-
-                final boolean lastNameIsEmpty = editedPersonalInformation.getLastName().trim().isEmpty();
-
-                final boolean phoneNumberIsEmpty = editedPersonalInformation.getPhoneNumber().trim().isEmpty();
-
-                final boolean websiteIsEmpty = editedPersonalInformation.getWebsite().trim().isEmpty();
-
-                final boolean countryIsEmpty = editedPersonalInformation.getCountry().trim().isEmpty();
-
-                final boolean genderIsEmpty = editedPersonalInformation.getGender().trim().isEmpty();
-
-                final boolean careerTitleIsEmpty = editedPersonalInformation.getCareerTitle().trim().isEmpty();
-
-                final boolean allInformationIsCompleted =
-                        !firstNameIsEmpty && !lastNameIsEmpty && !phoneNumberIsEmpty && !websiteIsEmpty &&
-                                !countryIsEmpty && !genderIsEmpty && !careerTitleIsEmpty;
-
-                // updating user's new info into the database, into SharedPreferences and into utilities
-                MyCustomVariables.getDatabaseReference()
-                        .child(MyCustomVariables.getFirebaseAuth().getUid())
-                        .child("PersonalInformation")
-                        .setValue(editedPersonalInformation)
-                        .addOnCompleteListener((final Task<Void> task) -> MyCustomMethods.showShortMessage(this,
-                                getResources().getString(R.string.profile_updated_successfully)));
-
-                userDetails.setPersonalInformation(editedPersonalInformation);
-                MyCustomSharedPreferences.saveUserDetailsToSharedPreferences(preferences, userDetails);
-
-                MyCustomVariables.setUserDetails(userDetails);
-
-                onBackPressed();
-
-            }
-            // here we need to set the case when all information is completed
-            else if (!personalInformationHasBeenModified) {
-                MyCustomMethods.showShortMessage(this, getResources().getString(R.string.no_changes_have_been_made));
-                onBackPressed();
-            } else {
-                MyCustomMethods.showShortMessage(this,
-                        getResources().getString(R.string.please_complete_all_fields));
-            }
-        });
+//        binding.updateProfileButton.setOnClickListener((final View view) -> {
+//            final PersonalInformation editedPersonalInformation =
+//                    personalInformationValidation(userDetails.getPersonalInformation());
+//
+//            if (editedPersonalInformation != null && MyCustomVariables.getFirebaseAuth().getUid() != null) {
+//                final boolean firstNameIsEmpty = editedPersonalInformation.getFirstName().trim().isEmpty();
+//
+//                final boolean lastNameIsEmpty = editedPersonalInformation.getLastName().trim().isEmpty();
+//
+//                final boolean phoneNumberIsEmpty = editedPersonalInformation.getPhoneNumber().trim().isEmpty();
+//
+//                final boolean websiteIsEmpty = editedPersonalInformation.getWebsite().trim().isEmpty();
+//
+//                final boolean countryIsEmpty = editedPersonalInformation.getCountry().trim().isEmpty();
+//
+//                final boolean genderIsEmpty = editedPersonalInformation.getGender().trim().isEmpty();
+//
+//                final boolean careerTitleIsEmpty = editedPersonalInformation.getCareerTitle().trim().isEmpty();
+//
+//                final boolean allInformationIsCompleted =
+//                        !firstNameIsEmpty && !lastNameIsEmpty && !phoneNumberIsEmpty && !websiteIsEmpty &&
+//                                !countryIsEmpty && !genderIsEmpty && !careerTitleIsEmpty;
+//
+//                // updating user's new info into the database, into SharedPreferences and into utilities
+//                MyCustomVariables.getDatabaseReference()
+//                        .child(MyCustomVariables.getFirebaseAuth().getUid())
+//                        .child("PersonalInformation")
+//                        .setValue(editedPersonalInformation)
+//                        .addOnCompleteListener((final Task<Void> task) -> MyCustomMethods.showShortMessage(this,
+//                                getResources().getString(R.string.profile_updated_successfully)));
+//
+//                userDetails.setPersonalInformation(editedPersonalInformation);
+//                MyCustomSharedPreferences.saveUserDetailsToSharedPreferences(preferences, userDetails);
+//
+//                MyCustomVariables.setUserDetails(userDetails);
+//
+//                onBackPressed();
+//
+//            }
+//            // here we need to set the case when all information is completed
+//            else if (!personalInformationHasBeenModified) {
+//                MyCustomMethods.showShortMessage(this, getResources().getString(R.string.no_changes_have_been_made));
+//                onBackPressed();
+//            } else {
+//                MyCustomMethods.showShortMessage(this,
+//                        getResources().getString(R.string.please_complete_all_fields));
+//            }
+//        });
 
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
     }
@@ -415,7 +414,8 @@ public class EditAccountActivity
     /**
      * Method for styling spinner's first element
      */
-    private void setSelectedItemColorSpinner(final Spinner spinner) {
+    private void setSpinnerOnSelectedItemListener(final Spinner spinner,
+                                                  final String spinnerType) {
         final AdapterView.OnItemSelectedListener itemSelectedListener = new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(final AdapterView<?> parent,
@@ -434,6 +434,12 @@ public class EditAccountActivity
                 // centering spinner's first item's text and setting its color based on the selected theme
                 ((TextView) parent.getChildAt(0)).setTextColor(color);
                 ((TextView) parent.getChildAt(0)).setGravity(Gravity.START);
+
+                if (spinnerType.trim().equals("COUNTRY_SPINNER")) {
+                    viewModel.setCountry(String.valueOf(parent.getItemAtPosition(position)));
+                } else if (spinnerType.trim().equals("GENDER_SPINNER")) {
+                    viewModel.setGender(String.valueOf(parent.getItemAtPosition(position)));
+                }
             }
 
             @Override
@@ -489,7 +495,7 @@ public class EditAccountActivity
         binding = DataBindingUtil.setContentView(this, R.layout.edit_account_remastered_activity);
         preferences = getSharedPreferences(MyCustomVariables.getSharedPreferencesFileName(), MODE_PRIVATE);
         userDetails = MyCustomSharedPreferences.retrieveUserDetailsFromSharedPreferences(this);
-        viewModel = new EditAccountViewModel(getApplication(), userDetails);
+        viewModel = new EditAccountViewModel(getApplication(), this, userDetails);
 
         binding.setActivity(this);
         binding.setFragmentManager(getSupportFragmentManager());

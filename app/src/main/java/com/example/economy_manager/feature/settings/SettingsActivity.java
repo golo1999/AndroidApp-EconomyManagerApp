@@ -216,8 +216,8 @@ public class SettingsActivity extends AppCompatActivity
             if (MyCustomVariables.getFirebaseAuth().getUid() != null) {
                 MyCustomVariables.getDatabaseReference()
                         .child(MyCustomVariables.getFirebaseAuth().getUid())
-                        .child("ApplicationSettings")
-                        .child("darkTheme")
+                        .child("applicationSettings")
+                        .child("darkThemeEnabled")
                         .setValue(isChecked);
 
                 viewModel.getUserDetails().getApplicationSettings().setDarkThemeEnabled(isChecked);

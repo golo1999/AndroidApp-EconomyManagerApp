@@ -1,9 +1,13 @@
 package com.example.economy_manager.utility;
 
+import static android.content.Context.MODE_PRIVATE;
+
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.text.format.DateFormat;
+import android.util.Patterns;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
@@ -12,10 +16,17 @@ import androidx.annotation.NonNull;
 
 import com.example.economy_manager.R;
 import com.example.economy_manager.feature.login.LogInActivity;
+import com.example.economy_manager.model.MyCustomTime;
+import com.google.gson.Gson;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 public final class MyCustomMethods {
     private MyCustomMethods() {
@@ -31,6 +42,14 @@ public final class MyCustomMethods {
 
             manager.hideSoftInputFromWindow(view.getWindowToken(), 0);
         }
+    }
+
+    public static boolean stringIsNotEmpty(final @NonNull String enteredString) {
+        return !enteredString.trim().isEmpty();
+    }
+
+    public static boolean emailIsValid(final @NonNull String email) {
+        return Patterns.EMAIL_ADDRESS.matcher(email).matches();
     }
 
     public static void finishActivityWithFadeTransition(final @NonNull Activity currentActivity) {
@@ -126,6 +145,18 @@ public final class MyCustomMethods {
         return ((float) ((int) ((tmp - (int) tmp) >= 0.5f ? tmp + 1 : tmp))) / pow;
     }
 
+    public static void sortMapDescendingByValue(final @NonNull LinkedHashMap<Integer, Float> map) {
+        final List<Map.Entry<Integer, Float>> sortedEntries = new ArrayList<>(map.entrySet());
+
+        sortedEntries.sort((final Map.Entry<Integer, Float> firstEntry, final Map.Entry<Integer, Float> secondEntry) ->
+                secondEntry.getValue().compareTo(firstEntry.getValue()));
+
+        map.clear();
+
+        sortedEntries.forEach((final Map.Entry<Integer, Float> entry) -> map.put(entry.getKey(), entry.getValue()));
+
+    }
+
     public static void goToActivityWithFadeTransition(final @NonNull Activity currentActivity,
                                                       final @NonNull Class<? extends Activity> nextActivity) {
         currentActivity.startActivity(new Intent(currentActivity, nextActivity));
@@ -151,17 +182,66 @@ public final class MyCustomMethods {
         currentActivity.finish();
     }
 
+    public static int nameIsValid(final String name) {
+        if (name.length() < 2) {
+            return 0;
+        } else for (final char character : name.toCharArray()) {
+            // if the character is not a letter
+            if (!Character.isLetter(character)) {
+                return -1;
+            }
+        }
+
+        return 1;
+    }
+
+    public static <T> boolean objectExistsInSharedPreferences(@NonNull Activity parentActivity,
+                                                              @NonNull String key,
+                                                              Class<T> tClass,
+                                                              T givenObject) {
+        T retrievedObject = retrieveObjectFromSharedPreferences(parentActivity, key, tClass);
+
+        return givenObject.equals(retrievedObject);
+    }
+
     public static void restartCurrentActivity(final Activity activity) {
         activity.startActivity(activity.getIntent());
         activity.finish();
         activity.overridePendingTransition(0, 0);
     }
 
-    public static void showShortMessage(final Context context, final String message) {
+    public static <T> T retrieveObjectFromSharedPreferences(@NonNull Activity parentActivity,
+                                                            @NonNull String key,
+                                                            Class<T> tClass) {
+        SharedPreferences preferences =
+                parentActivity.getSharedPreferences(MyCustomVariables.getSharedPreferencesFileName(), MODE_PRIVATE);
+        Gson gson = new Gson();
+        String json = preferences.getString(key, "");
+
+        return gson.fromJson(json, tClass);
+    }
+
+    public static <T> void saveObjectToSharedPreferences(@NonNull Activity parentActivity,
+                                                         @NonNull T object,
+                                                         @NonNull String key) {
+        SharedPreferences preferences =
+                parentActivity.getSharedPreferences(MyCustomVariables.getSharedPreferencesFileName(), MODE_PRIVATE);
+
+        SharedPreferences.Editor editor = preferences.edit();
+        Gson gson = new Gson();
+        String json = gson.toJson(object);
+
+        editor.putString(key, json);
+        editor.apply();
+    }
+
+    public static void showShortMessage(final Context context,
+                                        final String message) {
         Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
     }
 
-    public static void showLongMessage(final Context context, final String message) {
+    public static void showLongMessage(final Context context,
+                                       final String message) {
         Toast.makeText(context, message, Toast.LENGTH_LONG).show();
     }
 
@@ -176,5 +256,26 @@ public final class MyCustomMethods {
         activity.finishAffinity();
         activity.startActivity(new Intent(activity, LogInActivity.class));
         activity.overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+    }
+
+    public static boolean transactionWasMadeInTheLastWeek(final @NonNull MyCustomTime transactionTime) {
+        final LocalDate oneWeekAgoDate = LocalDate.now().minusDays(8);
+
+        final LocalDateTime oneWeekAgoDateTime =
+                LocalDateTime.of(oneWeekAgoDate, LocalTime.of(23, 59, 59));
+
+        final LocalDate nextDayDate = LocalDate.now().plusDays(1);
+
+        final LocalDateTime nextDayDateTime = LocalDateTime.of(nextDayDate, LocalTime.of(0, 0));
+
+        final LocalDateTime transactionTimeParsed = LocalDateTime.of(transactionTime.getYear(),
+                transactionTime.getMonth(), transactionTime.getDay(), transactionTime.getHour(),
+                transactionTime.getMinute(), transactionTime.getSecond());
+
+        final boolean isAfterOneWeekAgoDate = transactionTimeParsed.isAfter(oneWeekAgoDateTime);
+
+        final boolean isBeforeCurrentDate = transactionTimeParsed.isBefore(nextDayDateTime);
+
+        return isAfterOneWeekAgoDate && isBeforeCurrentDate;
     }
 }

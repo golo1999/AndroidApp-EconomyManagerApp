@@ -62,7 +62,7 @@
     <string name="login_forgot_password">Am uitat parola</string>
     <string name="login_login">Autentificare</string>
     <string name="login_incorrect_username_password">Numele de utilizator sau parolă incorectă</string>
-    <string name="login_email_not_valid">Emailul nu este valid</string>
+    <string name="email_not_valid">Emailul nu este valid</string>
     <string name="money_error1">Vă rugăm să selectați o opțiune</string>
     <string name="login_no_account">Nu aveți cont?&#160;</string>
     <string name="signup_signup">Înregistrare</string>

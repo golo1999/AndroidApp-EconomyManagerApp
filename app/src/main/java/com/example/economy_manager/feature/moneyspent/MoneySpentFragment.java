@@ -81,15 +81,15 @@ public class MoneySpentFragment extends Fragment {
                             float moneySpentLastWeek = 0f;
 
                             if (snapshot.exists() &&
-                                    snapshot.hasChild("PersonalTransactions") &&
-                                    snapshot.child("PersonalTransactions").hasChildren()) {
+                                    snapshot.hasChild("personalTransactions") &&
+                                    snapshot.child("personalTransactions").hasChildren()) {
                                 for (final DataSnapshot transactionIterator :
-                                        snapshot.child("PersonalTransactions").getChildren()) {
+                                        snapshot.child("personalTransactions").getChildren()) {
                                     final Transaction transaction = transactionIterator.getValue(Transaction.class);
 
                                     if (transaction != null &&
                                             transaction.getType() == 0 &&
-                                            viewModel.transactionWasMadeInTheLastWeek(transaction.getTime())) {
+                                            MyCustomMethods.transactionWasMadeInTheLastWeek(transaction.getTime())) {
                                         moneySpentLastWeek += Float.parseFloat(transaction.getValue());
                                     }
                                 }

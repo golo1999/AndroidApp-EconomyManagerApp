@@ -59,7 +59,7 @@ public class SignUpViewModel extends ViewModel {
         if (currentUserID != null) {
             MyCustomVariables.getDatabaseReference()
                     .child(currentUserID)
-                    .child("PersonalInformation")
+                    .child("personalInformation")
                     .setValue(information);
         }
     }
@@ -73,7 +73,7 @@ public class SignUpViewModel extends ViewModel {
         if (currentUserID != null) {
             MyCustomVariables.getDatabaseReference()
                     .child(currentUserID)
-                    .child("ApplicationSettings")
+                    .child("applicationSettings")
                     .setValue(settings);
         }
     }

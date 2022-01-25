@@ -82,10 +82,10 @@ public class BudgetReviewFragment extends Fragment {
 
                             float totalMonthlyExpenses = 0f;
 
-                            if (snapshot.exists() && snapshot.hasChild("PersonalTransactions") &&
-                                    snapshot.child("PersonalTransactions").hasChildren()) {
+                            if (snapshot.exists() && snapshot.hasChild("personalTransactions") &&
+                                    snapshot.child("personalTransactions").hasChildren()) {
                                 for (final DataSnapshot databaseTransaction :
-                                        snapshot.child("PersonalTransactions").getChildren()) {
+                                        snapshot.child("personalTransactions").getChildren()) {
                                     final Transaction transaction = databaseTransaction.getValue(Transaction.class);
 
                                     if (transaction != null && transaction.getTime() != null &&

@@ -14,12 +14,12 @@ import androidx.lifecycle.ViewModel;
 
 import com.example.economy_manager.R;
 import com.example.economy_manager.feature.budgetreview.BudgetReviewFragment;
+import com.example.economy_manager.feature.favoriteexpenses.FavoriteExpensesCategoryFragment;
 import com.example.economy_manager.feature.lasttentransactions.LastTenTransactionsFragment;
 import com.example.economy_manager.feature.moneyspent.MoneySpentFragment;
 import com.example.economy_manager.feature.moneyspentpercentage.MoneySpentPercentageFragment;
 import com.example.economy_manager.feature.showsavings.ShowSavingsFragment;
 import com.example.economy_manager.feature.topfiveexpenses.TopFiveExpensesFragment;
-import com.example.economy_manager.model.MyCustomTime;
 import com.example.economy_manager.model.Transaction;
 import com.example.economy_manager.model.UserDetails;
 import com.example.economy_manager.utility.Languages;
@@ -29,15 +29,8 @@ import com.example.economy_manager.utility.Types;
 import com.facebook.login.LoginManager;
 
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
-import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 
 public class MainScreenViewModel extends ViewModel {
     private UserDetails userDetails;
@@ -51,6 +44,8 @@ public class MainScreenViewModel extends ViewModel {
     private final LastTenTransactionsFragment lastTenTransactionsFragment = LastTenTransactionsFragment.newInstance();
 
     private final TopFiveExpensesFragment topFiveExpensesFragment = TopFiveExpensesFragment.newInstance();
+
+    private final FavoriteExpensesCategoryFragment favoriteExpensesCategoryFragment = FavoriteExpensesCategoryFragment.newInstance();
 
     private final MoneySpentPercentageFragment moneySpentPercentageFragment = MoneySpentPercentageFragment.newInstance();
 
@@ -168,6 +163,10 @@ public class MainScreenViewModel extends ViewModel {
 
     public TopFiveExpensesFragment getFragmentTopFiveExpenses() {
         return topFiveExpensesFragment;
+    }
+
+    public FavoriteExpensesCategoryFragment getFavoriteExpensesCategoryFragment() {
+        return favoriteExpensesCategoryFragment;
     }
 
     public MoneySpentPercentageFragment getFragmentMoneySpentPercentage() {
@@ -315,37 +314,4 @@ public class MainScreenViewModel extends ViewModel {
 //            }
 //        });
 //    }
-
-    public LinkedHashMap<Integer, Float> getSortedMapDescendingByValue(final LinkedHashMap<Integer, Float> map) {
-        final List<Map.Entry<Integer, Float>> sortedEntries = new ArrayList<>(map.entrySet());
-
-        sortedEntries.sort((final Map.Entry<Integer, Float> entry1, final Map.Entry<Integer, Float> entry2) ->
-                entry2.getValue().compareTo(entry1.getValue()));
-
-        map.clear();
-
-        sortedEntries.forEach((final Map.Entry<Integer, Float> entry) -> map.put(entry.getKey(), entry.getValue()));
-
-        return map;
-    }
-
-    public boolean transactionWasMadeInTheLastWeek(final @NonNull MyCustomTime transactionTime) {
-        final LocalDate oneWeekAgoDate = LocalDate.now().minusDays(8);
-
-        final LocalDateTime oneWeekAgoDateTime = LocalDateTime.of(oneWeekAgoDate, LocalTime.of(23, 59, 59));
-
-        final LocalDate nextDayDate = LocalDate.now().plusDays(1);
-
-        final LocalDateTime nextDayDateTime = LocalDateTime.of(nextDayDate, LocalTime.of(0, 0));
-
-        final LocalDateTime transactionTimeParsed = LocalDateTime.of(transactionTime.getYear(),
-                transactionTime.getMonth(), transactionTime.getDay(), transactionTime.getHour(),
-                transactionTime.getMinute(), transactionTime.getSecond());
-
-        final boolean isAfterOneWeekAgoDate = transactionTimeParsed.isAfter(oneWeekAgoDateTime);
-
-        final boolean isBeforeCurrentDate = transactionTimeParsed.isBefore(nextDayDateTime);
-
-        return isAfterOneWeekAgoDate && isBeforeCurrentDate;
-    }
 }

@@ -22,6 +22,14 @@ public class ApplicationSettings {
         setCurrencySymbol();
     }
 
+    public ApplicationSettings(String currency,
+                               String currencySymbol,
+                               boolean darkThemeEnabled) {
+        this.currency = currency;
+        this.currencySymbol = currencySymbol;
+        this.darkThemeEnabled = darkThemeEnabled;
+    }
+
     public void setCurrency(String currency) {
         this.currency = currency;
 

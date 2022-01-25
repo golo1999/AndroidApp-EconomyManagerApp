@@ -1,5 +1,6 @@
 package com.example.economy_manager.utility;
 
+import android.app.Activity;
 import android.app.Application;
 
 import androidx.annotation.Nullable;
@@ -15,58 +16,58 @@ public final class Countries {
     }
 
     @Nullable
-    public static String getCountryNameInEnglish(final Application app,
+    public static String getCountryNameInEnglish(final Activity activity,
                                                  final String countryName) {
-        return countryName.equals(app.getResources().getString(R.string.edit_account_country_albania)) ?
-                "Albania" : countryName.equals(app.getResources().getString(R.string.edit_account_country_andorra)) ?
-                "Andorra" : countryName.equals(app.getResources().getString(R.string.edit_account_country_armenia)) ?
-                "Armenia" : countryName.equals(app.getResources().getString(R.string.edit_account_country_austria)) ?
-                "Austria" : countryName.equals(app.getResources().getString(R.string.edit_account_country_azerbaijan)) ?
-                "Azerbaijan" : countryName.equals(app.getResources().getString(R.string.edit_account_country_belarus)) ?
-                "Belarus" : countryName.equals(app.getResources().getString(R.string.edit_account_country_belgium)) ?
-                "Belgium" : countryName.equals(app.getResources().getString(R.string.edit_account_country_bosnia_and_herzegovina)) ?
-                "Bosnia and Herzegovina" : countryName.equals(app.getResources().getString(R.string.edit_account_country_bulgaria)) ?
-                "Bulgaria" : countryName.equals(app.getResources().getString(R.string.edit_account_country_croatia)) ?
-                "Croatia" : countryName.equals(app.getResources().getString(R.string.edit_account_country_cyprus)) ?
-                "Cyprus" : countryName.equals(app.getResources().getString(R.string.edit_account_country_czech_republic)) ?
-                "Czech Republic" : countryName.equals(app.getResources().getString(R.string.edit_account_country_denmark)) ?
-                "Denmark" : countryName.equals(app.getResources().getString(R.string.edit_account_country_estonia)) ?
-                "Estonia" : countryName.equals(app.getResources().getString(R.string.edit_account_country_finland)) ?
-                "Finland" : countryName.equals(app.getResources().getString(R.string.edit_account_country_france)) ?
-                "France" : countryName.equals(app.getResources().getString(R.string.edit_account_country_georgia)) ?
-                "Georgia" : countryName.equals(app.getResources().getString(R.string.edit_account_country_germany)) ?
-                "Germany" : countryName.equals(app.getResources().getString(R.string.edit_account_country_greece)) ?
-                "Greece" : countryName.equals(app.getResources().getString(R.string.edit_account_country_hungary)) ?
-                "Hungary" : countryName.equals(app.getResources().getString(R.string.edit_account_country_iceland)) ?
-                "Iceland" : countryName.equals(app.getResources().getString(R.string.edit_account_country_ireland)) ?
-                "Ireland" : countryName.equals(app.getResources().getString(R.string.edit_account_country_italy)) ?
-                "Italy" : countryName.equals(app.getResources().getString(R.string.edit_account_country_kazakhstan)) ?
-                "Kazakhstan" : countryName.equals(app.getResources().getString(R.string.edit_account_country_latvia)) ?
-                "Latvia" : countryName.equals(app.getResources().getString(R.string.edit_account_country_liechtenstein)) ?
-                "Liechtenstein" : countryName.equals(app.getResources().getString(R.string.edit_account_country_lithuania)) ?
-                "Lithuania" : countryName.equals(app.getResources().getString(R.string.edit_account_country_luxembourg)) ?
-                "Luxembourg" : countryName.equals(app.getResources().getString(R.string.edit_account_country_malta)) ?
-                "Malta" : countryName.equals(app.getResources().getString(R.string.edit_account_country_moldova)) ?
-                "Moldova" : countryName.equals(app.getResources().getString(R.string.edit_account_country_monaco)) ?
-                "Monaco" : countryName.equals(app.getResources().getString(R.string.edit_account_country_montenegro)) ?
-                "Montenegro" : countryName.equals(app.getResources().getString(R.string.edit_account_country_netherlands)) ?
-                "Netherlands" : countryName.equals(app.getResources().getString(R.string.edit_account_country_north_macedonia)) ?
-                "North Macedonia" : countryName.equals(app.getResources().getString(R.string.edit_account_country_norway)) ?
-                "Norway" : countryName.equals(app.getResources().getString(R.string.edit_account_country_poland)) ?
-                "Poland" : countryName.equals(app.getResources().getString(R.string.edit_account_country_portugal)) ?
-                "Portugal" : countryName.equals(app.getResources().getString(R.string.edit_account_country_romania)) ?
-                "Romania" : countryName.equals(app.getResources().getString(R.string.edit_account_country_russia)) ?
-                "Russia" : countryName.equals(app.getResources().getString(R.string.edit_account_country_san_marino)) ?
-                "San Marino" : countryName.equals(app.getResources().getString(R.string.edit_account_country_serbia)) ?
-                "Serbia" : countryName.equals(app.getResources().getString(R.string.edit_account_country_slovakia)) ?
-                "Slovakia" : countryName.equals(app.getResources().getString(R.string.edit_account_country_slovenia)) ?
-                "Slovenia" : countryName.equals(app.getResources().getString(R.string.edit_account_country_spain)) ?
-                "Spain" : countryName.equals(app.getResources().getString(R.string.edit_account_country_sweden)) ?
-                "Sweden" : countryName.equals(app.getResources().getString(R.string.edit_account_country_switzerland)) ?
-                "Switzerland" : countryName.equals(app.getResources().getString(R.string.edit_account_country_turkey)) ?
-                "Turkey" : countryName.equals(app.getResources().getString(R.string.edit_account_country_ukraine)) ?
-                "Ukraine" : countryName.equals(app.getResources().getString(R.string.edit_account_country_uk)) ?
-                "United Kingdom" : countryName.equals(app.getResources().getString(R.string.edit_account_country_vatican_city)) ?
+        return countryName.equals(activity.getResources().getString(R.string.edit_account_country_albania)) ?
+                "Albania" : countryName.equals(activity.getResources().getString(R.string.edit_account_country_andorra)) ?
+                "Andorra" : countryName.equals(activity.getResources().getString(R.string.edit_account_country_armenia)) ?
+                "Armenia" : countryName.equals(activity.getResources().getString(R.string.edit_account_country_austria)) ?
+                "Austria" : countryName.equals(activity.getResources().getString(R.string.edit_account_country_azerbaijan)) ?
+                "Azerbaijan" : countryName.equals(activity.getResources().getString(R.string.edit_account_country_belarus)) ?
+                "Belarus" : countryName.equals(activity.getResources().getString(R.string.edit_account_country_belgium)) ?
+                "Belgium" : countryName.equals(activity.getResources().getString(R.string.edit_account_country_bosnia_and_herzegovina)) ?
+                "Bosnia and Herzegovina" : countryName.equals(activity.getResources().getString(R.string.edit_account_country_bulgaria)) ?
+                "Bulgaria" : countryName.equals(activity.getResources().getString(R.string.edit_account_country_croatia)) ?
+                "Croatia" : countryName.equals(activity.getResources().getString(R.string.edit_account_country_cyprus)) ?
+                "Cyprus" : countryName.equals(activity.getResources().getString(R.string.edit_account_country_czech_republic)) ?
+                "Czech Republic" : countryName.equals(activity.getResources().getString(R.string.edit_account_country_denmark)) ?
+                "Denmark" : countryName.equals(activity.getResources().getString(R.string.edit_account_country_estonia)) ?
+                "Estonia" : countryName.equals(activity.getResources().getString(R.string.edit_account_country_finland)) ?
+                "Finland" : countryName.equals(activity.getResources().getString(R.string.edit_account_country_france)) ?
+                "France" : countryName.equals(activity.getResources().getString(R.string.edit_account_country_georgia)) ?
+                "Georgia" : countryName.equals(activity.getResources().getString(R.string.edit_account_country_germany)) ?
+                "Germany" : countryName.equals(activity.getResources().getString(R.string.edit_account_country_greece)) ?
+                "Greece" : countryName.equals(activity.getResources().getString(R.string.edit_account_country_hungary)) ?
+                "Hungary" : countryName.equals(activity.getResources().getString(R.string.edit_account_country_iceland)) ?
+                "Iceland" : countryName.equals(activity.getResources().getString(R.string.edit_account_country_ireland)) ?
+                "Ireland" : countryName.equals(activity.getResources().getString(R.string.edit_account_country_italy)) ?
+                "Italy" : countryName.equals(activity.getResources().getString(R.string.edit_account_country_kazakhstan)) ?
+                "Kazakhstan" : countryName.equals(activity.getResources().getString(R.string.edit_account_country_latvia)) ?
+                "Latvia" : countryName.equals(activity.getResources().getString(R.string.edit_account_country_liechtenstein)) ?
+                "Liechtenstein" : countryName.equals(activity.getResources().getString(R.string.edit_account_country_lithuania)) ?
+                "Lithuania" : countryName.equals(activity.getResources().getString(R.string.edit_account_country_luxembourg)) ?
+                "Luxembourg" : countryName.equals(activity.getResources().getString(R.string.edit_account_country_malta)) ?
+                "Malta" : countryName.equals(activity.getResources().getString(R.string.edit_account_country_moldova)) ?
+                "Moldova" : countryName.equals(activity.getResources().getString(R.string.edit_account_country_monaco)) ?
+                "Monaco" : countryName.equals(activity.getResources().getString(R.string.edit_account_country_montenegro)) ?
+                "Montenegro" : countryName.equals(activity.getResources().getString(R.string.edit_account_country_netherlands)) ?
+                "Netherlands" : countryName.equals(activity.getResources().getString(R.string.edit_account_country_north_macedonia)) ?
+                "North Macedonia" : countryName.equals(activity.getResources().getString(R.string.edit_account_country_norway)) ?
+                "Norway" : countryName.equals(activity.getResources().getString(R.string.edit_account_country_poland)) ?
+                "Poland" : countryName.equals(activity.getResources().getString(R.string.edit_account_country_portugal)) ?
+                "Portugal" : countryName.equals(activity.getResources().getString(R.string.edit_account_country_romania)) ?
+                "Romania" : countryName.equals(activity.getResources().getString(R.string.edit_account_country_russia)) ?
+                "Russia" : countryName.equals(activity.getResources().getString(R.string.edit_account_country_san_marino)) ?
+                "San Marino" : countryName.equals(activity.getResources().getString(R.string.edit_account_country_serbia)) ?
+                "Serbia" : countryName.equals(activity.getResources().getString(R.string.edit_account_country_slovakia)) ?
+                "Slovakia" : countryName.equals(activity.getResources().getString(R.string.edit_account_country_slovenia)) ?
+                "Slovenia" : countryName.equals(activity.getResources().getString(R.string.edit_account_country_spain)) ?
+                "Spain" : countryName.equals(activity.getResources().getString(R.string.edit_account_country_sweden)) ?
+                "Sweden" : countryName.equals(activity.getResources().getString(R.string.edit_account_country_switzerland)) ?
+                "Switzerland" : countryName.equals(activity.getResources().getString(R.string.edit_account_country_turkey)) ?
+                "Turkey" : countryName.equals(activity.getResources().getString(R.string.edit_account_country_ukraine)) ?
+                "Ukraine" : countryName.equals(activity.getResources().getString(R.string.edit_account_country_uk)) ?
+                "United Kingdom" : countryName.equals(activity.getResources().getString(R.string.edit_account_country_vatican_city)) ?
                 "Vatican City" : null;
     }
 

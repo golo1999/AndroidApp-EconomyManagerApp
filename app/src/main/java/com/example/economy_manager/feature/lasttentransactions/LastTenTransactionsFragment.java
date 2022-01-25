@@ -81,10 +81,10 @@ public class LastTenTransactionsFragment extends Fragment {
                                     viewModel.getUserDetails().getApplicationSettings().getCurrencySymbol() :
                                     MyCustomMethods.getCurrencySymbol();
 
-                            if (snapshot.exists() && snapshot.hasChild("PersonalTransactions") &&
-                                    snapshot.child("PersonalTransactions").hasChildren()) {
+                            if (snapshot.exists() && snapshot.hasChild("personalTransactions") &&
+                                    snapshot.child("personalTransactions").hasChildren()) {
                                 for (DataSnapshot transactionIterator :
-                                        snapshot.child("PersonalTransactions").getChildren()) {
+                                        snapshot.child("personalTransactions").getChildren()) {
                                     final Transaction transaction = transactionIterator.getValue(Transaction.class);
 
                                     if (transaction != null && transaction.getTime() != null &&

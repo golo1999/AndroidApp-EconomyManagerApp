@@ -73,7 +73,7 @@
     <string name="no_transactions_this_year">In diesem Jahr wurden keine Transaktionen durchgeführt</string>
     <string name="no_transactions_yet">Es wurden noch keine Transaktionen durchgeführt</string>
     <string name="forgot_password_email_does_not_exist">E-Mail existiert nicht in der Datenbank</string>
-    <string name="login_email_not_valid">Email Adresse ist nicht gültig</string>
+    <string name="email_not_valid">Email Adresse ist nicht gültig</string>
     <string name="login_incorrect_username_password">Falscher Benutzername oder falsches Passwort</string>
     <string name="login_forgot_password">Passwort vergessen</string>
     <string name="last_week_expenses">Letzte Woche Ausgaben</string>
