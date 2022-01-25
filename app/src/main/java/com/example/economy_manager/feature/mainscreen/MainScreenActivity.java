@@ -83,7 +83,7 @@ public class MainScreenActivity
             moneySpentPercentageLayoutParams.height = ViewGroup.LayoutParams.WRAP_CONTENT;
         }
 
-        binding.expensesChartContainer.setLayoutParams(moneySpentPercentageLayoutParams);
+        binding.expensesChartFragmentContainer.setLayoutParams(moneySpentPercentageLayoutParams);
     }
 
     @Override
@@ -96,7 +96,7 @@ public class MainScreenActivity
             moneySpentPercentageLayoutParams.height = percentageScreenHeight;
         }
 
-        binding.expensesChartContainer.setLayoutParams(moneySpentPercentageLayoutParams);
+        binding.expensesChartFragmentContainer.setLayoutParams(moneySpentPercentageLayoutParams);
     }
 
     private void setActivityTheme() {
@@ -116,13 +116,13 @@ public class MainScreenActivity
     private void setFragments() {
         getSupportFragmentManager()
                 .beginTransaction()
-                .replace(R.id.fragment_show_savings_container, viewModel.getFragmentShowSavings())
-                .replace(R.id.fragment_budget_review_container, viewModel.getFragmentBudgetReview())
-                .replace(R.id.fragment_money_spent_container, viewModel.getFragmentMoneySpent())
-                .replace(R.id.fragment_last_ten_transactions_container, viewModel.getFragmentLastTenTransactions())
-                .replace(R.id.fragment_top_five_expenses_container, viewModel.getFragmentTopFiveExpenses())
-                .replace(R.id.favoriteExpensesCategoryContainer, viewModel.getFavoriteExpensesCategoryFragment())
-                .replace(R.id.expensesChartContainer, viewModel.getFragmentMoneySpentPercentage())
+                .replace(R.id.showSavingsFragmentContainer, viewModel.getFragmentShowSavings())
+                .replace(R.id.budgetReviewFragmentContainer, viewModel.getFragmentBudgetReview())
+                .replace(R.id.moneySpentFragmentContainer, viewModel.getFragmentMoneySpent())
+                .replace(R.id.lastTenTransactionsFragmentContainer, viewModel.getFragmentLastTenTransactions())
+                .replace(R.id.topFiveExpensesFragmentContainer, viewModel.getFragmentTopFiveExpenses())
+                .replace(R.id.favoriteExpensesCategoryFragmentContainer, viewModel.getFavoriteExpensesCategoryFragment())
+                .replace(R.id.expensesChartFragmentContainer, viewModel.getFragmentMoneySpentPercentage())
                 .commit();
     }
 
@@ -276,7 +276,7 @@ public class MainScreenActivity
     private void setVariables() {
         binding = DataBindingUtil.setContentView(this, R.layout.main_screen_activity);
         viewModel = new ViewModelProvider(this).get(MainScreenViewModel.class);
-        moneySpentPercentageLayoutParams = binding.expensesChartContainer.getLayoutParams();
+        moneySpentPercentageLayoutParams = binding.expensesChartFragmentContainer.getLayoutParams();
 
         binding.setActivity(this);
         binding.setAddExpenseActivity(AddExpenseActivity.class);

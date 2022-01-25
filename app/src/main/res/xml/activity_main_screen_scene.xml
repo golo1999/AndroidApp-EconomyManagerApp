@@ -9,14 +9,14 @@
     <ConstraintSet android:id="@+id/end">
         <Constraint android:id="@id/firebaseLoadingProgressBarLayout" />
         <Constraint
-            android:id="@+id/main_screen_top_layout"
+            android:id="@+id/topLayout"
             android:layout_width="0sp"
             android:layout_height="0sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
         <Constraint
-            android:id="@+id/main_screen_top_layout"
+            android:id="@+id/topLayout"
             android:layout_width="0sp"
             android:layout_height="0sp"
             app:layout_constraintEnd_toEndOf="parent"
@@ -31,14 +31,14 @@
             <KeyAttribute
                 android:alpha="0"
                 app:framePosition="100"
-                app:motionTarget="@+id/main_screen_top_layout" />
+                app:motionTarget="@+id/topLayout" />
             <KeyAttribute
                 android:alpha="0"
                 app:framePosition="25"
                 app:motionTarget="@+id/firebaseLoadingProgressBarLayout" />
         </KeyFrameSet>
         <OnSwipe
-            app:touchAnchorId="@+id/main_screen_top_layout"
+            app:touchAnchorId="@+id/topLayout"
             app:touchAnchorSide="bottom" />
     </Transition>
 </MotionScene>

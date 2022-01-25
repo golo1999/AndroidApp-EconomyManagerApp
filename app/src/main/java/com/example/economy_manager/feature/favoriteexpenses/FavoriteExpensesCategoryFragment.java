@@ -12,12 +12,13 @@ import androidx.fragment.app.Fragment;
 import com.example.economy_manager.R;
 import com.example.economy_manager.model.Transaction;
 import com.example.economy_manager.model.UserDetails;
+import com.example.economy_manager.utility.MyCustomMethods;
 import com.example.economy_manager.utility.MyCustomVariables;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
 
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class FavoriteExpensesCategoryFragment extends Fragment {
@@ -60,7 +61,7 @@ public class FavoriteExpensesCategoryFragment extends Fragment {
                     .addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(final @NonNull DataSnapshot snapshot) {
-                            final HashMap<Integer, Float> expensesMap = new HashMap<>();
+                            final LinkedHashMap<Integer, Float> expensesMap = new LinkedHashMap<>();
 
                             if (!snapshot.exists()) {
                                 return;
@@ -96,6 +97,10 @@ public class FavoriteExpensesCategoryFragment extends Fragment {
                                         }
                                     }
                                 }
+                            }
+
+                            if (!expensesMap.isEmpty()) {
+                                MyCustomMethods.sortMapDescendingByValue(expensesMap);
                             } else {
 
                             }

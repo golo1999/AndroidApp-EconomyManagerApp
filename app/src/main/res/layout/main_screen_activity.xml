@@ -63,7 +63,7 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/main_screen_top_layout"
+            android:id="@+id/topLayout"
             android:layout_width="0sp"
             android:layout_height="wrap_content"
             android:background="#A2A2A1"
@@ -129,7 +129,7 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.core.widget.NestedScrollView
-            android:id="@+id/main_screen_nested_scroll_view"
+            android:id="@+id/nestedScrollView"
             android:layout_width="0sp"
             android:layout_height="0sp"
             android:fillViewport="true"
@@ -137,21 +137,21 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/main_screen_top_layout">
+            app:layout_constraintTop_toBottomOf="@id/topLayout">
 
             <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/main_screen_container"
+                android:id="@+id/mainContainer"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
                 <androidx.cardview.widget.CardView
-                    android:id="@+id/main_screen_greeting_layout"
+                    android:id="@+id/greetingLayout"
                     android:layout_width="0sp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="20sp"
                     android:layout_marginBottom="10sp"
                     app:cardBackgroundColor="#DA291C"
-                    app:cardCornerRadius="20sp"
+                    app:cardCornerRadius="10sp"
                     app:cardElevation="10sp"
                     app:layout_constraintBottom_toTopOf="@id/remainingMonthlyIncomeText"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -216,22 +216,32 @@
                     android:text="@string/remaining_monthly_income"
                     android:textSize="20sp"
                     android:textStyle="bold"
-                    app:layout_constraintBottom_toTopOf="@id/fragment_show_savings_container"
+                    app:layout_constraintBottom_toTopOf="@id/showSavingsCard"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/main_screen_greeting_layout"
+                    app:layout_constraintTop_toBottomOf="@id/greetingLayout"
                     app:layout_constraintWidth_percent=".9" />
 
-                <FrameLayout
-                    android:id="@+id/fragment_show_savings_container"
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/showSavingsCard"
                     android:layout_width="0sp"
                     android:layout_height="wrap_content"
                     android:layout_marginVertical="10sp"
+                    app:cardBackgroundColor="#FFA500"
+                    app:cardCornerRadius="10sp"
+                    app:cardElevation="10sp"
                     app:layout_constraintBottom_toTopOf="@id/monthlyBalanceText"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/remainingMonthlyIncomeText"
-                    app:layout_constraintWidth_percent=".9" />
+                    app:layout_constraintWidth_percent=".9">
+
+                    <androidx.fragment.app.FragmentContainerView
+                        android:id="@+id/showSavingsFragmentContainer"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+
+                </androidx.cardview.widget.CardView>
 
                 <TextView
                     android:id="@+id/monthlyBalanceText"
@@ -240,22 +250,32 @@
                     android:text="@string/monthly_balance"
                     android:textSize="20sp"
                     android:textStyle="bold"
-                    app:layout_constraintBottom_toTopOf="@id/fragment_budget_review_container"
+                    app:layout_constraintBottom_toTopOf="@id/budgetReviewCard"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/fragment_show_savings_container"
+                    app:layout_constraintTop_toBottomOf="@id/showSavingsCard"
                     app:layout_constraintWidth_percent=".9" />
 
-                <FrameLayout
-                    android:id="@+id/fragment_budget_review_container"
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/budgetReviewCard"
                     android:layout_width="0sp"
                     android:layout_height="wrap_content"
                     android:layout_marginVertical="10sp"
+                    app:cardBackgroundColor="@color/white"
+                    app:cardCornerRadius="10sp"
+                    app:cardElevation="10sp"
                     app:layout_constraintBottom_toTopOf="@id/lastWeekExpensesText"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/monthlyBalanceText"
-                    app:layout_constraintWidth_percent=".9" />
+                    app:layout_constraintWidth_percent=".9">
+
+                    <androidx.fragment.app.FragmentContainerView
+                        android:id="@+id/budgetReviewFragmentContainer"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+
+                </androidx.cardview.widget.CardView>
 
                 <TextView
                     android:id="@+id/lastWeekExpensesText"
@@ -264,22 +284,32 @@
                     android:text="@string/last_week_expenses"
                     android:textSize="20sp"
                     android:textStyle="bold"
-                    app:layout_constraintBottom_toTopOf="@id/fragment_money_spent_container"
+                    app:layout_constraintBottom_toTopOf="@id/moneySpentCard"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/fragment_budget_review_container"
+                    app:layout_constraintTop_toBottomOf="@id/budgetReviewCard"
                     app:layout_constraintWidth_percent=".9" />
 
-                <FrameLayout
-                    android:id="@+id/fragment_money_spent_container"
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/moneySpentCard"
                     android:layout_width="0sp"
                     android:layout_height="wrap_content"
                     android:layout_marginVertical="10sp"
+                    app:cardBackgroundColor="@color/lime"
+                    app:cardCornerRadius="10sp"
+                    app:cardElevation="10sp"
                     app:layout_constraintBottom_toTopOf="@id/lastTenTransactionsText"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/lastWeekExpensesText"
-                    app:layout_constraintWidth_percent=".9" />
+                    app:layout_constraintWidth_percent=".9">
+
+                    <androidx.fragment.app.FragmentContainerView
+                        android:id="@+id/moneySpentFragmentContainer"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+
+                </androidx.cardview.widget.CardView>
 
                 <TextView
                     android:id="@+id/lastTenTransactionsText"
@@ -288,22 +318,32 @@
                     android:text="@string/last_10_transactions"
                     android:textSize="20sp"
                     android:textStyle="bold"
-                    app:layout_constraintBottom_toTopOf="@id/fragment_last_ten_transactions_container"
+                    app:layout_constraintBottom_toTopOf="@id/lastTenTransactionsCard"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/fragment_money_spent_container"
+                    app:layout_constraintTop_toBottomOf="@id/moneySpentCard"
                     app:layout_constraintWidth_percent=".9" />
 
-                <FrameLayout
-                    android:id="@+id/fragment_last_ten_transactions_container"
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/lastTenTransactionsCard"
                     android:layout_width="0sp"
                     android:layout_height="wrap_content"
                     android:layout_marginVertical="10sp"
+                    app:cardBackgroundColor="#333D79"
+                    app:cardCornerRadius="10sp"
+                    app:cardElevation="10sp"
                     app:layout_constraintBottom_toTopOf="@id/topFiveExpensesText"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/lastTenTransactionsText"
-                    app:layout_constraintWidth_percent=".9" />
+                    app:layout_constraintWidth_percent=".9">
+
+                    <androidx.fragment.app.FragmentContainerView
+                        android:id="@+id/lastTenTransactionsFragmentContainer"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+
+                </androidx.cardview.widget.CardView>
 
                 <TextView
                     android:id="@+id/topFiveExpensesText"
@@ -312,22 +352,32 @@
                     android:text="@string/top_5_expenses"
                     android:textSize="20sp"
                     android:textStyle="bold"
-                    app:layout_constraintBottom_toTopOf="@id/fragment_top_five_expenses_container"
+                    app:layout_constraintBottom_toTopOf="@id/topFiveExpensesCard"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/fragment_last_ten_transactions_container"
+                    app:layout_constraintTop_toBottomOf="@id/lastTenTransactionsCard"
                     app:layout_constraintWidth_percent=".9" />
 
-                <FrameLayout
-                    android:id="@+id/fragment_top_five_expenses_container"
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/topFiveExpensesCard"
                     android:layout_width="0sp"
                     android:layout_height="wrap_content"
                     android:layout_marginVertical="10sp"
-                    app:layout_constraintBottom_toTopOf="@+id/favoriteExpensesCategoryText"
+                    app:cardBackgroundColor="#FEE715"
+                    app:cardCornerRadius="10sp"
+                    app:cardElevation="10sp"
+                    app:layout_constraintBottom_toTopOf="@id/favoriteExpensesCategoryText"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/topFiveExpensesText"
-                    app:layout_constraintWidth_percent=".9" />
+                    app:layout_constraintWidth_percent=".9">
+
+                    <androidx.fragment.app.FragmentContainerView
+                        android:id="@+id/topFiveExpensesFragmentContainer"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+
+                </androidx.cardview.widget.CardView>
 
                 <TextView
                     android:id="@+id/favoriteExpensesCategoryText"
@@ -336,14 +386,14 @@
                     android:text="Favorite expenses"
                     android:textSize="20sp"
                     android:textStyle="bold"
-                    app:layout_constraintBottom_toTopOf="@id/favoriteExpensesCategoryContainer"
+                    app:layout_constraintBottom_toTopOf="@id/favoriteExpensesCategoryFragmentContainer"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/fragment_top_five_expenses_container"
+                    app:layout_constraintTop_toBottomOf="@id/topFiveExpensesCard"
                     app:layout_constraintWidth_percent=".9" />
 
-                <FrameLayout
-                    android:id="@+id/favoriteExpensesCategoryContainer"
+                <androidx.fragment.app.FragmentContainerView
+                    android:id="@+id/favoriteExpensesCategoryFragmentContainer"
                     android:layout_width="0sp"
                     android:layout_height="wrap_content"
                     android:layout_marginVertical="10sp"
@@ -360,23 +410,32 @@
                     android:text="@string/expenses_chart"
                     android:textSize="20sp"
                     android:textStyle="bold"
-                    app:layout_constraintBottom_toTopOf="@id/expensesChartContainer"
+                    app:layout_constraintBottom_toTopOf="@id/expensesChartCard"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/favoriteExpensesCategoryContainer"
+                    app:layout_constraintTop_toBottomOf="@id/favoriteExpensesCategoryFragmentContainer"
                     app:layout_constraintWidth_percent=".9" />
 
-                <FrameLayout
-                    android:id="@+id/expensesChartContainer"
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/expensesChartCard"
                     android:layout_width="0sp"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="10sp"
-                    android:layout_marginBottom="20sp"
-                    app:layout_constraintBottom_toTopOf="@+id/main_screen_fab_layout"
+                    android:layout_marginVertical="10sp"
+                    app:cardBackgroundColor="@color/white"
+                    app:cardCornerRadius="10sp"
+                    app:cardElevation="10sp"
+                    app:layout_constraintBottom_toTopOf="@id/fabLayout"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/expensesChartText"
-                    app:layout_constraintWidth_percent=".9" />
+                    app:layout_constraintWidth_percent=".9">
+
+                    <androidx.fragment.app.FragmentContainerView
+                        android:id="@+id/expensesChartFragmentContainer"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+
+                </androidx.cardview.widget.CardView>
 
                 <!--            <FrameLayout-->
                 <!--                android:id="@+id/fragment_money_spent_percentage_container"-->
@@ -392,15 +451,15 @@
                 <!--                app:layout_constraintWidth_percent=".9" />-->
 
                 <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/main_screen_fab_layout"
+                    android:id="@+id/fabLayout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="20sp"
+                    android:paddingVertical="20sp"
                     android:clipChildren="false"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/expensesChartContainer">
+                    app:layout_constraintTop_toBottomOf="@id/expensesChartCard">
 
                     <com.google.android.material.floatingactionbutton.FloatingActionButton
                         android:id="@+id/addIncomeButton"
@@ -443,4 +502,5 @@
         </androidx.core.widget.NestedScrollView>
 
     </androidx.constraintlayout.motion.widget.MotionLayout>
+
 </layout>
