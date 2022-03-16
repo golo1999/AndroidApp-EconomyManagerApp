@@ -13,6 +13,7 @@ import com.example.economy_manager.utility.MyCustomVariables;
 import com.google.android.gms.tasks.Task;
 
 public class ForgotPasswordViewModel extends ViewModel {
+
     private String enteredEmail = "";
 
     public String getEnteredEmail() {

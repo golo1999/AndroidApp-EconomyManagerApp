@@ -55,65 +55,67 @@ public class FavoriteExpensesCategoryFragment extends Fragment {
     }
 
     private void setExpensesMap() {
-        if (MyCustomVariables.getFirebaseAuth().getUid() != null) {
-            MyCustomVariables.getDatabaseReference()
-                    .child(MyCustomVariables.getFirebaseAuth().getUid())
-                    .addListenerForSingleValueEvent(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(final @NonNull DataSnapshot snapshot) {
-                            final LinkedHashMap<Integer, Float> expensesMap = new LinkedHashMap<>();
+        if (MyCustomVariables.getFirebaseAuth().getUid() == null) {
+            return;
+        }
 
-                            if (!snapshot.exists()) {
-                                return;
-                            }
+        MyCustomVariables.getDatabaseReference()
+                .child(MyCustomVariables.getFirebaseAuth().getUid())
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(final @NonNull DataSnapshot snapshot) {
+                        final LinkedHashMap<Integer, Float> expensesMap = new LinkedHashMap<>();
 
-                            final UserDetails details = snapshot.getValue(UserDetails.class);
+                        if (!snapshot.exists()) {
+                            return;
+                        }
 
-                            if (details == null || details.getPersonalTransactions() == null) {
-                                return;
-                            }
+                        final UserDetails details = snapshot.getValue(UserDetails.class);
 
-                            if (!details.getPersonalTransactions().isEmpty()) {
-                                for (Map.Entry<String, Transaction> transactionEntry :
-                                        details.getPersonalTransactions().entrySet()) {
-                                    final Transaction transaction = transactionEntry.getValue();
+                        if (details == null || details.getPersonalTransactions() == null) {
+                            return;
+                        }
 
-                                    if (transaction != null && transaction.getType() == 0) {
-                                        final Integer transactionCategory = transaction.getCategory();
+                        if (!details.getPersonalTransactions().isEmpty()) {
+                            for (Map.Entry<String, Transaction> transactionEntry :
+                                    details.getPersonalTransactions().entrySet()) {
+                                final Transaction transaction = transactionEntry.getValue();
 
-                                        final Float transactionValue = Float.parseFloat(transaction.getValue());
+                                if (transaction != null && transaction.getType() == 0) {
+                                    final Integer transactionCategory = transaction.getCategory();
 
-                                        if (expensesMap.isEmpty() || !expensesMap.containsKey(transactionCategory)) {
-                                            expensesMap.put(transactionCategory, transactionValue);
-                                        } else if (expensesMap.containsKey(transactionCategory)) {
-                                            final Float currentCategoryTotalValue = expensesMap.get(transactionCategory);
+                                    final Float transactionValue = Float.parseFloat(transaction.getValue());
 
-                                            if (currentCategoryTotalValue != null) {
-                                                final Float newCategoryTotalValue =
-                                                        currentCategoryTotalValue + transactionValue;
+                                    if (expensesMap.isEmpty() || !expensesMap.containsKey(transactionCategory)) {
+                                        expensesMap.put(transactionCategory, transactionValue);
+                                    } else if (expensesMap.containsKey(transactionCategory)) {
+                                        final Float currentCategoryTotalValue = expensesMap.get(transactionCategory);
 
-                                                expensesMap.replace(transactionCategory, newCategoryTotalValue);
-                                            }
+                                        if (currentCategoryTotalValue != null) {
+                                            final Float newCategoryTotalValue =
+                                                    currentCategoryTotalValue + transactionValue;
+
+                                            expensesMap.replace(transactionCategory, newCategoryTotalValue);
                                         }
                                     }
                                 }
                             }
-
-                            if (!expensesMap.isEmpty()) {
-                                MyCustomMethods.sortMapDescendingByValue(expensesMap);
-                            } else {
-
-                            }
-
-                            Log.d("expensesMap", expensesMap.toString());
                         }
 
-                        @Override
-                        public void onCancelled(final @NonNull DatabaseError error) {
+                        if (!expensesMap.isEmpty()) {
+                            MyCustomMethods.sortMapDescendingByValue(expensesMap);
+                        } else {
 
                         }
-                    });
-        }
+
+                        Log.d("expensesMap", expensesMap.toString());
+                    }
+
+                    @Override
+                    public void onCancelled(final @NonNull DatabaseError error) {
+
+                    }
+                });
     }
 
     private void setVariables(final View v) {

@@ -18,6 +18,15 @@
     <color name="turkish_sea">#195190</color>
     <color name="gold">#FFDF00</color>
 
+    <!-- Dark theme -->
+
+    <color name="primaryDark">#1C1C1E</color>
+    <color name="secondaryDark">#FEDA00</color>
+
+    <!-- Light theme -->
+
+    <color name="secondaryLight">#06E1C0</color>
+
     <color name="expenses_bills">#BB22BE</color>
     <color name="expenses_car">#C6980C</color>
     <color name="expenses_clothes">#E1932C</color>

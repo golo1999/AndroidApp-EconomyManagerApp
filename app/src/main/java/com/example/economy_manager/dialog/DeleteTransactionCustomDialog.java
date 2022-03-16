@@ -15,6 +15,7 @@ import com.example.economy_manager.model.Transaction;
 import java.util.ArrayList;
 
 public class DeleteTransactionCustomDialog extends DialogFragment {
+
     private final ArrayList<Transaction> transactionsList;
     private final EditTransactionsRecyclerViewAdapter adapter;
     private final int positionInList;

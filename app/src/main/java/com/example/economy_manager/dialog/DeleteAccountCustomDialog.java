@@ -15,6 +15,7 @@ import androidx.appcompat.app.AppCompatDialogFragment;
 import com.example.economy_manager.R;
 
 public class DeleteAccountCustomDialog extends AppCompatDialogFragment {
+
     private EditText password;
     private CustomDialogListener listener;
     private final int choice;

@@ -25,6 +25,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.Locale;
 
 public class MoneySpentFragment extends Fragment {
+
     private MoneySpentFragmentBinding binding;
     private MainScreenViewModel viewModel;
 
@@ -68,68 +69,70 @@ public class MoneySpentFragment extends Fragment {
     }
 
     private void setLastWeekExpenses() {
-        if (MyCustomVariables.getFirebaseAuth().getUid() != null) {
-            MyCustomVariables.getDatabaseReference()
-                    .child(MyCustomVariables.getFirebaseAuth().getUid())
-                    .addValueEventListener(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(final @NonNull DataSnapshot snapshot) {
-                            final String currencySymbol = viewModel.getUserDetails() != null ?
-                                    viewModel.getUserDetails().getApplicationSettings().getCurrencySymbol() :
-                                    MyCustomMethods.getCurrencySymbol();
-
-                            float moneySpentLastWeek = 0f;
-
-                            if (snapshot.exists() &&
-                                    snapshot.hasChild("personalTransactions") &&
-                                    snapshot.child("personalTransactions").hasChildren()) {
-                                for (final DataSnapshot transactionIterator :
-                                        snapshot.child("personalTransactions").getChildren()) {
-                                    final Transaction transaction = transactionIterator.getValue(Transaction.class);
-
-                                    if (transaction != null &&
-                                            transaction.getType() == 0 &&
-                                            MyCustomMethods.transactionWasMadeInTheLastWeek(transaction.getTime())) {
-                                        moneySpentLastWeek += Float.parseFloat(transaction.getValue());
-                                    }
-                                }
-                            }
-
-                            // if the user hasn't spent money in the last week
-                            if (moneySpentLastWeek <= 0f) {
-                                binding.moneySpentText.setText(R.string.no_money_last_week);
-                            }
-                            // if the user spent money in the last week
-                            else {
-                                if (String.valueOf(moneySpentLastWeek).contains(".") &&
-                                        String.valueOf(moneySpentLastWeek).length() -
-                                                String.valueOf(moneySpentLastWeek).indexOf(".") > 3) {
-                                    moneySpentLastWeek = Float.parseFloat(String.format(Locale.getDefault(),
-                                            "%.2f", moneySpentLastWeek));
-                                }
-
-                                final boolean languageIsEnglish =
-                                        Locale.getDefault().getDisplayLanguage().equals(Languages.ENGLISH_LANGUAGE);
-
-                                final String youSpentText = languageIsEnglish ?
-                                        // english
-                                        requireContext().getResources().getString(R.string.money_spent_you_spent) +
-                                                " " + currencySymbol + moneySpentLastWeek + " " +
-                                                requireContext().getResources().getString(R.string.money_spent_last_week) :
-                                        // everything else
-                                        requireContext().getResources().getString(R.string.money_spent_you_spent) +
-                                                " " + moneySpentLastWeek + " " + currencySymbol + " " +
-                                                requireContext().getResources().getString(R.string.money_spent_last_week);
-
-                                binding.moneySpentText.setText(youSpentText.trim());
-                            }
-                        }
-
-                        @Override
-                        public void onCancelled(final @NonNull DatabaseError error) {
-
-                        }
-                    });
+        if (MyCustomVariables.getFirebaseAuth().getUid() == null) {
+            return;
         }
+
+        MyCustomVariables.getDatabaseReference()
+                .child(MyCustomVariables.getFirebaseAuth().getUid())
+                .addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(final @NonNull DataSnapshot snapshot) {
+                        final String currencySymbol = viewModel.getUserDetails() != null ?
+                                viewModel.getUserDetails().getApplicationSettings().getCurrencySymbol() :
+                                MyCustomMethods.getCurrencySymbol();
+
+                        float moneySpentLastWeek = 0f;
+
+                        if (snapshot.exists() &&
+                                snapshot.hasChild("personalTransactions") &&
+                                snapshot.child("personalTransactions").hasChildren()) {
+                            for (final DataSnapshot transactionIterator :
+                                    snapshot.child("personalTransactions").getChildren()) {
+                                final Transaction transaction = transactionIterator.getValue(Transaction.class);
+
+                                if (transaction != null &&
+                                        transaction.getType() == 0 &&
+                                        MyCustomMethods.transactionWasMadeInTheLastWeek(transaction.getTime())) {
+                                    moneySpentLastWeek += Float.parseFloat(transaction.getValue());
+                                }
+                            }
+                        }
+
+                        // if the user hasn't spent money in the last week
+                        if (moneySpentLastWeek <= 0f) {
+                            binding.moneySpentText.setText(R.string.no_money_last_week);
+                        }
+                        // if the user spent money in the last week
+                        else {
+                            if (String.valueOf(moneySpentLastWeek).contains(".") &&
+                                    String.valueOf(moneySpentLastWeek).length() -
+                                            String.valueOf(moneySpentLastWeek).indexOf(".") > 3) {
+                                moneySpentLastWeek = Float.parseFloat(String.format(Locale.getDefault(),
+                                        "%.2f", moneySpentLastWeek));
+                            }
+
+                            final boolean languageIsEnglish =
+                                    Locale.getDefault().getDisplayLanguage().equals(Languages.ENGLISH_LANGUAGE);
+
+                            final String youSpentText = languageIsEnglish ?
+                                    // english
+                                    requireContext().getResources().getString(R.string.money_spent_you_spent) +
+                                            " " + currencySymbol + moneySpentLastWeek + " " +
+                                            requireContext().getResources().getString(R.string.money_spent_last_week) :
+                                    // everything else
+                                    requireContext().getResources().getString(R.string.money_spent_you_spent) +
+                                            " " + moneySpentLastWeek + " " + currencySymbol + " " +
+                                            requireContext().getResources().getString(R.string.money_spent_last_week);
+
+                            binding.moneySpentText.setText(youSpentText.trim());
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(final @NonNull DatabaseError error) {
+
+                    }
+                });
     }
 }

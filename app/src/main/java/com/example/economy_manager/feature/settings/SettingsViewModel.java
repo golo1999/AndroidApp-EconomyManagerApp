@@ -179,16 +179,16 @@ public class SettingsViewModel extends AndroidViewModel {
     }
 
     public int getTextColor(final Context context) {
-        final boolean checked = getUserDetails() != null ?
-                getUserDetails().getApplicationSettings().isDarkThemeEnabled() :
+        final boolean checked = userDetails != null ?
+                userDetails.getApplicationSettings().isDarkThemeEnabled() :
                 MyCustomVariables.getDefaultUserDetails().getApplicationSettings().isDarkThemeEnabled();
 
         return !checked ? context.getColor(R.color.turkish_sea) : Color.WHITE;
     }
 
     public int getTheme() {
-        final boolean darkThemeEnabled = getUserDetails() != null ?
-                getUserDetails().getApplicationSettings().isDarkThemeEnabled() :
+        final boolean darkThemeEnabled = userDetails != null ?
+                userDetails.getApplicationSettings().isDarkThemeEnabled() :
                 MyCustomVariables.getDefaultUserDetails().getApplicationSettings().isDarkThemeEnabled();
 
         return !darkThemeEnabled ? R.drawable.ic_white_gradient_tobacco_ad : R.drawable.ic_black_gradient_night_shift;
@@ -372,13 +372,13 @@ public class SettingsViewModel extends AndroidViewModel {
 
         final String userId = MyCustomVariables.getFirebaseAuth().getUid();
 
-        final String previousCurrency = getUserDetails().getApplicationSettings().getCurrency();
+        final String previousCurrency = userDetails.getApplicationSettings().getCurrency();
 
-        if (userId != null && getUserDetails() != null && !previousCurrency.equals(selectedCurrency)) {
-            getUserDetails().getApplicationSettings().setCurrency(selectedCurrency);
+        if (userId != null && userDetails != null && !previousCurrency.equals(selectedCurrency)) {
+            userDetails.getApplicationSettings().setCurrency(selectedCurrency);
 
-            MyCustomSharedPreferences.saveUserDetailsToSharedPreferences(preferences, getUserDetails());
-            MyCustomVariables.setUserDetails(getUserDetails());
+            MyCustomSharedPreferences.saveUserDetailsToSharedPreferences(preferences, userDetails);
+            MyCustomVariables.setUserDetails(userDetails);
 
             MyCustomVariables.getDatabaseReference()
                     .child(userId)

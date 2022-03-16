@@ -18,6 +18,7 @@ import com.google.firebase.storage.StorageReference;
 import com.squareup.picasso.Picasso;
 
 public class EditPhotoViewModel extends ViewModel {
+
     private final StorageReference storageReference = FirebaseStorage.getInstance().getReference();
 
     private Uri imageUri;

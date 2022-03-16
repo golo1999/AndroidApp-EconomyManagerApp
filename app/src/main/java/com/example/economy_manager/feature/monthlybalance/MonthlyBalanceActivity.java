@@ -30,6 +30,7 @@ import java.util.Collections;
 import java.util.Locale;
 
 public class MonthlyBalanceActivity extends AppCompatActivity {
+
     private MonthlyBalanceActivityBinding binding;
     private MonthlyBalanceViewModel viewModel;
 
@@ -70,138 +71,143 @@ public class MonthlyBalanceActivity extends AppCompatActivity {
     }
 
     private void setIncomesAndExpensesInParent() {
-        if (MyCustomVariables.getFirebaseAuth().getUid() != null) {
-            MyCustomVariables.getDatabaseReference()
-                    .child(MyCustomVariables.getFirebaseAuth().getUid())
-                    .addListenerForSingleValueEvent(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(final @NonNull DataSnapshot snapshot) {
-                            final String currencySymbol = viewModel.getUserDetails() != null ?
-                                    viewModel.getUserDetails().getApplicationSettings().getCurrencySymbol() :
-                                    MyCustomMethods.getCurrencySymbol();
-                            final ArrayList<Transaction> transactionsList = new ArrayList<>();
+        if (MyCustomVariables.getFirebaseAuth().getUid() == null) {
+            return;
+        }
 
-                            final ArrayList<Integer> daysList = new ArrayList<>();
+        MyCustomVariables.getDatabaseReference()
+                .child(MyCustomVariables.getFirebaseAuth().getUid())
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(final @NonNull DataSnapshot snapshot) {
+                        final String currencySymbol = viewModel.getUserDetails() != null ?
+                                viewModel.getUserDetails().getApplicationSettings().getCurrencySymbol() :
+                                MyCustomMethods.getCurrencySymbol();
+                        final ArrayList<Transaction> transactionsList = new ArrayList<>();
 
-                            if (snapshot.exists() && snapshot.hasChild("personalTransactions") &&
-                                    snapshot.child("personalTransactions").hasChildren()) {
-                                for (final DataSnapshot databaseTransaction :
-                                        snapshot.child("personalTransactions").getChildren()) {
-                                    final Transaction transaction = databaseTransaction.getValue(Transaction.class);
+                        final ArrayList<Integer> daysList = new ArrayList<>();
 
-                                    if (transaction != null && transaction.getTime() != null &&
-                                            transaction.getTime().getYear() == LocalDate.now().getYear() &&
-                                            transaction.getTime().getMonth() == LocalDate.now().getMonthValue()) {
-                                        transactionsList.add(transaction);
+                        if (!snapshot.exists() ||
+                                !snapshot.hasChild("personalTransactions") ||
+                                !snapshot.child("personalTransactions").hasChildren()) {
+                            return;
+                        }
 
-                                        if (viewModel.checkIfDayCanBeAddedToList(daysList, transaction.getTime().getDay())) {
-                                            daysList.add(transaction.getTime().getDay());
-                                        }
-                                    }
-                                }
+                        for (final DataSnapshot databaseTransaction :
+                                snapshot.child("personalTransactions").getChildren()) {
+                            final Transaction transaction = databaseTransaction.getValue(Transaction.class);
 
-                                // sorting the list by value descending
-                                transactionsList.sort((final Transaction transaction1, final Transaction transaction2) ->
-                                        Float.compare(Float.parseFloat(String.valueOf(transaction2.getValue())),
-                                                Float.parseFloat(String.valueOf(transaction1.getValue()))));
-                                daysList.sort(Collections.reverseOrder());
+                            if (transaction != null && transaction.getTime() != null &&
+                                    transaction.getTime().getYear() == LocalDate.now().getYear() &&
+                                    transaction.getTime().getMonth() == LocalDate.now().getMonthValue()) {
+                                transactionsList.add(transaction);
 
-                                // setting the balance for each day from the list
-                                for (final int dayFromDaysList : daysList) {
-                                    // calculating the total incomes and expenses for each day
-                                    float dateTotalIncome = 0f;
-
-                                    float dateTotalExpense = 0f;
-
-                                    final String dateTranslated = viewModel
-                                            .getDateTranslated(MonthlyBalanceActivity.this, dayFromDaysList);
-
-                                    final ConstraintLayout dayAndSumLayout =
-                                            (ConstraintLayout) View.inflate(MonthlyBalanceActivity.this,
-                                                    R.layout.monthly_balance_title_layout, null);
-
-                                    final TextView dayText = dayAndSumLayout
-                                            .findViewById(R.id.monthly_balance_relative_layout_day);
-
-                                    final TextView totalSumText = dayAndSumLayout
-                                            .findViewById(R.id.monthly_balance_relative_layout_day_total_sum);
-
-                                    binding.mainLayout.addView(dayAndSumLayout);
-                                    dayText.setText(dateTranslated);
-                                    dayText.setTextSize(25);
-
-                                    dayText.setTextColor(viewModel.getUserDetails() == null ||
-                                            !viewModel.getUserDetails().getApplicationSettings().isDarkThemeEnabled()
-                                            ? Color.BLUE : Color.YELLOW);
-
-                                    for (final Transaction transactionsListIterator : transactionsList) {
-                                        if (dayFromDaysList == transactionsListIterator.getTime().getDay()) {
-                                            if (transactionsListIterator.getType() == 1) {
-                                                dateTotalIncome += Float
-                                                        .parseFloat(transactionsListIterator.getValue());
-                                            } else {
-                                                dateTotalExpense += Float
-                                                        .parseFloat(transactionsListIterator.getValue());
-                                            }
-
-                                            final LinearLayout transactionLayout = (LinearLayout) View
-                                                    .inflate(MonthlyBalanceActivity.this,
-                                                            R.layout.monthly_balance_linearlayout,
-                                                            null);
-                                            final TextView typeText = transactionLayout
-                                                    .findViewById(R.id.monthly_balance_relative_layout_type);
-
-                                            final TextView valueText = transactionLayout
-                                                    .findViewById(R.id.monthly_balance_relative_layout_value);
-
-                                            typeText.setText(Types.getTranslatedType(MonthlyBalanceActivity.this,
-                                                    String.valueOf(Transaction
-                                                            .getTypeFromIndexInEnglish(transactionsListIterator
-                                                                    .getCategory()))));
-
-                                            typeText.setTextColor(viewModel.getUserDetails() == null ||
-                                                    !viewModel.getUserDetails().getApplicationSettings().isDarkThemeEnabled() ?
-                                                    Color.BLACK : Color.WHITE);
-                                            valueText.setTextColor(viewModel.getUserDetails() == null ||
-                                                    !viewModel.getUserDetails().getApplicationSettings().isDarkThemeEnabled() ?
-                                                    Color.BLACK : Color.WHITE);
-
-                                            typeText.setTextSize(19);
-
-                                            String text = Locale.getDefault().getDisplayLanguage().equals("English") ?
-                                                    currencySymbol + transactionsListIterator.getValue() :
-                                                    transactionsListIterator.getValue() + " " + currencySymbol;
-
-                                            text = transactionsListIterator.getType() == 1 ?
-                                                    "+" + text : "-" + text;
-
-                                            valueText.setText(text);
-                                            valueText.setTextSize(19);
-
-                                            binding.mainLayout.addView(transactionLayout);
-                                        }
-                                    }
-
-                                    final String textForTotalSum = Locale.getDefault().getDisplayLanguage()
-                                            .equals("English") ?
-                                            currencySymbol + Math.abs(dateTotalIncome - dateTotalExpense) :
-                                            Math.abs(dateTotalIncome - dateTotalExpense) + " " + currencySymbol;
-
-                                    totalSumText.setText(textForTotalSum);
-                                    totalSumText.setTextSize(25);
-
-                                    totalSumText.setTextColor(dateTotalIncome - dateTotalExpense < 0f ?
-                                            Color.RED : Color.GREEN);
+                                if (viewModel.checkIfDayCanBeAddedToList(daysList, transaction.getTime().getDay())) {
+                                    daysList.add(transaction.getTime().getDay());
                                 }
                             }
                         }
 
-                        @Override
-                        public void onCancelled(@NonNull DatabaseError error) {
+                        // sorting the list by value descending
+                        transactionsList.sort((final Transaction transaction1, final Transaction transaction2) ->
+                                Float.compare(Float.parseFloat(String.valueOf(transaction2.getValue())),
+                                        Float.parseFloat(String.valueOf(transaction1.getValue()))));
+                        daysList.sort(Collections.reverseOrder());
 
+                        // setting the balance for each day from the list
+                        for (final int dayFromDaysList : daysList) {
+                            // calculating the total incomes and expenses for each day
+                            float dateTotalIncome = 0f;
+
+                            float dateTotalExpense = 0f;
+
+                            final String dateTranslated = viewModel
+                                    .getDateTranslated(MonthlyBalanceActivity.this, dayFromDaysList);
+
+                            final ConstraintLayout dayAndSumLayout =
+                                    (ConstraintLayout) View.inflate(MonthlyBalanceActivity.this,
+                                            R.layout.monthly_balance_title_layout, null);
+
+                            final TextView dayText = dayAndSumLayout
+                                    .findViewById(R.id.monthly_balance_relative_layout_day);
+
+                            final TextView totalSumText = dayAndSumLayout
+                                    .findViewById(R.id.monthly_balance_relative_layout_day_total_sum);
+
+                            binding.mainLayout.addView(dayAndSumLayout);
+                            dayText.setText(dateTranslated);
+                            dayText.setTextSize(25);
+
+                            dayText.setTextColor(viewModel.getUserDetails() == null ||
+                                    !viewModel.getUserDetails().getApplicationSettings().isDarkThemeEnabled()
+                                    ? Color.BLUE : Color.YELLOW);
+
+                            for (final Transaction transactionsListIterator : transactionsList) {
+                                if (dayFromDaysList == transactionsListIterator.getTime().getDay()) {
+                                    if (transactionsListIterator.getType() == 1) {
+                                        dateTotalIncome += Float
+                                                .parseFloat(transactionsListIterator.getValue());
+                                    } else {
+                                        dateTotalExpense += Float
+                                                .parseFloat(transactionsListIterator.getValue());
+                                    }
+
+                                    final LinearLayout transactionLayout = (LinearLayout) View
+                                            .inflate(MonthlyBalanceActivity.this,
+                                                    R.layout.monthly_balance_linearlayout,
+                                                    null);
+                                    final TextView typeText = transactionLayout
+                                            .findViewById(R.id.monthly_balance_relative_layout_type);
+
+                                    final TextView valueText = transactionLayout
+                                            .findViewById(R.id.monthly_balance_relative_layout_value);
+
+                                    typeText.setText(Types.getTranslatedType(MonthlyBalanceActivity.this,
+                                            String.valueOf(Transaction
+                                                    .getTypeFromIndexInEnglish(transactionsListIterator
+                                                            .getCategory()))));
+
+                                    typeText.setTextColor(viewModel.getUserDetails() == null ||
+                                            !viewModel.getUserDetails().getApplicationSettings().isDarkThemeEnabled() ?
+                                            Color.BLACK : Color.WHITE);
+                                    valueText.setTextColor(viewModel.getUserDetails() == null ||
+                                            !viewModel.getUserDetails().getApplicationSettings().isDarkThemeEnabled() ?
+                                            Color.BLACK : Color.WHITE);
+
+                                    typeText.setTextSize(19);
+
+                                    String text = Locale.getDefault().getDisplayLanguage().equals("English") ?
+                                            currencySymbol + transactionsListIterator.getValue() :
+                                            transactionsListIterator.getValue() + " " + currencySymbol;
+
+                                    text = transactionsListIterator.getType() == 1 ?
+                                            "+" + text : "-" + text;
+
+                                    valueText.setText(text);
+                                    valueText.setTextSize(19);
+
+                                    binding.mainLayout.addView(transactionLayout);
+                                }
+                            }
+
+                            final String textForTotalSum = Locale.getDefault().getDisplayLanguage()
+                                    .equals("English") ?
+                                    currencySymbol + Math.abs(dateTotalIncome - dateTotalExpense) :
+                                    Math.abs(dateTotalIncome - dateTotalExpense) + " " + currencySymbol;
+
+                            totalSumText.setText(textForTotalSum);
+                            totalSumText.setTextSize(25);
+
+                            totalSumText.setTextColor(dateTotalIncome - dateTotalExpense < 0f ?
+                                    Color.RED : Color.GREEN);
                         }
-                    });
-        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
+                    }
+                });
     }
 
     private void setCenterText() {

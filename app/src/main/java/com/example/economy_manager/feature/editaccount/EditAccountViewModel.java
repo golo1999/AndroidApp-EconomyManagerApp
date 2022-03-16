@@ -21,6 +21,7 @@ import java.util.Collections;
 import java.util.HashMap;
 
 public class EditAccountViewModel extends AndroidViewModel {
+
     private final ObservableField<String> firstName = new ObservableField<>("");
     private final ObservableField<String> lastName = new ObservableField<>("");
     private final ObservableField<String> phoneNumber = new ObservableField<>("");

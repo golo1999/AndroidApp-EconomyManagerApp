@@ -52,6 +52,7 @@ public class EditTransactionsActivity
         EditSpecificTransactionFragment.OnDateReceivedCallBack,
         EditSpecificTransactionFragment.OnTimeReceivedCallBack,
         TimePickerDialog.OnTimeSetListener {
+
     private EditTransactionsActivityBinding binding;
     private EditTransactionsViewModel viewModel;
     private final ArrayList<Transaction> allTransactionsList = new ArrayList<>();
@@ -88,9 +89,11 @@ public class EditTransactionsActivity
         final Fragment currentDisplayedFragment =
                 viewModel.getCurrentDisplayedFragment(getSupportFragmentManager().getFragments());
 
-        if (currentDisplayedFragment instanceof EditSpecificTransactionFragment) {
-            ((EditSpecificTransactionFragment) currentDisplayedFragment).setDateText(newDate);
+        if (!(currentDisplayedFragment instanceof EditSpecificTransactionFragment)) {
+            return;
         }
+
+        ((EditSpecificTransactionFragment) currentDisplayedFragment).setDateText(newDate);
     }
 
     @Override
@@ -108,9 +111,11 @@ public class EditTransactionsActivity
         final Fragment currentDisplayedFragment =
                 viewModel.getCurrentDisplayedFragment(getSupportFragmentManager().getFragments());
 
-        if (currentDisplayedFragment instanceof EditSpecificTransactionFragment) {
-            ((EditSpecificTransactionFragment) currentDisplayedFragment).setTimeText(newTime);
+        if (!(currentDisplayedFragment instanceof EditSpecificTransactionFragment)) {
+            return;
         }
+
+        ((EditSpecificTransactionFragment) currentDisplayedFragment).setTimeText(newTime);
     }
 
     @Override
@@ -129,8 +134,8 @@ public class EditTransactionsActivity
 
     @Override
     public void onDialogPositiveClick(final DialogFragment dialog,
-                                      final ArrayList<Transaction> transactionsList,
-                                      final EditTransactionsRecyclerViewAdapter adapter,
+                                      final @NonNull ArrayList<Transaction> transactionsList,
+                                      final @NonNull EditTransactionsRecyclerViewAdapter adapter,
                                       final int positionInList) {
         final Transaction transactionToDelete = transactionsList.get(positionInList);
         final String currentUserID = MyCustomVariables.getFirebaseAuth().getUid();
@@ -138,16 +143,18 @@ public class EditTransactionsActivity
         transactionsList.remove(positionInList);
         adapter.notifyItemRemoved(positionInList);
 
-        if (currentUserID != null) {
-            MyCustomVariables.getDatabaseReference()
-                    .child(currentUserID)
-                    .child("personalTransactions")
-                    .child(transactionToDelete.getId())
-                    .removeValue();
+        if (currentUserID == null) {
+            return;
         }
+
+        MyCustomVariables.getDatabaseReference()
+                .child(currentUserID)
+                .child("personalTransactions")
+                .child(transactionToDelete.getId())
+                .removeValue();
     }
 
-    private void createMonthSpinner(final ArrayList<String> list,
+    private void createMonthSpinner(final @NonNull ArrayList<String> list,
                                     final String selectedYear) {
         // setting the array which contains the months translated in english
         final String[] months = getResources().getStringArray(R.array.months);
@@ -385,163 +392,157 @@ public class EditTransactionsActivity
     }
 
     private void setBottomLayout() {
-        if (MyCustomVariables.getFirebaseAuth().getUid() != null) {
-            MyCustomVariables.getDatabaseReference()
-                    .child(MyCustomVariables.getFirebaseAuth().getUid())
-                    .child("personalTransactions")
-                    .addValueEventListener(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(final @NonNull DataSnapshot snapshot) {
-                            if (snapshot.exists() &&
-                                    snapshot.hasChildren()) {
-                                final ArrayList<String> yearsList = new ArrayList<>();
+        if (MyCustomVariables.getFirebaseAuth().getUid() == null) {
+            return;
+        }
 
-                                final ArrayList<String> monthsList = new ArrayList<>();
+        MyCustomVariables.getDatabaseReference()
+                .child(MyCustomVariables.getFirebaseAuth().getUid())
+                .child("personalTransactions")
+                .addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(final @NonNull DataSnapshot snapshot) {
+                        if (snapshot.exists() &&
+                                snapshot.hasChildren()) {
+                            final ArrayList<String> yearsList = new ArrayList<>();
 
-                                final Iterable<DataSnapshot> snapshotChildren = snapshot.getChildren();
+                            final ArrayList<String> monthsList = new ArrayList<>();
 
-                                if (!allTransactionsList.isEmpty()) {
-                                    allTransactionsList.clear();
-                                }
+                            final Iterable<DataSnapshot> snapshotChildren = snapshot.getChildren();
 
-                                snapshotChildren.forEach((final DataSnapshot transaction) -> {
-                                    final Transaction transactionFromDatabase = transaction.getValue(Transaction.class);
-
-                                    if (transactionFromDatabase != null && transactionFromDatabase.getTime() != null) {
-                                        final String transactionYear =
-                                                String.valueOf(transactionFromDatabase.getTime().getYear());
-
-                                        if (yearsList.isEmpty()) {
-                                            yearsList.add(transactionYear);
-                                        } else {
-                                            boolean yearAlreadyExists = false;
-
-                                            for (final String year : yearsList)
-                                                if (year.equals(transactionYear)) {
-                                                    yearAlreadyExists = true;
-                                                    break;
-                                                }
-
-                                            if (!yearAlreadyExists) {
-                                                yearsList.add(transactionYear);
-                                            }
-                                        }
-
-                                        allTransactionsList.add(transactionFromDatabase);
-                                    }
-                                });
-
-                                createYearSpinner(yearsList);
-
-                                binding.yearsSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                                    @Override
-                                    public void onItemSelected(final AdapterView<?> parent,
-                                                               final View view,
-                                                               final int position,
-                                                               final long id) {
-                                        final String selectedYear =
-                                                String.valueOf(binding.yearsSpinner.getItemAtPosition(position));
-
-                                        try {
-                                            ((TextView) parent.getChildAt(0)).setTextColor(Color.WHITE);
-                                            ((TextView) parent.getChildAt(0)).setGravity(Gravity.CENTER);
-                                        } catch (NullPointerException e) {
-                                            e.printStackTrace();
-                                        }
-
-                                        if (!monthsList.isEmpty()) {
-                                            monthsList.clear();
-                                        }
-
-                                        allTransactionsList.forEach((final Transaction transaction) -> {
-                                            if (String.valueOf(transaction.getTime().getYear()).equals(selectedYear)) {
-                                                final String transactionMonthParsed =
-                                                        transaction.getTime().getMonthName().charAt(0) +
-                                                                transaction.getTime().getMonthName().substring(1)
-                                                                        .toLowerCase();
-
-                                                if (monthsList.isEmpty()) {
-                                                    monthsList.add(transactionMonthParsed);
-                                                } else {
-                                                    boolean monthAlreadyExists = false;
-
-                                                    for (final String month : monthsList)
-                                                        if (month.equals(transactionMonthParsed)) {
-                                                            monthAlreadyExists = true;
-                                                            break;
-                                                        }
-
-                                                    if (!monthAlreadyExists) {
-                                                        monthsList.add(transactionMonthParsed);
-                                                    }
-                                                }
-                                            }
-                                        });
-
-                                        createMonthSpinner(monthsList, selectedYear);
-
-                                        binding.monthsSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                                            @Override
-                                            public void onItemSelected(final AdapterView<?> parent,
-                                                                       final View view,
-                                                                       final int position,
-                                                                       final long id) {
-                                                final String selectedMonth =
-                                                        String.valueOf(binding.monthsSpinner.getItemAtPosition(position));
-
-                                                try {
-                                                    ((TextView) parent.getChildAt(0)).setTextColor(Color.WHITE);
-                                                    ((TextView) parent.getChildAt(0)).setGravity(Gravity.CENTER);
-                                                } catch (NullPointerException e) {
-                                                    e.printStackTrace();
-                                                }
-
-                                                if (!monthsList.isEmpty()) {
-                                                    binding.centerText.setText("");
-                                                    binding.recyclerView.setEnabled(true);
-                                                    binding.recyclerView.setVisibility(View.VISIBLE);
-                                                    populateRecyclerView(selectedYear, selectedMonth);
-                                                }
-                                            }
-
-                                            @Override
-                                            public void onNothingSelected(final AdapterView<?> parent) {
-
-                                            }
-                                        });
-                                    }
-
-                                    @Override
-                                    public void onNothingSelected(final AdapterView<?> parent) {
-
-                                    }
-                                });
-                            } else {
-                                binding.monthsSpinner.setEnabled(false);
-                                binding.yearsSpinner.setEnabled(false);
-                                binding.bottomLayout.setVisibility(View.GONE);
-                                binding.monthsSpinner.setVisibility(View.GONE);
-                                binding.yearsSpinner.setVisibility(View.GONE);
-                                binding.centerText.setText(getResources()
-                                        .getString(R.string.edit_transactions_center_text_no_transactions).trim());
+                            if (!allTransactionsList.isEmpty()) {
+                                allTransactionsList.clear();
                             }
 
-                            final boolean darkThemeEnabled = userDetails != null ?
-                                    userDetails.getApplicationSettings().isDarkThemeEnabled() :
-                                    MyCustomVariables.getDefaultUserDetails().getApplicationSettings().isDarkThemeEnabled();
+                            snapshotChildren.forEach((final DataSnapshot transaction) -> {
+                                final Transaction transactionFromDatabase = transaction.getValue(Transaction.class);
 
-                            binding.centerText.setTextColor(!darkThemeEnabled ? getColor(R.color.turkish_sea) : Color.WHITE);
-                            binding.centerText.setTextSize(20);
-                            binding.recyclerView.setEnabled(false);
-                            binding.recyclerView.setVisibility(View.GONE);
+                                if (transactionFromDatabase != null && transactionFromDatabase.getTime() != null) {
+                                    final String transactionYear =
+                                            String.valueOf(transactionFromDatabase.getTime().getYear());
+
+                                    if (yearsList.isEmpty()) {
+                                        yearsList.add(transactionYear);
+                                    } else {
+                                        boolean yearAlreadyExists = false;
+
+                                        for (final String year : yearsList)
+                                            if (year.equals(transactionYear)) {
+                                                yearAlreadyExists = true;
+                                                break;
+                                            }
+
+                                        if (!yearAlreadyExists) {
+                                            yearsList.add(transactionYear);
+                                        }
+                                    }
+
+                                    allTransactionsList.add(transactionFromDatabase);
+                                }
+                            });
+
+                            createYearSpinner(yearsList);
+
+                            binding.yearsSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                                @Override
+                                public void onItemSelected(final AdapterView<?> parent,
+                                                           final View view,
+                                                           final int position,
+                                                           final long id) {
+                                    final String selectedYear =
+                                            String.valueOf(binding.yearsSpinner.getItemAtPosition(position));
+
+                                    ((TextView) parent.getChildAt(0)).setTextColor(Color.WHITE);
+                                    ((TextView) parent.getChildAt(0)).setGravity(Gravity.CENTER);
+
+                                    if (!monthsList.isEmpty()) {
+                                        monthsList.clear();
+                                    }
+
+                                    allTransactionsList.forEach((final Transaction transaction) -> {
+                                        if (String.valueOf(transaction.getTime().getYear()).equals(selectedYear)) {
+                                            final String transactionMonthParsed =
+                                                    transaction.getTime().getMonthName().charAt(0) +
+                                                            transaction.getTime().getMonthName().substring(1)
+                                                                    .toLowerCase();
+
+                                            if (monthsList.isEmpty()) {
+                                                monthsList.add(transactionMonthParsed);
+                                            } else {
+                                                boolean monthAlreadyExists = false;
+
+                                                for (final String month : monthsList)
+                                                    if (month.equals(transactionMonthParsed)) {
+                                                        monthAlreadyExists = true;
+                                                        break;
+                                                    }
+
+                                                if (!monthAlreadyExists) {
+                                                    monthsList.add(transactionMonthParsed);
+                                                }
+                                            }
+                                        }
+                                    });
+
+                                    createMonthSpinner(monthsList, selectedYear);
+
+                                    binding.monthsSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                                        @Override
+                                        public void onItemSelected(final AdapterView<?> parent,
+                                                                   final View view,
+                                                                   final int position,
+                                                                   final long id) {
+                                            final String selectedMonth =
+                                                    String.valueOf(binding.monthsSpinner.getItemAtPosition(position));
+
+                                            ((TextView) parent.getChildAt(0)).setTextColor(Color.WHITE);
+                                            ((TextView) parent.getChildAt(0)).setGravity(Gravity.CENTER);
+
+                                            if (!monthsList.isEmpty()) {
+                                                binding.centerText.setText("");
+                                                binding.recyclerView.setEnabled(true);
+                                                binding.recyclerView.setVisibility(View.VISIBLE);
+                                                populateRecyclerView(selectedYear, selectedMonth);
+                                            }
+                                        }
+
+                                        @Override
+                                        public void onNothingSelected(final AdapterView<?> parent) {
+
+                                        }
+                                    });
+                                }
+
+                                @Override
+                                public void onNothingSelected(final AdapterView<?> parent) {
+
+                                }
+                            });
+                        } else {
+                            binding.monthsSpinner.setEnabled(false);
+                            binding.yearsSpinner.setEnabled(false);
+                            binding.bottomLayout.setVisibility(View.GONE);
+                            binding.monthsSpinner.setVisibility(View.GONE);
+                            binding.yearsSpinner.setVisibility(View.GONE);
+                            binding.centerText.setText(getResources()
+                                    .getString(R.string.edit_transactions_center_text_no_transactions).trim());
                         }
 
-                        @Override
-                        public void onCancelled(@NonNull DatabaseError error) {
+                        final boolean darkThemeEnabled = userDetails != null ?
+                                userDetails.getApplicationSettings().isDarkThemeEnabled() :
+                                MyCustomVariables.getDefaultUserDetails().getApplicationSettings().isDarkThemeEnabled();
 
-                        }
-                    });
-        }
+                        binding.centerText.setTextColor(!darkThemeEnabled ? getColor(R.color.turkish_sea) : Color.WHITE);
+                        binding.centerText.setTextSize(20);
+                        binding.recyclerView.setEnabled(false);
+                        binding.recyclerView.setVisibility(View.GONE);
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
+                    }
+                });
     }
 
     public void setEditSpecificTransactionFragment() {

@@ -28,6 +28,7 @@ import java.util.Collections;
 public class AddIncomeActivity
         extends AppCompatActivity
         implements DatePickerDialog.OnDateSetListener {
+
     private AddIncomeActivityBinding binding;
     private AddIncomeViewModel viewModel;
     private final RadioButton[] optionsArray = new RadioButton[4];
@@ -160,20 +161,22 @@ public class AddIncomeActivity
         final int selectedID = binding.optionsLayout.getCheckedRadioButtonId();
 
         MyCustomMethods.closeTheKeyboard(AddIncomeActivity.this);
-        // if there was any radio button checked
-        if (selectedID != -1 && MyCustomVariables.getFirebaseAuth().getUid() != null) {
-            if (!String.valueOf(binding.valueField.getText()).trim().isEmpty()) {
-                final String userID = MyCustomVariables.getFirebaseAuth().getUid();
 
-                addTransactionToDatabase(selectedID, userID);
-            } else {
-                MyCustomMethods.showShortMessage(this, getResources().getString(R.string.money_error4));
-            }
-        }
-        // if there wasn't a radio button checked
-        else {
+        // if there was NOT any radio button checked
+        if (selectedID == -1 || MyCustomVariables.getFirebaseAuth().getUid() == null) {
             MyCustomMethods.showShortMessage(this, getResources().getString(R.string.money_error1));
+            return;
         }
+
+        // if the entered value is empty
+        if (String.valueOf(binding.valueField.getText()).trim().isEmpty()) {
+            MyCustomMethods.showShortMessage(this, getResources().getString(R.string.money_error4));
+            return;
+        }
+
+        final String userID = MyCustomVariables.getFirebaseAuth().getUid();
+
+        addTransactionToDatabase(selectedID, userID);
     }
 
     private void setDateText(final LocalDate date) {

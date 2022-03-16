@@ -49,27 +49,29 @@ public class SplashScreenActivity extends AppCompatActivity {
                             .addListenerForSingleValueEvent(new ValueEventListener() {
                                 @Override
                                 public void onDataChange(final @NonNull DataSnapshot snapshot) {
-                                    if (snapshot.exists()) {
-                                        final UserDetails details = snapshot.getValue(UserDetails.class);
-
-                                        if (details != null) {
-                                            if (MyCustomMethods.
-                                                    objectExistsInSharedPreferences(SplashScreenActivity.this,
-                                                            "currentUserDetails", UserDetails.class, details)) {
-                                                MyCustomMethods.
-                                                        saveObjectToSharedPreferences(SplashScreenActivity.this,
-                                                                details, "currentUserDetails");
-                                            }
-
-                                            final UserDetails retrievedUserDetails = MyCustomMethods.
-                                                    retrieveObjectFromSharedPreferences(SplashScreenActivity.this,
-                                                            "currentUserDetails", UserDetails.class);
-
-                                            if (retrievedUserDetails != null) {
-                                                MyCustomVariables.setUserDetails(retrievedUserDetails);
-                                            }
-                                        }
+                                    if (!snapshot.exists()) {
+                                        return;
                                     }
+
+                                    final UserDetails details = snapshot.getValue(UserDetails.class);
+
+                                    if (details == null) {
+                                        return;
+                                    }
+
+                                    MyCustomMethods.saveObjectToSharedPreferences(SplashScreenActivity.this,
+                                            details, "currentUserDetails");
+
+
+                                    final UserDetails retrievedUserDetails = MyCustomMethods.
+                                            retrieveObjectFromSharedPreferences(SplashScreenActivity.this,
+                                                    "currentUserDetails", UserDetails.class);
+
+                                    if (retrievedUserDetails == null) {
+                                        return;
+                                    }
+
+                                    MyCustomVariables.setUserDetails(retrievedUserDetails);
                                 }
 
                                 @Override

@@ -28,6 +28,7 @@ import java.util.Locale;
 
 public class EditTransactionsRecyclerViewAdapter
         extends RecyclerView.Adapter<EditTransactionsRecyclerViewAdapter.EditTransactionsViewHolder> {
+
     private final EditTransactionsViewModel viewModel;
     private final ArrayList<Transaction> transactionsList;
     private final Context context;
@@ -134,24 +135,28 @@ public class EditTransactionsRecyclerViewAdapter
 
         private void setOnClickListeners() {
             transactionEdit.setOnClickListener(view -> {
-                if (getBindingAdapterPosition() > -1) {
-                    // retrieving the selected transaction from the list
-                    selectedTransaction = transactionsList.get(getBindingAdapterPosition());
-
-                    if (selectedTransaction != null) {
-                        viewModel.setSelectedTransaction(selectedTransaction);
-                        viewModel.setSelectedTransactionListPosition(getBindingAdapterPosition());
-
-                        if (viewModel.getEditTransactionsRecyclerViewAdapter() == null) {
-                            final EditTransactionsRecyclerViewAdapter adapter =
-                                    (EditTransactionsRecyclerViewAdapter) recyclerView.getAdapter();
-
-                            viewModel.setEditTransactionsRecyclerViewAdapter(adapter);
-                        }
-
-                        ((EditTransactionsActivity) context).setEditSpecificTransactionFragment();
-                    }
+                if (getBindingAdapterPosition() < 0) {
+                    return;
                 }
+
+                // retrieving the selected transaction from the list
+                selectedTransaction = transactionsList.get(getBindingAdapterPosition());
+
+                if (selectedTransaction == null) {
+                    return;
+                }
+
+                viewModel.setSelectedTransaction(selectedTransaction);
+                viewModel.setSelectedTransactionListPosition(getBindingAdapterPosition());
+
+                if (viewModel.getEditTransactionsRecyclerViewAdapter() == null) {
+                    final EditTransactionsRecyclerViewAdapter adapter =
+                            (EditTransactionsRecyclerViewAdapter) recyclerView.getAdapter();
+
+                    viewModel.setEditTransactionsRecyclerViewAdapter(adapter);
+                }
+
+                ((EditTransactionsActivity) context).setEditSpecificTransactionFragment();
             });
 
             transactionDelete.setOnClickListener(view -> {
@@ -160,9 +165,11 @@ public class EditTransactionsRecyclerViewAdapter
 
                 final int positionInList = getBindingAdapterPosition();
 
-                if (adapter != null && positionInList > -1) {
-                    showTransactionDeleteDialog(transactionsList, adapter, positionInList);
+                if (adapter == null || positionInList < 0) {
+                    return;
                 }
+
+                showTransactionDeleteDialog(transactionsList, adapter, positionInList);
             });
         }
 

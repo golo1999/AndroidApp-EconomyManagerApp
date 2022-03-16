@@ -30,6 +30,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
 
 import java.time.LocalDate;
+import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -72,6 +73,7 @@ public class MainScreenActivity
         super.onStart();
         setUserDetails();
         setActivityTheme();
+        setGreetingCardTheme();
         setTextsBetweenFragments();
         setDates();
         setMoneySpentPercentage();
@@ -126,66 +128,90 @@ public class MainScreenActivity
                 .commit();
     }
 
+    private void setGreetingCardTheme() {
+        final int cardBackgroundColor = viewModel.getUserDetails().getApplicationSettings().isDarkThemeEnabled() ?
+                getColor(R.color.secondaryDark) : getColor(R.color.secondaryLight);
+
+        final int cardTextColor = viewModel.getUserDetails().getApplicationSettings().isDarkThemeEnabled() ?
+                getColor(R.color.primaryDark) : getColor(R.color.white);
+
+        binding.greetingLayout.setCardBackgroundColor(cardBackgroundColor);
+        binding.greetingText.setTextColor(cardTextColor);
+        binding.dateText.setTextColor(cardTextColor);
+        binding.moneySpentPercentageText.setTextColor(cardTextColor);
+    }
+
     private void setMoneySpentPercentage() {
         final String currentUserID = MyCustomVariables.getFirebaseAuth().getUid();
 
-        if (currentUserID != null) {
-            MyCustomVariables.getDatabaseReference()
-                    .child(currentUserID)
-                    .addValueEventListener(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(final @NonNull DataSnapshot snapshot) {
-                            float totalMonthlyIncomes = 0f;
-                            float totalMonthlyExpenses = 0f;
-                            boolean currentMonthTransactionsExist = false;
+        if (currentUserID == null) {
+            return;
+        }
 
-                            if (snapshot.exists() && snapshot.hasChild("personalTransactions") &&
-                                    snapshot.child("personalTransactions").hasChildren()) {
-                                for (final DataSnapshot databaseTransaction :
-                                        snapshot.child("personalTransactions").getChildren()) {
-                                    final Transaction transaction = databaseTransaction.getValue(Transaction.class);
+        MyCustomVariables.getDatabaseReference()
+                .child(currentUserID)
+                .addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(final @NonNull DataSnapshot snapshot) {
+                        float totalMonthlyIncomes = 0f;
+                        float totalMonthlyExpenses = 0f;
+                        boolean currentMonthTransactionsExist = false;
 
-                                    if (transaction != null &&
-                                            transaction.getTime().getYear() == LocalDate.now().getYear() &&
-                                            transaction.getTime().getMonth() == LocalDate.now().getMonthValue()) {
-                                        if (!currentMonthTransactionsExist) {
-                                            currentMonthTransactionsExist = true;
-                                        }
+                        if (!snapshot.exists()) {
+                            return;
+                        }
 
-                                        if (transaction.getCategory() > 0 && transaction.getCategory() < 4) {
-                                            totalMonthlyIncomes += Float.parseFloat(transaction.getValue());
-                                        } else {
-                                            totalMonthlyExpenses += Float.parseFloat(transaction.getValue());
-                                        }
+                        final UserDetails details = snapshot.getValue(UserDetails.class);
+
+                        if (details == null || details.getPersonalTransactions() == null) {
+                            return;
+                        }
+
+                        if (!details.getPersonalTransactions().isEmpty()) {
+                            for (Map.Entry<String, Transaction> transactionEntry :
+                                    details.getPersonalTransactions().entrySet()) {
+                                final Transaction transaction = transactionEntry.getValue();
+
+                                if (transaction != null &&
+                                        transaction.getTime().getYear() == LocalDate.now().getYear() &&
+                                        transaction.getTime().getMonth() == LocalDate.now().getMonthValue()) {
+                                    if (!currentMonthTransactionsExist) {
+                                        currentMonthTransactionsExist = true;
+                                    }
+
+                                    if (transaction.getCategory() > 0 && transaction.getCategory() < 4) {
+                                        totalMonthlyIncomes += Float.parseFloat(transaction.getValue());
+                                    } else {
+                                        totalMonthlyExpenses += Float.parseFloat(transaction.getValue());
                                     }
                                 }
-
-                                final int percentage =
-                                        Float.valueOf(totalMonthlyExpenses / totalMonthlyIncomes * 100).intValue();
-
-                                final String percentageText = currentMonthTransactionsExist ?
-                                        percentage <= 100 ?
-                                                getResources().getString(R.string.money_spent_you_spent) + " " + percentage
-                                                        + getResources().getString(R.string.money_spent_percentage) :
-                                                getResources().getString(R.string.money_spent_you_spent) + " " + 100
-                                                        + getResources().getString(R.string.money_spent_percentage) :
-                                        getResources().getString(R.string.no_money_records_month);
-
-                                binding.moneySpentPercentageText.setText(percentageText);
-                            } else {
-                                binding.moneySpentPercentageText.setText(getResources().getString(R.string.no_money_records_yet));
                             }
 
-                            binding.firebaseLoadingProgressBar.setVisibility(View.GONE);
-                            binding.firebaseLoadingProgressBarLayout.setVisibility(View.GONE);
+                            final int percentage =
+                                    Float.valueOf(totalMonthlyExpenses / totalMonthlyIncomes * 100).intValue();
+
+                            final String percentageText = currentMonthTransactionsExist ?
+                                    percentage <= 100 ?
+                                            getResources().getString(R.string.money_spent_you_spent) + " " + percentage
+                                                    + getResources().getString(R.string.money_spent_percentage) :
+                                            getResources().getString(R.string.money_spent_you_spent) + " " + 100
+                                                    + getResources().getString(R.string.money_spent_percentage) :
+                                    getResources().getString(R.string.no_money_records_month);
+
+                            binding.moneySpentPercentageText.setText(percentageText);
+                        } else {
+                            binding.moneySpentPercentageText.setText(getResources().getString(R.string.no_money_records_yet));
                         }
 
-                        @Override
-                        public void onCancelled(final @NonNull DatabaseError error) {
+                        binding.firebaseLoadingProgressBar.setVisibility(View.GONE);
+                        binding.firebaseLoadingProgressBarLayout.setVisibility(View.GONE);
+                    }
 
-                        }
-                    });
-        }
+                    @Override
+                    public void onCancelled(final @NonNull DatabaseError error) {
+
+                    }
+                });
     }
 
     private void setTextsBetweenFragments() {
@@ -221,53 +247,57 @@ public class MainScreenActivity
     private void setUserDetails() {
         final String currentUserID = MyCustomVariables.getFirebaseAuth().getUid();
 
-        if (currentUserID != null) {
-            if (MyCustomSharedPreferences.retrieveUserDetailsFromSharedPreferences(this) == null) {
-                MyCustomVariables.getDatabaseReference()
-                        .child(currentUserID)
-                        .addListenerForSingleValueEvent(new ValueEventListener() {
-                            @Override
-                            public void onDataChange(final @NonNull DataSnapshot snapshot) {
-                                if (snapshot.exists()) {
-                                    final UserDetails details = snapshot.getValue(UserDetails.class);
-
-                                    if (details != null &&
-                                            details.getApplicationSettings() != null &&
-                                            details.getPersonalInformation() != null) {
-                                        if (MyCustomMethods.
-                                                objectExistsInSharedPreferences(MainScreenActivity.this,
-                                                        "currentUserDetails", UserDetails.class, details)) {
-                                            MyCustomMethods.
-                                                    saveObjectToSharedPreferences(MainScreenActivity.this,
-                                                            details, "currentUserDetails");
-                                        }
-
-                                        if (MyCustomMethods.
-                                                retrieveObjectFromSharedPreferences(MainScreenActivity.this,
-                                                        "currentUserDetails", UserDetails.class) != null) {
-                                            final UserDetails userDetails = MyCustomMethods.
-                                                    retrieveObjectFromSharedPreferences(MainScreenActivity.this,
-                                                            "currentUserDetails", UserDetails.class);
-
-                                            MyCustomVariables.setUserDetails(userDetails);
-                                            viewModel.setUserDetails(userDetails);
-                                        }
-                                    }
-                                }
-                            }
-
-                            @Override
-                            public void onCancelled(final @NonNull DatabaseError error) {
-
-                            }
-                        });
-            } else {
-                final UserDetails userDetails =
-                        MyCustomSharedPreferences.retrieveUserDetailsFromSharedPreferences(this);
-
-                viewModel.setUserDetails(userDetails);
-            }
+        if (currentUserID == null) {
+            return;
         }
+
+        if (MyCustomSharedPreferences.retrieveUserDetailsFromSharedPreferences(this) != null) {
+            final UserDetails userDetails =
+                    MyCustomSharedPreferences.retrieveUserDetailsFromSharedPreferences(this);
+
+            viewModel.setUserDetails(userDetails);
+
+            return;
+        }
+
+        MyCustomVariables.getDatabaseReference()
+                .child(currentUserID)
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(final @NonNull DataSnapshot snapshot) {
+                        if (!snapshot.exists()) {
+                            return;
+                        }
+
+                        final UserDetails details = snapshot.getValue(UserDetails.class);
+
+                        if (details == null ||
+                                details.getApplicationSettings() == null ||
+                                details.getPersonalInformation() == null) {
+                            return;
+                        }
+
+                        MyCustomMethods.
+                                saveObjectToSharedPreferences(MainScreenActivity.this,
+                                        details, "currentUserDetails");
+
+                        if (MyCustomMethods.
+                                retrieveObjectFromSharedPreferences(MainScreenActivity.this,
+                                        "currentUserDetails", UserDetails.class) != null) {
+                            final UserDetails userDetails = MyCustomMethods.
+                                    retrieveObjectFromSharedPreferences(MainScreenActivity.this,
+                                            "currentUserDetails", UserDetails.class);
+
+                            MyCustomVariables.setUserDetails(userDetails);
+                            viewModel.setUserDetails(userDetails);
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(final @NonNull DatabaseError error) {
+
+                    }
+                });
     }
 
     /**

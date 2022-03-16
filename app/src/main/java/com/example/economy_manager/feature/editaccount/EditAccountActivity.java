@@ -43,6 +43,7 @@ import java.util.Locale;
 public class EditAccountActivity
         extends AppCompatActivity
         implements DatePickerDialog.OnDateSetListener {
+
     private EditAccountRemasteredActivityBinding binding;
     private EditAccountViewModel viewModel;
     private SharedPreferences preferences;

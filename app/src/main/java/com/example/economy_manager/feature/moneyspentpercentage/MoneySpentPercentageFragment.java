@@ -34,10 +34,11 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class MoneySpentPercentageFragment extends Fragment {
+
     private MoneySpentPercentageFragmentBinding binding;
     private MainScreenViewModel viewModel;
     private UserDetails userDetails;
-    private LinkedHashMap<Integer, Float> transactionTypesMap = new LinkedHashMap<>();
+    private final LinkedHashMap<Integer, Float> transactionTypesMap = new LinkedHashMap<>();
     private MoneySpentPercentageListener listener;
 
     public MoneySpentPercentageFragment() {
@@ -106,91 +107,97 @@ public class MoneySpentPercentageFragment extends Fragment {
      * Method for calculating each expense's percentage from the total expenses
      */
     private void populateMap() {
-        if (MyCustomVariables.getFirebaseAuth().getUid() != null) {
-            MyCustomVariables.getDatabaseReference()
-                    .child(MyCustomVariables.getFirebaseAuth().getUid())
-                    .addValueEventListener(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(final @NonNull DataSnapshot snapshot) {
-                            if (snapshot.exists() &&
-                                    snapshot.hasChild("personalTransactions") &&
-                                    snapshot.child("personalTransactions").hasChildren()) {
-                                final Iterable<DataSnapshot> personalTransactions =
-                                        snapshot.child("personalTransactions").getChildren();
+        if (MyCustomVariables.getFirebaseAuth().getUid() == null) {
+            return;
+        }
 
-                                final int currentMonthIndex = LocalDate.now().getMonthValue();
+        MyCustomVariables.getDatabaseReference()
+                .child(MyCustomVariables.getFirebaseAuth().getUid())
+                .addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(final @NonNull DataSnapshot snapshot) {
+                        if (!snapshot.exists() ||
+                                !snapshot.hasChild("personalTransactions") ||
+                                !snapshot.child("personalTransactions").hasChildren()) {
+                            return;
+                        }
 
-                                final int currentYear = LocalDate.now().getYear();
+                        final Iterable<DataSnapshot> personalTransactions =
+                                snapshot.child("personalTransactions").getChildren();
 
-                                final AtomicReference<Float> currentMonthExpensesTotal =
-                                        new AtomicReference<>(0f);
+                        final int currentMonthIndex = LocalDate.now().getMonthValue();
 
-                                if (!transactionTypesMap.isEmpty()) {
-                                    transactionTypesMap.clear();
+                        final int currentYear = LocalDate.now().getYear();
+
+                        final AtomicReference<Float> currentMonthExpensesTotal =
+                                new AtomicReference<>(0f);
+
+                        if (!transactionTypesMap.isEmpty()) {
+                            transactionTypesMap.clear();
+                        }
+
+                        personalTransactions.forEach((final DataSnapshot personalTransactionIterator) -> {
+                            final Transaction personalTransaction =
+                                    personalTransactionIterator.getValue(Transaction.class);
+
+                            // if the transaction is a current month & year expense
+                            if (personalTransaction != null &&
+                                    personalTransaction.getType() == 0 &&
+                                    personalTransaction.getTime().getYear() == currentYear &&
+                                    personalTransaction.getTime().getMonth() == currentMonthIndex) {
+                                final int personalTransactionCategory = personalTransaction.getCategory();
+
+                                currentMonthExpensesTotal.updateAndGet((final Float value) ->
+                                        value + Float.parseFloat(personalTransaction.getValue()));
+
+                                // updating current category's total value if it already exists
+                                if (!transactionTypesMap.containsKey(personalTransactionCategory)) {
+                                    final float personalTransactionValue =
+                                            Float.parseFloat(String.format(Locale.getDefault(),
+                                                    "%.0f",
+                                                    Float.parseFloat(personalTransaction.getValue())));
+
+                                    transactionTypesMap.put(personalTransactionCategory,
+                                            personalTransactionValue);
                                 }
+                                // if the current category doesn't exist yet
+                                else {
+                                    final float personalTransactionCategoryCurrentSum =
+                                            Float.parseFloat(String.valueOf(transactionTypesMap
+                                                    .get(personalTransactionCategory)));
 
-                                personalTransactions.forEach((final DataSnapshot personalTransactionIterator) -> {
-                                    final Transaction personalTransaction =
-                                            personalTransactionIterator.getValue(Transaction.class);
+                                    final float personalTransactionValue =
+                                            Float.parseFloat(String.format(Locale.getDefault(),
+                                                    "%.0f",
+                                                    Float.parseFloat(personalTransaction.getValue())));
 
-                                    // if the transaction is a current month & year expense
-                                    if (personalTransaction != null &&
-                                            personalTransaction.getType() == 0 &&
-                                            personalTransaction.getTime().getYear() == currentYear &&
-                                            personalTransaction.getTime().getMonth() == currentMonthIndex) {
-                                        final int personalTransactionCategory = personalTransaction.getCategory();
-
-                                        currentMonthExpensesTotal.updateAndGet((final Float value) ->
-                                                value + Float.parseFloat(personalTransaction.getValue()));
-
-                                        // updating current category's total value if it already exists
-                                        if (!transactionTypesMap.containsKey(personalTransactionCategory)) {
-                                            final float personalTransactionValue =
-                                                    Float.parseFloat(String.format(Locale.getDefault(),
-                                                            "%.0f",
-                                                            Float.parseFloat(personalTransaction.getValue())));
-
-                                            transactionTypesMap.put(personalTransactionCategory,
-                                                    personalTransactionValue);
-                                        }
-                                        // if the current category doesn't exist yet
-                                        else {
-                                            final float personalTransactionCategoryCurrentSum =
-                                                    Float.parseFloat(String.valueOf(transactionTypesMap
-                                                            .get(personalTransactionCategory)));
-
-                                            final float personalTransactionValue =
-                                                    Float.parseFloat(String.format(Locale.getDefault(),
-                                                            "%.0f",
-                                                            Float.parseFloat(personalTransaction.getValue())));
-
-                                            transactionTypesMap.put(personalTransactionCategory,
-                                                    personalTransactionCategoryCurrentSum + personalTransactionValue);
-                                        }
-                                    }
-                                });
-
-                                if (!transactionTypesMap.isEmpty()) {
-                                    listener.onNotEmptyPieChart();
-                                    binding.noExpensesMadeText.setVisibility(View.GONE);
-                                    binding.pieChart.setVisibility(View.VISIBLE);
-
-                                    MyCustomMethods.sortMapDescendingByValue(transactionTypesMap);
-                                    setPieChartData(transactionTypesMap, currentMonthExpensesTotal.get());
-                                } else {
-                                    listener.onEmptyPieChart();
-                                    binding.pieChart.setVisibility(View.GONE);
-                                    binding.noExpensesMadeText.setVisibility(View.VISIBLE);
+                                    transactionTypesMap.put(personalTransactionCategory,
+                                            personalTransactionCategoryCurrentSum + personalTransactionValue);
                                 }
                             }
+                        });
+
+                        if (transactionTypesMap.isEmpty()) {
+                            listener.onEmptyPieChart();
+                            binding.pieChart.setVisibility(View.GONE);
+                            binding.noExpensesMadeText.setVisibility(View.VISIBLE);
+
+                            return;
                         }
 
-                        @Override
-                        public void onCancelled(final @NonNull DatabaseError error) {
+                        listener.onNotEmptyPieChart();
+                        binding.noExpensesMadeText.setVisibility(View.GONE);
+                        binding.pieChart.setVisibility(View.VISIBLE);
 
-                        }
-                    });
-        }
+                        MyCustomMethods.sortMapDescendingByValue(transactionTypesMap);
+                        setPieChartData(transactionTypesMap, currentMonthExpensesTotal.get());
+                    }
+
+                    @Override
+                    public void onCancelled(final @NonNull DatabaseError error) {
+
+                    }
+                });
     }
 
     private void setPieChartData(final LinkedHashMap<Integer, Float> transactionTypesMap,

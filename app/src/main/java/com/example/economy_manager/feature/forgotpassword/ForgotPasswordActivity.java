@@ -12,6 +12,7 @@ import com.example.economy_manager.feature.forgotpassword.ForgotPasswordViewMode
 import com.example.economy_manager.utility.MyCustomMethods;
 
 public class ForgotPasswordActivity extends AppCompatActivity {
+
     private ForgotPasswordActivityBinding binding;
     private ForgotPasswordViewModel viewModel;
 

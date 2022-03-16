@@ -20,6 +20,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.storage.UploadTask;
 
 public class EditPhotoActivity extends AppCompatActivity {
+
     private EditPhotoActivityBinding binding;
     private EditPhotoViewModel viewModel;
 

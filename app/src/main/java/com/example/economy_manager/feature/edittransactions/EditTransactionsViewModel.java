@@ -11,14 +11,14 @@ import androidx.lifecycle.ViewModel;
 
 import com.example.economy_manager.R;
 import com.example.economy_manager.databinding.EditSpecificTransactionFragmentBinding;
-import com.example.economy_manager.utility.DatePickerFragment;
-import com.example.economy_manager.utility.TimePickerFragment;
 import com.example.economy_manager.model.MyCustomTime;
 import com.example.economy_manager.model.Transaction;
 import com.example.economy_manager.model.UserDetails;
+import com.example.economy_manager.utility.DatePickerFragment;
 import com.example.economy_manager.utility.Months;
 import com.example.economy_manager.utility.MyCustomMethods;
 import com.example.economy_manager.utility.MyCustomVariables;
+import com.example.economy_manager.utility.TimePickerFragment;
 import com.example.economy_manager.utility.Types;
 
 import java.time.LocalDate;
@@ -29,6 +29,7 @@ import java.util.Collections;
 import java.util.List;
 
 public class EditTransactionsViewModel extends ViewModel {
+
     private EditSpecificTransactionFragmentBinding binding;
     private String activityTitle;
     private Fragment editSpecificTransactionFragment;
@@ -92,7 +93,7 @@ public class EditTransactionsViewModel extends ViewModel {
         return transactionTypesList;
     }
 
-    public void setTransactionTypesList(final Context context) {
+    public void setTransactionTypesList(final @NonNull Context context) {
         transactionTypesList.add(context.getResources().getString(R.string.subtract_money_bills).trim());
         transactionTypesList.add(context.getResources().getString(R.string.subtract_money_car).trim());
         transactionTypesList.add(context.getResources().getString(R.string.subtract_money_clothes).trim());
@@ -152,7 +153,7 @@ public class EditTransactionsViewModel extends ViewModel {
     }
 
     public int getNearestMonthPositionFromSpinner(final Context context,
-                                                  final ArrayList<String> monthsList,
+                                                  final @NonNull ArrayList<String> monthsList,
                                                   final int monthIndex) {
         for (int listIteratorCounter = 0; listIteratorCounter < monthsList.size(); ++listIteratorCounter) {
             final String listIteratorInEnglish = Months.getMonthInEnglish(context,
@@ -183,64 +184,68 @@ public class EditTransactionsViewModel extends ViewModel {
     public void modifyTransactionIntoDatabase(final @NonNull Activity activity) {
         final Transaction selectedTransaction = getSelectedTransaction();
 
-        if (selectedTransaction != null) {
-            final String editedNote = !String.valueOf(getBinding().noteField.getText()).trim().isEmpty() ?
-                    String.valueOf(getBinding().noteField.getText()).trim() : selectedTransaction.getNote();
-
-            final String editedValue = !String.valueOf(getBinding().valueField.getText()).trim().isEmpty() ?
-                    String.valueOf(getBinding().valueField.getText()).trim() : selectedTransaction.getValue();
-
-            final int parsedCategoryIndex = Transaction.getIndexFromCategory(Types.
-                    getTypeInEnglish(activity, String.valueOf(getBinding().typeSpinner.getSelectedItem()).trim()));
-
-            final int editedCategoryIndex = parsedCategoryIndex >= 0 && parsedCategoryIndex <= 18 &&
-                    parsedCategoryIndex != selectedTransaction.getCategory() ?
-                    parsedCategoryIndex : selectedTransaction.getCategory();
-
-            final int selectedYear = getTransactionDate().getYear();
-
-            final int selectedMonth = getTransactionDate().getMonthValue();
-
-            final int selectedDay = getTransactionDate().getDayOfMonth();
-
-            final int selectedHour = getTransactionTime().getHour();
-
-            final int selectedMinute = getTransactionTime().getMinute();
-
-            final int selectedSecond =
-                    (selectedYear != selectedTransaction.getTime().getYear() &&
-                            selectedMonth != selectedTransaction.getTime().getMonth() &&
-                            selectedDay != selectedTransaction.getTime().getDay() &&
-                            selectedHour != selectedTransaction.getTime().getHour() &&
-                            selectedMinute != selectedTransaction.getTime().getMinute()) ?
-                            LocalDateTime.now().getSecond() : selectedTransaction.getTime().getSecond();
-
-            final LocalDate selectedLocalDate =
-                    LocalDate.of(selectedYear, selectedMonth, selectedDay);
-
-            final MyCustomTime editedTime = new MyCustomTime(selectedYear,
-                    selectedMonth,
-                    String.valueOf(selectedLocalDate.getMonth()),
-                    selectedDay,
-                    String.valueOf(selectedLocalDate.getDayOfWeek()),
-                    selectedHour,
-                    selectedMinute,
-                    selectedSecond);
-
-            final int editedCategoryType = (editedCategoryIndex >= 0 && editedCategoryIndex <= 3) ? 1 : 0;
-
-            final Transaction editedTransaction = new Transaction(selectedTransaction.getId(),
-                    editedCategoryIndex, editedTime, editedCategoryType, editedNote, editedValue);
-
-            updateTransaction(activity, selectedTransaction);
-
-            if (!selectedTransaction.equals(editedTransaction) &&
-                    getEditTransactionsRecyclerViewAdapter() != null) {
-                final int selectedTransactionListPosition = getSelectedTransactionListPosition();
-
-                getEditTransactionsRecyclerViewAdapter().notifyItemChanged(selectedTransactionListPosition);
-            }
+        if (selectedTransaction == null) {
+            return;
         }
+
+        final String editedNote = !String.valueOf(getBinding().noteField.getText()).trim().isEmpty() ?
+                String.valueOf(getBinding().noteField.getText()).trim() : selectedTransaction.getNote();
+
+        final String editedValue = !String.valueOf(getBinding().valueField.getText()).trim().isEmpty() ?
+                String.valueOf(getBinding().valueField.getText()).trim() : selectedTransaction.getValue();
+
+        final int parsedCategoryIndex = Transaction.getIndexFromCategory(Types.
+                getTypeInEnglish(activity, String.valueOf(getBinding().typeSpinner.getSelectedItem()).trim()));
+
+        final int editedCategoryIndex = parsedCategoryIndex >= 0 && parsedCategoryIndex <= 18 &&
+                parsedCategoryIndex != selectedTransaction.getCategory() ?
+                parsedCategoryIndex : selectedTransaction.getCategory();
+
+        final int selectedYear = getTransactionDate().getYear();
+
+        final int selectedMonth = getTransactionDate().getMonthValue();
+
+        final int selectedDay = getTransactionDate().getDayOfMonth();
+
+        final int selectedHour = getTransactionTime().getHour();
+
+        final int selectedMinute = getTransactionTime().getMinute();
+
+        final int selectedSecond =
+                (selectedYear != selectedTransaction.getTime().getYear() &&
+                        selectedMonth != selectedTransaction.getTime().getMonth() &&
+                        selectedDay != selectedTransaction.getTime().getDay() &&
+                        selectedHour != selectedTransaction.getTime().getHour() &&
+                        selectedMinute != selectedTransaction.getTime().getMinute()) ?
+                        LocalDateTime.now().getSecond() : selectedTransaction.getTime().getSecond();
+
+        final LocalDate selectedLocalDate =
+                LocalDate.of(selectedYear, selectedMonth, selectedDay);
+
+        final MyCustomTime editedTime = new MyCustomTime(selectedYear,
+                selectedMonth,
+                String.valueOf(selectedLocalDate.getMonth()),
+                selectedDay,
+                String.valueOf(selectedLocalDate.getDayOfWeek()),
+                selectedHour,
+                selectedMinute,
+                selectedSecond);
+
+        final int editedCategoryType = (editedCategoryIndex >= 0 && editedCategoryIndex <= 3) ? 1 : 0;
+
+        final Transaction editedTransaction = new Transaction(selectedTransaction.getId(),
+                editedCategoryIndex, editedTime, editedCategoryType, editedNote, editedValue);
+
+        updateTransaction(activity, selectedTransaction);
+
+        if (selectedTransaction.equals(editedTransaction) ||
+                getEditTransactionsRecyclerViewAdapter() == null) {
+            return;
+        }
+
+        final int selectedTransactionListPosition = getSelectedTransactionListPosition();
+
+        getEditTransactionsRecyclerViewAdapter().notifyItemChanged(selectedTransactionListPosition);
     }
 
     public void onDateTextClickedInFragment(final FragmentManager fragmentManager) {
@@ -329,7 +334,8 @@ public class EditTransactionsViewModel extends ViewModel {
             hasBeenModified = true;
         }
 
-        if (!String.valueOf(getBinding().valueField.getText()).trim().equals(String.valueOf(getBinding().valueField.getHint()).trim()) &&
+        if (!String.valueOf(getBinding().valueField.getText()).trim().
+                equals(String.valueOf(getBinding().valueField.getHint()).trim()) &&
                 !String.valueOf(getBinding().valueField.getText()).trim().isEmpty()) {
             final String editedValue = String.valueOf(getBinding().valueField.getText()).trim();
 
@@ -370,20 +376,23 @@ public class EditTransactionsViewModel extends ViewModel {
             }
         }
 
-        // updating the transaction into the Firebase database
-        if (hasBeenModified && MyCustomVariables.getFirebaseAuth().getUid() != null) {
-            MyCustomVariables.getDatabaseReference()
-                    .child(MyCustomVariables.getFirebaseAuth().getUid())
-                    .child("personalTransactions")
-                    .child(initialTransaction.getId())
-                    .setValue(initialTransaction);
+        if (!hasBeenModified || MyCustomVariables.getFirebaseAuth().getUid() == null) {
+            return;
         }
 
+        // updating the transaction into the Firebase database
+        MyCustomVariables.getDatabaseReference()
+                .child(MyCustomVariables.getFirebaseAuth().getUid())
+                .child("personalTransactions")
+                .child(initialTransaction.getId())
+                .setValue(initialTransaction);
     }
 
     public void resetTransactionTypesList() {
-        if (!getTransactionTypesList().isEmpty()) {
-            transactionTypesList.clear();
+        if (getTransactionTypesList().isEmpty()) {
+            return;
         }
+
+        transactionTypesList.clear();
     }
 }

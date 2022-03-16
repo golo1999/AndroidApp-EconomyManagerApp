@@ -25,6 +25,7 @@ import java.time.LocalDate;
 import java.util.Locale;
 
 public class BudgetReviewFragment extends Fragment {
+
     private BudgetReviewFragmentBinding binding;
     private UserDetails userDetails;
 
@@ -68,66 +69,7 @@ public class BudgetReviewFragment extends Fragment {
     }
 
     private void updateMoneyBalance() {
-        if (MyCustomVariables.getFirebaseAuth().getUid() != null) {
-            MyCustomVariables.getDatabaseReference()
-                    .child(MyCustomVariables.getFirebaseAuth().getUid())
-                    .addValueEventListener(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(final @NonNull DataSnapshot snapshot) {
-                            final String currencySymbol = userDetails != null ?
-                                    userDetails.getApplicationSettings().getCurrencySymbol() :
-                                    MyCustomMethods.getCurrencySymbol();
-
-                            float totalMonthlyIncomes = 0f;
-
-                            float totalMonthlyExpenses = 0f;
-
-                            if (snapshot.exists() && snapshot.hasChild("personalTransactions") &&
-                                    snapshot.child("personalTransactions").hasChildren()) {
-                                for (final DataSnapshot databaseTransaction :
-                                        snapshot.child("personalTransactions").getChildren()) {
-                                    final Transaction transaction = databaseTransaction.getValue(Transaction.class);
-
-                                    if (transaction != null && transaction.getTime() != null &&
-                                            transaction.getTime().getYear() == LocalDate.now().getYear() &&
-                                            transaction.getTime().getMonth() == LocalDate.now().getMonthValue()) {
-                                        if (transaction.getType() == 1) {
-                                            totalMonthlyIncomes += Float.parseFloat(transaction.getValue());
-                                        } else {
-                                            totalMonthlyExpenses += Float.parseFloat(transaction.getValue());
-                                        }
-                                    }
-                                }
-                            }
-
-                            totalMonthlyIncomes =
-                                    MyCustomMethods.getRoundedNumberToNDecimalPlaces(totalMonthlyIncomes, 2);
-
-                            totalMonthlyExpenses =
-                                    MyCustomMethods.getRoundedNumberToNDecimalPlaces(totalMonthlyExpenses, 2);
-
-                            final String totalMonthlyIncomesText =
-                                    Locale.getDefault().getDisplayLanguage().equals(Languages.ENGLISH_LANGUAGE) ?
-                                            currencySymbol + totalMonthlyIncomes :
-                                            totalMonthlyIncomes + " " + currencySymbol;
-
-                            final String totalMonthlyExpensesText =
-                                    Locale.getDefault().getDisplayLanguage().equals(Languages.ENGLISH_LANGUAGE) ?
-                                            currencySymbol + totalMonthlyExpenses :
-                                            totalMonthlyExpenses + " " + currencySymbol;
-
-                            binding.incomesValue.setText(totalMonthlyIncomesText);
-
-                            binding.expensesValue.setText(totalMonthlyExpensesText);
-
-                        }
-
-                        @Override
-                        public void onCancelled(final @NonNull DatabaseError error) {
-
-                        }
-                    });
-        } else {
+        if (MyCustomVariables.getFirebaseAuth().getUid() == null) {
             final String currencySymbol = userDetails != null ?
                     userDetails.getApplicationSettings().getCurrencySymbol() : MyCustomMethods.getCurrencySymbol();
 
@@ -145,6 +87,67 @@ public class BudgetReviewFragment extends Fragment {
 
             binding.incomesValue.setText(totalMonthlyIncomesText);
             binding.expensesValue.setText(totalMonthlyExpensesText);
+
+            return;
         }
+
+        MyCustomVariables.getDatabaseReference()
+                .child(MyCustomVariables.getFirebaseAuth().getUid())
+                .addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(final @NonNull DataSnapshot snapshot) {
+                        final String currencySymbol = userDetails != null ?
+                                userDetails.getApplicationSettings().getCurrencySymbol() :
+                                MyCustomMethods.getCurrencySymbol();
+
+                        float totalMonthlyIncomes = 0f;
+
+                        float totalMonthlyExpenses = 0f;
+
+                        if (snapshot.exists() && snapshot.hasChild("personalTransactions") &&
+                                snapshot.child("personalTransactions").hasChildren()) {
+                            for (final DataSnapshot databaseTransaction :
+                                    snapshot.child("personalTransactions").getChildren()) {
+                                final Transaction transaction = databaseTransaction.getValue(Transaction.class);
+
+                                if (transaction != null && transaction.getTime() != null &&
+                                        transaction.getTime().getYear() == LocalDate.now().getYear() &&
+                                        transaction.getTime().getMonth() == LocalDate.now().getMonthValue()) {
+                                    if (transaction.getType() == 1) {
+                                        totalMonthlyIncomes += Float.parseFloat(transaction.getValue());
+                                    } else {
+                                        totalMonthlyExpenses += Float.parseFloat(transaction.getValue());
+                                    }
+                                }
+                            }
+                        }
+
+                        totalMonthlyIncomes =
+                                MyCustomMethods.getRoundedNumberToNDecimalPlaces(totalMonthlyIncomes, 2);
+
+                        totalMonthlyExpenses =
+                                MyCustomMethods.getRoundedNumberToNDecimalPlaces(totalMonthlyExpenses, 2);
+
+                        final String totalMonthlyIncomesText =
+                                Locale.getDefault().getDisplayLanguage().equals(Languages.ENGLISH_LANGUAGE) ?
+                                        currencySymbol + totalMonthlyIncomes :
+                                        totalMonthlyIncomes + " " + currencySymbol;
+
+                        final String totalMonthlyExpensesText =
+                                Locale.getDefault().getDisplayLanguage().equals(Languages.ENGLISH_LANGUAGE) ?
+                                        currencySymbol + totalMonthlyExpenses :
+                                        totalMonthlyExpenses + " " + currencySymbol;
+
+                        binding.incomesValue.setText(totalMonthlyIncomesText);
+
+                        binding.expensesValue.setText(totalMonthlyExpensesText);
+
+                    }
+
+                    @Override
+                    public void onCancelled(final @NonNull DatabaseError error) {
+
+                    }
+                });
     }
 }

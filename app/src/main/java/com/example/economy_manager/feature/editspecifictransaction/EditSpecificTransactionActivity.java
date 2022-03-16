@@ -38,6 +38,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 public class EditSpecificTransactionActivity extends AppCompatActivity {
+
     private EditSpecificTransactionViewModel viewModel;
     private TextView titleText;
     private TextView noteText;

@@ -110,6 +110,8 @@
     <string name="last_10_transactions">Last 10 transactions</string>
     <string name="last_week_expenses">Last week expenses</string>
     <string name="email_not_valid">Email address is not valid</string>
+    <string name="login">Login</string>
+    <string name="log_in">Log in</string>
     <string name="login_forgot_password">Forgot password</string>
     <string name="login_login">Log in</string>
     <string name="login_incorrect_username_password">Incorrect username or password</string>
@@ -150,6 +152,7 @@
     <string name="proceed">"Proceed "</string>
     <string name="profile_updated_successfully">Profile updated successfully</string>
     <string name="rate_app">Rate the app</string>
+    <string name="register">Register</string>
     <string name="remaining_monthly_income">Remaining monthly income</string>
     <string name="reset_database">Reset database</string>
     <string name="salary">Salary</string>

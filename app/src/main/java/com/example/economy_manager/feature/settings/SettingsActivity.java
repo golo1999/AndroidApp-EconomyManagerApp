@@ -18,10 +18,10 @@ import androidx.databinding.DataBindingUtil;
 
 import com.example.economy_manager.R;
 import com.example.economy_manager.databinding.SettingsActivityBinding;
-import com.example.economy_manager.utility.CurrenciesSpinnerAdapter;
 import com.example.economy_manager.dialog.ChangePasswordCustomDialog;
 import com.example.economy_manager.dialog.DeleteAccountCustomDialog;
 import com.example.economy_manager.model.UserDetails;
+import com.example.economy_manager.utility.CurrenciesSpinnerAdapter;
 import com.example.economy_manager.utility.MyCustomMethods;
 import com.example.economy_manager.utility.MyCustomSharedPreferences;
 import com.example.economy_manager.utility.MyCustomVariables;
@@ -98,16 +98,20 @@ public class SettingsActivity extends AppCompatActivity
     private void hideButtons() {
         final FirebaseUser user = MyCustomVariables.getFirebaseAuth().getCurrentUser();
 
-        if (user != null) {
-            final String authProvider = user
-                    .getProviderData()
-                    .get(user.getProviderData().size() - 1)
-                    .getProviderId();
-
-            if (authProvider.equals("google.com") || authProvider.equals("facebook.com")) {
-                binding.changePasswordButton.setVisibility(View.GONE);
-            }
+        if (user == null) {
+            return;
         }
+
+        final String authProvider = user
+                .getProviderData()
+                .get(user.getProviderData().size() - 1)
+                .getProviderId();
+
+        if (!authProvider.equals("google.com") && !authProvider.equals("facebook.com")) {
+            return;
+        }
+
+        binding.changePasswordButton.setVisibility(View.GONE);
     }
 
     private void saveSelectedCurrency() {
@@ -161,14 +165,16 @@ public class SettingsActivity extends AppCompatActivity
                                        final View view,
                                        final int position,
                                        long id) {
-                if (MyCustomVariables.getFirebaseAuth().getUid() != null) {
-                    final int color = viewModel.getTextColor(SettingsActivity.this);
-                    // the first element will have the text aligned to its start and
-                    // the color based on the selected theme
-                    ((TextView) parent.getChildAt(0)).setTextColor(color);
-                    ((TextView) parent.getChildAt(0)).setGravity(Gravity.END);
-                    ((TextView) parent.getChildAt(0)).setTypeface(null, Typeface.BOLD);
+                if (MyCustomVariables.getFirebaseAuth().getUid() == null) {
+                    return;
                 }
+
+                final int color = viewModel.getTextColor(SettingsActivity.this);
+                // the first element will have the text aligned to its start and
+                // the color based on the selected theme
+                ((TextView) parent.getChildAt(0)).setTextColor(color);
+                ((TextView) parent.getChildAt(0)).setGravity(Gravity.END);
+                ((TextView) parent.getChildAt(0)).setTypeface(null, Typeface.BOLD);
             }
 
             @Override
@@ -186,7 +192,8 @@ public class SettingsActivity extends AppCompatActivity
                 MyCustomVariables.getDefaultUserDetails().getApplicationSettings().isDarkThemeEnabled();
 
         final String currency = viewModel.getUserDetails() != null ?
-                viewModel.getUserDetails().getApplicationSettings().getCurrency() : MyCustomVariables.getDefaultCurrency();
+                viewModel.getUserDetails().getApplicationSettings().getCurrency() :
+                MyCustomVariables.getDefaultCurrency();
         // turkish sea (blue) or white
         final int color = viewModel.getTextColor(this);
 
@@ -213,19 +220,21 @@ public class SettingsActivity extends AppCompatActivity
                 10 : 11);
 
         binding.themeSwitch.setOnCheckedChangeListener((final CompoundButton buttonView, final boolean isChecked) -> {
-            if (MyCustomVariables.getFirebaseAuth().getUid() != null) {
-                MyCustomVariables.getDatabaseReference()
-                        .child(MyCustomVariables.getFirebaseAuth().getUid())
-                        .child("applicationSettings")
-                        .child("darkThemeEnabled")
-                        .setValue(isChecked);
-
-                viewModel.getUserDetails().getApplicationSettings().setDarkThemeEnabled(isChecked);
-                MyCustomSharedPreferences.saveUserDetailsToSharedPreferences(preferences, viewModel.getUserDetails());
-
-                MyCustomVariables.setUserDetails(viewModel.getUserDetails());
-                MyCustomMethods.restartCurrentActivity(this);
+            if (MyCustomVariables.getFirebaseAuth().getUid() == null) {
+                return;
             }
+
+            MyCustomVariables.getDatabaseReference()
+                    .child(MyCustomVariables.getFirebaseAuth().getUid())
+                    .child("applicationSettings")
+                    .child("darkThemeEnabled")
+                    .setValue(isChecked);
+
+            viewModel.getUserDetails().getApplicationSettings().setDarkThemeEnabled(isChecked);
+            MyCustomSharedPreferences.saveUserDetailsToSharedPreferences(preferences, viewModel.getUserDetails());
+
+            MyCustomVariables.setUserDetails(viewModel.getUserDetails());
+            MyCustomMethods.restartCurrentActivity(this);
         });
     }
 

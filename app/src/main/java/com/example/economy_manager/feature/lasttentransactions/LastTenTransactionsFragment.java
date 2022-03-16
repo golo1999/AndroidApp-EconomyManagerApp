@@ -31,6 +31,7 @@ import java.util.Locale;
 import java.util.stream.Collectors;
 
 public class LastTenTransactionsFragment extends Fragment {
+
     private MainScreenViewModel viewModel;
     private LinearLayout mainLayout;
 
@@ -38,6 +39,7 @@ public class LastTenTransactionsFragment extends Fragment {
         // Required empty public constructor
     }
 
+    @NonNull
     public static LastTenTransactionsFragment newInstance() {
         final LastTenTransactionsFragment fragment = new LastTenTransactionsFragment();
         final Bundle args = new Bundle();
@@ -48,7 +50,7 @@ public class LastTenTransactionsFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(final LayoutInflater inflater,
+    public View onCreateView(final @NonNull LayoutInflater inflater,
                              final ViewGroup container,
                              final Bundle savedInstanceState) {
         final View v = inflater.inflate(R.layout.last_ten_transactions_fragment, container, false);
@@ -64,113 +66,114 @@ public class LastTenTransactionsFragment extends Fragment {
         createAndSetList();
     }
 
-    private void setVariables(final View v) {
+    private void setVariables(final @NonNull View v) {
         viewModel = new ViewModelProvider((ViewModelStoreOwner) requireContext()).get(MainScreenViewModel.class);
         mainLayout = v.findViewById(R.id.mainLayout);
     }
 
     // method for setting the transactions list and displaying it on the screen
     private void createAndSetList() {
-        if (MyCustomVariables.getFirebaseAuth().getUid() != null) {
-            MyCustomVariables.getDatabaseReference().child(MyCustomVariables.getFirebaseAuth().getUid())
-                    .addValueEventListener(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(final @NonNull DataSnapshot snapshot) {
-                            final ArrayList<Transaction> transactionsList = new ArrayList<>();
-                            final String currencySymbol = viewModel.getUserDetails() != null ?
-                                    viewModel.getUserDetails().getApplicationSettings().getCurrencySymbol() :
-                                    MyCustomMethods.getCurrencySymbol();
-
-                            if (snapshot.exists() && snapshot.hasChild("personalTransactions") &&
-                                    snapshot.child("personalTransactions").hasChildren()) {
-                                for (DataSnapshot transactionIterator :
-                                        snapshot.child("personalTransactions").getChildren()) {
-                                    final Transaction transaction = transactionIterator.getValue(Transaction.class);
-
-                                    if (transaction != null && transaction.getTime() != null &&
-                                            transaction.getTime().getYear() == LocalDate.now().getYear() &&
-                                            transaction.getTime().getMonth() == LocalDate.now().getMonthValue()) {
-                                        transactionsList.add(transaction);
-                                    }
-                                }
-                            }
-
-                            // displaying the list on the screen
-                            showLastTransactions(mainLayout, transactionsList, currencySymbol);
-                        }
-
-                        @Override
-                        public void onCancelled(final @NonNull DatabaseError error) {
-
-                        }
-                    });
-        } else {
+        if (MyCustomVariables.getFirebaseAuth().getUid() == null) {
             showNoTransactionsLayout(mainLayout,
                     requireContext().getResources().getString(R.string.no_transactions_yet));
+
+            return;
         }
+
+        MyCustomVariables.getDatabaseReference().child(MyCustomVariables.getFirebaseAuth().getUid())
+                .addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(final @NonNull DataSnapshot snapshot) {
+                        final ArrayList<Transaction> transactionsList = new ArrayList<>();
+                        final String currencySymbol = viewModel.getUserDetails() != null ?
+                                viewModel.getUserDetails().getApplicationSettings().getCurrencySymbol() :
+                                MyCustomMethods.getCurrencySymbol();
+
+                        if (snapshot.exists() &&
+                                snapshot.hasChild("personalTransactions") &&
+                                snapshot.child("personalTransactions").hasChildren()) {
+                            for (DataSnapshot transactionIterator :
+                                    snapshot.child("personalTransactions").getChildren()) {
+                                final Transaction transaction = transactionIterator.getValue(Transaction.class);
+
+                                if (transaction != null && transaction.getTime() != null &&
+                                        transaction.getTime().getYear() == LocalDate.now().getYear() &&
+                                        transaction.getTime().getMonth() == LocalDate.now().getMonthValue()) {
+                                    transactionsList.add(transaction);
+                                }
+                            }
+                        }
+
+                        // displaying the list on the screen
+                        showLastTransactions(mainLayout, transactionsList, currencySymbol);
+                    }
+
+                    @Override
+                    public void onCancelled(final @NonNull DatabaseError error) {
+
+                    }
+                });
     }
 
     // method for displaying the list on the screen
-    private void showLastTransactions(final LinearLayout mainLayout,
+    private void showLastTransactions(final @NonNull LinearLayout mainLayout,
                                       final ArrayList<Transaction> transactionsList,
                                       final String currencySymbol) {
         // removing all the existing views from the main layout
         mainLayout.removeAllViews();
 
-        try {
-            if (transactionsList.size() == 0) {
-                showNoTransactionsLayout(mainLayout,
-                        requireContext().getResources().getString(R.string.no_transactions_this_month));
+        if (transactionsList.size() == 0) {
+            showNoTransactionsLayout(mainLayout,
+                    requireContext().getResources().getString(R.string.no_transactions_this_month));
+
+            return;
+        }
+
+        ArrayList<Transaction> limitedTransactionsList = null;
+
+        // sorting the list by date descending
+        transactionsList.sort((final Transaction transaction1, final Transaction transaction2) ->
+                transaction2.getTime().compareTo(transaction1.getTime()));
+
+        // creating a new list from the first 10 transactions only if there are more than that
+        if (transactionsList.size() > 10) {
+            limitedTransactionsList = (ArrayList<Transaction>) transactionsList.stream()
+                    .limit(10).collect(Collectors.toList());
+        }
+
+        // iterating through the new list only if there are more than 10 transactions,
+        // otherwise iterating through the old list
+        for (final Transaction transaction :
+                (limitedTransactionsList != null ? limitedTransactionsList : transactionsList)) {
+            final LinearLayout childLayout = (LinearLayout) getLayoutInflater()
+                    .inflate(R.layout.last_ten_transactions_linearlayout, mainLayout, false);
+
+            final TextView typeFromChildLayout =
+                    childLayout.findViewById(R.id.transactionTitle);
+
+            final TextView valueFromChildLayout =
+                    childLayout.findViewById(R.id.transactionValue);
+
+            final String valueWithCurrency = Locale.getDefault().getDisplayLanguage().equals("English") ?
+                    currencySymbol + transaction.getValue() : transaction.getValue() + " " + currencySymbol;
+
+            final String translatedType = Types.getTranslatedType(requireContext(),
+                    String.valueOf(Transaction.getTypeFromIndexInEnglish(transaction.getCategory())));
+
+            valueFromChildLayout.setTextColor(transaction.getType() == 1 ? Color.GREEN : Color.RED);
+
+            if (translatedType == null) {
+                return;
             }
-            // if the transactions list isn't empty
-            else {
-                ArrayList<Transaction> limitedTransactionsList = null;
 
-                // sorting the list by date descending
-                transactionsList.sort((final Transaction transaction1, final Transaction transaction2) ->
-                        transaction2.getTime().compareTo(transaction1.getTime()));
+            // displaying the views on the screen if the type was successfully translated
+            typeFromChildLayout.setText(translatedType);
+            valueFromChildLayout.setText(valueWithCurrency);
+            typeFromChildLayout.setTextColor(Color.WHITE);
+            typeFromChildLayout.setTextSize(18);
+            valueFromChildLayout.setTextSize(18);
 
-                // creating a new list from the first 10 transactions only if there are more than that
-                if (transactionsList.size() > 10) {
-                    limitedTransactionsList = (ArrayList<Transaction>) transactionsList.stream()
-                            .limit(10).collect(Collectors.toList());
-                }
-
-                // iterating through the new list only if there are more than 10 transactions,
-                // otherwise iterating through the old list
-                for (final Transaction transaction :
-                        (limitedTransactionsList != null ? limitedTransactionsList : transactionsList)) {
-                    final LinearLayout childLayout = (LinearLayout) getLayoutInflater()
-                            .inflate(R.layout.last_ten_transactions_linearlayout, mainLayout, false);
-
-                    final TextView typeFromChildLayout =
-                            childLayout.findViewById(R.id.transactionTitle);
-
-                    final TextView valueFromChildLayout =
-                            childLayout.findViewById(R.id.transactionValue);
-
-                    final String valueWithCurrency = Locale.getDefault().getDisplayLanguage().equals("English") ?
-                            currencySymbol + transaction.getValue() : transaction.getValue() + " " + currencySymbol;
-
-                    final String translatedType = Types.getTranslatedType(requireContext(),
-                            String.valueOf(Transaction.getTypeFromIndexInEnglish(transaction.getCategory())));
-
-                    valueFromChildLayout.setTextColor(transaction.getType() == 1 ? Color.GREEN : Color.RED);
-
-                    // displaying the views on the screen if the type was successfully translated
-                    if (translatedType != null) {
-                        typeFromChildLayout.setText(translatedType);
-                        valueFromChildLayout.setText(valueWithCurrency);
-                        typeFromChildLayout.setTextColor(Color.WHITE);
-                        typeFromChildLayout.setTextSize(18);
-                        valueFromChildLayout.setTextSize(18);
-
-                        mainLayout.addView(childLayout);
-                    }
-                }
-            }
-        } catch (NullPointerException e) {
-            e.printStackTrace();
+            mainLayout.addView(childLayout);
         }
     }
 

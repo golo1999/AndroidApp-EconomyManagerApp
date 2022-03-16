@@ -6,6 +6,7 @@ import com.example.economy_manager.model.Transaction;
 import com.example.economy_manager.model.UserDetails;
 
 public class EditSpecificTransactionViewModel extends ViewModel {
+
     private UserDetails userDetails;
     private String activityTitle;
     private Transaction selectedTransaction;

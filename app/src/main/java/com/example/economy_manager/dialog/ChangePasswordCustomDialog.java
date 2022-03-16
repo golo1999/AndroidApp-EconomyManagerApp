@@ -15,6 +15,7 @@ import androidx.appcompat.app.AppCompatDialogFragment;
 import com.example.economy_manager.R;
 
 public class ChangePasswordCustomDialog extends AppCompatDialogFragment {
+
     private EditText oldPasswordField;
     private EditText newPasswordField;
     private CustomDialogListener listener;

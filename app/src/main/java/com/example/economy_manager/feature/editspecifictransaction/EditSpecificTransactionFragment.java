@@ -33,6 +33,7 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 
 public class EditSpecificTransactionFragment extends Fragment {
+
     private EditSpecificTransactionFragmentBinding binding;
     private EditTransactionsViewModel viewModel;
 

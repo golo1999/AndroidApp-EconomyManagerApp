@@ -12,8 +12,8 @@ import androidx.lifecycle.ViewModelProvider;
 import com.example.economy_manager.R;
 import com.example.economy_manager.databinding.LogInActivityBinding;
 import com.example.economy_manager.feature.forgotpassword.ForgotPasswordActivity;
-import com.example.economy_manager.feature.register.SignUpActivity;
 import com.example.economy_manager.feature.mainscreen.MainScreenActivity;
+import com.example.economy_manager.feature.register.SignUpActivity;
 import com.example.economy_manager.model.ApplicationSettings;
 import com.example.economy_manager.model.PersonalInformation;
 import com.example.economy_manager.utility.MyCustomMethods;
@@ -40,6 +40,7 @@ import com.google.firebase.auth.GoogleAuthProvider;
 import java.util.Arrays;
 
 public class LogInActivity extends AppCompatActivity {
+
     private LogInActivityBinding binding;
     private LogInViewModel viewModel;
     private CallbackManager manager;
@@ -141,16 +142,20 @@ public class LogInActivity extends AppCompatActivity {
         MyCustomVariables.getFirebaseAuth()
                 .signInWithCredential(credential)
                 .addOnCompleteListener((final Task<AuthResult> task) -> {
-                    if (task.isSuccessful()) {
-                        if (MyCustomVariables.getFirebaseAuth().getCurrentUser() != null) {
-                            createPersonalInformationPath();
-                            createApplicationSettingsPath();
-                            goToTheMainScreen();
-                        }
-                    } else {
+                    if (!task.isSuccessful()) {
                         MyCustomMethods.showShortMessage(this,
                                 getResources().getString(R.string.facebook_authentication_failed));
+
+                        return;
                     }
+
+                    if (MyCustomVariables.getFirebaseAuth().getCurrentUser() == null) {
+                        return;
+                    }
+
+                    createPersonalInformationPath();
+                    createApplicationSettingsPath();
+                    goToTheMainScreen();
                 });
     }
 
@@ -175,16 +180,20 @@ public class LogInActivity extends AppCompatActivity {
         MyCustomVariables.getFirebaseAuth()
                 .signInWithCredential(credential)
                 .addOnCompleteListener((final Task<AuthResult> task) -> {
-                    if (task.isSuccessful()) {
-                        if (MyCustomVariables.getFirebaseAuth().getCurrentUser() != null) {
-                            createPersonalInformationPath();
-                            createApplicationSettingsPath();
-                            goToTheMainScreen();
-                        }
-                    } else {
+                    if (!task.isSuccessful()) {
                         MyCustomMethods.showShortMessage(this,
                                 getResources().getString(R.string.google_authentication_failed));
+
+                        return;
                     }
+
+                    if (MyCustomVariables.getFirebaseAuth().getCurrentUser() == null) {
+                        return;
+                    }
+
+                    createPersonalInformationPath();
+                    createApplicationSettingsPath();
+                    goToTheMainScreen();
                 });
     }
 
@@ -192,24 +201,28 @@ public class LogInActivity extends AppCompatActivity {
         final PersonalInformation information = new PersonalInformation();
         final String currentUserID = MyCustomVariables.getFirebaseAuth().getUid();
 
-        if (currentUserID != null) {
-            MyCustomVariables.getDatabaseReference()
-                    .child(currentUserID)
-                    .child("personalInformation")
-                    .setValue(information);
+        if (currentUserID == null) {
+            return;
         }
+
+        MyCustomVariables.getDatabaseReference()
+                .child(currentUserID)
+                .child("personalInformation")
+                .setValue(information);
     }
 
     private void createApplicationSettingsPath() {
         final ApplicationSettings settings = new ApplicationSettings();
         final String currentUserID = MyCustomVariables.getFirebaseAuth().getUid();
 
-        if (currentUserID != null) {
-            MyCustomVariables.getDatabaseReference()
-                    .child(currentUserID)
-                    .child("applicationSettings")
-                    .setValue(settings);
+        if (currentUserID == null) {
+            return;
         }
+
+        MyCustomVariables.getDatabaseReference()
+                .child(currentUserID)
+                .child("applicationSettings")
+                .setValue(settings);
     }
 
     private void goToTheMainScreen() {

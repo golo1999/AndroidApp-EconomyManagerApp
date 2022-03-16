@@ -16,6 +16,7 @@ import com.example.economy_manager.utility.MyCustomMethods;
 import java.time.LocalDate;
 
 public class AddIncomeViewModel extends ViewModel {
+
     private LocalDate transactionDate = LocalDate.now();
 
     public LocalDate getTransactionDate() {
@@ -115,25 +116,29 @@ public class AddIncomeViewModel extends ViewModel {
                                       final int count) {
                 final int textLength = String.valueOf(s).length();
 
-                // if the number is decimal (contains comma)
-                if (String.valueOf(s).contains(".")) {
-                    // saving comma's position
-                    final int positionOfComma = String.valueOf(s).indexOf(".");
-                    // adding a zero before if the first character is a dot (i.e: .5 => 0.5)
-                    if (positionOfComma == 0 && textLength == 1) {
-                        final String text = "0" + field.getText();
+                // if the number NOT is decimal (doesn't contain comma)
+                if (!String.valueOf(s).contains(".")) {
+                    return;
+                }
 
-                        field.setText(text);
-                        // putting the cursor at the end
-                        field.setSelection(String.valueOf(field.getText()).length());
-                    }
-                    // if we add more than two decimals
-                    if (textLength - positionOfComma > 3) {
-                        // putting only the first two decimals
-                        field.setText(String.valueOf(field.getText()).substring(0, positionOfComma + 3));
-                        // putting the cursor at the end
-                        field.setSelection(String.valueOf(field.getText()).length());
-                    }
+                // saving comma's position
+                final int positionOfComma = String.valueOf(s).indexOf(".");
+
+                // adding a zero before if the first character is a dot (i.e: .5 => 0.5)
+                if (positionOfComma == 0 && textLength == 1) {
+                    final String text = "0" + field.getText();
+
+                    field.setText(text);
+                    // putting the cursor at the end
+                    field.setSelection(String.valueOf(field.getText()).length());
+                }
+
+                // if we add more than two decimals
+                if (textLength - positionOfComma > 3) {
+                    // putting only the first two decimals
+                    field.setText(String.valueOf(field.getText()).substring(0, positionOfComma + 3));
+                    // putting the cursor at the end
+                    field.setSelection(String.valueOf(field.getText()).length());
                 }
             }
 
