@@ -2,7 +2,6 @@ package com.example.economy_manager.feature.mainscreen;
 
 import android.app.Activity;
 import android.content.Context;
-import android.graphics.Color;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,15 +15,16 @@ import com.example.economy_manager.R;
 import com.example.economy_manager.feature.budgetreview.BudgetReviewFragment;
 import com.example.economy_manager.feature.favoriteexpenses.FavoriteExpensesCategoryFragment;
 import com.example.economy_manager.feature.lasttentransactions.LastTenTransactionsFragment;
-import com.example.economy_manager.feature.moneyspent.MoneySpentFragment;
+import com.example.economy_manager.feature.lastweekexpenses.LastWeekExpensesFragment;
 import com.example.economy_manager.feature.moneyspentpercentage.MoneySpentPercentageFragment;
-import com.example.economy_manager.feature.showsavings.ShowSavingsFragment;
+import com.example.economy_manager.feature.monthlysavings.MonthlySavingsFragment;
 import com.example.economy_manager.feature.topfiveexpenses.TopFiveExpensesFragment;
 import com.example.economy_manager.model.Transaction;
 import com.example.economy_manager.model.UserDetails;
 import com.example.economy_manager.utility.Languages;
 import com.example.economy_manager.utility.MyCustomMethods;
 import com.example.economy_manager.utility.MyCustomVariables;
+import com.example.economy_manager.utility.Theme;
 import com.example.economy_manager.utility.Types;
 import com.facebook.login.LoginManager;
 
@@ -35,11 +35,11 @@ import java.util.Locale;
 public class MainScreenViewModel extends ViewModel {
     private UserDetails userDetails;
 
-    private final ShowSavingsFragment showSavingsFragment = ShowSavingsFragment.newInstance();
+    private final MonthlySavingsFragment monthlySavingsFragment = MonthlySavingsFragment.newInstance();
 
     private final BudgetReviewFragment budgetReviewFragment = BudgetReviewFragment.newInstance();
 
-    private final MoneySpentFragment moneySpentFragment = MoneySpentFragment.newInstance();
+    private final LastWeekExpensesFragment lastWeekExpensesFragment = LastWeekExpensesFragment.newInstance();
 
     private final LastTenTransactionsFragment lastTenTransactionsFragment = LastTenTransactionsFragment.newInstance();
 
@@ -128,13 +128,12 @@ public class MainScreenViewModel extends ViewModel {
 
     private int timerCounter = 0;
 
-    public int getActivityTheme() {
-        final boolean darkThemeEnabled = getUserDetails() != null ?
+    public int getActivityTheme(final Context context) {
+        final boolean isDarkThemeEnabled = getUserDetails() != null ?
                 getUserDetails().getApplicationSettings().isDarkThemeEnabled() :
                 MyCustomVariables.getDefaultUserDetails().getApplicationSettings().isDarkThemeEnabled();
 
-        return !darkThemeEnabled ?
-                R.drawable.ic_white_gradient_tobacco_ad : R.drawable.ic_black_gradient_night_shift;
+        return Theme.getBackgroundColor(context, isDarkThemeEnabled);
     }
 
     public UserDetails getUserDetails() {
@@ -145,16 +144,16 @@ public class MainScreenViewModel extends ViewModel {
         this.userDetails = userDetails;
     }
 
-    public ShowSavingsFragment getFragmentShowSavings() {
-        return showSavingsFragment;
+    public MonthlySavingsFragment getFragmentShowSavings() {
+        return monthlySavingsFragment;
     }
 
     public BudgetReviewFragment getFragmentBudgetReview() {
         return budgetReviewFragment;
     }
 
-    public MoneySpentFragment getFragmentMoneySpent() {
-        return moneySpentFragment;
+    public LastWeekExpensesFragment getFragmentMoneySpent() {
+        return lastWeekExpensesFragment;
     }
 
     public LastTenTransactionsFragment getFragmentLastTenTransactions() {
@@ -183,9 +182,9 @@ public class MainScreenViewModel extends ViewModel {
 
     public String getGreetingMessage(Context context) {
         return getCurrentHour() < 12 ?
-                context.getResources().getString(R.string.greet_good_morning).trim() : getCurrentHour() < 18 ?
-                context.getResources().getString(R.string.greet_good_afternoon).trim() :
-                context.getResources().getString(R.string.greet_good_evening).trim();
+                context.getResources().getString(R.string.good_morning).trim() : getCurrentHour() < 18 ?
+                context.getResources().getString(R.string.good_afternoon).trim() :
+                context.getResources().getString(R.string.good_evening).trim();
     }
 
     public String getDatePrefix() {
@@ -232,7 +231,7 @@ public class MainScreenViewModel extends ViewModel {
                 getUserDetails().getApplicationSettings().isDarkThemeEnabled() :
                 MyCustomVariables.getDefaultUserDetails().getApplicationSettings().isDarkThemeEnabled();
 
-        return !darkThemeEnabled ? activity.getColor(R.color.turkish_sea) : Color.WHITE;
+        return darkThemeEnabled ? activity.getColor(R.color.tertiaryLight) : activity.getColor(R.color.quaternaryLight);
     }
 
     public void goToActivity(final @NonNull Activity currentActivity,

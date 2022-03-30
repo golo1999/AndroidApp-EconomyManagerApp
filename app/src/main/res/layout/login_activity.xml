@@ -6,19 +6,19 @@
 
         <variable
             name="activity"
-            type="com.example.economy_manager.feature.login.LogInActivity" />
+            type="com.example.economy_manager.feature.login.LoginActivity" />
 
         <variable
             name="forgotPasswordActivity"
             type="Class&lt;com.example.economy_manager.feature.forgotpassword.ForgotPasswordActivity>" />
 
         <variable
-            name="signUpActivity"
-            type="Class&lt;com.example.economy_manager.feature.register.SignUpActivity>" />
+            name="registerActivity"
+            type="Class&lt;com.example.economy_manager.feature.register.RegisterActivity>" />
 
         <variable
             name="viewModel"
-            type="com.example.economy_manager.feature.login.LogInViewModel" />
+            type="com.example.economy_manager.feature.login.LoginViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -27,7 +27,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/primaryDark"
-        tools:context=".feature.login.LogInActivity">
+        tools:context=".feature.login.LoginActivity">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/login_layout"
@@ -47,8 +47,8 @@
                 android:layout_width="0sp"
                 android:layout_height="wrap_content"
                 android:autofillHints="AUTOFILL_HINT_USERNAME"
-                android:background="@drawable/button_gold_border"
-                android:drawableStart="@drawable/ic_email_gold"
+                android:background="@drawable/button_outline_dark"
+                android:drawableStart="@drawable/ic_email_dark"
                 android:drawablePadding="10sp"
                 android:hint="@string/email"
                 android:inputType="textEmailAddress"
@@ -68,8 +68,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20sp"
                 android:autofillHints="AUTOFILL_HINT_PASSWORD"
-                android:background="@drawable/button_gold_border"
-                android:drawableStart="@drawable/ic_password_gold"
+                android:background="@drawable/button_outline_dark"
+                android:drawableStart="@drawable/ic_password_dark"
                 android:drawablePadding="10sp"
                 android:hint="@string/password"
                 android:inputType="textPassword"
@@ -89,7 +89,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20sp"
                 android:onClick="@{() -> viewModel.goToActivityInDirection(activity, forgotPasswordActivity, 0)}"
-                android:text="@string/login_forgot_password"
+                android:text="@string/forgot_password"
                 android:textAlignment="center"
                 android:textColor="@color/secondaryDark"
                 android:textSize="18sp"
@@ -103,11 +103,11 @@
                 android:layout_width="0sp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20sp"
-                android:background="@drawable/button_gold_border"
+                android:background="@drawable/button_outline_dark"
                 android:onClick="@{() -> viewModel.onLogInButtonClicked(activity, viewModel.enteredEmail, viewModel.enteredPassword)}"
                 android:padding="10sp"
                 android:stateListAnimator="@null"
-                android:text="@string/login_login"
+                android:text="@string/log_in_with_email"
                 android:textAlignment="center"
                 android:textColor="@color/secondaryDark"
                 android:textSize="18sp"
@@ -143,7 +143,7 @@
                 android:layout_width="0sp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20sp"
-                android:onClick="@{() -> viewModel.goToActivityInDirection(activity, signUpActivity, 1)}"
+                android:onClick="@{() -> viewModel.goToActivityInDirection(activity, registerActivity, 1)}"
                 android:text="@string/register"
                 android:textAlignment="center"
                 android:textColor="@color/secondaryDark"

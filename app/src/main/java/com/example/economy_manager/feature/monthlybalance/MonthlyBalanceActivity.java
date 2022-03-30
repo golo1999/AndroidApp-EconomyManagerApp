@@ -67,7 +67,7 @@ public class MonthlyBalanceActivity extends AppCompatActivity {
     }
 
     private void setActivityTheme() {
-        getWindow().setBackgroundDrawableResource(viewModel.getActivityTheme());
+        getWindow().getDecorView().setBackgroundColor(viewModel.getActivityTheme(this));
     }
 
     private void setIncomesAndExpensesInParent() {
@@ -109,9 +109,9 @@ public class MonthlyBalanceActivity extends AppCompatActivity {
                         }
 
                         // sorting the list by value descending
-                        transactionsList.sort((final Transaction transaction1, final Transaction transaction2) ->
-                                Float.compare(Float.parseFloat(String.valueOf(transaction2.getValue())),
-                                        Float.parseFloat(String.valueOf(transaction1.getValue()))));
+                        transactionsList.sort((final Transaction firstTransaction, final Transaction secondTransaction) ->
+                                Float.compare(Float.parseFloat(String.valueOf(secondTransaction.getValue())),
+                                        Float.parseFloat(String.valueOf(firstTransaction.getValue()))));
                         daysList.sort(Collections.reverseOrder());
 
                         // setting the balance for each day from the list
@@ -139,8 +139,8 @@ public class MonthlyBalanceActivity extends AppCompatActivity {
                             dayText.setTextSize(25);
 
                             dayText.setTextColor(viewModel.getUserDetails() == null ||
-                                    !viewModel.getUserDetails().getApplicationSettings().isDarkThemeEnabled()
-                                    ? Color.BLUE : Color.YELLOW);
+                                    viewModel.getUserDetails().getApplicationSettings().isDarkThemeEnabled()
+                                    ? getColor(R.color.secondaryDark) : getColor(R.color.secondaryLight));
 
                             for (final Transaction transactionsListIterator : transactionsList) {
                                 if (dayFromDaysList == transactionsListIterator.getTime().getDay()) {
@@ -168,8 +168,8 @@ public class MonthlyBalanceActivity extends AppCompatActivity {
                                                             .getCategory()))));
 
                                     typeText.setTextColor(viewModel.getUserDetails() == null ||
-                                            !viewModel.getUserDetails().getApplicationSettings().isDarkThemeEnabled() ?
-                                            Color.BLACK : Color.WHITE);
+                                            viewModel.getUserDetails().getApplicationSettings().isDarkThemeEnabled() ?
+                                            getColor(R.color.tertiaryDark) : getColor(R.color.quaternaryLight));
                                     valueText.setTextColor(viewModel.getUserDetails() == null ||
                                             !viewModel.getUserDetails().getApplicationSettings().isDarkThemeEnabled() ?
                                             Color.BLACK : Color.WHITE);
@@ -211,49 +211,52 @@ public class MonthlyBalanceActivity extends AppCompatActivity {
     }
 
     private void setCenterText() {
-        if (MyCustomVariables.getFirebaseAuth().getUid() != null) {
-            final boolean darkThemeEnabled = viewModel.getUserDetails() != null ?
-                    viewModel.getUserDetails().getApplicationSettings().isDarkThemeEnabled() :
-                    MyCustomVariables.getDefaultUserDetails().getApplicationSettings().isDarkThemeEnabled();
-
-            MyCustomVariables.getDatabaseReference()
-                    .child(MyCustomVariables.getFirebaseAuth().getUid())
-                    .addValueEventListener(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(final @NonNull DataSnapshot snapshot) {
-                            if (snapshot.exists() &&
-                                    snapshot.hasChild("personalTransactions") &&
-                                    snapshot.child("personalTransactions").hasChildren()) {
-                                int numberOfCurrentMonthTransactions = 0;
-
-                                for (final DataSnapshot transaction :
-                                        snapshot.child("personalTransactions").getChildren()) {
-                                    final Transaction databaseTransaction = transaction.getValue(Transaction.class);
-
-                                    if (databaseTransaction != null && databaseTransaction.getTime() != null &&
-                                            databaseTransaction.getTime().getYear() == LocalDate.now().getYear() &&
-                                            databaseTransaction.getTime().getMonth() == LocalDate.now().getMonthValue()) {
-                                        ++numberOfCurrentMonthTransactions;
-                                        break;
-                                    }
-                                }
-
-                                binding.centerText.setText(numberOfCurrentMonthTransactions > 0 ?
-                                        "" : getResources()
-                                        .getString(R.string.no_transactions_this_month));
-                            } else {
-                                binding.centerText.setText(R.string.no_transactions_yet);
-                            }
-                        }
-
-                        @Override
-                        public void onCancelled(final @NonNull DatabaseError error) {
-
-                        }
-                    });
-
-            binding.centerText.setTextColor(!darkThemeEnabled ? getColor(R.color.turkish_sea) : Color.WHITE);
-            binding.centerText.setTextSize(20);
+        if (MyCustomVariables.getFirebaseAuth().getUid() == null) {
+            return;
         }
+
+        final boolean darkThemeEnabled = viewModel.getUserDetails() != null ?
+                viewModel.getUserDetails().getApplicationSettings().isDarkThemeEnabled() :
+                MyCustomVariables.getDefaultUserDetails().getApplicationSettings().isDarkThemeEnabled();
+
+        MyCustomVariables.getDatabaseReference()
+                .child(MyCustomVariables.getFirebaseAuth().getUid())
+                .addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(final @NonNull DataSnapshot snapshot) {
+                        if (snapshot.exists() &&
+                                snapshot.hasChild("personalTransactions") &&
+                                snapshot.child("personalTransactions").hasChildren()) {
+                            int numberOfCurrentMonthTransactions = 0;
+
+                            for (final DataSnapshot transaction :
+                                    snapshot.child("personalTransactions").getChildren()) {
+                                final Transaction databaseTransaction = transaction.getValue(Transaction.class);
+
+                                if (databaseTransaction != null && databaseTransaction.getTime() != null &&
+                                        databaseTransaction.getTime().getYear() == LocalDate.now().getYear() &&
+                                        databaseTransaction.getTime().getMonth() == LocalDate.now().getMonthValue()) {
+                                    ++numberOfCurrentMonthTransactions;
+                                    break;
+                                }
+                            }
+
+                            binding.centerText.setText(numberOfCurrentMonthTransactions > 0 ?
+                                    "" : getResources()
+                                    .getString(R.string.no_transactions_made_this_month));
+                        } else {
+                            binding.centerText.setText(R.string.no_transactions_made_yet);
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(final @NonNull DatabaseError error) {
+
+                    }
+                });
+
+        binding.centerText.setTextColor(darkThemeEnabled ?
+                getColor(R.color.secondaryDark) : getColor(R.color.quaternaryLight));
+        binding.centerText.setTextSize(20);
     }
 }

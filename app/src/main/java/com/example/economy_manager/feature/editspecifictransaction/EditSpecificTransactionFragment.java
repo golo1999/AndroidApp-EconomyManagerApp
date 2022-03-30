@@ -183,7 +183,7 @@ public class EditSpecificTransactionFragment extends Fragment {
 
     private void setFragmentTitle() {
         final String editSpecificTransactionText =
-                requireContext().getResources().getString(R.string.edit_specific_transaction_title).trim();
+                requireContext().getResources().getString(R.string.edit_specific_transaction).trim();
 
         if (viewModel.getActivityTitle() == null ||
                 !viewModel.getActivityTitle().equals(editSpecificTransactionText)) {

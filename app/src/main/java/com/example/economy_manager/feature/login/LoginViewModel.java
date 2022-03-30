@@ -18,7 +18,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
 
-public class LogInViewModel extends ViewModel {
+public class LoginViewModel extends ViewModel {
 
     private final ObservableField<String> enteredEmail = new ObservableField<>("");
 
@@ -72,14 +72,14 @@ public class LogInViewModel extends ViewModel {
                                 goToTheMainScreen(activity);
                             } else {
                                 MyCustomMethods.showShortMessage(activity,
-                                        activity.getResources().getString(R.string.verify_email));
+                                        activity.getResources().getString(R.string.please_verify_your_email));
                                 setEnteredPassword("");
                             }
                         }
                         // removing the entered password & showing message if the credentials don't match
                         else {
                             MyCustomMethods.showShortMessage(activity,
-                                    activity.getResources().getString(R.string.login_incorrect_username_password));
+                                    activity.getResources().getString(R.string.incorrect_username_or_password));
                             setEnteredPassword("");
                         }
                     });
@@ -89,30 +89,34 @@ public class LogInViewModel extends ViewModel {
             MyCustomMethods.closeTheKeyboard(activity);
             // if both the email & the password are empty
             if (emailValue.isEmpty() && passwordValue.isEmpty()) {
-                MyCustomMethods.showShortMessage(activity, activity.getResources().getString(R.string.signup_error2));
+                MyCustomMethods.showShortMessage(activity, activity.getResources().getString(R.string.email_and_password_should_not_be_empty));
             }
             // if the email is empty
             else if (emailValue.isEmpty()) {
-                MyCustomMethods.showShortMessage(activity, activity.getResources().getString(R.string.signup_error3));
+                MyCustomMethods.showShortMessage(activity, activity.getResources().getString(R.string.should_not_be_empty));
                 setEnteredPassword("");
             }
             // if the password is empty
             else if (passwordValue.isEmpty()) {
-                MyCustomMethods.showShortMessage(activity, activity.getResources().getString(R.string.signup_error4));
+                MyCustomMethods.showShortMessage(activity,
+                        activity.getResources().getString(R.string.should_not_be_empty,
+                                activity.getResources().getString(R.string.password)));
             }
             // if the email isn't valid & the password is too short
             else if (!Patterns.EMAIL_ADDRESS.matcher(emailValue).matches() && passwordValue.length() < 4) {
-                MyCustomMethods.showShortMessage(activity, activity.getResources().getString(R.string.signup_error5));
+                MyCustomMethods.showShortMessage(activity, activity.getResources().getString(R.string.email_and_password_are_not_valid));
                 setEnteredPassword("");
             }
             // if the email isn't valid & the password is
             else if (!Patterns.EMAIL_ADDRESS.matcher(emailValue).matches()) {
-                MyCustomMethods.showShortMessage(activity, activity.getResources().getString(R.string.email_not_valid));
+                MyCustomMethods.showShortMessage(activity, activity.getResources().getString(R.string.email_address_is_not_valid));
                 setEnteredPassword("");
             }
             // if the email is valid & the password is too short
             else {
-                MyCustomMethods.showShortMessage(activity, activity.getResources().getString(R.string.signup_error7));
+                MyCustomMethods.showShortMessage(activity,
+                        activity.getResources().getString(R.string.should_have_at_least_characters,
+                                activity.getResources().getString(R.string.password), 7));
                 setEnteredPassword("");
             }
         }

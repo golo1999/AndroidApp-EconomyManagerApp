@@ -8,14 +8,13 @@ import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.economy_manager.R;
-import com.example.economy_manager.databinding.SignUpActivityBinding;
-import com.example.economy_manager.feature.register.SignUpViewModel;
+import com.example.economy_manager.databinding.RegisterActivityBinding;
 import com.example.economy_manager.utility.MyCustomMethods;
 import com.example.economy_manager.utility.MyCustomVariables;
 
-public class SignUpActivity extends AppCompatActivity {
-    private SignUpActivityBinding binding;
-    private SignUpViewModel viewModel;
+public class RegisterActivity extends AppCompatActivity {
+    private RegisterActivityBinding binding;
+    private RegisterViewModel viewModel;
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
@@ -31,8 +30,8 @@ public class SignUpActivity extends AppCompatActivity {
     }
 
     private void setVariables() {
-        binding = DataBindingUtil.setContentView(this, R.layout.sign_up_activity);
-        viewModel = new ViewModelProvider(this).get(SignUpViewModel.class);
+        binding = DataBindingUtil.setContentView(this, R.layout.register_activity);
+        viewModel = new ViewModelProvider(this).get(RegisterViewModel.class);
 
         binding.setActivity(this);
         binding.setViewModel(viewModel);

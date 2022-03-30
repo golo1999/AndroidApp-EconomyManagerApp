@@ -48,7 +48,7 @@ public class EditAccountActivity
     private EditAccountViewModel viewModel;
     private SharedPreferences preferences;
     private UserDetails userDetails;
-    private boolean darkThemeEnabled;
+    private boolean isDarkThemeEnabled;
     private boolean personalInformationHasBeenModified;
 
     @Override
@@ -68,6 +68,18 @@ public class EditAccountActivity
         getAndSetPersonalInformation();
         setSpinnerOnSelectedItemListener(binding.countrySpinner, "COUNTRY_SPINNER");
         setSpinnerOnSelectedItemListener(binding.genderSpinner, "GENDER_SPINNER");
+
+        binding.firstNameField.setOnFocusChangeListener((View v, boolean hasFocus) -> {
+//            if (!hasFocus) {
+//                binding.firstNameField.setHint(getResources().getString(R.string.edit_account_first_name));
+//            } else {
+//                binding.firstNameField.setHint("");
+//            }
+
+//            if (hasFocus) {
+//                binding.firstNameField.setHint("");
+//            }
+        });
     }
 
     /**
@@ -147,22 +159,22 @@ public class EditAccountActivity
     private PersonalInformation personalInformationValidation(final PersonalInformation initialPersonalInformation) {
         final String enteredFirstName = !String.valueOf(binding.firstNameField.getText()).trim().isEmpty() ?
                 String.valueOf(binding.firstNameField.getText()).trim() :
-                !String.valueOf(binding.firstNameField.getHint()).trim().equals(getResources().getString(R.string.edit_account_first_name)) ?
+                !String.valueOf(binding.firstNameField.getHint()).trim().equals(getResources().getString(R.string.first_name)) ?
                         String.valueOf(binding.firstNameField.getHint()).trim() : "";
 
         final String enteredLastName = !String.valueOf(binding.lastNameField.getText()).trim().isEmpty() ?
                 String.valueOf(binding.lastNameField.getText()).trim() :
-                !String.valueOf(binding.lastNameField.getHint()).trim().equals(getResources().getString(R.string.edit_account_last_name)) ?
+                !String.valueOf(binding.lastNameField.getHint()).trim().equals(getResources().getString(R.string.last_name)) ?
                         String.valueOf(binding.lastNameField.getHint()).trim() : "";
 
         final String enteredPhoneNumber = !String.valueOf(binding.phoneField.getText()).trim().isEmpty() ?
                 String.valueOf(binding.phoneField.getText()).trim() :
-                !String.valueOf(binding.phoneField.getHint()).trim().equals(getResources().getString(R.string.edit_account_phone_number)) ?
+                !String.valueOf(binding.phoneField.getHint()).trim().equals(getResources().getString(R.string.phone_number)) ?
                         String.valueOf(binding.phoneField.getHint()).trim() : "";
 
         final String enteredWebsite = !String.valueOf(binding.websiteField.getText()).trim().isEmpty() ?
                 String.valueOf(binding.websiteField.getText()).trim() :
-                !String.valueOf(binding.websiteField.getHint()).trim().equals(getResources().getString(R.string.edit_account_website)) ?
+                !String.valueOf(binding.websiteField.getHint()).trim().equals(getResources().getString(R.string.website)) ?
                         String.valueOf(binding.websiteField.getHint()).trim() : "";
 
         final String enteredCountry = Locale.getDefault().getDisplayLanguage().equals(Languages.ENGLISH_LANGUAGE) ?
@@ -186,7 +198,7 @@ public class EditAccountActivity
         final String enteredCareerTitle = !String.valueOf(binding.careerTitleField.getText()).trim().isEmpty() ?
                 String.valueOf(binding.careerTitleField.getText()).trim() :
                 !String.valueOf(binding.careerTitleField.getHint()).trim()
-                        .equals(getResources().getString(R.string.edit_account_career_title)) ?
+                        .equals(getResources().getString(R.string.career_title)) ?
                         String.valueOf(binding.careerTitleField.getHint()).trim() : "";
 
         final String enteredPhotoURL = initialPersonalInformation.getPhotoURL();
@@ -204,19 +216,19 @@ public class EditAccountActivity
 
         final boolean firstNameIsOK = !enteredFirstName.isEmpty() ||
                 !String.valueOf(binding.firstNameField.getHint()).trim()
-                        .equals(getResources().getString(R.string.edit_account_first_name).trim());
+                        .equals(getResources().getString(R.string.first_name).trim());
 
         final boolean lastNameIsOK = !enteredLastName.isEmpty() ||
                 !String.valueOf(binding.lastNameField.getHint()).trim()
-                        .equals(getResources().getString(R.string.edit_account_last_name).trim());
+                        .equals(getResources().getString(R.string.last_name).trim());
 
         final boolean phoneNumberIsOK = !enteredPhoneNumber.isEmpty() ||
                 !String.valueOf(binding.phoneField.getHint()).trim()
-                        .equals(getResources().getString(R.string.edit_account_phone_number).trim());
+                        .equals(getResources().getString(R.string.phone_number).trim());
 
         final boolean websiteIsOK = !enteredWebsite.isEmpty() ||
                 !String.valueOf(binding.websiteField.getHint()).trim()
-                        .equals(getResources().getString(R.string.edit_account_website).trim());
+                        .equals(getResources().getString(R.string.website).trim());
 
         final boolean countryNameIsOK = !enteredCountry.isEmpty();
 
@@ -224,7 +236,7 @@ public class EditAccountActivity
 
         final boolean careerTitleIsOK = !enteredCareerTitle.isEmpty() ||
                 !String.valueOf(binding.careerTitleField.getHint()).trim()
-                        .equals(getResources().getString(R.string.edit_account_career_title).trim());
+                        .equals(getResources().getString(R.string.career_title).trim());
 
         final boolean firstNameHasBeenModified = !enteredFirstName.isEmpty() &&
                 !enteredFirstName.equals(String.valueOf(binding.firstNameField.getHint()));
@@ -302,11 +314,11 @@ public class EditAccountActivity
                     userDetails = MyCustomVariables.getDefaultUserDetails();
                 }
 
-                if (userDetails.getApplicationSettings().isDarkThemeEnabled() != darkThemeEnabled) {
-                    darkThemeEnabled = userDetails.getApplicationSettings().isDarkThemeEnabled();
+                if (userDetails.getApplicationSettings().isDarkThemeEnabled() != isDarkThemeEnabled) {
+                    isDarkThemeEnabled = userDetails.getApplicationSettings().isDarkThemeEnabled();
                 }
 
-                final int itemsColor = !darkThemeEnabled ? Color.WHITE : Color.BLACK;
+                final int itemsColor = !isDarkThemeEnabled ? Color.WHITE : Color.BLACK;
                 // setting elements' text color based on the selected theme
                 ((TextView) v).setTextColor(itemsColor);
 
@@ -340,11 +352,11 @@ public class EditAccountActivity
                     userDetails = MyCustomVariables.getDefaultUserDetails();
                 }
 
-                if (userDetails.getApplicationSettings().isDarkThemeEnabled() != darkThemeEnabled) {
-                    darkThemeEnabled = userDetails.getApplicationSettings().isDarkThemeEnabled();
+                if (userDetails.getApplicationSettings().isDarkThemeEnabled() != isDarkThemeEnabled) {
+                    isDarkThemeEnabled = userDetails.getApplicationSettings().isDarkThemeEnabled();
                 }
 
-                final int itemsColor = !darkThemeEnabled ? Color.WHITE : Color.BLACK;
+                final int itemsColor = !isDarkThemeEnabled ? Color.WHITE : Color.BLACK;
                 // setting elements' text color based on the selected theme
                 ((TextView) v).setTextColor(itemsColor);
 
@@ -427,11 +439,11 @@ public class EditAccountActivity
                     userDetails = MyCustomVariables.getDefaultUserDetails();
                 }
 
-                if (userDetails.getApplicationSettings().isDarkThemeEnabled() != darkThemeEnabled) {
-                    darkThemeEnabled = userDetails.getApplicationSettings().isDarkThemeEnabled();
+                if (userDetails.getApplicationSettings().isDarkThemeEnabled() != isDarkThemeEnabled) {
+                    isDarkThemeEnabled = userDetails.getApplicationSettings().isDarkThemeEnabled();
                 }
 
-                final int color = !darkThemeEnabled ? getColor(R.color.turkish_sea) : Color.WHITE;
+                final int color = !isDarkThemeEnabled ? getColor(R.color.turkish_sea) : Color.WHITE;
                 // centering spinner's first item's text and setting its color based on the selected theme
                 ((TextView) parent.getChildAt(0)).setTextColor(color);
                 ((TextView) parent.getChildAt(0)).setGravity(Gravity.START);
@@ -453,19 +465,17 @@ public class EditAccountActivity
     }
 
     private void setTheme() {
-        darkThemeEnabled = userDetails != null ?
+        isDarkThemeEnabled = userDetails != null ?
                 userDetails.getApplicationSettings().isDarkThemeEnabled() :
                 MyCustomVariables.getDefaultUserDetails().getApplicationSettings().isDarkThemeEnabled();
 
-        final int theme = !darkThemeEnabled ?
-                R.drawable.ic_white_gradient_tobacco_ad : R.drawable.ic_black_gradient_night_shift;
         // turkish sea (blue) if dark theme is enabled or white if it's not
-        final int color = !darkThemeEnabled ? getColor(R.color.turkish_sea) : Color.WHITE;
+        final int color = !isDarkThemeEnabled ? getColor(R.color.turkish_sea) : Color.WHITE;
 
-        final int dropDownTheme = !darkThemeEnabled ?
+        final int dropDownTheme = !isDarkThemeEnabled ?
                 R.drawable.ic_blue_gradient_unloved_teen : R.drawable.ic_white_gradient_tobacco_ad;
 
-        getWindow().setBackgroundDrawableResource(theme);
+        getWindow().getDecorView().setBackgroundColor(viewModel.getActivityTheme(this, isDarkThemeEnabled));
         // setting arrow color
         binding.countrySpinner.getBackground().setColorFilter(color, PorterDuff.Mode.SRC_ATOP);
         // setting element's color
@@ -480,7 +490,7 @@ public class EditAccountActivity
         setEditTextColor(binding.careerTitleField, color);
 
         setBirthDateTextStyle(color);
-        setUpdateProfileButtonStyle(darkThemeEnabled);
+        setUpdateProfileButtonStyle(isDarkThemeEnabled);
     }
 
     private void setUpdateProfileButtonStyle(final boolean darkThemeEnabled) {

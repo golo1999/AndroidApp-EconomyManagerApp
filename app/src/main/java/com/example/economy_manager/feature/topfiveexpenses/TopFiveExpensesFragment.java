@@ -1,6 +1,5 @@
 package com.example.economy_manager.feature.topfiveexpenses;
 
-import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -106,7 +105,7 @@ public class TopFiveExpensesFragment extends Fragment {
                         }
                     });
         } else {
-            binding.centerText.setText(requireContext().getResources().getString(R.string.top_5_expenses_no_expenses_yet));
+            binding.centerText.setText(requireContext().getResources().getString(R.string.no_expenses_made_yet));
             binding.centerText.setVisibility(View.VISIBLE);
         }
     }
@@ -119,7 +118,7 @@ public class TopFiveExpensesFragment extends Fragment {
         try {
             if (expensesList.size() == 0) {
                 final String noExpensesThisMonthText =
-                        requireContext().getResources().getString(R.string.top_5_expenses_no_expenses_this_month);
+                        requireContext().getResources().getString(R.string.no_expenses_made_this_month);
 
                 binding.centerText.setText(noExpensesThisMonthText);
                 binding.centerText.setVisibility(View.VISIBLE);
@@ -163,17 +162,19 @@ public class TopFiveExpensesFragment extends Fragment {
                     final String translatedType = Types.getTranslatedType(requireContext(),
                             String.valueOf(Transaction.getTypeFromIndexInEnglish(transaction.getCategory())));
 
-                    // displaying the views on the screen if the type was successfully translated
-                    if (translatedType != null) {
-                        typeFromChildLayout.setText(translatedType);
-                        valueFromChildLayout.setText(valueWithCurrency);
-                        typeFromChildLayout.setTextColor(Color.BLACK);
-                        valueFromChildLayout.setTextColor(Color.BLACK);
-                        typeFromChildLayout.setTextSize(18);
-                        valueFromChildLayout.setTextSize(18);
-
-                        mainLayout.addView(childLayout);
+                    if (translatedType == null) {
+                        return;
                     }
+
+                    // displaying the views on the screen if the type was successfully translated
+                    typeFromChildLayout.setText(translatedType);
+                    valueFromChildLayout.setText(valueWithCurrency);
+                    typeFromChildLayout.setTextColor(requireContext().getColor(R.color.quaternaryLight));
+                    valueFromChildLayout.setTextColor(requireContext().getColor(R.color.quaternaryLight));
+                    typeFromChildLayout.setTextSize(18);
+                    valueFromChildLayout.setTextSize(18);
+
+                    mainLayout.addView(childLayout);
                 }
             }
         } catch (NullPointerException e) {

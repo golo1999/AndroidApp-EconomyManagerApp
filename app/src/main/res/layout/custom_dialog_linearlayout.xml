@@ -20,7 +20,7 @@
             android:id="@+id/delete_account_text"
             android:layout_width="0sp"
             android:layout_height="wrap_content"
-            android:text="@string/custom_dialog_enter_password"
+            android:text="@string/please_enter_your_password"
             android:textAlignment="center"
             android:textSize="18sp"
             android:textStyle="bold"

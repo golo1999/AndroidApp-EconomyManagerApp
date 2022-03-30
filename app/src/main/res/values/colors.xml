@@ -1,31 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <resources>
     <color name="colorPrimary">#6200EE</color>
     <color name="colorPrimaryDark">#3700B3</color>
     <color name="colorAccent">#03DAC5</color>
     <color name="FirstColor">#89ABE3</color>
     <color name="SecondColor">#FCF6F5</color>
-    <color name="red">#FF0000</color>
-    <color name="lime">#00FF00</color>
-    <color name="transparentWhite">#80FFFFFF</color>
-    <color name="silver">#C0C0C0</color>
-    <color name="green">#008000</color>
-    <color name="blue">#0000FF</color>
-    <color name="yellow">#FFFF00</color>
-    <color name="white">#FFFFFF</color>
-    <color name="orange">#F95700</color>
+
     <color name="black">#000000</color>
-    <color name="turkish_sea">#195190</color>
+    <color name="blue">#0000FF</color>
+    <color name="crimson">#DC143C</color>
     <color name="gold">#FFDF00</color>
+    <color name="green">#008000</color>
+    <color name="lime">#00FF00</color>
+    <color name="orange">#F95700</color>
+    <color name="red">#FF0000</color>
+    <color name="silver">#C0C0C0</color>
+    <color name="transparentWhite">#80FFFFFF</color>
+    <color name="turkish_sea">#195190</color>
+    <color name="white">#FFFFFF</color>
+    <color name="yellow">#FFFF00</color>
 
     <!-- Dark theme -->
 
     <color name="primaryDark">#1C1C1E</color>
     <color name="secondaryDark">#FEDA00</color>
+    <color name="tertiaryDark">#E2E5F1</color>
 
     <!-- Light theme -->
 
+    <color name="primaryLight">#F5F8FE</color>
     <color name="secondaryLight">#06E1C0</color>
+    <color name="tertiaryLight">#E2E5F1</color>
+    <color name="quaternaryLight">#697589</color>
+
+    <!-- Expenses -->
 
     <color name="expenses_bills">#BB22BE</color>
     <color name="expenses_car">#C6980C</color>
@@ -42,5 +51,4 @@
     <color name="expenses_taxi">#7CF00D</color>
     <color name="expenses_toiletry">#D98D26</color>
     <color name="expenses_transport">#087AD9</color>
-
 </resources>

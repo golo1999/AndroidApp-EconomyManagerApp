@@ -115,9 +115,7 @@ public class SettingsActivity extends AppCompatActivity
     }
 
     private void saveSelectedCurrency() {
-        final String selectedCurrency = String.valueOf(binding.currencySpinner.getSelectedItem());
-
-        viewModel.saveSelectedCurrencyHandler(selectedCurrency, preferences);
+        viewModel.saveSelectedCurrencyHandler(String.valueOf(binding.currencySpinner.getSelectedItem()), preferences);
     }
 
     private void setAllButtonsStyle() {
@@ -169,10 +167,9 @@ public class SettingsActivity extends AppCompatActivity
                     return;
                 }
 
-                final int color = viewModel.getTextColor(SettingsActivity.this);
                 // the first element will have the text aligned to its start and
                 // the color based on the selected theme
-                ((TextView) parent.getChildAt(0)).setTextColor(color);
+                ((TextView) parent.getChildAt(0)).setTextColor(viewModel.getTextColor(SettingsActivity.this));
                 ((TextView) parent.getChildAt(0)).setGravity(Gravity.END);
                 ((TextView) parent.getChildAt(0)).setTypeface(null, Typeface.BOLD);
             }
@@ -246,7 +243,7 @@ public class SettingsActivity extends AppCompatActivity
     }
 
     private void setTheme() {
-        getWindow().setBackgroundDrawableResource(viewModel.getTheme());
+        getWindow().getDecorView().setBackgroundColor(viewModel.getTheme(this));
     }
 
     private void setVariables() {

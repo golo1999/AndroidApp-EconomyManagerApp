@@ -43,7 +43,7 @@ public class DeleteTransactionCustomDialog extends DialogFragment {
     public Dialog onCreateDialog(final Bundle savedInstanceState) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
-        builder.setMessage(R.string.delete_transaction)
+        builder.setMessage(R.string.are_you_sure_you_want_to_delete_this_transaction)
                 .setPositiveButton(R.string.ok, (dialog, id) ->
                         listener.onDialogPositiveClick(DeleteTransactionCustomDialog.this, transactionsList,
                                 adapter, positionInList))

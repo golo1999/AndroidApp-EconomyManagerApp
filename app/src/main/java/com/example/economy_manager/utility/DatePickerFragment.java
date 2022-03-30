@@ -24,10 +24,15 @@ public class DatePickerFragment extends DialogFragment {
     @NonNull
     @Override
     public Dialog onCreateDialog(final @Nullable Bundle savedInstanceState) {
-        return new DatePickerDialog(requireActivity(),
+        final DatePickerDialog datePickerDialog = new DatePickerDialog(requireActivity(),
                 (DatePickerDialog.OnDateSetListener) requireActivity(),
                 datePickerStartDate.getYear(),
                 datePickerStartDate.getMonthValue() - 1,
                 datePickerStartDate.getDayOfMonth());
+
+        // setting max date as today
+        datePickerDialog.getDatePicker().setMaxDate(System.currentTimeMillis());
+
+        return datePickerDialog;
     }
 }

@@ -28,11 +28,11 @@ public class AddIncomeViewModel extends ViewModel {
     }
 
     public String getDepositsText(final Context context) {
-        return context.getResources().getString(R.string.add_money_deposits).trim();
+        return context.getResources().getString(R.string.deposits).trim();
     }
 
     public String getIndependentSourcesText(final Context context) {
-        return context.getResources().getString(R.string.add_money_independent_sources).trim();
+        return context.getResources().getString(R.string.independent_sources).trim();
     }
 
     public String getSalaryText(final Context context) {

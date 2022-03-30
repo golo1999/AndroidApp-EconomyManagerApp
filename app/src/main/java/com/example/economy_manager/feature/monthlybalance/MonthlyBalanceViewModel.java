@@ -4,11 +4,11 @@ import android.content.Context;
 
 import androidx.lifecycle.ViewModel;
 
-import com.example.economy_manager.R;
 import com.example.economy_manager.model.UserDetails;
 import com.example.economy_manager.utility.Languages;
 import com.example.economy_manager.utility.Months;
 import com.example.economy_manager.utility.MyCustomVariables;
+import com.example.economy_manager.utility.Theme;
 
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -34,12 +34,12 @@ public class MonthlyBalanceViewModel extends ViewModel {
         return true;
     }
 
-    public int getActivityTheme() {
-        final boolean checked = getUserDetails() != null ?
+    public int getActivityTheme(final Context context) {
+        final boolean isDarkThemeEnabled = getUserDetails() != null ?
                 getUserDetails().getApplicationSettings().isDarkThemeEnabled() :
                 MyCustomVariables.getDefaultUserDetails().getApplicationSettings().isDarkThemeEnabled();
 
-        return !checked ? R.drawable.ic_white_gradient_tobacco_ad : R.drawable.ic_black_gradient_night_shift;
+        return Theme.getBackgroundColor(context, isDarkThemeEnabled);
     }
 
     public String getActivityTitle(final Context context) {

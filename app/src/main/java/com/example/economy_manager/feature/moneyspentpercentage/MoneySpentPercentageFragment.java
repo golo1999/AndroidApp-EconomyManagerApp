@@ -39,7 +39,7 @@ public class MoneySpentPercentageFragment extends Fragment {
     private MainScreenViewModel viewModel;
     private UserDetails userDetails;
     private final LinkedHashMap<Integer, Float> transactionTypesMap = new LinkedHashMap<>();
-    private MoneySpentPercentageListener listener;
+    private IMoneySpentPercentageListener listener;
 
     public MoneySpentPercentageFragment() {
         // Required empty public constructor
@@ -55,7 +55,7 @@ public class MoneySpentPercentageFragment extends Fragment {
         return fragment;
     }
 
-    public interface MoneySpentPercentageListener {
+    public interface IMoneySpentPercentageListener {
         void onEmptyPieChart();
 
         void onNotEmptyPieChart();
@@ -66,7 +66,7 @@ public class MoneySpentPercentageFragment extends Fragment {
         super.onAttach(context);
 
         try {
-            listener = (MoneySpentPercentageListener) context;
+            listener = (IMoneySpentPercentageListener) context;
         } catch (ClassCastException e) {
             throw new ClassCastException(context.toString() + " " + "must implement MoneySpentPercentageListener");
         }

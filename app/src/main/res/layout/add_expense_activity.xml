@@ -53,7 +53,7 @@
                         android:layout_width="0sp"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="10sp"
-                        android:text="@string/subtract_money_title"
+                        android:text="@string/new_expense"
                         android:textAlignment="center"
                         android:textColor="@color/SecondColor"
                         android:textSize="30sp"

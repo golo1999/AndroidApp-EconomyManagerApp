@@ -33,6 +33,7 @@ import com.example.economy_manager.utility.Months;
 import com.example.economy_manager.utility.MyCustomMethods;
 import com.example.economy_manager.utility.MyCustomSharedPreferences;
 import com.example.economy_manager.utility.MyCustomVariables;
+import com.example.economy_manager.utility.Theme;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
@@ -101,9 +102,7 @@ public class EditTransactionsActivity
                           final int year,
                           final int month,
                           final int dayOfMonth) {
-        final LocalDate newTransactionDate = LocalDate.of(year, month + 1, dayOfMonth);
-
-        onDateReceived(newTransactionDate);
+        onDateReceived(LocalDate.of(year, month + 1, dayOfMonth));
     }
 
     @Override
@@ -122,9 +121,7 @@ public class EditTransactionsActivity
     public void onTimeSet(final TimePicker timePicker,
                           final int hourOfDay,
                           final int minute) {
-        final LocalTime newTransactionTime = LocalTime.of(hourOfDay, minute);
-
-        onTimeReceived(newTransactionTime);
+        onTimeReceived(LocalTime.of(hourOfDay, minute));
     }
 
     @Override
@@ -137,7 +134,6 @@ public class EditTransactionsActivity
                                       final @NonNull ArrayList<Transaction> transactionsList,
                                       final @NonNull EditTransactionsRecyclerViewAdapter adapter,
                                       final int positionInList) {
-        final Transaction transactionToDelete = transactionsList.get(positionInList);
         final String currentUserID = MyCustomVariables.getFirebaseAuth().getUid();
 
         transactionsList.remove(positionInList);
@@ -150,7 +146,7 @@ public class EditTransactionsActivity
         MyCustomVariables.getDatabaseReference()
                 .child(currentUserID)
                 .child("personalTransactions")
-                .child(transactionToDelete.getId())
+                .child(transactionsList.get(positionInList).getId())
                 .removeValue();
     }
 
@@ -353,10 +349,8 @@ public class EditTransactionsActivity
     private void populateRecyclerView(final String selectedYear,
                                       final String selectedMonth) {
         if (!transactionsList.isEmpty()) {
-            final int currentNumberOfTransactions = recyclerViewAdapter.getItemCount();
-
             transactionsList.clear();
-            recyclerViewAdapter.notifyItemRangeRemoved(0, currentNumberOfTransactions);
+            recyclerViewAdapter.notifyItemRangeRemoved(0, recyclerViewAdapter.getItemCount());
         }
 
         allTransactionsList.forEach((final Transaction transaction) -> {
@@ -373,8 +367,8 @@ public class EditTransactionsActivity
             }
         });
 
-        transactionsList.sort((final Transaction o1, final Transaction o2) ->
-                Float.compare(Float.parseFloat(o2.getValue()), Float.parseFloat(o1.getValue())));
+        transactionsList.sort((final Transaction transaction1, final Transaction transaction2) ->
+                Float.compare(Float.parseFloat(transaction2.getValue()), Float.parseFloat(transaction1.getValue())));
 
         recyclerViewAdapter.notifyItemRangeChanged(0, transactionsList.size());
     }
@@ -408,18 +402,16 @@ public class EditTransactionsActivity
 
                             final ArrayList<String> monthsList = new ArrayList<>();
 
-                            final Iterable<DataSnapshot> snapshotChildren = snapshot.getChildren();
-
                             if (!allTransactionsList.isEmpty()) {
                                 allTransactionsList.clear();
                             }
 
-                            snapshotChildren.forEach((final DataSnapshot transaction) -> {
-                                final Transaction transactionFromDatabase = transaction.getValue(Transaction.class);
+                            snapshot.getChildren().forEach((final DataSnapshot transaction) -> {
+                                final Transaction databaseTransaction = transaction.getValue(Transaction.class);
 
-                                if (transactionFromDatabase != null && transactionFromDatabase.getTime() != null) {
+                                if (databaseTransaction != null && databaseTransaction.getTime() != null) {
                                     final String transactionYear =
-                                            String.valueOf(transactionFromDatabase.getTime().getYear());
+                                            String.valueOf(databaseTransaction.getTime().getYear());
 
                                     if (yearsList.isEmpty()) {
                                         yearsList.add(transactionYear);
@@ -437,7 +429,7 @@ public class EditTransactionsActivity
                                         }
                                     }
 
-                                    allTransactionsList.add(transactionFromDatabase);
+                                    allTransactionsList.add(databaseTransaction);
                                 }
                             });
 
@@ -525,7 +517,7 @@ public class EditTransactionsActivity
                             binding.monthsSpinner.setVisibility(View.GONE);
                             binding.yearsSpinner.setVisibility(View.GONE);
                             binding.centerText.setText(getResources()
-                                    .getString(R.string.edit_transactions_center_text_no_transactions).trim());
+                                    .getString(R.string.no_transactions_made_yet).trim());
                         }
 
                         final boolean darkThemeEnabled = userDetails != null ?
@@ -564,27 +556,18 @@ public class EditTransactionsActivity
     }
 
     private void setTheme() {
-        final boolean darkThemeEnabled = userDetails != null ?
+        final boolean isDarkThemeEnabled = userDetails != null ?
                 userDetails.getApplicationSettings().isDarkThemeEnabled() :
                 MyCustomVariables.getDefaultUserDetails().getApplicationSettings().isDarkThemeEnabled();
 
-        final int theme = !darkThemeEnabled ?
-                R.drawable.ic_white_gradient_tobacco_ad : R.drawable.ic_black_gradient_night_shift;
-
-        final int dropDownTheme = !darkThemeEnabled ?
-                R.drawable.ic_blue_gradient_unloved_teen : R.drawable.ic_white_gradient_tobacco_ad;
-
-        // setting dropdown color
-        getWindow().setBackgroundDrawableResource(theme);
+        binding.setActivityBackgroundColor(Theme.getBackgroundColor(this, isDarkThemeEnabled));
+        binding.setDropdownBackgroundColor(Theme.getDropdownBackgroundColor(this, isDarkThemeEnabled));
 
         // setting arrow color
         binding.monthsSpinner.getBackground().setColorFilter(Color.WHITE, PorterDuff.Mode.SRC_ATOP);
 
-        binding.monthsSpinner.setPopupBackgroundResource(dropDownTheme);
         // setting elements' color
         binding.yearsSpinner.getBackground().setColorFilter(Color.WHITE, PorterDuff.Mode.SRC_ATOP);
-
-        binding.yearsSpinner.setPopupBackgroundResource(dropDownTheme);
     }
 
     private void setVariables() {

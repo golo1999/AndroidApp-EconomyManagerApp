@@ -4,15 +4,15 @@
     <item
         android:id="@+id/bottom_navigation_main_screen_edit_transactions"
         android:icon="@drawable/ic_edit"
-        android:title="@string/bottom_nav_main_screen_edit" />
+        android:title="@string/transactions" />
     <item
         android:id="@+id/bottom_navigation_main_screen_monthly_balance"
         android:icon="@drawable/ic_balance"
-        android:title="@string/bottom_nav_main_screen_balance" />
+        android:title="@string/balance" />
     <item
         android:id="@+id/bottom_navigation_main_screen_account"
         android:icon="@drawable/ic_account"
-        android:title="@string/bottom_nav_main_screen_account" />
+        android:title="@string/account" />
     <!--<item
         android:id="@+id/bottomNavigationMainScreenSignOut"
         android:icon="@drawable/ic_sign_out"

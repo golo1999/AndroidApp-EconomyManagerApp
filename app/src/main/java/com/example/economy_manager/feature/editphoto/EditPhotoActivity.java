@@ -81,7 +81,7 @@ public class EditPhotoActivity extends AppCompatActivity {
                             }, 500);
 
                             MyCustomMethods.showShortMessage(this,
-                                    getResources().getString(R.string.edit_photo_upload_successful));
+                                    getResources().getString(R.string.upload_successful));
 
                             final Task<Uri> uriTask = taskSnapshot.getStorage().getDownloadUrl();
 
@@ -129,7 +129,7 @@ public class EditPhotoActivity extends AppCompatActivity {
                         });
             }
         } else {
-            MyCustomMethods.showShortMessage(this, getResources().getString(R.string.edit_photo_select_file));
+            MyCustomMethods.showShortMessage(this, getResources().getString(R.string.please_select_a_file_first));
         }
     }
 }

@@ -94,25 +94,25 @@ public class EditTransactionsViewModel extends ViewModel {
     }
 
     public void setTransactionTypesList(final @NonNull Context context) {
-        transactionTypesList.add(context.getResources().getString(R.string.subtract_money_bills).trim());
-        transactionTypesList.add(context.getResources().getString(R.string.subtract_money_car).trim());
-        transactionTypesList.add(context.getResources().getString(R.string.subtract_money_clothes).trim());
-        transactionTypesList.add(context.getResources().getString(R.string.subtract_money_communications).trim());
-        transactionTypesList.add(context.getResources().getString(R.string.add_money_deposits).trim());
-        transactionTypesList.add(context.getResources().getString(R.string.subtract_money_eating_out).trim());
-        transactionTypesList.add(context.getResources().getString(R.string.subtract_money_entertainment).trim());
-        transactionTypesList.add(context.getResources().getString(R.string.subtract_money_food).trim());
-        transactionTypesList.add(context.getResources().getString(R.string.subtract_money_gifts).trim());
-        transactionTypesList.add(context.getResources().getString(R.string.subtract_money_health).trim());
-        transactionTypesList.add(context.getResources().getString(R.string.subtract_money_house).trim());
-        transactionTypesList.add(context.getResources().getString(R.string.subtract_money_pets).trim());
-        transactionTypesList.add(context.getResources().getString(R.string.add_money_independent_sources).trim());
+        transactionTypesList.add(context.getResources().getString(R.string.bills).trim());
+        transactionTypesList.add(context.getResources().getString(R.string.car).trim());
+        transactionTypesList.add(context.getResources().getString(R.string.clothes).trim());
+        transactionTypesList.add(context.getResources().getString(R.string.communications).trim());
+        transactionTypesList.add(context.getResources().getString(R.string.deposits).trim());
+        transactionTypesList.add(context.getResources().getString(R.string.eating_out).trim());
+        transactionTypesList.add(context.getResources().getString(R.string.entertainment).trim());
+        transactionTypesList.add(context.getResources().getString(R.string.food).trim());
+        transactionTypesList.add(context.getResources().getString(R.string.gifts).trim());
+        transactionTypesList.add(context.getResources().getString(R.string.health).trim());
+        transactionTypesList.add(context.getResources().getString(R.string.house).trim());
+        transactionTypesList.add(context.getResources().getString(R.string.pets).trim());
+        transactionTypesList.add(context.getResources().getString(R.string.independent_sources).trim());
         transactionTypesList.add(context.getResources().getString(R.string.salary).trim());
         transactionTypesList.add(context.getResources().getString(R.string.saving).trim());
-        transactionTypesList.add(context.getResources().getString(R.string.subtract_money_sports).trim());
-        transactionTypesList.add(context.getResources().getString(R.string.subtract_money_taxi).trim());
-        transactionTypesList.add(context.getResources().getString(R.string.subtract_money_toiletry).trim());
-        transactionTypesList.add(context.getResources().getString(R.string.subtract_money_transport).trim());
+        transactionTypesList.add(context.getResources().getString(R.string.sports).trim());
+        transactionTypesList.add(context.getResources().getString(R.string.taxi).trim());
+        transactionTypesList.add(context.getResources().getString(R.string.toiletry).trim());
+        transactionTypesList.add(context.getResources().getString(R.string.transport).trim());
 
         Collections.sort(transactionTypesList);
     }

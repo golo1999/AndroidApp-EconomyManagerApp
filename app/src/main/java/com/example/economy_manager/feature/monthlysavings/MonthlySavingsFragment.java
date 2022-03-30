@@ -1,6 +1,5 @@
-package com.example.economy_manager.feature.showsavings;
+package com.example.economy_manager.feature.monthlysavings;
 
-import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,7 +12,7 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelStoreOwner;
 
 import com.example.economy_manager.R;
-import com.example.economy_manager.databinding.ShowSavingsFragmentBinding;
+import com.example.economy_manager.databinding.MonthlySavingsFragmentBinding;
 import com.example.economy_manager.feature.mainscreen.MainScreenViewModel;
 import com.example.economy_manager.model.Transaction;
 import com.example.economy_manager.utility.Languages;
@@ -26,16 +25,16 @@ import com.google.firebase.database.ValueEventListener;
 import java.time.LocalDate;
 import java.util.Locale;
 
-public class ShowSavingsFragment extends Fragment {
-    private ShowSavingsFragmentBinding binding;
+public class MonthlySavingsFragment extends Fragment {
+    private MonthlySavingsFragmentBinding binding;
     private MainScreenViewModel viewModel;
 
-    public ShowSavingsFragment() {
+    public MonthlySavingsFragment() {
         // Required empty public constructor
     }
 
-    public static ShowSavingsFragment newInstance() {
-        final ShowSavingsFragment fragment = new ShowSavingsFragment();
+    public static MonthlySavingsFragment newInstance() {
+        final MonthlySavingsFragment fragment = new MonthlySavingsFragment();
         final Bundle args = new Bundle();
 
         fragment.setArguments(args);
@@ -64,7 +63,7 @@ public class ShowSavingsFragment extends Fragment {
 
     private void setVariables(final @NonNull LayoutInflater inflater,
                               final ViewGroup container) {
-        binding = DataBindingUtil.inflate(inflater, R.layout.show_savings_fragment, container, false);
+        binding = DataBindingUtil.inflate(inflater, R.layout.monthly_savings_fragment, container, false);
         viewModel = new ViewModelProvider((ViewModelStoreOwner) requireContext()).get(MainScreenViewModel.class);
     }
 
@@ -112,7 +111,10 @@ public class ShowSavingsFragment extends Fragment {
                             binding.showSavingsText.setText(savingsText);
 
                             binding.showSavingsText.setTextColor(totalMonthlySavings > 0f ?
-                                    Color.GREEN : totalMonthlySavings == 0f ? Color.BLUE : Color.RED);
+                                    requireContext().getColor(R.color.secondaryLight) :
+                                    totalMonthlySavings == 0f ?
+                                            requireContext().getColor(R.color.quaternaryLight) :
+                                            requireContext().getColor(R.color.crimson));
                         }
 
                         @Override

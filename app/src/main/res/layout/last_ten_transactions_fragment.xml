@@ -15,9 +15,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textAlignment="center"
-        android:textColor="#FAEBEF"
+        android:textColor="@color/quaternaryLight"
         android:textSize="18sp"
         android:textStyle="bold"
-        tools:text="@string/no_money_records_month" />
+        tools:text="@string/no_money_records_this_month" />
 
 </LinearLayout>

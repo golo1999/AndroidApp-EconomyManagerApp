@@ -54,7 +54,7 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/goBack"
                 app:layout_constraintTop_toTopOf="parent"
-                tools:text="@string/edit_specific_transaction_title" />
+                tools:text="@string/edit_specific_transaction" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

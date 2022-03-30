@@ -10,10 +10,10 @@ import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.economy_manager.R;
-import com.example.economy_manager.databinding.LogInActivityBinding;
+import com.example.economy_manager.databinding.LoginActivityBinding;
 import com.example.economy_manager.feature.forgotpassword.ForgotPasswordActivity;
 import com.example.economy_manager.feature.mainscreen.MainScreenActivity;
-import com.example.economy_manager.feature.register.SignUpActivity;
+import com.example.economy_manager.feature.register.RegisterActivity;
 import com.example.economy_manager.model.ApplicationSettings;
 import com.example.economy_manager.model.PersonalInformation;
 import com.example.economy_manager.utility.MyCustomMethods;
@@ -39,10 +39,10 @@ import com.google.firebase.auth.GoogleAuthProvider;
 
 import java.util.Arrays;
 
-public class LogInActivity extends AppCompatActivity {
+public class LoginActivity extends AppCompatActivity {
 
-    private LogInActivityBinding binding;
-    private LogInViewModel viewModel;
+    private LoginActivityBinding binding;
+    private LoginViewModel viewModel;
     private CallbackManager manager;
     private GoogleSignInClient mGoogleSignInClient;
     private static final int RC_SIGN_IN = 27;
@@ -67,12 +67,12 @@ public class LogInActivity extends AppCompatActivity {
     }
 
     private void setVariables() {
-        binding = DataBindingUtil.setContentView(this, R.layout.log_in_activity);
-        viewModel = new ViewModelProvider(this).get(LogInViewModel.class);
+        binding = DataBindingUtil.setContentView(this, R.layout.login_activity);
+        viewModel = new ViewModelProvider(this).get(LoginViewModel.class);
 
         binding.setActivity(this);
         binding.setForgotPasswordActivity(ForgotPasswordActivity.class);
-        binding.setSignUpActivity(SignUpActivity.class);
+        binding.setRegisterActivity(RegisterActivity.class);
         binding.setViewModel(viewModel);
     }
 
@@ -227,6 +227,6 @@ public class LogInActivity extends AppCompatActivity {
 
     private void goToTheMainScreen() {
         MyCustomMethods.showShortMessage(this, getResources().getString(R.string.login_successful));
-        MyCustomMethods.signInWithFadeTransition(LogInActivity.this, MainScreenActivity.class);
+        MyCustomMethods.signInWithFadeTransition(LoginActivity.this, MainScreenActivity.class);
     }
 }

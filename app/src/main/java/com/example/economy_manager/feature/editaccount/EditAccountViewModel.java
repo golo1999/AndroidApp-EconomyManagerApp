@@ -2,6 +2,7 @@ package com.example.economy_manager.feature.editaccount;
 
 import android.app.Activity;
 import android.app.Application;
+import android.content.Context;
 
 import androidx.annotation.NonNull;
 import androidx.databinding.ObservableField;
@@ -14,6 +15,7 @@ import com.example.economy_manager.utility.Countries;
 import com.example.economy_manager.utility.DatePickerFragment;
 import com.example.economy_manager.utility.Genders;
 import com.example.economy_manager.utility.MyCustomMethods;
+import com.example.economy_manager.utility.Theme;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -137,6 +139,11 @@ public class EditAccountViewModel extends AndroidViewModel {
         this.transactionDate = transactionDate;
     }
 
+    public int getActivityTheme(final Context context,
+                                final boolean isDarkThemeEnabled) {
+        return Theme.getBackgroundColor(context, isDarkThemeEnabled);
+    }
+
     private boolean personalInformationIsValid(String enteredFirstName,
                                                String enteredLastName,
                                                String enteredPhoneNumber,
@@ -159,22 +166,22 @@ public class EditAccountViewModel extends AndroidViewModel {
 
         final Object firstName = getUserDetails() == null ||
                 getUserDetails().getPersonalInformation().getFirstName().trim().isEmpty() ?
-                activity.getResources().getString(R.string.edit_account_first_name).trim() :
+                activity.getResources().getString(R.string.first_name).trim() :
                 getUserDetails().getPersonalInformation().getFirstName().trim();
 
         final Object lastName = getUserDetails() == null ||
                 getUserDetails().getPersonalInformation().getLastName().trim().isEmpty() ?
-                activity.getResources().getString(R.string.edit_account_last_name).trim() :
+                activity.getResources().getString(R.string.last_name).trim() :
                 getUserDetails().getPersonalInformation().getLastName().trim();
 
         final Object phoneNumber = getUserDetails() == null ||
                 getUserDetails().getPersonalInformation().getPhoneNumber().trim().isEmpty() ?
-                activity.getResources().getString(R.string.edit_account_phone_number).trim() :
+                activity.getResources().getString(R.string.phone_number).trim() :
                 getUserDetails().getPersonalInformation().getPhoneNumber().trim();
 
         final Object website = getUserDetails() == null ||
                 getUserDetails().getPersonalInformation().getWebsite().trim().isEmpty() ?
-                activity.getResources().getString(R.string.edit_account_website).trim() :
+                activity.getResources().getString(R.string.website).trim() :
                 getUserDetails().getPersonalInformation().getWebsite().trim();
 
         final Object countrySpinnerSelection = Countries.getCountryPositionInList(getApplication(), countriesList,
@@ -193,7 +200,7 @@ public class EditAccountViewModel extends AndroidViewModel {
 
         final Object careerTitle = getUserDetails() == null ||
                 getUserDetails().getPersonalInformation().getCareerTitle().trim().isEmpty() ?
-                activity.getResources().getString(R.string.edit_account_career_title).trim() :
+                activity.getResources().getString(R.string.career_title).trim() :
                 getUserDetails().getPersonalInformation().getCareerTitle().trim();
 
 

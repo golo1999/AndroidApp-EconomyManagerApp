@@ -94,8 +94,8 @@ public class AddExpenseActivity
                 .setValue(newTransaction)
                 .addOnSuccessListener((final Void aVoid) -> {
                     MyCustomMethods.showShortMessage(this,
-                            getResources().getString(R.string.expense) + " " +
-                                    getResources().getString(R.string.add_money_added_successfully));
+                            getResources().getString(R.string.added_successfully,
+                                    getResources().getString(R.string.expense)));
                     finish();
                     overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
                 })
@@ -228,12 +228,13 @@ public class AddExpenseActivity
         MyCustomMethods.closeTheKeyboard(AddExpenseActivity.this);
         // if there was NOT any radio button checked or the user is not logged in
         if (selectedID == -1 || MyCustomVariables.getFirebaseAuth().getUid() == null) {
-            MyCustomMethods.showShortMessage(this, getResources().getString(R.string.money_error1));
+            MyCustomMethods.showShortMessage(this, getResources().getString(R.string.please_select_an_option));
             return;
         }
 
         if (String.valueOf(binding.valueField.getText()).trim().isEmpty()) {
-            MyCustomMethods.showShortMessage(this, getResources().getString(R.string.money_error4));
+            MyCustomMethods.showShortMessage(this,
+                    getResources().getString(R.string.should_not_be_empty, getResources().getString(R.string.value)));
             return;
         }
 

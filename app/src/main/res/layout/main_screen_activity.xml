@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<layout>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
 
     <data>
 
@@ -38,8 +38,7 @@
 
     </data>
 
-    <androidx.constraintlayout.motion.widget.MotionLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
+    <androidx.constraintlayout.motion.widget.MotionLayout xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
         android:id="@+id/main_screen_main_layout"
         android:layout_width="match_parent"
@@ -67,7 +66,6 @@
             android:id="@+id/topLayout"
             android:layout_width="0sp"
             android:layout_height="wrap_content"
-            android:background="#A2A2A1"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
@@ -77,16 +75,18 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="5sp"
+                android:contentDescription="@string/monthly_transactions"
                 android:onClick="@{() -> viewModel.goToActivity(activity, editTransactionsActivity)}"
-                android:src="@drawable/ic_edit"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                tools:src="@drawable/ic_edit" />
 
             <ImageView
                 android:id="@+id/monthlyBalance"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:contentDescription="@string/monthly_balance"
                 android:onClick="@{() -> viewModel.goToActivity(activity, monthlyBalanceActivity)}"
                 android:src="@drawable/ic_balance"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -98,6 +98,7 @@
                 android:id="@+id/editAccount"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:contentDescription="@string/edit_account"
                 android:onClick="@{() -> viewModel.goToActivity(activity, editAccountActivity)}"
                 android:src="@drawable/ic_account"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -109,6 +110,7 @@
                 android:id="@+id/settings"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:contentDescription="@string/settings"
                 android:onClick="@{() -> viewModel.goToActivity(activity, settingsActivity)}"
                 android:src="@drawable/ic_settings"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -121,6 +123,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="5sp"
+                android:contentDescription="@string/sign_out"
                 android:onClick="@{() -> viewModel.logout(activity)}"
                 android:src="@drawable/ic_sign_out"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -224,7 +227,7 @@
                     android:layout_width="0sp"
                     android:layout_height="wrap_content"
                     android:layout_marginVertical="10sp"
-                    app:cardBackgroundColor="#FFA500"
+                    app:cardBackgroundColor="@color/tertiaryLight"
                     app:cardCornerRadius="10sp"
                     app:cardElevation="10sp"
                     app:layout_constraintBottom_toTopOf="@id/monthlyBalanceText"
@@ -258,7 +261,7 @@
                     android:layout_width="0sp"
                     android:layout_height="wrap_content"
                     android:layout_marginVertical="10sp"
-                    app:cardBackgroundColor="@color/white"
+                    app:cardBackgroundColor="@color/tertiaryLight"
                     app:cardCornerRadius="10sp"
                     app:cardElevation="10sp"
                     app:layout_constraintBottom_toTopOf="@id/lastWeekExpensesText"
@@ -292,7 +295,7 @@
                     android:layout_width="0sp"
                     android:layout_height="wrap_content"
                     android:layout_marginVertical="10sp"
-                    app:cardBackgroundColor="@color/lime"
+                    app:cardBackgroundColor="@color/tertiaryLight"
                     app:cardCornerRadius="10sp"
                     app:cardElevation="10sp"
                     app:layout_constraintBottom_toTopOf="@id/lastTenTransactionsText"
@@ -312,7 +315,7 @@
                     android:id="@+id/lastTenTransactionsText"
                     android:layout_width="0sp"
                     android:layout_height="wrap_content"
-                    android:text="@string/last_10_transactions"
+                    android:text="@string/last_ten_transactions"
                     android:textSize="20sp"
                     android:textStyle="bold"
                     app:layout_constraintBottom_toTopOf="@id/lastTenTransactionsCard"
@@ -326,7 +329,7 @@
                     android:layout_width="0sp"
                     android:layout_height="wrap_content"
                     android:layout_marginVertical="10sp"
-                    app:cardBackgroundColor="#333D79"
+                    app:cardBackgroundColor="@color/tertiaryLight"
                     app:cardCornerRadius="10sp"
                     app:cardElevation="10sp"
                     app:layout_constraintBottom_toTopOf="@id/topFiveExpensesText"
@@ -346,7 +349,7 @@
                     android:id="@+id/topFiveExpensesText"
                     android:layout_width="0sp"
                     android:layout_height="wrap_content"
-                    android:text="@string/top_5_expenses"
+                    android:text="@string/top_five_expenses"
                     android:textSize="20sp"
                     android:textStyle="bold"
                     app:layout_constraintBottom_toTopOf="@id/topFiveExpensesCard"
@@ -360,7 +363,7 @@
                     android:layout_width="0sp"
                     android:layout_height="wrap_content"
                     android:layout_marginVertical="10sp"
-                    app:cardBackgroundColor="#FEE715"
+                    app:cardBackgroundColor="@color/tertiaryLight"
                     app:cardCornerRadius="10sp"
                     app:cardElevation="10sp"
                     app:layout_constraintBottom_toTopOf="@id/favoriteExpensesCategoryText"
@@ -462,35 +465,37 @@
                         android:id="@+id/addIncomeButton"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:backgroundTint="@color/white"
+                        android:contentDescription="@string/new_income"
                         android:elevation="6sp"
                         android:onClick="@{() -> viewModel.goToActivity(activity, addIncomeActivity)}"
                         android:scaleType="fitCenter"
-                        android:src="@drawable/ic_add"
                         app:elevation="0sp"
                         app:fabSize="normal"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toStartOf="@id/addExpenseButton"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
-                        app:maxImageSize="66sp" />
+                        app:maxImageSize="66sp"
+                        tools:backgroundTint="@color/white"
+                        tools:src="@drawable/ic_add" />
 
                     <com.google.android.material.floatingactionbutton.FloatingActionButton
                         android:id="@+id/addExpenseButton"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:backgroundTint="@color/white"
+                        android:contentDescription="@string/new_expense"
                         android:elevation="6sp"
                         android:onClick="@{() -> viewModel.goToActivity(activity, addExpenseActivity)}"
                         android:scaleType="fitCenter"
-                        android:src="@drawable/ic_subtract"
                         app:elevation="0sp"
                         app:fabSize="normal"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toEndOf="@id/addIncomeButton"
                         app:layout_constraintTop_toTopOf="parent"
-                        app:maxImageSize="66sp" />
+                        app:maxImageSize="66sp"
+                        tools:backgroundTint="@color/white"
+                        tools:src="@drawable/ic_subtract" />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 

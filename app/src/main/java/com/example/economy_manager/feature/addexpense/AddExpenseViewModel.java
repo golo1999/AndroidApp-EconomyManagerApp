@@ -26,63 +26,63 @@ public class AddExpenseViewModel extends ViewModel {
     }
 
     public String getBillsText(final Context context) {
-        return context.getResources().getString(R.string.subtract_money_bills).trim();
+        return context.getResources().getString(R.string.bills).trim();
     }
 
     public String getCarText(final Context context) {
-        return context.getResources().getString(R.string.subtract_money_car).trim();
+        return context.getResources().getString(R.string.car).trim();
     }
 
     public String getClothesText(final Context context) {
-        return context.getResources().getString(R.string.subtract_money_clothes).trim();
+        return context.getResources().getString(R.string.clothes).trim();
     }
 
     public String getCommunicationsText(final Context context) {
-        return context.getResources().getString(R.string.subtract_money_communications).trim();
+        return context.getResources().getString(R.string.communications).trim();
     }
 
     public String getEatingOutText(final Context context) {
-        return context.getResources().getString(R.string.subtract_money_eating_out).trim();
+        return context.getResources().getString(R.string.eating_out).trim();
     }
 
     public String getEntertainmentText(final Context context) {
-        return context.getResources().getString(R.string.subtract_money_entertainment).trim();
+        return context.getResources().getString(R.string.entertainment).trim();
     }
 
     public String getFoodText(final Context context) {
-        return context.getResources().getString(R.string.subtract_money_food).trim();
+        return context.getResources().getString(R.string.food).trim();
     }
 
     public String getGiftsText(final Context context) {
-        return context.getResources().getString(R.string.subtract_money_gifts).trim();
+        return context.getResources().getString(R.string.gifts).trim();
     }
 
     public String getHealthText(final Context context) {
-        return context.getResources().getString(R.string.subtract_money_health).trim();
+        return context.getResources().getString(R.string.health).trim();
     }
 
     public String getHouseText(final Context context) {
-        return context.getResources().getString(R.string.subtract_money_house).trim();
+        return context.getResources().getString(R.string.house).trim();
     }
 
     public String getPetsText(final Context context) {
-        return context.getResources().getString(R.string.subtract_money_pets).trim();
+        return context.getResources().getString(R.string.pets).trim();
     }
 
     public String getSportsText(final Context context) {
-        return context.getResources().getString(R.string.subtract_money_sports).trim();
+        return context.getResources().getString(R.string.sports).trim();
     }
 
     public String getTaxiText(final Context context) {
-        return context.getResources().getString(R.string.subtract_money_taxi).trim();
+        return context.getResources().getString(R.string.taxi).trim();
     }
 
     public String getToiletryText(final Context context) {
-        return context.getResources().getString(R.string.subtract_money_toiletry).trim();
+        return context.getResources().getString(R.string.toiletry).trim();
     }
 
     public String getTransportText(final Context context) {
-        return context.getResources().getString(R.string.subtract_money_transport).trim();
+        return context.getResources().getString(R.string.transport).trim();
     }
 
     // method for limiting the number to only two decimals

@@ -1,4 +1,4 @@
-package com.example.economy_manager.feature.moneyspent;
+package com.example.economy_manager.feature.lastweekexpenses;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -12,7 +12,7 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelStoreOwner;
 
 import com.example.economy_manager.R;
-import com.example.economy_manager.databinding.MoneySpentFragmentBinding;
+import com.example.economy_manager.databinding.LastWeekExpensesFragmentBinding;
 import com.example.economy_manager.feature.mainscreen.MainScreenViewModel;
 import com.example.economy_manager.model.Transaction;
 import com.example.economy_manager.utility.Languages;
@@ -24,17 +24,17 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.Locale;
 
-public class MoneySpentFragment extends Fragment {
+public class LastWeekExpensesFragment extends Fragment {
 
-    private MoneySpentFragmentBinding binding;
+    private LastWeekExpensesFragmentBinding binding;
     private MainScreenViewModel viewModel;
 
-    public MoneySpentFragment() {
+    public LastWeekExpensesFragment() {
         // Required empty public constructor
     }
 
-    public static MoneySpentFragment newInstance() {
-        final MoneySpentFragment fragment = new MoneySpentFragment();
+    public static LastWeekExpensesFragment newInstance() {
+        final LastWeekExpensesFragment fragment = new LastWeekExpensesFragment();
         final Bundle args = new Bundle();
 
         fragment.setArguments(args);
@@ -64,7 +64,7 @@ public class MoneySpentFragment extends Fragment {
 
     private void setVariables(final @NonNull LayoutInflater inflater,
                               final ViewGroup container) {
-        binding = DataBindingUtil.inflate(inflater, R.layout.money_spent_fragment, container, false);
+        binding = DataBindingUtil.inflate(inflater, R.layout.last_week_expenses_fragment, container, false);
         viewModel = new ViewModelProvider((ViewModelStoreOwner) requireContext()).get(MainScreenViewModel.class);
     }
 
@@ -101,7 +101,7 @@ public class MoneySpentFragment extends Fragment {
 
                         // if the user hasn't spent money in the last week
                         if (moneySpentLastWeek <= 0f) {
-                            binding.moneySpentText.setText(R.string.no_money_last_week);
+                            binding.moneySpentText.setText(R.string.no_money_spent_last_week);
                         }
                         // if the user spent money in the last week
                         else {
@@ -115,15 +115,12 @@ public class MoneySpentFragment extends Fragment {
                             final boolean languageIsEnglish =
                                     Locale.getDefault().getDisplayLanguage().equals(Languages.ENGLISH_LANGUAGE);
 
-                            final String youSpentText = languageIsEnglish ?
-                                    // english
-                                    requireContext().getResources().getString(R.string.money_spent_you_spent) +
-                                            " " + currencySymbol + moneySpentLastWeek + " " +
-                                            requireContext().getResources().getString(R.string.money_spent_last_week) :
-                                    // everything else
-                                    requireContext().getResources().getString(R.string.money_spent_you_spent) +
-                                            " " + moneySpentLastWeek + " " + currencySymbol + " " +
-                                            requireContext().getResources().getString(R.string.money_spent_last_week);
+                            final String moneyPlusCurrencySymbol = languageIsEnglish ?
+                                    currencySymbol + moneySpentLastWeek : moneySpentLastWeek + currencySymbol;
+
+                            final String youSpentText =
+                                    requireContext().getResources().getString(R.string.you_spent_last_week,
+                                            moneyPlusCurrencySymbol);
 
                             binding.moneySpentText.setText(youSpentText.trim());
                         }

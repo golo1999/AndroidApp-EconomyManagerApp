@@ -15,6 +15,7 @@
         <variable
             name="viewModel"
             type="com.example.economy_manager.feature.editaccount.EditAccountViewModel" />
+
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -36,43 +37,15 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
-                <androidx.constraintlayout.widget.ConstraintLayout
+                <include
                     android:id="@+id/topLayout"
-                    android:layout_width="0sp"
+                    layout="@layout/top_layout"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="#A2A2A1"
-                    android:focusable="true"
-                    android:focusableInTouchMode="true"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent">
-
-                    <ImageView
-                        android:id="@+id/goBack"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="5sp"
-                        android:onClick="@{() -> activity.onBackPressed()}"
-                        android:src="@drawable/ic_back"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintLeft_toLeftOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-                    <TextView
-                        android:id="@+id/title"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="20sp"
-                        android:text="@string/edit_account"
-                        android:textAlignment="center"
-                        android:textColor="@color/white"
-                        android:textSize="20sp"
-                        android:textStyle="bold"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintLeft_toRightOf="@id/goBack"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-                </androidx.constraintlayout.widget.ConstraintLayout>
+                    app:activity="@{activity}"
+                    app:backgroundColor="@{@color/quaternaryLight}"
+                    app:titleColor="@{@color/primaryLight}"
+                    app:titleText="@{@string/edit_account}" />
 
                 <de.hdodenhof.circleimageview.CircleImageView
                     android:id="@+id/photo"
@@ -92,6 +65,8 @@
                     android:layout_width="0sp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="20sp"
+                    android:focusable="true"
+                    android:focusableInTouchMode="true"
                     app:errorEnabled="true"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -102,10 +77,10 @@
                         android:id="@+id/firstNameField"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="@string/edit_account_first_name"
+                        android:hint="@string/first_name"
+                        android:inputType="textPersonName"
                         android:text="@={viewModel.firstName}"
-                        android:textSize="18sp"
-                        android:inputType="textPersonName" />
+                        android:textSize="18sp" />
 
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -121,7 +96,7 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/firstNameFieldLayout"
                     app:layout_constraintWidth_percent=".8"
-                    tools:text="@string/edit_account_last_name" />
+                    tools:text="@string/last_name" />
 
                 <EditText
                     android:id="@+id/phoneField"
@@ -135,7 +110,7 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/lastNameField"
                     app:layout_constraintWidth_percent=".8"
-                    tools:text="@string/edit_account_phone_number" />
+                    tools:text="@string/phone_number" />
 
                 <EditText
                     android:id="@+id/websiteField"
@@ -149,7 +124,7 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/phoneField"
                     app:layout_constraintWidth_percent=".8"
-                    tools:text="@string/edit_account_website" />
+                    tools:text="@string/website" />
 
                 <Spinner
                     android:id="@+id/countrySpinner"
@@ -184,7 +159,7 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/genderSpinner"
                     app:layout_constraintWidth_percent=".8"
-                    tools:text="@string/edit_account_birth_date" />
+                    tools:text="@string/birth_date" />
 
                 <EditText
                     android:id="@+id/careerTitleField"
@@ -198,7 +173,7 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/birthDateText"
                     app:layout_constraintWidth_percent=".8"
-                    tools:text="@string/edit_account_career_title" />
+                    tools:text="@string/career_title" />
 
                 <Button
                     android:id="@+id/updateProfileButton"

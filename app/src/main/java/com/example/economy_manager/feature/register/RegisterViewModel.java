@@ -17,7 +17,7 @@ import com.example.economy_manager.utility.MyCustomSharedPreferences;
 import com.example.economy_manager.utility.MyCustomVariables;
 import com.google.firebase.auth.FirebaseUser;
 
-public class SignUpViewModel extends ViewModel {
+public class RegisterViewModel extends ViewModel {
     private final ObservableField<String> enteredEmail = new ObservableField<>("");
 
     private final ObservableField<String> enteredPassword = new ObservableField<>("");
@@ -95,7 +95,7 @@ public class SignUpViewModel extends ViewModel {
                         fbUser.sendEmailVerification().addOnCompleteListener(task1 -> {
                             if (task1.isSuccessful()) {
                                 MyCustomMethods.showShortMessage(activity,
-                                        activity.getResources().getString(R.string.verify_email));
+                                        activity.getResources().getString(R.string.please_verify_your_email));
                                 createPersonalInformationPath();
                                 createApplicationSettingsPath();
                                 MyCustomSharedPreferences.saveUserDetailsToSharedPreferences(getPreferences(),
@@ -108,7 +108,7 @@ public class SignUpViewModel extends ViewModel {
                 }
                 // showing the message & resetting the password field if the user already exists
                 else {
-                    MyCustomMethods.showShortMessage(activity, activity.getResources().getString(R.string.signup_error1));
+                    MyCustomMethods.showShortMessage(activity, activity.getResources().getString(R.string.email_already_exists));
 
                     setEnteredPassword("");
                 }
@@ -117,38 +117,42 @@ public class SignUpViewModel extends ViewModel {
         // if both email and password are empty
         else if (emailValue.isEmpty() && passwordValue.isEmpty()) {
             // showing the error
-            MyCustomMethods.showShortMessage(activity, activity.getResources().getString(R.string.signup_error2));
+            MyCustomMethods.showShortMessage(activity, activity.getResources().getString(R.string.email_and_password_should_not_be_empty));
         }
         // if only the email is empty
         else if (emailValue.isEmpty()) {
             // showing the error
-            MyCustomMethods.showShortMessage(activity, activity.getResources().getString(R.string.signup_error3));
+            MyCustomMethods.showShortMessage(activity, activity.getResources().getString(R.string.should_not_be_empty));
             // resetting the password field
             setEnteredPassword("");
         }
         // if only the password is empty
         else if (passwordValue.isEmpty()) {
             // showing the error
-            MyCustomMethods.showShortMessage(activity, activity.getResources().getString(R.string.signup_error4));
+            MyCustomMethods.showShortMessage(activity,
+                    activity.getResources().getString(R.string.should_not_be_empty,
+                            activity.getResources().getString(R.string.password)));
         }
         // if the password is too short and the email isn't valid
         else if (passwordValue.length() < 7 && !Patterns.EMAIL_ADDRESS.matcher(emailValue).matches()) {
             // showing the error
-            MyCustomMethods.showShortMessage(activity, activity.getResources().getString(R.string.signup_error5));
+            MyCustomMethods.showShortMessage(activity, activity.getResources().getString(R.string.email_and_password_are_not_valid));
             // resetting the password field
             setEnteredPassword("");
         }
         // if the email isn't valid
         else if (!Patterns.EMAIL_ADDRESS.matcher(emailValue).matches()) {
             // showing the error
-            MyCustomMethods.showShortMessage(activity, activity.getResources().getString(R.string.signup_error6));
+            MyCustomMethods.showShortMessage(activity, activity.getResources().getString(R.string.please_enter_a_valid_email));
             // resetting the password field
             setEnteredPassword("");
         }
         // if the password is too short
         else {
             // showing the error
-            MyCustomMethods.showShortMessage(activity, activity.getResources().getString(R.string.signup_error7));
+            MyCustomMethods.showShortMessage(activity,
+                    activity.getResources().getString(R.string.should_have_at_least_characters,
+                            activity.getResources().getString(R.string.password), 7));
             // resetting the password field
             setEnteredPassword("");
         }

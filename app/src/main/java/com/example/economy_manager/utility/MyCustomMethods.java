@@ -15,7 +15,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 
 import com.example.economy_manager.R;
-import com.example.economy_manager.feature.login.LogInActivity;
+import com.example.economy_manager.feature.login.LoginActivity;
 import com.example.economy_manager.model.MyCustomTime;
 import com.google.gson.Gson;
 
@@ -254,7 +254,7 @@ public final class MyCustomMethods {
 
     public static void signOutWithFadeTransition(final @NonNull Activity activity) {
         activity.finishAffinity();
-        activity.startActivity(new Intent(activity, LogInActivity.class));
+        activity.startActivity(new Intent(activity, LoginActivity.class));
         activity.overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
     }
 

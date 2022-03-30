@@ -7,7 +7,7 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.ViewModel;
 
 import com.example.economy_manager.R;
-import com.example.economy_manager.feature.register.SignUpActivity;
+import com.example.economy_manager.feature.register.RegisterActivity;
 import com.example.economy_manager.utility.MyCustomMethods;
 import com.example.economy_manager.utility.MyCustomVariables;
 import com.google.android.gms.tasks.Task;
@@ -34,22 +34,22 @@ public class ForgotPasswordViewModel extends ViewModel {
                     .addOnCompleteListener((final Task<Void> task) -> {
                         if (task.isSuccessful()) {
                             MyCustomMethods.showLongMessage(currentActivity,
-                                    currentActivity.getResources().getString(R.string.verify_email));
+                                    currentActivity.getResources().getString(R.string.please_verify_your_email));
                             MyCustomMethods.finishActivityWithSlideTransition(currentActivity,
                                     1);
                         } else {
                             MyCustomMethods.showShortMessage(currentActivity,
-                                    currentActivity.getResources().getString(R.string.forgot_password_email_does_not_exist));
+                                    currentActivity.getResources().getString(R.string.email_does_not_exist_in_the_database));
                         }
                     });
         } else {
             MyCustomMethods.showShortMessage(currentActivity, emailText.isEmpty() ?
-                    currentActivity.getResources().getString(R.string.signup_error3) :
-                    currentActivity.getResources().getString(R.string.email_not_valid));
+                    currentActivity.getResources().getString(R.string.should_not_be_empty) :
+                    currentActivity.getResources().getString(R.string.email_address_is_not_valid));
         }
     }
 
     public void onSignUpButtonClicked(final @NonNull Activity currentActivity) {
-        MyCustomMethods.goToActivityWithSlideTransition(currentActivity, SignUpActivity.class, 1);
+        MyCustomMethods.goToActivityWithSlideTransition(currentActivity, RegisterActivity.class, 1);
     }
 }

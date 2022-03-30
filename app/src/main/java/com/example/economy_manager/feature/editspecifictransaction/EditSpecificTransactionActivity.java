@@ -170,8 +170,8 @@ public class EditSpecificTransactionActivity extends AppCompatActivity {
 
     private void setTitle() {
         if ((viewModel.getActivityTitle() == null) || (!viewModel.getActivityTitle()
-                .equals(getResources().getString(R.string.edit_specific_transaction_title).trim()))) {
-            viewModel.setActivityTitle(getResources().getString(R.string.edit_specific_transaction_title).trim());
+                .equals(getResources().getString(R.string.edit_specific_transaction).trim()))) {
+            viewModel.setActivityTitle(getResources().getString(R.string.edit_specific_transaction).trim());
         }
 
         titleText.setText(viewModel.getActivityTitle());
@@ -207,25 +207,25 @@ public class EditSpecificTransactionActivity extends AppCompatActivity {
     }
 
     private void populateTransactionTypesList(final ArrayList<String> list) {
-        list.add(getResources().getString(R.string.add_money_deposits).trim());
-        list.add(getResources().getString(R.string.add_money_independent_sources).trim());
+        list.add(getResources().getString(R.string.deposits).trim());
+        list.add(getResources().getString(R.string.independent_sources).trim());
         list.add(getResources().getString(R.string.salary).trim());
         list.add(getResources().getString(R.string.saving).trim());
-        list.add(getResources().getString(R.string.subtract_money_bills).trim());
-        list.add(getResources().getString(R.string.subtract_money_car).trim());
-        list.add(getResources().getString(R.string.subtract_money_clothes).trim());
-        list.add(getResources().getString(R.string.subtract_money_communications).trim());
-        list.add(getResources().getString(R.string.subtract_money_eating_out).trim());
-        list.add(getResources().getString(R.string.subtract_money_entertainment).trim());
-        list.add(getResources().getString(R.string.subtract_money_food).trim());
-        list.add(getResources().getString(R.string.subtract_money_gifts).trim());
-        list.add(getResources().getString(R.string.subtract_money_health).trim());
-        list.add(getResources().getString(R.string.subtract_money_house).trim());
-        list.add(getResources().getString(R.string.subtract_money_pets).trim());
-        list.add(getResources().getString(R.string.subtract_money_sports).trim());
-        list.add(getResources().getString(R.string.subtract_money_taxi).trim());
-        list.add(getResources().getString(R.string.subtract_money_toiletry).trim());
-        list.add(getResources().getString(R.string.subtract_money_transport).trim());
+        list.add(getResources().getString(R.string.bills).trim());
+        list.add(getResources().getString(R.string.car).trim());
+        list.add(getResources().getString(R.string.clothes).trim());
+        list.add(getResources().getString(R.string.communications).trim());
+        list.add(getResources().getString(R.string.eating_out).trim());
+        list.add(getResources().getString(R.string.entertainment).trim());
+        list.add(getResources().getString(R.string.food).trim());
+        list.add(getResources().getString(R.string.gifts).trim());
+        list.add(getResources().getString(R.string.health).trim());
+        list.add(getResources().getString(R.string.house).trim());
+        list.add(getResources().getString(R.string.pets).trim());
+        list.add(getResources().getString(R.string.sports).trim());
+        list.add(getResources().getString(R.string.taxi).trim());
+        list.add(getResources().getString(R.string.toiletry).trim());
+        list.add(getResources().getString(R.string.transport).trim());
 
         Collections.sort(list);
     }
@@ -271,25 +271,25 @@ public class EditSpecificTransactionActivity extends AppCompatActivity {
             }
         };
 
-        types.add(getResources().getString(R.string.subtract_money_bills).trim());
-        types.add(getResources().getString(R.string.subtract_money_car).trim());
-        types.add(getResources().getString(R.string.subtract_money_clothes).trim());
-        types.add(getResources().getString(R.string.subtract_money_communications).trim());
-        types.add(getResources().getString(R.string.add_money_deposits).trim());
-        types.add(getResources().getString(R.string.subtract_money_eating_out).trim());
-        types.add(getResources().getString(R.string.subtract_money_entertainment).trim());
-        types.add(getResources().getString(R.string.subtract_money_food).trim());
-        types.add(getResources().getString(R.string.subtract_money_gifts).trim());
-        types.add(getResources().getString(R.string.subtract_money_health).trim());
-        types.add(getResources().getString(R.string.subtract_money_house).trim());
-        types.add(getResources().getString(R.string.subtract_money_pets).trim());
-        types.add(getResources().getString(R.string.add_money_independent_sources).trim());
+        types.add(getResources().getString(R.string.bills).trim());
+        types.add(getResources().getString(R.string.car).trim());
+        types.add(getResources().getString(R.string.clothes).trim());
+        types.add(getResources().getString(R.string.communications).trim());
+        types.add(getResources().getString(R.string.deposits).trim());
+        types.add(getResources().getString(R.string.eating_out).trim());
+        types.add(getResources().getString(R.string.entertainment).trim());
+        types.add(getResources().getString(R.string.food).trim());
+        types.add(getResources().getString(R.string.gifts).trim());
+        types.add(getResources().getString(R.string.health).trim());
+        types.add(getResources().getString(R.string.house).trim());
+        types.add(getResources().getString(R.string.pets).trim());
+        types.add(getResources().getString(R.string.independent_sources).trim());
         types.add(getResources().getString(R.string.salary).trim());
         types.add(getResources().getString(R.string.saving).trim());
-        types.add(getResources().getString(R.string.subtract_money_sports).trim());
-        types.add(getResources().getString(R.string.subtract_money_taxi).trim());
-        types.add(getResources().getString(R.string.subtract_money_toiletry).trim());
-        types.add(getResources().getString(R.string.subtract_money_transport).trim());
+        types.add(getResources().getString(R.string.sports).trim());
+        types.add(getResources().getString(R.string.taxi).trim());
+        types.add(getResources().getString(R.string.toiletry).trim());
+        types.add(getResources().getString(R.string.transport).trim());
 
         Collections.sort(types);
 

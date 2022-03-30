@@ -8,20 +8,20 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="20sp"
-        tools:context=".feature.showsavings.ShowSavingsFragment">
+        tools:context=".feature.lastweekexpenses.LastWeekExpensesFragment">
 
         <TextView
-            android:id="@+id/showSavingsText"
+            android:id="@+id/moneySpentText"
             android:layout_width="0sp"
             android:layout_height="wrap_content"
             android:textAlignment="center"
+            android:textColor="@color/quaternaryLight"
             android:textSize="20sp"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:text="@string/saving" />
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

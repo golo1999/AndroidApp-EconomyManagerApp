@@ -1,5 +1,6 @@
 package com.example.economy_manager.feature.mainscreen;
 
+import android.content.res.ColorStateList;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.view.View;
@@ -36,7 +37,7 @@ import java.util.TimerTask;
 
 public class MainScreenActivity
         extends AppCompatActivity
-        implements MoneySpentPercentageFragment.MoneySpentPercentageListener {
+        implements MoneySpentPercentageFragment.IMoneySpentPercentageListener {
     private MainScreenActivityBinding binding;
     private MainScreenViewModel viewModel;
     private ViewGroup.LayoutParams moneySpentPercentageLayoutParams;
@@ -73,6 +74,8 @@ public class MainScreenActivity
         super.onStart();
         setUserDetails();
         setActivityTheme();
+        setTopLayoutTheme();
+        setFloatingActionButtonsTheme();
         setGreetingCardTheme();
         setTextsBetweenFragments();
         setDates();
@@ -102,7 +105,7 @@ public class MainScreenActivity
     }
 
     private void setActivityTheme() {
-        getWindow().setBackgroundDrawableResource(viewModel.getActivityTheme());
+        getWindow().getDecorView().setBackgroundColor(viewModel.getActivityTheme(this));
     }
 
     private void setDates() {
@@ -126,6 +129,25 @@ public class MainScreenActivity
                 .replace(R.id.favoriteExpensesCategoryFragmentContainer, viewModel.getFavoriteExpensesCategoryFragment())
                 .replace(R.id.expensesChartFragmentContainer, viewModel.getFragmentMoneySpentPercentage())
                 .commit();
+    }
+
+    private void setFloatingActionButtonsTheme() {
+        final int addIncomeButtonBackgroundResource =
+                viewModel.getUserDetails().getApplicationSettings().isDarkThemeEnabled() ?
+                        R.drawable.ic_add_dark : R.drawable.ic_add_light;
+
+        final int addExpenseButtonBackgroundResource =
+                viewModel.getUserDetails().getApplicationSettings().isDarkThemeEnabled() ?
+                        R.drawable.ic_subtract_dark : R.drawable.ic_subtract_light;
+
+        final int backgroundTint = viewModel.getUserDetails().getApplicationSettings().isDarkThemeEnabled() ?
+                getColor(R.color.primaryDark) : getColor(R.color.primaryLight);
+
+        binding.addIncomeButton.setBackgroundTintList(ColorStateList.valueOf(backgroundTint));
+        binding.addIncomeButton.setImageResource(addIncomeButtonBackgroundResource);
+
+        binding.addExpenseButton.setBackgroundTintList(ColorStateList.valueOf(backgroundTint));
+        binding.addExpenseButton.setImageResource(addExpenseButtonBackgroundResource);
     }
 
     private void setGreetingCardTheme() {
@@ -191,12 +213,9 @@ public class MainScreenActivity
                                     Float.valueOf(totalMonthlyExpenses / totalMonthlyIncomes * 100).intValue();
 
                             final String percentageText = currentMonthTransactionsExist ?
-                                    percentage <= 100 ?
-                                            getResources().getString(R.string.money_spent_you_spent) + " " + percentage
-                                                    + getResources().getString(R.string.money_spent_percentage) :
-                                            getResources().getString(R.string.money_spent_you_spent) + " " + 100
-                                                    + getResources().getString(R.string.money_spent_percentage) :
-                                    getResources().getString(R.string.no_money_records_month);
+                                    getResources().getString(R.string.you_spent_percentage_of_your_incomes,
+                                            Math.min(percentage, 100) + "%") :
+                                    getResources().getString(R.string.no_money_records_this_month);
 
                             binding.moneySpentPercentageText.setText(percentageText);
                         } else {
@@ -242,6 +261,39 @@ public class MainScreenActivity
                 });
             }
         }, 1000, 1000);
+    }
+
+    private void setTopLayoutTheme() {
+        final int topLayoutBackgroundColor =
+                viewModel.getUserDetails().getApplicationSettings().isDarkThemeEnabled() ?
+                        getColor(R.color.primaryDark) : getColor(R.color.primaryLight);
+
+        final int editTransactionsBackgroundResource =
+                viewModel.getUserDetails().getApplicationSettings().isDarkThemeEnabled() ?
+                        R.drawable.ic_edit_dark : R.drawable.ic_edit_light;
+
+        final int monthlyBalanceBackgroundResource =
+                viewModel.getUserDetails().getApplicationSettings().isDarkThemeEnabled() ?
+                        R.drawable.ic_balance_dark : R.drawable.ic_balance_light;
+
+        final int editAccountBackgroundResource =
+                viewModel.getUserDetails().getApplicationSettings().isDarkThemeEnabled() ?
+                        R.drawable.ic_account_dark : R.drawable.ic_account_light;
+
+        final int settingsBackgroundResource =
+                viewModel.getUserDetails().getApplicationSettings().isDarkThemeEnabled() ?
+                        R.drawable.ic_settings_dark : R.drawable.ic_settings_light;
+
+        final int signOutBackgroundResource =
+                viewModel.getUserDetails().getApplicationSettings().isDarkThemeEnabled() ?
+                        R.drawable.ic_sign_out_dark : R.drawable.ic_sign_out_light;
+
+        binding.topLayout.setBackgroundColor(topLayoutBackgroundColor);
+        binding.editTransactions.setImageResource(editTransactionsBackgroundResource);
+        binding.monthlyBalance.setImageResource(monthlyBalanceBackgroundResource);
+        binding.editAccount.setImageResource(editAccountBackgroundResource);
+        binding.settings.setImageResource(settingsBackgroundResource);
+        binding.signOut.setImageResource(signOutBackgroundResource);
     }
 
     private void setUserDetails() {

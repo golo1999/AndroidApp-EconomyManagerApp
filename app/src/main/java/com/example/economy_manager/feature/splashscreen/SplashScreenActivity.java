@@ -9,7 +9,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.example.economy_manager.R;
 import com.example.economy_manager.databinding.SplashScreenActivityBinding;
-import com.example.economy_manager.feature.login.LogInActivity;
+import com.example.economy_manager.feature.login.LoginActivity;
 import com.example.economy_manager.feature.mainscreen.MainScreenActivity;
 import com.example.economy_manager.model.UserDetails;
 import com.example.economy_manager.utility.MyCustomMethods;
@@ -83,7 +83,7 @@ public class SplashScreenActivity extends AppCompatActivity {
 
                 MyCustomMethods.goToActivityWithoutTransition(SplashScreenActivity.this,
                         MyCustomVariables.getFirebaseAuth().getCurrentUser() != null ?
-                                MainScreenActivity.class : LogInActivity.class);
+                                MainScreenActivity.class : LoginActivity.class);
             }
         }
     }

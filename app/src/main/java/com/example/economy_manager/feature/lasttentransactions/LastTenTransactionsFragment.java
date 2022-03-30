@@ -1,6 +1,5 @@
 package com.example.economy_manager.feature.lasttentransactions;
 
-import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.view.Gravity;
@@ -75,7 +74,7 @@ public class LastTenTransactionsFragment extends Fragment {
     private void createAndSetList() {
         if (MyCustomVariables.getFirebaseAuth().getUid() == null) {
             showNoTransactionsLayout(mainLayout,
-                    requireContext().getResources().getString(R.string.no_transactions_yet));
+                    requireContext().getResources().getString(R.string.no_transactions_made_yet));
 
             return;
         }
@@ -124,7 +123,7 @@ public class LastTenTransactionsFragment extends Fragment {
 
         if (transactionsList.size() == 0) {
             showNoTransactionsLayout(mainLayout,
-                    requireContext().getResources().getString(R.string.no_transactions_this_month));
+                    requireContext().getResources().getString(R.string.no_transactions_made_this_month));
 
             return;
         }
@@ -160,7 +159,9 @@ public class LastTenTransactionsFragment extends Fragment {
             final String translatedType = Types.getTranslatedType(requireContext(),
                     String.valueOf(Transaction.getTypeFromIndexInEnglish(transaction.getCategory())));
 
-            valueFromChildLayout.setTextColor(transaction.getType() == 1 ? Color.GREEN : Color.RED);
+            valueFromChildLayout.setTextColor(transaction.getType() == 1 ?
+                    requireContext().getColor(R.color.secondaryLight) :
+                    requireContext().getColor(R.color.crimson));
 
             if (translatedType == null) {
                 return;
@@ -169,7 +170,7 @@ public class LastTenTransactionsFragment extends Fragment {
             // displaying the views on the screen if the type was successfully translated
             typeFromChildLayout.setText(translatedType);
             valueFromChildLayout.setText(valueWithCurrency);
-            typeFromChildLayout.setTextColor(Color.WHITE);
+            typeFromChildLayout.setTextColor(requireContext().getColor(R.color.quaternaryLight));
             typeFromChildLayout.setTextSize(18);
             valueFromChildLayout.setTextSize(18);
 
@@ -186,7 +187,7 @@ public class LastTenTransactionsFragment extends Fragment {
         params.setMargins(0, 20, 0, 20);
 
         noTransactions.setText(message);
-        noTransactions.setTextColor(Color.parseColor("#FAEBEF"));
+        noTransactions.setTextColor(requireContext().getColor(R.color.quaternaryLight));
         noTransactions.setTypeface(null, Typeface.BOLD);
         noTransactions.setTextSize(20);
         noTransactions.setGravity(Gravity.CENTER);

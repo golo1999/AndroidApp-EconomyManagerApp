@@ -15,6 +15,7 @@
         <variable
             name="viewModel"
             type="com.example.economy_manager.feature.settings.SettingsViewModel" />
+
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -24,41 +25,15 @@
         android:layout_height="match_parent"
         tools:context=".feature.settings.SettingsActivity">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <include
             android:id="@+id/topLayout"
-            android:layout_width="0sp"
+            layout="@layout/top_layout"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="#A2A2A1"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
-
-            <ImageView
-                android:id="@+id/goBack"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="5sp"
-                android:onClick="@{() -> activity.onBackPressed()}"
-                android:src="@drawable/ic_back"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <TextView
-                android:id="@+id/title"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="20sp"
-                android:text="@string/settings_text"
-                android:textAlignment="center"
-                android:textColor="@color/white"
-                android:textSize="20sp"
-                android:textStyle="bold"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintLeft_toRightOf="@id/goBack"
-                app:layout_constraintTop_toTopOf="parent" />
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
+            app:activity="@{activity}"
+            app:backgroundColor="@{@color/quaternaryLight}"
+            app:titleColor="@{@color/primaryLight}"
+            app:titleText="@{@string/settings}" />
 
         <ScrollView
             android:layout_width="0sp"
@@ -87,7 +62,7 @@
                         android:id="@+id/themeText"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/settings_dark_theme"
+                        android:text="@string/dark_theme"
                         android:textAlignment="center"
                         android:textSize="20sp"
                         android:textStyle="bold"
@@ -121,7 +96,7 @@
                         android:id="@+id/currencyText"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/settings_currency"
+                        android:text="@string/currency"
                         android:textAlignment="center"
                         android:textSize="20sp"
                         android:textStyle="bold"
@@ -148,7 +123,7 @@
                     android:layout_marginTop="30sp"
                     android:padding="10sp"
                     android:stateListAnimator="@null"
-                    android:text="@string/rate_app"
+                    android:text="@string/rate_the_app"
                     android:textSize="18sp"
                     android:textStyle="bold"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -209,4 +184,5 @@
         </ScrollView>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+
 </layout>
