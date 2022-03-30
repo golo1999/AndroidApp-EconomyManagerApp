@@ -17,12 +17,28 @@
             type="Class&lt;com.example.economy_manager.feature.addincome.AddIncomeActivity>" />
 
         <variable
+            name="dateText"
+            type="String" />
+
+        <variable
             name="editAccountActivity"
             type="Class&lt;com.example.economy_manager.feature.editaccount.EditAccountActivity>" />
 
         <variable
             name="editTransactionsActivity"
             type="Class&lt;com.example.economy_manager.feature.edittransactions.EditTransactionsActivity>" />
+
+        <variable
+            name="greetingText"
+            type="String" />
+
+        <variable
+            name="isDarkThemeEnabled"
+            type="boolean" />
+
+        <variable
+            name="moneySpentPercentageText"
+            type="String" />
 
         <variable
             name="monthlyBalanceActivity"
@@ -62,75 +78,18 @@
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <include
             android:id="@+id/topLayout"
-            android:layout_width="0sp"
+            layout="@layout/main_screen_top_layout"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
-
-            <ImageView
-                android:id="@+id/editTransactions"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="5sp"
-                android:contentDescription="@string/monthly_transactions"
-                android:onClick="@{() -> viewModel.goToActivity(activity, editTransactionsActivity)}"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:src="@drawable/ic_edit" />
-
-            <ImageView
-                android:id="@+id/monthlyBalance"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:contentDescription="@string/monthly_balance"
-                android:onClick="@{() -> viewModel.goToActivity(activity, monthlyBalanceActivity)}"
-                android:src="@drawable/ic_balance"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@id/editAccount"
-                app:layout_constraintStart_toEndOf="@id/editTransactions"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <ImageView
-                android:id="@+id/editAccount"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:contentDescription="@string/edit_account"
-                android:onClick="@{() -> viewModel.goToActivity(activity, editAccountActivity)}"
-                android:src="@drawable/ic_account"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@id/settings"
-                app:layout_constraintStart_toEndOf="@id/monthlyBalance"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <ImageView
-                android:id="@+id/settings"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:contentDescription="@string/settings"
-                android:onClick="@{() -> viewModel.goToActivity(activity, settingsActivity)}"
-                android:src="@drawable/ic_settings"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@id/signOut"
-                app:layout_constraintStart_toEndOf="@id/editAccount"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <ImageView
-                android:id="@+id/signOut"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="5sp"
-                android:contentDescription="@string/sign_out"
-                android:onClick="@{() -> viewModel.logout(activity)}"
-                android:src="@drawable/ic_sign_out"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
+            app:activity="@{activity}"
+            app:editAccountActivity="@{editAccountActivity}"
+            app:editTransactionsActivity="@{editTransactionsActivity}"
+            app:isDarkThemeEnabled="@{isDarkThemeEnabled}"
+            app:monthlyBalanceActivity="@{monthlyBalanceActivity}"
+            app:settingsActivity="@{settingsActivity}"
+            app:viewModel="@{viewModel}" />
 
         <androidx.core.widget.NestedScrollView
             android:id="@+id/nestedScrollView"
@@ -148,66 +107,21 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
-                <androidx.cardview.widget.CardView
-                    android:id="@+id/greetingLayout"
+                <include
+                    android:id="@+id/greetingCard"
+                    layout="@layout/main_screen_greeting_card"
                     android:layout_width="0sp"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="20sp"
-                    android:layout_marginBottom="10sp"
-                    app:cardCornerRadius="10sp"
-                    app:cardElevation="10sp"
+                    android:layout_marginVertical="10sp"
+                    app:dateText="@{dateText}"
+                    app:greetingText="@{greetingText}"
+                    app:isDarkThemeEnabled="@{isDarkThemeEnabled}"
                     app:layout_constraintBottom_toTopOf="@id/remainingMonthlyIncomeText"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintWidth_percent=".9">
-
-                    <androidx.constraintlayout.widget.ConstraintLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent">
-
-                        <TextView
-                            android:id="@+id/greetingText"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginVertical="5sp"
-                            android:textAlignment="center"
-                            android:textSize="30sp"
-                            android:textStyle="bold"
-                            app:layout_constraintBottom_toTopOf="@id/dateText"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent" />
-
-                        <TextView
-                            android:id="@+id/dateText"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginBottom="5sp"
-                            android:textAlignment="center"
-                            android:textSize="20sp"
-                            android:textStyle="bold"
-                            app:layout_constraintBottom_toTopOf="@id/moneySpentPercentageText"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@+id/greetingText" />
-
-                        <TextView
-                            android:id="@+id/moneySpentPercentageText"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginBottom="5sp"
-                            android:textAlignment="center"
-                            android:textSize="20sp"
-                            android:textStyle="bold"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@id/dateText" />
-
-                    </androidx.constraintlayout.widget.ConstraintLayout>
-
-                </androidx.cardview.widget.CardView>
+                    app:layout_constraintWidth_percent=".9"
+                    app:moneySpentPercentageText="@{moneySpentPercentageText}" />
 
                 <TextView
                     android:id="@+id/remainingMonthlyIncomeText"
@@ -219,7 +133,7 @@
                     app:layout_constraintBottom_toTopOf="@id/showSavingsCard"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/greetingLayout"
+                    app:layout_constraintTop_toBottomOf="@id/greetingCard"
                     app:layout_constraintWidth_percent=".9" />
 
                 <androidx.cardview.widget.CardView
@@ -383,7 +297,7 @@
                     android:id="@+id/favoriteExpensesCategoryText"
                     android:layout_width="0sp"
                     android:layout_height="wrap_content"
-                    android:text="Favorite expenses"
+                    android:text="@string/favorite_expenses"
                     android:textSize="20sp"
                     android:textStyle="bold"
                     app:layout_constraintBottom_toTopOf="@id/favoriteExpensesCategoryFragmentContainer"
@@ -450,54 +364,18 @@
                 <!--                app:layout_constraintTop_toBottomOf="@id/mainScreenMoneySpentPercentage"-->
                 <!--                app:layout_constraintWidth_percent=".9" />-->
 
-                <androidx.constraintlayout.widget.ConstraintLayout
+                <include
                     android:id="@+id/fabLayout"
+                    layout="@layout/main_screen_floating_action_buttons_layout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:clipChildren="false"
-                    android:paddingVertical="20sp"
+                    app:activity="@{activity}"
+                    app:addExpenseActivity="@{addExpenseActivity}"
+                    app:addIncomeActivity="@{addIncomeActivity}"
+                    app:isDarkThemeEnabled="@{isDarkThemeEnabled}"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/expensesChartCard">
-
-                    <com.google.android.material.floatingactionbutton.FloatingActionButton
-                        android:id="@+id/addIncomeButton"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:contentDescription="@string/new_income"
-                        android:elevation="6sp"
-                        android:onClick="@{() -> viewModel.goToActivity(activity, addIncomeActivity)}"
-                        android:scaleType="fitCenter"
-                        app:elevation="0sp"
-                        app:fabSize="normal"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toStartOf="@id/addExpenseButton"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:maxImageSize="66sp"
-                        tools:backgroundTint="@color/white"
-                        tools:src="@drawable/ic_add" />
-
-                    <com.google.android.material.floatingactionbutton.FloatingActionButton
-                        android:id="@+id/addExpenseButton"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:contentDescription="@string/new_expense"
-                        android:elevation="6sp"
-                        android:onClick="@{() -> viewModel.goToActivity(activity, addExpenseActivity)}"
-                        android:scaleType="fitCenter"
-                        app:elevation="0sp"
-                        app:fabSize="normal"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toEndOf="@id/addIncomeButton"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:maxImageSize="66sp"
-                        tools:backgroundTint="@color/white"
-                        tools:src="@drawable/ic_subtract" />
-
-                </androidx.constraintlayout.widget.ConstraintLayout>
+                    app:layout_constraintTop_toBottomOf="@id/expensesChartCard"
+                    app:viewModel="@{viewModel}" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 

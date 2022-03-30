@@ -26,6 +26,7 @@
     <string name="expenses_chart">Expenses chart</string>
     <string name="facebook_app_id" translatable="false">973649146445611</string>
     <string name="facebook_login_protocol_scheme" translatable="false">fb973649146445611</string>
+    <string name="favorite_expenses">Favorite expenses</string>
     <string name="first_name">First name</string>
     <string name="forgot_password">Forgot password</string>
     <string name="go_back">Go back</string>

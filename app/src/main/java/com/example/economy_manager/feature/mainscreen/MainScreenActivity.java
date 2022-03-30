@@ -1,6 +1,5 @@
 package com.example.economy_manager.feature.mainscreen;
 
-import android.content.res.ColorStateList;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.view.View;
@@ -74,9 +73,6 @@ public class MainScreenActivity
         super.onStart();
         setUserDetails();
         setActivityTheme();
-        setTopLayoutTheme();
-        setFloatingActionButtonsTheme();
-        setGreetingCardTheme();
         setTextsBetweenFragments();
         setDates();
         setMoneySpentPercentage();
@@ -109,12 +105,12 @@ public class MainScreenActivity
     }
 
     private void setDates() {
-        if (!String.valueOf(binding.greetingText.getText()).trim().equals(viewModel.getGreetingMessage(this))) {
-            binding.greetingText.setText(viewModel.getGreetingMessage(this));
+        if (!String.valueOf(binding.getGreetingText()).equals(viewModel.getGreetingMessage(this))) {
+            binding.setGreetingText(viewModel.getGreetingMessage(this));
         }
 
-        if (!String.valueOf(binding.dateText.getText()).trim().equals(viewModel.getCurrentDateTranslated())) {
-            binding.dateText.setText(viewModel.getCurrentDateTranslated());
+        if (!String.valueOf(binding.getDateText()).equals(viewModel.getCurrentDateTranslated())) {
+            binding.setDateText(viewModel.getCurrentDateTranslated());
         }
     }
 
@@ -129,38 +125,6 @@ public class MainScreenActivity
                 .replace(R.id.favoriteExpensesCategoryFragmentContainer, viewModel.getFavoriteExpensesCategoryFragment())
                 .replace(R.id.expensesChartFragmentContainer, viewModel.getFragmentMoneySpentPercentage())
                 .commit();
-    }
-
-    private void setFloatingActionButtonsTheme() {
-        final int addIncomeButtonBackgroundResource =
-                viewModel.getUserDetails().getApplicationSettings().isDarkThemeEnabled() ?
-                        R.drawable.ic_add_dark : R.drawable.ic_add_light;
-
-        final int addExpenseButtonBackgroundResource =
-                viewModel.getUserDetails().getApplicationSettings().isDarkThemeEnabled() ?
-                        R.drawable.ic_subtract_dark : R.drawable.ic_subtract_light;
-
-        final int backgroundTint = viewModel.getUserDetails().getApplicationSettings().isDarkThemeEnabled() ?
-                getColor(R.color.primaryDark) : getColor(R.color.primaryLight);
-
-        binding.addIncomeButton.setBackgroundTintList(ColorStateList.valueOf(backgroundTint));
-        binding.addIncomeButton.setImageResource(addIncomeButtonBackgroundResource);
-
-        binding.addExpenseButton.setBackgroundTintList(ColorStateList.valueOf(backgroundTint));
-        binding.addExpenseButton.setImageResource(addExpenseButtonBackgroundResource);
-    }
-
-    private void setGreetingCardTheme() {
-        final int cardBackgroundColor = viewModel.getUserDetails().getApplicationSettings().isDarkThemeEnabled() ?
-                getColor(R.color.secondaryDark) : getColor(R.color.secondaryLight);
-
-        final int cardTextColor = viewModel.getUserDetails().getApplicationSettings().isDarkThemeEnabled() ?
-                getColor(R.color.primaryDark) : getColor(R.color.white);
-
-        binding.greetingLayout.setCardBackgroundColor(cardBackgroundColor);
-        binding.greetingText.setTextColor(cardTextColor);
-        binding.dateText.setTextColor(cardTextColor);
-        binding.moneySpentPercentageText.setTextColor(cardTextColor);
     }
 
     private void setMoneySpentPercentage() {
@@ -217,9 +181,9 @@ public class MainScreenActivity
                                             Math.min(percentage, 100) + "%") :
                                     getResources().getString(R.string.no_money_records_this_month);
 
-                            binding.moneySpentPercentageText.setText(percentageText);
+                            binding.setMoneySpentPercentageText(percentageText);
                         } else {
-                            binding.moneySpentPercentageText.setText(getResources().getString(R.string.no_money_records_yet));
+                            binding.setMoneySpentPercentageText(getResources().getString(R.string.no_money_records_yet));
                         }
 
                         binding.firebaseLoadingProgressBar.setVisibility(View.GONE);
@@ -263,39 +227,6 @@ public class MainScreenActivity
         }, 1000, 1000);
     }
 
-    private void setTopLayoutTheme() {
-        final int topLayoutBackgroundColor =
-                viewModel.getUserDetails().getApplicationSettings().isDarkThemeEnabled() ?
-                        getColor(R.color.primaryDark) : getColor(R.color.primaryLight);
-
-        final int editTransactionsBackgroundResource =
-                viewModel.getUserDetails().getApplicationSettings().isDarkThemeEnabled() ?
-                        R.drawable.ic_edit_dark : R.drawable.ic_edit_light;
-
-        final int monthlyBalanceBackgroundResource =
-                viewModel.getUserDetails().getApplicationSettings().isDarkThemeEnabled() ?
-                        R.drawable.ic_balance_dark : R.drawable.ic_balance_light;
-
-        final int editAccountBackgroundResource =
-                viewModel.getUserDetails().getApplicationSettings().isDarkThemeEnabled() ?
-                        R.drawable.ic_account_dark : R.drawable.ic_account_light;
-
-        final int settingsBackgroundResource =
-                viewModel.getUserDetails().getApplicationSettings().isDarkThemeEnabled() ?
-                        R.drawable.ic_settings_dark : R.drawable.ic_settings_light;
-
-        final int signOutBackgroundResource =
-                viewModel.getUserDetails().getApplicationSettings().isDarkThemeEnabled() ?
-                        R.drawable.ic_sign_out_dark : R.drawable.ic_sign_out_light;
-
-        binding.topLayout.setBackgroundColor(topLayoutBackgroundColor);
-        binding.editTransactions.setImageResource(editTransactionsBackgroundResource);
-        binding.monthlyBalance.setImageResource(monthlyBalanceBackgroundResource);
-        binding.editAccount.setImageResource(editAccountBackgroundResource);
-        binding.settings.setImageResource(settingsBackgroundResource);
-        binding.signOut.setImageResource(signOutBackgroundResource);
-    }
-
     private void setUserDetails() {
         final String currentUserID = MyCustomVariables.getFirebaseAuth().getUid();
 
@@ -308,9 +239,9 @@ public class MainScreenActivity
                     MyCustomSharedPreferences.retrieveUserDetailsFromSharedPreferences(this);
 
             viewModel.setUserDetails(userDetails);
-
-            return;
         }
+
+        binding.setIsDarkThemeEnabled(viewModel.getUserDetails().getApplicationSettings().isDarkThemeEnabled());
 
         MyCustomVariables.getDatabaseReference()
                 .child(currentUserID)

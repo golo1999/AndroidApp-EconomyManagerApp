@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="activity"
+            type="com.example.economy_manager.feature.mainscreen.MainScreenActivity" />
+
+        <variable
+            name="editAccountActivity"
+            type="Class&lt;com.example.economy_manager.feature.editaccount.EditAccountActivity>" />
+
+        <variable
+            name="editTransactionsActivity"
+            type="Class&lt;com.example.economy_manager.feature.edittransactions.EditTransactionsActivity>" />
+
+        <variable
+            name="isDarkThemeEnabled"
+            type="boolean" />
+
+        <variable
+            name="monthlyBalanceActivity"
+            type="Class&lt;com.example.economy_manager.feature.monthlybalance.MonthlyBalanceActivity>" />
+
+        <variable
+            name="settingsActivity"
+            type="Class&lt;com.example.economy_manager.feature.settings.SettingsActivity>" />
+
+        <variable
+            name="viewModel"
+            type="com.example.economy_manager.feature.mainscreen.MainScreenViewModel" />
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/mainScreenTopLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@{isDarkThemeEnabled ? @color/primaryDark : @color/primaryLight}"
+        tools:background="@color/primaryDark">
+
+        <ImageView
+            android:id="@+id/editTransactions"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="5sp"
+            android:contentDescription="@string/monthly_transactions"
+            android:onClick="@{() -> viewModel.goToActivity(activity, editTransactionsActivity)}"
+            android:src="@{isDarkThemeEnabled ? @drawable/ic_edit_dark : @drawable/ic_edit_light}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:src="@drawable/ic_edit_dark" />
+
+        <ImageView
+            android:id="@+id/monthlyBalance"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="5sp"
+            android:contentDescription="@string/monthly_balance"
+            android:onClick="@{() -> viewModel.goToActivity(activity, monthlyBalanceActivity)}"
+            android:src="@{isDarkThemeEnabled ? @drawable/ic_balance_dark : @drawable/ic_balance_light}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/editAccount"
+            app:layout_constraintStart_toEndOf="@id/editTransactions"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:src="@drawable/ic_balance_dark" />
+
+        <ImageView
+            android:id="@+id/editAccount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="5sp"
+            android:contentDescription="@string/edit_account"
+            android:onClick="@{() -> viewModel.goToActivity(activity, editAccountActivity)}"
+            android:src="@{isDarkThemeEnabled ? @drawable/ic_account_dark : @drawable/ic_account_light}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/settings"
+            app:layout_constraintStart_toEndOf="@id/monthlyBalance"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:src="@drawable/ic_account_dark" />
+
+        <ImageView
+            android:id="@+id/settings"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="5sp"
+            android:contentDescription="@string/settings"
+            android:onClick="@{() -> viewModel.goToActivity(activity, settingsActivity)}"
+            android:src="@{isDarkThemeEnabled ? @drawable/ic_settings_dark : @drawable/ic_settings_light}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/signOut"
+            app:layout_constraintStart_toEndOf="@id/editAccount"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:src="@drawable/ic_settings_dark" />
+
+        <ImageView
+            android:id="@+id/signOut"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="5sp"
+            android:contentDescription="@string/sign_out"
+            android:onClick="@{() -> viewModel.logout(activity)}"
+            android:src="@{isDarkThemeEnabled ? @drawable/ic_sign_out_dark : @drawable/ic_sign_out_light}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:src="@drawable/ic_sign_out_dark" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>

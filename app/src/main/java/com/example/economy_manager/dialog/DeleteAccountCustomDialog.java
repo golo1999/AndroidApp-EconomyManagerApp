@@ -3,20 +3,20 @@ package com.example.economy_manager.dialog;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
-import android.view.View;
-import android.widget.EditText;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatDialogFragment;
+import androidx.databinding.DataBindingUtil;
 
 import com.example.economy_manager.R;
+import com.example.economy_manager.databinding.CustomDialogBinding;
 
 public class DeleteAccountCustomDialog extends AppCompatDialogFragment {
-
-    private EditText password;
+    private CustomDialogBinding binding;
     private CustomDialogListener listener;
     private final int choice;
 
@@ -34,50 +34,56 @@ public class DeleteAccountCustomDialog extends AppCompatDialogFragment {
         this.choice = choice;
     }
 
-    @NonNull
-    @Override
-    public Dialog onCreateDialog(final @Nullable Bundle savedInstanceState) {
-        final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-
-        if (getActivity() != null) {
-            final LayoutInflater inflater = getActivity().getLayoutInflater();
-
-            final View view = inflater.inflate(R.layout.custom_dialog_linearlayout, null);
-
-            if (choice == 0 || choice == 1) {
-                builder.setView(view)
-                        .setPositiveButton(getResources().getString(R.string.proceed), (dialog, which) -> {
-                            final String typedPassword = String.valueOf(password.getText());
-
-                            if (choice == 0) {
-                                listener.getTypedPasswordAndDeleteTheAccount(typedPassword);
-                            } else {
-                                listener.getTypedPasswordAndResetTheDatabase(typedPassword);
-                            }
-                        })
-                        .setNegativeButton(getResources().getString(R.string.cancel), (dialog, which) -> {
-
-                        });
-            } else if (choice == 2) {
-                listener.deleteAccount();
-            } else if (choice == 3) {
-                listener.resetDatabase();
-            }
-
-            password = view.findViewById(R.id.delete_account_password);
-        }
-
-        return builder.create();
-    }
-
     @Override
     public void onAttach(final @NonNull Context context) {
         super.onAttach(context);
+        setBinding();
 
         try {
             listener = (CustomDialogListener) context;
         } catch (ClassCastException e) {
             throw new ClassCastException(context.toString() + " must implement the listener");
         }
+    }
+
+    @NonNull
+    @Override
+    public Dialog onCreateDialog(final @Nullable Bundle savedInstanceState) {
+        final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+
+        if (getActivity() != null) {
+            switch (choice) {
+                case 0:
+                case 1:
+                    builder.setView(binding.getRoot())
+                            .setPositiveButton(getResources().getString(R.string.proceed),
+                                    (DialogInterface dialog, int which) -> {
+                                        final String typedPassword = String.valueOf(binding.passwordField.getText());
+
+                                        if (choice == 0) {
+                                            listener.getTypedPasswordAndDeleteTheAccount(typedPassword);
+                                        } else {
+                                            listener.getTypedPasswordAndResetTheDatabase(typedPassword);
+                                        }
+                                    })
+                            .setNegativeButton(getResources().getString(R.string.cancel), (dialog, which) -> {
+
+                            });
+                    break;
+                case 2:
+                    listener.deleteAccount();
+                    break;
+                case 3:
+                    listener.resetDatabase();
+                    break;
+            }
+        }
+
+        return builder.create();
+    }
+
+    public void setBinding() {
+        binding = DataBindingUtil.inflate(LayoutInflater.from(getContext()),
+                R.layout.custom_dialog, null, false);
     }
 }

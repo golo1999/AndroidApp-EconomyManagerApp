@@ -93,6 +93,7 @@
         <entry key="..\:/AndroidStudioApps/3/app/src/main/res/layout/favorite_expenses_category_fragment.xml" value="0.36666666666666664" />
         <entry key="..\:/AndroidStudioApps/3/app/src/main/res/layout/forgot_password_activity.xml" value="0.36666666666666664" />
         <entry key="..\:/AndroidStudioApps/3/app/src/main/res/layout/fragment_date_picker.xml" value="0.36666666666666664" />
+        <entry key="..\:/AndroidStudioApps/3/app/src/main/res/layout/greeting_card.xml" value="0.36666666666666664" />
         <entry key="..\:/AndroidStudioApps/3/app/src/main/res/layout/last_ten_transactions_fragment.xml" value="0.36666666666666664" />
         <entry key="..\:/AndroidStudioApps/3/app/src/main/res/layout/last_ten_transactions_linearlayout.xml" value="0.36666666666666664" />
         <entry key="..\:/AndroidStudioApps/3/app/src/main/res/layout/last_week_expenses_fragment.xml" value="0.36666666666666664" />
@@ -100,6 +101,8 @@
         <entry key="..\:/AndroidStudioApps/3/app/src/main/res/layout/login_activity.xml" value="0.36666666666666664" />
         <entry key="..\:/AndroidStudioApps/3/app/src/main/res/layout/main_screen_activity.xml" value="0.33" />
         <entry key="..\:/AndroidStudioApps/3/app/src/main/res/layout/main_screen_activity_dark.xml" value="0.36666666666666664" />
+        <entry key="..\:/AndroidStudioApps/3/app/src/main/res/layout/main_screen_floating_action_buttons_layout.xml" value="0.36666666666666664" />
+        <entry key="..\:/AndroidStudioApps/3/app/src/main/res/layout/main_screen_top_layout.xml" value="0.36666666666666664" />
         <entry key="..\:/AndroidStudioApps/3/app/src/main/res/layout/money_spent_fragment.xml" value="0.36666666666666664" />
         <entry key="..\:/AndroidStudioApps/3/app/src/main/res/layout/money_spent_percentage_fragment.xml" value="0.33" />
         <entry key="..\:/AndroidStudioApps/3/app/src/main/res/layout/monthly_balance_activity.xml" value="0.36666666666666664" />
