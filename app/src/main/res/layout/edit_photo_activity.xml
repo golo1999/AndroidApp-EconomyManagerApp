@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<layout>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
 
@@ -11,11 +13,10 @@
         <variable
             name="viewModel"
             type="com.example.economy_manager.feature.editphoto.EditPhotoViewModel" />
+
     </data>
 
-    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@drawable/ic_yellow_gradient_soda"
@@ -80,7 +81,7 @@
                 android:layout_width="0sp"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="2.5sp"
-                android:background="@drawable/button_blue_border"
+                android:background="@drawable/ic_outlined_button_light"
                 android:onClick="@{() -> viewModel.openFileChooser(activity)}"
                 android:text="@string/choose"
                 android:textColor="#195190"
@@ -96,7 +97,7 @@
                 android:layout_width="0sp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="2.5sp"
-                android:background="@drawable/button_blue_border"
+                android:background="@drawable/ic_outlined_button_light"
                 android:onClick="@{() -> activity.uploadFile()}"
                 android:text="@string/upload"
                 android:textColor="#195190"
@@ -110,4 +111,5 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+
 </layout>

@@ -131,7 +131,7 @@ public class SettingsActivity extends AppCompatActivity
 
     private void setButtonStyle(final Button button,
                                 final boolean darkThemeEnabled) {
-        button.setBackgroundResource(!darkThemeEnabled ? R.drawable.button_blue_border : R.drawable.button_white_border);
+        button.setBackgroundResource(!darkThemeEnabled ? R.drawable.ic_outlined_button_light : R.drawable.ic_outlined_button_dark);
         button.setTextColor(getColor(!darkThemeEnabled ? R.color.turkish_sea : R.color.white));
     }
 

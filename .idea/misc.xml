@@ -49,10 +49,15 @@
         <entry key="..\:/AndroidStudioApps/3/app/src/main/res/drawable/ic_money.xml" value="0.3828125" />
         <entry key="..\:/AndroidStudioApps/3/app/src/main/res/drawable/ic_new_app_icon_foreground.xml" value="0.3828125" />
         <entry key="..\:/AndroidStudioApps/3/app/src/main/res/drawable/ic_orange_gradient_mars_conquest.xml" value="0.3828125" />
+        <entry key="..\:/AndroidStudioApps/3/app/src/main/res/drawable/ic_outlined_button_dark.xml" value="0.3828125" />
+        <entry key="..\:/AndroidStudioApps/3/app/src/main/res/drawable/ic_outlined_button_light.xml" value="0.3828125" />
         <entry key="..\:/AndroidStudioApps/3/app/src/main/res/drawable/ic_password.xml" value="0.3828125" />
+        <entry key="..\:/AndroidStudioApps/3/app/src/main/res/drawable/ic_password_dark.xml" value="0.3828125" />
         <entry key="..\:/AndroidStudioApps/3/app/src/main/res/drawable/ic_password_gold.xml" value="0.3828125" />
         <entry key="..\:/AndroidStudioApps/3/app/src/main/res/drawable/ic_person.xml" value="0.3828125" />
         <entry key="..\:/AndroidStudioApps/3/app/src/main/res/drawable/ic_person_blue.xml" value="0.3828125" />
+        <entry key="..\:/AndroidStudioApps/3/app/src/main/res/drawable/ic_person_dark.xml" value="0.3828125" />
+        <entry key="..\:/AndroidStudioApps/3/app/src/main/res/drawable/ic_person_light.xml" value="0.3828125" />
         <entry key="..\:/AndroidStudioApps/3/app/src/main/res/drawable/ic_person_white.xml" value="0.3828125" />
         <entry key="..\:/AndroidStudioApps/3/app/src/main/res/drawable/ic_pink_gradient_developing_country.xml" value="0.3828125" />
         <entry key="..\:/AndroidStudioApps/3/app/src/main/res/drawable/ic_red_gradient_slow_internet.xml" value="0.3828125" />
@@ -82,9 +87,13 @@
         <entry key="..\:/AndroidStudioApps/3/app/src/main/res/layout/add_money_activity.xml" value="0.33" />
         <entry key="..\:/AndroidStudioApps/3/app/src/main/res/layout/budget_review_cardview.xml" value="0.36666666666666664" />
         <entry key="..\:/AndroidStudioApps/3/app/src/main/res/layout/budget_review_fragment.xml" value="0.36666666666666664" />
+        <entry key="..\:/AndroidStudioApps/3/app/src/main/res/layout/change_password_custom_dialog.xml" value="0.36666666666666664" />
+        <entry key="..\:/AndroidStudioApps/3/app/src/main/res/layout/custom_dialog.xml" value="0.36666666666666664" />
         <entry key="..\:/AndroidStudioApps/3/app/src/main/res/layout/custom_dialog_linearlayout.xml" value="0.36666666666666664" />
         <entry key="..\:/AndroidStudioApps/3/app/src/main/res/layout/custom_spinner_item.xml" value="0.3278985507246377" />
         <entry key="..\:/AndroidStudioApps/3/app/src/main/res/layout/edit_account_activity.xml" value="0.36666666666666664" />
+        <entry key="..\:/AndroidStudioApps/3/app/src/main/res/layout/edit_account_activity_NOT_USED.xml" value="0.36666666666666664" />
+        <entry key="..\:/AndroidStudioApps/3/app/src/main/res/layout/edit_account_activity_not_used.xml" value="0.2563405797101449" />
         <entry key="..\:/AndroidStudioApps/3/app/src/main/res/layout/edit_account_remastered_activity.xml" value="0.36666666666666664" />
         <entry key="..\:/AndroidStudioApps/3/app/src/main/res/layout/edit_photo_activity.xml" value="0.33" />
         <entry key="..\:/AndroidStudioApps/3/app/src/main/res/layout/edit_specific_transaction_activity.xml" value="0.3134057971014493" />
@@ -102,6 +111,7 @@
         <entry key="..\:/AndroidStudioApps/3/app/src/main/res/layout/main_screen_activity.xml" value="0.33" />
         <entry key="..\:/AndroidStudioApps/3/app/src/main/res/layout/main_screen_activity_dark.xml" value="0.36666666666666664" />
         <entry key="..\:/AndroidStudioApps/3/app/src/main/res/layout/main_screen_floating_action_buttons_layout.xml" value="0.36666666666666664" />
+        <entry key="..\:/AndroidStudioApps/3/app/src/main/res/layout/main_screen_greeting_card.xml" value="0.36666666666666664" />
         <entry key="..\:/AndroidStudioApps/3/app/src/main/res/layout/main_screen_top_layout.xml" value="0.36666666666666664" />
         <entry key="..\:/AndroidStudioApps/3/app/src/main/res/layout/money_spent_fragment.xml" value="0.36666666666666664" />
         <entry key="..\:/AndroidStudioApps/3/app/src/main/res/layout/money_spent_percentage_fragment.xml" value="0.33" />

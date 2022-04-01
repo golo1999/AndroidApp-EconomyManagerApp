@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<layout>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
 
@@ -19,17 +21,16 @@
         <variable
             name="viewModel"
             type="com.example.economy_manager.feature.login.LoginViewModel" />
+
     </data>
 
-    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/primaryDark"
         tools:context=".feature.login.LoginActivity">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <androidx.appcompat.widget.LinearLayoutCompat
             android:id="@+id/login_layout"
             android:layout_width="0sp"
             android:layout_height="wrap_content"
@@ -44,10 +45,11 @@
 
             <EditText
                 android:id="@+id/emailField"
-                android:layout_width="0sp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:autofillHints="AUTOFILL_HINT_USERNAME"
-                android:background="@drawable/button_outline_dark"
+                android:layout_marginBottom="10sp"
+                android:autofillHints="emailAddress"
+                android:background="@drawable/ic_outlined_button_dark"
                 android:drawableStart="@drawable/ic_email_dark"
                 android:drawablePadding="10sp"
                 android:hint="@string/email"
@@ -57,18 +59,15 @@
                 android:textColor="@color/secondaryDark"
                 android:textColorHint="@color/secondaryDark"
                 android:textCursorDrawable="@null"
-                android:textSize="18sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                android:textSize="18sp" />
 
             <EditText
                 android:id="@+id/passwordField"
-                android:layout_width="0sp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="20sp"
-                android:autofillHints="AUTOFILL_HINT_PASSWORD"
-                android:background="@drawable/button_outline_dark"
+                android:layout_marginVertical="10sp"
+                android:autofillHints="password"
+                android:background="@drawable/ic_outlined_button_dark"
                 android:drawableStart="@drawable/ic_password_dark"
                 android:drawablePadding="10sp"
                 android:hint="@string/password"
@@ -78,82 +77,64 @@
                 android:textColor="@color/secondaryDark"
                 android:textColorHint="@color/secondaryDark"
                 android:textCursorDrawable="@null"
-                android:textSize="18sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/emailField" />
+                android:textSize="18sp" />
 
             <TextView
                 android:id="@+id/forgotPasswordText"
-                android:layout_width="0sp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="20sp"
+                android:layout_marginVertical="10sp"
                 android:onClick="@{() -> viewModel.goToActivityInDirection(activity, forgotPasswordActivity, 0)}"
                 android:text="@string/forgot_password"
                 android:textAlignment="center"
                 android:textColor="@color/secondaryDark"
                 android:textSize="18sp"
-                android:textStyle="bold"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/passwordField" />
+                android:textStyle="bold" />
 
             <Button
                 android:id="@+id/logInButton"
-                android:layout_width="0sp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="20sp"
-                android:background="@drawable/button_outline_dark"
+                android:layout_marginVertical="10sp"
+                android:background="@drawable/ic_outlined_button_dark"
                 android:onClick="@{() -> viewModel.onLogInButtonClicked(activity, viewModel.enteredEmail, viewModel.enteredPassword)}"
                 android:padding="10sp"
                 android:stateListAnimator="@null"
-                android:text="@string/log_in_with_email"
+                android:text="@string/log_in"
                 android:textAlignment="center"
                 android:textColor="@color/secondaryDark"
                 android:textSize="18sp"
-                android:textStyle="bold"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/forgotPasswordText" />
+                android:textStyle="bold" />
 
             <com.facebook.login.widget.LoginButton
                 android:id="@+id/facebookLogInButton"
-                android:layout_width="0sp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
-                android:layout_marginTop="20sp"
+                android:layout_marginVertical="10sp"
                 android:paddingTop="10sp"
-                android:paddingBottom="10sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/logInButton" />
+                android:paddingBottom="10sp" />
 
             <com.google.android.gms.common.SignInButton
                 android:id="@+id/googleLogInButton"
-                android:layout_width="0sp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
-                android:layout_marginTop="20sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/facebookLogInButton" />
+                android:layout_marginVertical="10sp" />
 
             <TextView
                 android:id="@+id/createAccountText"
-                android:layout_width="0sp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="20sp"
+                android:layout_marginTop="10sp"
                 android:onClick="@{() -> viewModel.goToActivityInDirection(activity, registerActivity, 1)}"
                 android:text="@string/register"
                 android:textAlignment="center"
                 android:textColor="@color/secondaryDark"
                 android:textSize="18sp"
-                android:textStyle="bold"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/googleLogInButton" />
+                android:textStyle="bold" />
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.appcompat.widget.LinearLayoutCompat>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

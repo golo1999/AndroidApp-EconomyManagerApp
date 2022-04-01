@@ -1,8 +1,8 @@
-package com.example.economy_manager.feature.editaccount;
+package com.example.economy_manager.feature.editprofile;
 
 import android.app.Activity;
 import android.app.Application;
-import android.content.Context;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.databinding.ObservableField;
@@ -10,19 +10,18 @@ import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.AndroidViewModel;
 
 import com.example.economy_manager.R;
+import com.example.economy_manager.databinding.EditProfileActivityBinding;
 import com.example.economy_manager.model.UserDetails;
 import com.example.economy_manager.utility.Countries;
 import com.example.economy_manager.utility.DatePickerFragment;
 import com.example.economy_manager.utility.Genders;
 import com.example.economy_manager.utility.MyCustomMethods;
-import com.example.economy_manager.utility.Theme;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 
-public class EditAccountViewModel extends AndroidViewModel {
+public class EditProfileViewModel extends AndroidViewModel {
 
     private final ObservableField<String> firstName = new ObservableField<>("");
     private final ObservableField<String> lastName = new ObservableField<>("");
@@ -33,22 +32,25 @@ public class EditAccountViewModel extends AndroidViewModel {
     private LocalDate birthDate = LocalDate.now();
     private final ObservableField<String> careerTitle = new ObservableField<>("");
 
+    private final EditProfileActivityBinding binding;
     private UserDetails userDetails;
     private final ArrayList<String> countriesList = new ArrayList<>();
     private final ArrayList<String> gendersList = new ArrayList<>();
     private LocalDate transactionDate = LocalDate.now();
 
-    public EditAccountViewModel(final @NonNull Application application,
+    public EditProfileViewModel(final @NonNull Application application,
                                 final @NonNull Activity activity,
-                                final UserDetails userDetails) {
+                                final UserDetails userDetails,
+                                final EditProfileActivityBinding binding) {
         super(application);
 
         this.userDetails = userDetails;
+        this.binding = binding;
 
         Countries.populateList(application, countriesList);
         Genders.populateList(activity, gendersList);
-        sortListAscending(countriesList);
-        sortListAscending(gendersList);
+        MyCustomMethods.sortListAscending(countriesList);
+        MyCustomMethods.sortListAscending(gendersList);
     }
 
     public ObservableField<String> getFirstName() {
@@ -139,25 +141,6 @@ public class EditAccountViewModel extends AndroidViewModel {
         this.transactionDate = transactionDate;
     }
 
-    public int getActivityTheme(final Context context,
-                                final boolean isDarkThemeEnabled) {
-        return Theme.getBackgroundColor(context, isDarkThemeEnabled);
-    }
-
-    private boolean personalInformationIsValid(String enteredFirstName,
-                                               String enteredLastName,
-                                               String enteredPhoneNumber,
-                                               String enteredWebsite,
-                                               String enteredCountry,
-                                               String enteredGender,
-                                               String enteredCareerTitle) {
-        return MyCustomMethods.nameIsValid(enteredFirstName) == 1 &&
-                MyCustomMethods.nameIsValid(enteredLastName) == 1 &&
-                MyCustomMethods.stringIsNotEmpty(enteredCountry) &&
-                MyCustomMethods.stringIsNotEmpty(enteredGender) &&
-                MyCustomMethods.stringIsNotEmpty(enteredCareerTitle);
-    }
-
     public HashMap<String, Object> getPersonalInformation(final @NonNull Activity activity) {
         final HashMap<String, Object> personalInformationMap = new HashMap<>();
 
@@ -221,12 +204,6 @@ public class EditAccountViewModel extends AndroidViewModel {
         new DatePickerFragment(getTransactionDate()).show(fragmentManager, "date_picker");
     }
 
-    private void sortListAscending(@NonNull final ArrayList<String> list) {
-        if (!list.isEmpty()) {
-            Collections.sort(list);
-        }
-    }
-
     public void updateProfileHandler(@NonNull Activity activity) {
         final String enteredFirstName = firstName.get();
         final String enteredLastName = lastName.get();
@@ -253,21 +230,83 @@ public class EditAccountViewModel extends AndroidViewModel {
                 enteredCountryInEnglish + " " +
                 enteredGenderInEnglish);
 
-        if (enteredFirstName.trim().isEmpty() ||
-                enteredLastName.trim().isEmpty() ||
-                enteredPhoneNumber.trim().isEmpty() ||
-                enteredWebsite.trim().isEmpty() ||
-                enteredCountry.trim().isEmpty() ||
-                enteredGender.trim().isEmpty() ||
-                enteredCareerTitle.trim().isEmpty()
-        ) {
-            MyCustomMethods.showShortMessage(activity, "empty");
-            return;
-        }
-//        else if () {
-//
-//        }
+        // if all fields & spinners are valid
+        if (MyCustomMethods.nameIsValid(enteredFirstName) == 1 &&
+                MyCustomMethods.nameIsValid(enteredLastName) == 1 &&
+                MyCustomMethods.stringIsNotEmpty(enteredCountry) &&
+                MyCustomMethods.stringIsNotEmpty(enteredGender) &&
+                MyCustomMethods.stringIsNotEmpty(enteredCareerTitle)) {
+            MyCustomMethods.showShortMessage(activity, "OK");
+        } else {
+            // first name input errors
+            if (enteredFirstName.trim().isEmpty()) {
+                final String error = activity.getResources().getString(R.string.should_not_be_empty,
+                        activity.getResources().getString(R.string.first_name));
 
-        MyCustomMethods.showShortMessage(activity, "ez");
+                binding.firstNameField.setError(error);
+            } else if (MyCustomMethods.nameIsValid(enteredFirstName.trim()) == 0) {
+                final String error = activity.getResources().getString(R.string.should_have_at_least_characters,
+                        activity.getResources().getString(R.string.first_name), 2);
+
+                binding.firstNameField.setError(error);
+            } else if (MyCustomMethods.nameIsValid(enteredFirstName.trim()) == -1) {
+                final String error = activity.getResources().getString(R.string.contains_invalid_characters,
+                        activity.getResources().getString(R.string.first_name));
+
+                binding.firstNameField.setError(error);
+            }
+            // last name input errors
+            if (enteredLastName.trim().isEmpty()) {
+                final String error = activity.getResources().getString(R.string.should_not_be_empty,
+                        activity.getResources().getString(R.string.last_name));
+
+                binding.lastNameField.setError(error);
+            } else if (MyCustomMethods.nameIsValid(enteredLastName.trim()) == 0) {
+                final String error = activity.getResources().getString(R.string.should_have_at_least_characters,
+                        activity.getResources().getString(R.string.last_name), 2);
+
+                binding.lastNameField.setError(error);
+            } else if (MyCustomMethods.nameIsValid(enteredLastName.trim()) == -1) {
+                final String error = activity.getResources().getString(R.string.contains_invalid_characters,
+                        activity.getResources().getString(R.string.last_name));
+
+                binding.lastNameField.setError(error);
+            }
+            // phone number errors
+            if (enteredPhoneNumber.trim().isEmpty()) {
+                final String error = activity.getResources().getString(R.string.should_not_be_empty,
+                        activity.getResources().getString(R.string.phone_number));
+
+                binding.phoneField.setError(error);
+            }
+            // website errors
+            if (enteredWebsite.trim().isEmpty()) {
+                final String error = activity.getResources().getString(R.string.should_not_be_empty,
+                        activity.getResources().getString(R.string.website));
+
+                binding.websiteField.setError(error);
+            }
+            // country spinner errors
+            if (enteredCountryInEnglish == null) {
+                final String error = activity.getResources().getString(R.string.should_not_be_empty,
+                        activity.getResources().getString(R.string.country));
+
+                ((TextView) binding.countrySpinner.getSelectedView()).setError(error);
+            }
+            // gender spinner errors
+            if (enteredGenderInEnglish == null) {
+                final String error = activity.getResources().getString(R.string.should_not_be_empty,
+                        activity.getResources().getString(R.string.country));
+
+                ((TextView) binding.countrySpinner.getSelectedView()).setError(error);
+            }
+            // career title errors
+            if (enteredCareerTitle.trim().isEmpty()) {
+                final String error = activity.getResources().getString(R.string.should_not_be_empty,
+                        activity.getResources().getString(R.string.career_title));
+
+                binding.careerTitleField.setError(error);
+            }
+        }
     }
 }

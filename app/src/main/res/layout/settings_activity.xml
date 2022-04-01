@@ -36,12 +36,10 @@
             app:titleText="@{@string/settings}" />
 
         <ScrollView
-            android:layout_width="0sp"
+            android:layout_width="match_parent"
             android:layout_height="0sp"
             android:fillViewport="true"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/topLayout">
 
             <androidx.constraintlayout.widget.ConstraintLayout
@@ -120,7 +118,7 @@
                     android:id="@+id/rateButton"
                     android:layout_width="0sp"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="30sp"
+                    android:layout_marginTop="20sp"
                     android:padding="10sp"
                     android:stateListAnimator="@null"
                     android:text="@string/rate_the_app"

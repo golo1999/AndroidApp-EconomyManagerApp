@@ -11,8 +11,8 @@
             type="com.example.economy_manager.feature.mainscreen.MainScreenActivity" />
 
         <variable
-            name="editAccountActivity"
-            type="Class&lt;com.example.economy_manager.feature.editaccount.EditAccountActivity>" />
+            name="editProfileActivity"
+            type="Class&lt;com.example.economy_manager.feature.editprofile.EditProfileActivity>" />
 
         <variable
             name="editTransactionsActivity"
@@ -75,8 +75,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="5sp"
-            android:contentDescription="@string/edit_account"
-            android:onClick="@{() -> viewModel.goToActivity(activity, editAccountActivity)}"
+            android:contentDescription="@string/edit_profile"
+            android:onClick="@{() -> viewModel.goToActivity(activity, editProfileActivity)}"
             android:src="@{isDarkThemeEnabled ? @drawable/ic_account_dark : @drawable/ic_account_light}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@id/settings"

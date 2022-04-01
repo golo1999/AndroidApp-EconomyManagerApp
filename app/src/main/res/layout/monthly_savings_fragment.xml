@@ -11,15 +11,13 @@
         tools:context=".feature.monthlysavings.MonthlySavingsFragment">
 
         <TextView
-            android:id="@+id/showSavingsText"
-            android:layout_width="0sp"
+            android:id="@+id/monthlySavingsText"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textAlignment="center"
             android:textSize="20sp"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:text="@string/saving" />
 

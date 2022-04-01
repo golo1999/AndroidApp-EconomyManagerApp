@@ -1,4 +1,4 @@
-package com.example.economy_manager.feature.editaccount;
+package com.example.economy_manager.feature.editprofile;
 
 import android.app.DatePickerDialog;
 import android.content.SharedPreferences;
@@ -23,7 +23,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 
 import com.example.economy_manager.R;
-import com.example.economy_manager.databinding.EditAccountRemasteredActivityBinding;
+import com.example.economy_manager.databinding.EditProfileActivityBinding;
 import com.example.economy_manager.feature.editphoto.EditPhotoActivity;
 import com.example.economy_manager.model.BirthDate;
 import com.example.economy_manager.model.PersonalInformation;
@@ -40,12 +40,12 @@ import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Locale;
 
-public class EditAccountActivity
+public class EditProfileActivity
         extends AppCompatActivity
         implements DatePickerDialog.OnDateSetListener {
 
-    private EditAccountRemasteredActivityBinding binding;
-    private EditAccountViewModel viewModel;
+    private EditProfileActivityBinding binding;
+    private EditProfileViewModel viewModel;
     private SharedPreferences preferences;
     private UserDetails userDetails;
     private boolean isDarkThemeEnabled;
@@ -68,18 +68,6 @@ public class EditAccountActivity
         getAndSetPersonalInformation();
         setSpinnerOnSelectedItemListener(binding.countrySpinner, "COUNTRY_SPINNER");
         setSpinnerOnSelectedItemListener(binding.genderSpinner, "GENDER_SPINNER");
-
-        binding.firstNameField.setOnFocusChangeListener((View v, boolean hasFocus) -> {
-//            if (!hasFocus) {
-//                binding.firstNameField.setHint(getResources().getString(R.string.edit_account_first_name));
-//            } else {
-//                binding.firstNameField.setHint("");
-//            }
-
-//            if (hasFocus) {
-//                binding.firstNameField.setHint("");
-//            }
-        });
     }
 
     /**
@@ -90,9 +78,7 @@ public class EditAccountActivity
                           final int year,
                           final int month,
                           final int dayOfMonth) {
-        final LocalDate newTransactionDate = LocalDate.of(year, month + 1, dayOfMonth);
-
-        setBirthDateText(newTransactionDate);
+        setBirthDateText(LocalDate.of(year, month + 1, dayOfMonth));
     }
 
     /**
@@ -104,7 +90,7 @@ public class EditAccountActivity
         final String accountPhotoImageURL = String.valueOf(retrievedPersonalInformation.get("photoURL"));
 
         final int accountPhotoPlaceholder = userDetails == null || !userDetails.getApplicationSettings().isDarkThemeEnabled() ?
-                R.drawable.ic_person_blue : R.drawable.ic_person_white;
+                R.drawable.ic_person_light : R.drawable.ic_person_dark;
 
         final int accountPhotoBorderColor = userDetails == null || !userDetails.getApplicationSettings().isDarkThemeEnabled() ?
                 getColor(R.color.turkish_sea) : Color.WHITE;
@@ -140,20 +126,14 @@ public class EditAccountActivity
         binding.photo.setBorderColor(accountPhotoBorderColor);
 
         binding.firstNameField.setHint(firstNameHint);
-
         binding.lastNameField.setHint(lastNameHint);
-
         binding.phoneField.setHint(phoneNumberHint);
-
         binding.websiteField.setHint(websiteHint);
-
         binding.countrySpinner.setSelection(countrySpinnerSelection);
-
         binding.genderSpinner.setSelection(genderSpinnerSelection);
+        binding.careerTitleField.setHint(careerTitleHint);
 
         setBirthDateText(birthDateHint);
-
-        binding.careerTitleField.setHint(careerTitleHint);
     }
 
     private PersonalInformation personalInformationValidation(final PersonalInformation initialPersonalInformation) {
@@ -369,7 +349,7 @@ public class EditAccountActivity
 
     private void setOnClickListeners() {
         binding.photo.setOnClickListener((final View view) ->
-                MyCustomMethods.goToActivityWithFadeTransition(EditAccountActivity.this,
+                MyCustomMethods.goToActivityWithFadeTransition(EditProfileActivity.this,
                         EditPhotoActivity.class));
 
 //        binding.updateProfileButton.setOnClickListener((final View view) -> {
@@ -469,13 +449,14 @@ public class EditAccountActivity
                 userDetails.getApplicationSettings().isDarkThemeEnabled() :
                 MyCustomVariables.getDefaultUserDetails().getApplicationSettings().isDarkThemeEnabled();
 
+        binding.setIsDarkThemeEnabled(isDarkThemeEnabled);
+
         // turkish sea (blue) if dark theme is enabled or white if it's not
         final int color = !isDarkThemeEnabled ? getColor(R.color.turkish_sea) : Color.WHITE;
 
         final int dropDownTheme = !isDarkThemeEnabled ?
                 R.drawable.ic_blue_gradient_unloved_teen : R.drawable.ic_white_gradient_tobacco_ad;
 
-        getWindow().getDecorView().setBackgroundColor(viewModel.getActivityTheme(this, isDarkThemeEnabled));
         // setting arrow color
         binding.countrySpinner.getBackground().setColorFilter(color, PorterDuff.Mode.SRC_ATOP);
         // setting element's color
@@ -483,30 +464,20 @@ public class EditAccountActivity
         binding.genderSpinner.getBackground().setColorFilter(color, PorterDuff.Mode.SRC_ATOP);
         binding.genderSpinner.setPopupBackgroundResource(dropDownTheme);
 
-        setEditTextColor(binding.firstNameField, color);
-        setEditTextColor(binding.lastNameField, color);
-        setEditTextColor(binding.phoneField, color);
-        setEditTextColor(binding.websiteField, color);
-        setEditTextColor(binding.careerTitleField, color);
+//        setEditTextColor(binding.firstNameField, color);
+//        setEditTextColor(binding.lastNameField, color);
+//        setEditTextColor(binding.phoneField, color);
+//        setEditTextColor(binding.websiteField, color);
+//        setEditTextColor(binding.careerTitleField, color);
 
         setBirthDateTextStyle(color);
-        setUpdateProfileButtonStyle(isDarkThemeEnabled);
-    }
-
-    private void setUpdateProfileButtonStyle(final boolean darkThemeEnabled) {
-        final int buttonBackground = darkThemeEnabled ? R.drawable.button_white_border : R.drawable.button_blue_border;
-
-        final int buttonTextColor = darkThemeEnabled ? Color.WHITE : getColor(R.color.turkish_sea);
-
-        binding.updateProfileButton.setBackgroundResource(buttonBackground);
-        binding.updateProfileButton.setTextColor(buttonTextColor);
     }
 
     private void setVariables() {
-        binding = DataBindingUtil.setContentView(this, R.layout.edit_account_remastered_activity);
+        binding = DataBindingUtil.setContentView(this, R.layout.edit_profile_activity);
         preferences = getSharedPreferences(MyCustomVariables.getSharedPreferencesFileName(), MODE_PRIVATE);
         userDetails = MyCustomSharedPreferences.retrieveUserDetailsFromSharedPreferences(this);
-        viewModel = new EditAccountViewModel(getApplication(), this, userDetails);
+        viewModel = new EditProfileViewModel(getApplication(), this, userDetails, binding);
 
         binding.setActivity(this);
         binding.setFragmentManager(getSupportFragmentManager());

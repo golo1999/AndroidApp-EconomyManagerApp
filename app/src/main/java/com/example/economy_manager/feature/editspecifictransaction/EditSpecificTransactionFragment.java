@@ -209,7 +209,7 @@ public class EditSpecificTransactionFragment extends Fragment {
     }
 
     private void setSaveChangesButtonStyle(final boolean darkThemeEnabled) {
-        final int background = !darkThemeEnabled ? R.drawable.button_blue_border : R.drawable.button_white_border;
+        final int background = !darkThemeEnabled ? R.drawable.ic_outlined_button_light : R.drawable.ic_outlined_button_dark;
 
         final int textColor = requireContext().getColor(!darkThemeEnabled ? R.color.turkish_sea : R.color.white);
 

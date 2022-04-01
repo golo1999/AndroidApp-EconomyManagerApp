@@ -1,7 +1,6 @@
 <resources>
     <string name="account">Account</string>
     <string name="added_successfully">%s added successfully</string>
-    <string name="and">and</string>
     <string name="and_between_spaces">&#32;and&#32;</string>
     <string name="app_name" translatable="false">Economy Manager</string>
     <string name="balance">Balance</string>
@@ -11,13 +10,14 @@
     <string name="change_account_image">Change account image</string>
     <string name="change_password">Change password</string>
     <string name="choose">Choose</string>
+    <string name="country">Country</string>
     <string name="currency">Currency</string>
     <string name="dark_theme">Dark theme</string>
     <string name="date">Date</string>
     <string name="day">Day</string>
     <string name="debt">Debt</string>
     <string name="delete_account">Delete account</string>
-    <string name="edit_account">Edit account</string>
+    <string name="edit_profile">Edit profile</string>
     <string name="edit_specific_transaction">Edit specific transaction</string>
     <string name="edit_transaction_date">Edit transaction date</string>
     <string name="email">Email</string>
@@ -29,6 +29,7 @@
     <string name="favorite_expenses">Favorite expenses</string>
     <string name="first_name">First name</string>
     <string name="forgot_password">Forgot password</string>
+    <string name="gender">Gender</string>
     <string name="go_back">Go back</string>
     <string name="good_afternoon">Good afternoon!</string>
     <string name="good_evening">Good evening!</string>
@@ -42,7 +43,6 @@
     <string name="last_ten_transactions">Last 10 transactions</string>
     <string name="last_week_expenses">Last week expenses</string>
     <string name="log_in">Log in</string>
-    <string name="log_in_with_email">Log in with email</string>
     <string name="login">Login</string>
     <string name="login_successful">Login successful</string>
     <string name="minute">Minute</string>
@@ -94,7 +94,7 @@
     <string name="top_five_expenses">Top 5 expenses</string>
     <string name="transactions">Transactions</string>
     <string name="type">Type</string>
-    <string name="update_profile">Update profile</string>
+    <string name="update">Update</string>
     <string name="upload">Upload</string>
     <string name="upload_successful">Upload successful</string>
     <string name="value">Value</string>
@@ -161,6 +161,7 @@
 
     <!-- Errors -->
 
+    <string name="contains_invalid_characters">%s contains invalid characters</string>
     <string name="email_address_is_not_valid">Email address is not valid</string>
     <string name="email_already_exists">Email already exists</string>
     <string name="email_and_password_are_not_valid">Email and password are not valid</string>

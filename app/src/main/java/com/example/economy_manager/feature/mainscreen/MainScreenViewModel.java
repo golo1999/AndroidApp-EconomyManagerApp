@@ -24,7 +24,6 @@ import com.example.economy_manager.model.UserDetails;
 import com.example.economy_manager.utility.Languages;
 import com.example.economy_manager.utility.MyCustomMethods;
 import com.example.economy_manager.utility.MyCustomVariables;
-import com.example.economy_manager.utility.Theme;
 import com.example.economy_manager.utility.Types;
 import com.facebook.login.LoginManager;
 
@@ -128,14 +127,6 @@ public class MainScreenViewModel extends ViewModel {
 
     private int timerCounter = 0;
 
-    public int getActivityTheme(final Context context) {
-        final boolean isDarkThemeEnabled = getUserDetails() != null ?
-                getUserDetails().getApplicationSettings().isDarkThemeEnabled() :
-                MyCustomVariables.getDefaultUserDetails().getApplicationSettings().isDarkThemeEnabled();
-
-        return Theme.getBackgroundColor(context, isDarkThemeEnabled);
-    }
-
     public UserDetails getUserDetails() {
         return userDetails;
     }
@@ -224,14 +215,6 @@ public class MainScreenViewModel extends ViewModel {
                 R.color.expenses_sports : key == 16 ?
                 R.color.expenses_taxi : key == 17 ?
                 R.color.expenses_toiletry : R.color.expenses_transport);
-    }
-
-    public int getTextColor(final @NonNull Activity activity) {
-        final boolean darkThemeEnabled = getUserDetails() != null ?
-                getUserDetails().getApplicationSettings().isDarkThemeEnabled() :
-                MyCustomVariables.getDefaultUserDetails().getApplicationSettings().isDarkThemeEnabled();
-
-        return darkThemeEnabled ? activity.getColor(R.color.tertiaryLight) : activity.getColor(R.color.quaternaryLight);
     }
 
     public void goToActivity(final @NonNull Activity currentActivity,

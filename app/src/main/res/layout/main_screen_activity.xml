@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
 
@@ -21,8 +23,8 @@
             type="String" />
 
         <variable
-            name="editAccountActivity"
-            type="Class&lt;com.example.economy_manager.feature.editaccount.EditAccountActivity>" />
+            name="editProfileActivity"
+            type="Class&lt;com.example.economy_manager.feature.editprofile.EditProfileActivity>" />
 
         <variable
             name="editTransactionsActivity"
@@ -54,29 +56,28 @@
 
     </data>
 
-    <androidx.constraintlayout.motion.widget.MotionLayout xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
+    <androidx.constraintlayout.motion.widget.MotionLayout
         android:id="@+id/main_screen_main_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@{isDarkThemeEnabled ? @color/primaryDark : @color/primaryLight}"
         app:layoutDescription="@xml/activity_main_screen_scene"
+        tools:background="@color/primaryLight"
         tools:context=".feature.mainscreen.MainScreenActivity">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <RelativeLayout
             android:id="@+id/firebaseLoadingProgressBarLayout"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            tools:visibility="gone">
 
             <ProgressBar
                 android:id="@+id/firebaseLoadingProgressBar"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                android:layout_centerInParent="true" />
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
+        </RelativeLayout>
 
         <include
             android:id="@+id/topLayout"
@@ -84,7 +85,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:activity="@{activity}"
-            app:editAccountActivity="@{editAccountActivity}"
+            app:editProfileActivity="@{editProfileActivity}"
             app:editTransactionsActivity="@{editTransactionsActivity}"
             app:isDarkThemeEnabled="@{isDarkThemeEnabled}"
             app:monthlyBalanceActivity="@{monthlyBalanceActivity}"
@@ -93,13 +94,11 @@
 
         <androidx.core.widget.NestedScrollView
             android:id="@+id/nestedScrollView"
-            android:layout_width="0sp"
+            android:layout_width="match_parent"
             android:layout_height="0sp"
             android:fillViewport="true"
             android:orientation="vertical"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/topLayout">
 
             <androidx.constraintlayout.widget.ConstraintLayout
@@ -128,6 +127,7 @@
                     android:layout_width="0sp"
                     android:layout_height="wrap_content"
                     android:text="@string/remaining_monthly_income"
+                    android:textColor="@{isDarkThemeEnabled ? @color/tertiaryLight : @color/quaternaryLight}"
                     android:textSize="20sp"
                     android:textStyle="bold"
                     app:layout_constraintBottom_toTopOf="@id/showSavingsCard"
@@ -162,6 +162,7 @@
                     android:layout_width="0sp"
                     android:layout_height="wrap_content"
                     android:text="@string/monthly_balance"
+                    android:textColor="@{isDarkThemeEnabled ? @color/tertiaryLight : @color/quaternaryLight}"
                     android:textSize="20sp"
                     android:textStyle="bold"
                     app:layout_constraintBottom_toTopOf="@id/budgetReviewCard"
@@ -196,6 +197,7 @@
                     android:layout_width="0sp"
                     android:layout_height="wrap_content"
                     android:text="@string/last_week_expenses"
+                    android:textColor="@{isDarkThemeEnabled ? @color/tertiaryLight : @color/quaternaryLight}"
                     android:textSize="20sp"
                     android:textStyle="bold"
                     app:layout_constraintBottom_toTopOf="@id/moneySpentCard"
@@ -230,6 +232,7 @@
                     android:layout_width="0sp"
                     android:layout_height="wrap_content"
                     android:text="@string/last_ten_transactions"
+                    android:textColor="@{isDarkThemeEnabled ? @color/tertiaryLight : @color/quaternaryLight}"
                     android:textSize="20sp"
                     android:textStyle="bold"
                     app:layout_constraintBottom_toTopOf="@id/lastTenTransactionsCard"
@@ -264,6 +267,7 @@
                     android:layout_width="0sp"
                     android:layout_height="wrap_content"
                     android:text="@string/top_five_expenses"
+                    android:textColor="@{isDarkThemeEnabled ? @color/tertiaryLight : @color/quaternaryLight}"
                     android:textSize="20sp"
                     android:textStyle="bold"
                     app:layout_constraintBottom_toTopOf="@id/topFiveExpensesCard"
@@ -298,6 +302,7 @@
                     android:layout_width="0sp"
                     android:layout_height="wrap_content"
                     android:text="@string/favorite_expenses"
+                    android:textColor="@{isDarkThemeEnabled ? @color/tertiaryLight : @color/quaternaryLight}"
                     android:textSize="20sp"
                     android:textStyle="bold"
                     app:layout_constraintBottom_toTopOf="@id/favoriteExpensesCategoryFragmentContainer"
@@ -322,6 +327,7 @@
                     android:layout_width="0sp"
                     android:layout_height="wrap_content"
                     android:text="@string/expenses_chart"
+                    android:textColor="@{isDarkThemeEnabled ? @color/tertiaryLight : @color/quaternaryLight}"
                     android:textSize="20sp"
                     android:textStyle="bold"
                     app:layout_constraintBottom_toTopOf="@id/expensesChartCard"

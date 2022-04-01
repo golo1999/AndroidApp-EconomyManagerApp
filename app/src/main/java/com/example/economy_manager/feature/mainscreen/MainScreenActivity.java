@@ -15,7 +15,7 @@ import com.example.economy_manager.R;
 import com.example.economy_manager.databinding.MainScreenActivityBinding;
 import com.example.economy_manager.feature.addexpense.AddExpenseActivity;
 import com.example.economy_manager.feature.addincome.AddIncomeActivity;
-import com.example.economy_manager.feature.editaccount.EditAccountActivity;
+import com.example.economy_manager.feature.editprofile.EditProfileActivity;
 import com.example.economy_manager.feature.edittransactions.EditTransactionsActivity;
 import com.example.economy_manager.feature.moneyspentpercentage.MoneySpentPercentageFragment;
 import com.example.economy_manager.feature.monthlybalance.MonthlyBalanceActivity;
@@ -72,8 +72,6 @@ public class MainScreenActivity
     protected void onStart() {
         super.onStart();
         setUserDetails();
-        setActivityTheme();
-        setTextsBetweenFragments();
         setDates();
         setMoneySpentPercentage();
     }
@@ -98,10 +96,6 @@ public class MainScreenActivity
         }
 
         binding.expensesChartFragmentContainer.setLayoutParams(moneySpentPercentageLayoutParams);
-    }
-
-    private void setActivityTheme() {
-        getWindow().getDecorView().setBackgroundColor(viewModel.getActivityTheme(this));
     }
 
     private void setDates() {
@@ -197,18 +191,6 @@ public class MainScreenActivity
                 });
     }
 
-    private void setTextsBetweenFragments() {
-        final int color = viewModel.getTextColor(this);
-
-        binding.remainingMonthlyIncomeText.setTextColor(color);
-        binding.monthlyBalanceText.setTextColor(color);
-        binding.lastWeekExpensesText.setTextColor(color);
-        binding.lastTenTransactionsText.setTextColor(color);
-        binding.topFiveExpensesText.setTextColor(color);
-        binding.favoriteExpensesCategoryText.setTextColor(color);
-        binding.expensesChartText.setTextColor(color);
-    }
-
     private void setTimer() {
         final Timer timer = new Timer();
 
@@ -241,7 +223,9 @@ public class MainScreenActivity
             viewModel.setUserDetails(userDetails);
         }
 
-        binding.setIsDarkThemeEnabled(viewModel.getUserDetails().getApplicationSettings().isDarkThemeEnabled());
+        if (viewModel.getUserDetails() != null) {
+            binding.setIsDarkThemeEnabled(viewModel.getUserDetails().getApplicationSettings().isDarkThemeEnabled());
+        }
 
         MyCustomVariables.getDatabaseReference()
                 .child(currentUserID)
@@ -294,7 +278,7 @@ public class MainScreenActivity
         binding.setActivity(this);
         binding.setAddExpenseActivity(AddExpenseActivity.class);
         binding.setAddIncomeActivity(AddIncomeActivity.class);
-        binding.setEditAccountActivity(EditAccountActivity.class);
+        binding.setEditProfileActivity(EditProfileActivity.class);
         binding.setEditTransactionsActivity(EditTransactionsActivity.class);
         binding.setMonthlyBalanceActivity(MonthlyBalanceActivity.class);
         binding.setSettingsActivity(SettingsActivity.class);

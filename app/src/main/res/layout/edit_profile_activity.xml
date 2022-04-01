@@ -6,15 +6,19 @@
 
         <variable
             name="activity"
-            type="com.example.economy_manager.feature.editaccount.EditAccountActivity" />
+            type="com.example.economy_manager.feature.editprofile.EditProfileActivity" />
 
         <variable
             name="fragmentManager"
             type="androidx.fragment.app.FragmentManager" />
 
         <variable
+            name="isDarkThemeEnabled"
+            type="boolean" />
+
+        <variable
             name="viewModel"
-            type="com.example.economy_manager.feature.editaccount.EditAccountViewModel" />
+            type="com.example.economy_manager.feature.editprofile.EditProfileViewModel" />
 
     </data>
 
@@ -25,17 +29,17 @@
         android:layout_height="match_parent">
 
         <ScrollView
-            android:layout_width="0sp"
-            android:layout_height="0sp"
-            android:fillViewport="true"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fillViewport="true">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:background="@{isDarkThemeEnabled ? @color/primaryDark : @color/primaryLight}"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                tools:background="@color/primaryLight">
 
                 <include
                     android:id="@+id/topLayout"
@@ -45,7 +49,7 @@
                     app:activity="@{activity}"
                     app:backgroundColor="@{@color/quaternaryLight}"
                     app:titleColor="@{@color/primaryLight}"
-                    app:titleText="@{@string/edit_account}" />
+                    app:titleText="@{@string/edit_profile}" />
 
                 <de.hdodenhof.circleimageview.CircleImageView
                     android:id="@+id/photo"
@@ -60,42 +64,47 @@
                     app:layout_constraintWidth_percent=".4"
                     tools:src="@drawable/ic_add_photo" />
 
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/firstNameFieldLayout"
+                <EditText
+                    android:id="@+id/firstNameField"
                     android:layout_width="0sp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="20sp"
-                    android:focusable="true"
-                    android:focusableInTouchMode="true"
-                    app:errorEnabled="true"
+                    android:autofillHints="name"
+                    android:background="@{isDarkThemeEnabled ? @drawable/ic_outlined_button_dark : @drawable/ic_outlined_button_light}"
+                    android:drawableStart="@{isDarkThemeEnabled ? @drawable/ic_person_dark : @drawable/ic_person_light}"
+                    android:drawablePadding="10sp"
+                    android:inputType="textPersonName"
+                    android:padding="10sp"
+                    android:text="@={viewModel.firstName}"
+                    android:textColor="@{isDarkThemeEnabled ? @color/secondaryDark : @color/quaternaryLight}"
+                    android:textColorHint="@{isDarkThemeEnabled ? @color/secondaryDark : @color/quaternaryLight}"
+                    android:textCursorDrawable="@null"
+                    android:textSize="18sp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/photo"
-                    app:layout_constraintWidth_percent=".8">
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/firstNameField"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="@string/first_name"
-                        android:inputType="textPersonName"
-                        android:text="@={viewModel.firstName}"
-                        android:textSize="18sp" />
-
-                </com.google.android.material.textfield.TextInputLayout>
+                    app:layout_constraintWidth_percent=".8"
+                    tools:background="@drawable/ic_outlined_button_light"
+                    tools:drawableStart="@drawable/ic_person_light"
+                    tools:ignore="labelFor"
+                    tools:text="@string/first_name"
+                    tools:textColor="@color/quaternaryLight"
+                    tools:textColorHint="@color/quaternaryLight" />
 
                 <EditText
                     android:id="@+id/lastNameField"
                     android:layout_width="0sp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="20sp"
+                    android:autofillHints="name"
                     android:inputType="textPersonName"
                     android:text="@={viewModel.lastName}"
                     android:textSize="18sp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/firstNameFieldLayout"
+                    app:layout_constraintTop_toBottomOf="@id/firstNameField"
                     app:layout_constraintWidth_percent=".8"
+                    tools:ignore="labelFor"
                     tools:text="@string/last_name" />
 
                 <EditText
@@ -103,6 +112,7 @@
                     android:layout_width="0sp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="20sp"
+                    android:autofillHints="phone"
                     android:inputType="phone"
                     android:text="@={viewModel.phoneNumber}"
                     android:textSize="18sp"
@@ -110,6 +120,7 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/lastNameField"
                     app:layout_constraintWidth_percent=".8"
+                    tools:ignore="labelFor"
                     tools:text="@string/phone_number" />
 
                 <EditText
@@ -117,6 +128,7 @@
                     android:layout_width="0sp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="20sp"
+                    android:autofillHints="name"
                     android:inputType="text"
                     android:text="@={viewModel.website}"
                     android:textSize="18sp"
@@ -124,6 +136,7 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/phoneField"
                     app:layout_constraintWidth_percent=".8"
+                    tools:ignore="labelFor"
                     tools:text="@string/website" />
 
                 <Spinner
@@ -166,6 +179,7 @@
                     android:layout_width="0sp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="20sp"
+                    android:autofillHints="name"
                     android:inputType="text"
                     android:text="@={viewModel.careerTitle}"
                     android:textSize="18sp"
@@ -173,6 +187,7 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/birthDateText"
                     app:layout_constraintWidth_percent=".8"
+                    tools:ignore="labelFor"
                     tools:text="@string/career_title" />
 
                 <Button
@@ -180,17 +195,21 @@
                     android:layout_width="0sp"
                     android:layout_height="wrap_content"
                     android:layout_marginVertical="20sp"
+                    android:background="@{isDarkThemeEnabled ? @drawable/ic_outlined_button_dark : @drawable/ic_outlined_button_light}"
                     android:onClick="@{() -> viewModel.updateProfileHandler(activity)}"
                     android:padding="10sp"
                     android:stateListAnimator="@null"
-                    android:text="@string/update_profile"
+                    android:text="@string/update"
+                    android:textColor="@{isDarkThemeEnabled ? @color/secondaryDark : @color/quaternaryLight}"
                     android:textSize="18sp"
                     android:textStyle="bold"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/careerTitleField"
-                    app:layout_constraintWidth_percent=".8" />
+                    app:layout_constraintWidth_percent=".8"
+                    tools:background="@drawable/ic_outlined_button_light"
+                    tools:textColor="@color/quaternaryLight" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 

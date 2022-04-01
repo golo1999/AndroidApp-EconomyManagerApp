@@ -23,6 +23,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
@@ -143,6 +144,12 @@ public final class MyCustomMethods {
         float tmp = number * pow;
 
         return ((float) ((int) ((tmp - (int) tmp) >= 0.5f ? tmp + 1 : tmp))) / pow;
+    }
+
+    public static <T extends Comparable<? super T>> void sortListAscending(@NonNull final ArrayList<T> list) {
+        if (!list.isEmpty()) {
+            Collections.sort(list);
+        }
     }
 
     public static void sortMapDescendingByValue(final @NonNull LinkedHashMap<Integer, Float> map) {

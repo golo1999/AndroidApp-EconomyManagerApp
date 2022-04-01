@@ -108,9 +108,9 @@ public class MonthlySavingsFragment extends Fragment {
                                             "-" + currencySymbol + Math.abs(totalMonthlySavings) :
                                             currencySymbol + totalMonthlySavings;
 
-                            binding.showSavingsText.setText(savingsText);
+                            binding.monthlySavingsText.setText(savingsText);
 
-                            binding.showSavingsText.setTextColor(totalMonthlySavings > 0f ?
+                            binding.monthlySavingsText.setTextColor(totalMonthlySavings > 0f ?
                                     requireContext().getColor(R.color.secondaryLight) :
                                     totalMonthlySavings == 0f ?
                                             requireContext().getColor(R.color.quaternaryLight) :
@@ -134,7 +134,7 @@ public class MonthlySavingsFragment extends Fragment {
                     Locale.getDefault().getDisplayLanguage().equals(Languages.ENGLISH_LANGUAGE) ?
                             currencySymbol + totalMonthlySavings : totalMonthlySavings + " " + currencySymbol;
 
-            binding.showSavingsText.setText(savingsText);
+            binding.monthlySavingsText.setText(savingsText);
         }
     }
 }
