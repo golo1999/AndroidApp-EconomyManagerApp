@@ -162,8 +162,7 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     tools:background="@drawable/ic_outlined_button_dark"
-                    tools:textColor="@color/secondaryDark"
-                    tools:textColorHint="@color/secondaryDark" />
+                    tools:textColor="@color/secondaryDark" />
 
                 <Button
                     android:id="@+id/saveButton"
@@ -182,8 +181,7 @@
                     app:layout_constraintStart_toEndOf="@id/cancelButton"
                     app:layout_constraintTop_toTopOf="parent"
                     tools:background="@drawable/ic_outlined_button_dark"
-                    tools:textColor="@color/secondaryDark"
-                    tools:textColorHint="@color/secondaryDark" />
+                    tools:textColor="@color/secondaryDark" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 

@@ -39,7 +39,7 @@
                 android:background="@{isDarkThemeEnabled ? @color/primaryDark : @color/primaryLight}"
                 android:focusable="true"
                 android:focusableInTouchMode="true"
-                tools:background="@color/primaryLight">
+                tools:background="@color/primaryDark">
 
                 <include
                     android:id="@+id/topLayout"
@@ -62,7 +62,7 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/topLayout"
                     app:layout_constraintWidth_percent=".4"
-                    tools:src="@drawable/ic_add_photo" />
+                    tools:src="@drawable/ic_person_dark" />
 
                 <EditText
                     android:id="@+id/firstNameField"
@@ -84,12 +84,12 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/photo"
                     app:layout_constraintWidth_percent=".8"
-                    tools:background="@drawable/ic_outlined_button_light"
-                    tools:drawableStart="@drawable/ic_person_light"
+                    tools:background="@drawable/ic_outlined_button_dark"
+                    tools:drawableStart="@drawable/ic_person_dark"
                     tools:ignore="labelFor"
                     tools:text="@string/first_name"
-                    tools:textColor="@color/quaternaryLight"
-                    tools:textColorHint="@color/quaternaryLight" />
+                    tools:textColor="@color/secondaryDark"
+                    tools:textColorHint="@color/secondaryDark" />
 
                 <EditText
                     android:id="@+id/lastNameField"
@@ -97,15 +97,25 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="20sp"
                     android:autofillHints="name"
+                    android:background="@{isDarkThemeEnabled ? @drawable/ic_outlined_button_dark : @drawable/ic_outlined_button_light}"
+                    android:drawableStart="@{isDarkThemeEnabled ? @drawable/ic_person_dark : @drawable/ic_person_light}"
+                    android:drawablePadding="10sp"
                     android:inputType="textPersonName"
+                    android:padding="10sp"
                     android:text="@={viewModel.lastName}"
+                    android:textColor="@{isDarkThemeEnabled ? @color/secondaryDark : @color/quaternaryLight}"
+                    android:textColorHint="@{isDarkThemeEnabled ? @color/secondaryDark : @color/quaternaryLight}"
                     android:textSize="18sp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/firstNameField"
                     app:layout_constraintWidth_percent=".8"
+                    tools:background="@drawable/ic_outlined_button_dark"
+                    tools:drawableStart="@drawable/ic_person_dark"
                     tools:ignore="labelFor"
-                    tools:text="@string/last_name" />
+                    tools:text="@string/last_name"
+                    tools:textColor="@color/secondaryDark"
+                    tools:textColorHint="@color/secondaryDark" />
 
                 <EditText
                     android:id="@+id/phoneField"
@@ -113,15 +123,25 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="20sp"
                     android:autofillHints="phone"
+                    android:background="@{isDarkThemeEnabled ? @drawable/ic_outlined_button_dark : @drawable/ic_outlined_button_light}"
+                    android:drawableStart="@{isDarkThemeEnabled ? @drawable/ic_phone_dark : @drawable/ic_phone_light}"
+                    android:drawablePadding="10sp"
                     android:inputType="phone"
+                    android:padding="10sp"
                     android:text="@={viewModel.phoneNumber}"
+                    android:textColor="@{isDarkThemeEnabled ? @color/secondaryDark : @color/quaternaryLight}"
+                    android:textColorHint="@{isDarkThemeEnabled ? @color/secondaryDark : @color/quaternaryLight}"
                     android:textSize="18sp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/lastNameField"
                     app:layout_constraintWidth_percent=".8"
+                    tools:background="@drawable/ic_outlined_button_dark"
+                    tools:drawableStart="@drawable/ic_phone_dark"
                     tools:ignore="labelFor"
-                    tools:text="@string/phone_number" />
+                    tools:text="@string/phone_number"
+                    tools:textColor="@color/secondaryDark"
+                    tools:textColorHint="@color/secondaryDark" />
 
                 <EditText
                     android:id="@+id/websiteField"
@@ -129,15 +149,25 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="20sp"
                     android:autofillHints="name"
+                    android:background="@{isDarkThemeEnabled ? @drawable/ic_outlined_button_dark : @drawable/ic_outlined_button_light}"
+                    android:drawableStart="@{isDarkThemeEnabled ? @drawable/ic_website_dark : @drawable/ic_website_light}"
+                    android:drawablePadding="10sp"
                     android:inputType="text"
+                    android:padding="10sp"
                     android:text="@={viewModel.website}"
+                    android:textColor="@{isDarkThemeEnabled ? @color/secondaryDark : @color/quaternaryLight}"
+                    android:textColorHint="@{isDarkThemeEnabled ? @color/secondaryDark : @color/quaternaryLight}"
                     android:textSize="18sp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/phoneField"
                     app:layout_constraintWidth_percent=".8"
+                    tools:background="@drawable/ic_outlined_button_dark"
+                    tools:drawableStart="@drawable/ic_website_dark"
                     tools:ignore="labelFor"
-                    tools:text="@string/website" />
+                    tools:text="@string/website"
+                    tools:textColor="@color/secondaryDark"
+                    tools:textColorHint="@color/secondaryDark" />
 
                 <Spinner
                     android:id="@+id/countrySpinner"
@@ -164,15 +194,22 @@
                     android:layout_width="0sp"
                     android:layout_height="match_parent"
                     android:layout_marginTop="20sp"
+                    android:drawableStart="@{isDarkThemeEnabled ? @drawable/ic_calendar_dark : @drawable/ic_calendar_light}"
                     android:drawablePadding="10sp"
                     android:onClick="@{() -> viewModel.onBirthDateTextClicked(fragmentManager)}"
+                    android:padding="10sp"
+                    android:textColor="@{isDarkThemeEnabled ? @color/secondaryDark : @color/quaternaryLight}"
+                    android:textColorHint="@{isDarkThemeEnabled ? @color/secondaryDark : @color/quaternaryLight}"
                     android:textSize="18sp"
                     android:textStyle="bold"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/genderSpinner"
                     app:layout_constraintWidth_percent=".8"
-                    tools:text="@string/birth_date" />
+                    tools:drawableStart="@drawable/ic_calendar_dark"
+                    tools:text="@string/birth_date"
+                    tools:textColor="@color/secondaryDark"
+                    tools:textColorHint="@color/secondaryDark" />
 
                 <EditText
                     android:id="@+id/careerTitleField"
@@ -180,15 +217,25 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="20sp"
                     android:autofillHints="name"
+                    android:background="@{isDarkThemeEnabled ? @drawable/ic_outlined_button_dark : @drawable/ic_outlined_button_light}"
+                    android:drawableStart="@{isDarkThemeEnabled ? @drawable/ic_business_dark : @drawable/ic_business_light}"
+                    android:drawablePadding="10sp"
                     android:inputType="text"
+                    android:padding="10sp"
                     android:text="@={viewModel.careerTitle}"
+                    android:textColor="@{isDarkThemeEnabled ? @color/secondaryDark : @color/quaternaryLight}"
+                    android:textColorHint="@{isDarkThemeEnabled ? @color/secondaryDark : @color/quaternaryLight}"
                     android:textSize="18sp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/birthDateText"
                     app:layout_constraintWidth_percent=".8"
+                    tools:background="@drawable/ic_outlined_button_dark"
+                    tools:drawableStart="@drawable/ic_business_dark"
                     tools:ignore="labelFor"
-                    tools:text="@string/career_title" />
+                    tools:text="@string/career_title"
+                    tools:textColor="@color/secondaryDark"
+                    tools:textColorHint="@color/secondaryDark" />
 
                 <Button
                     android:id="@+id/updateProfileButton"
@@ -208,8 +255,8 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/careerTitleField"
                     app:layout_constraintWidth_percent=".8"
-                    tools:background="@drawable/ic_outlined_button_light"
-                    tools:textColor="@color/quaternaryLight" />
+                    tools:background="@drawable/ic_outlined_button_dark"
+                    tools:textColor="@color/secondaryDark" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
