@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="account">Conta</string>
-    <string name="added_successfully">adicionado com sucesso</string>
+    <string name="added_successfully">" %s adicionado com sucesso"</string>
     <string name="deposits">Depósitos</string>
     <string name="independent_sources">Fontes independentes</string>
     <string name="new_income">Nova renda</string>

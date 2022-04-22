@@ -71,7 +71,7 @@
     <string name="please_select_a_file_first">Vă rugăm să selectați un fișier mai întâi</string>
     <string name="change_account_image">Schimbați imaginea contului</string>
     <string name="please_enter_a_valid_birth_date">Vă rugăm să introduceți o dată de naștere validă</string>
-    <string name="added_successfully">adăugat/ă cu succes</string>
+    <string name="added_successfully">%s adăugat/ă cu succes</string>
     <string name="email">Email</string>
     <string name="bills">Facturi</string>
     <string name="car">Automobil</string>

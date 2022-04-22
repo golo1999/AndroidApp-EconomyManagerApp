@@ -129,7 +129,7 @@ public class EditSpecificTransactionFragment extends Fragment {
 
     private void setDateTextColor(final int color) {
         final int drawableStartIcon = color == requireContext().getColor(R.color.turkish_sea) ?
-                R.drawable.ic_calendar_blue : R.drawable.ic_calendar_white;
+                R.drawable.ic_calendar_light : R.drawable.ic_calendar_dark;
 
         binding.dateText.setTextColor(color);
         binding.dateText.setCompoundDrawablesRelativeWithIntrinsicBounds(drawableStartIcon, 0, 0, 0);

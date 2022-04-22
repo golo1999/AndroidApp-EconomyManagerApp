@@ -64,7 +64,8 @@ public class MainScreenActivity
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setTimer();
-        setVariables();
+        setActivityVariables();
+        setLayoutVariables();
         setFragments();
     }
 
@@ -217,10 +218,7 @@ public class MainScreenActivity
         }
 
         if (MyCustomSharedPreferences.retrieveUserDetailsFromSharedPreferences(this) != null) {
-            final UserDetails userDetails =
-                    MyCustomSharedPreferences.retrieveUserDetailsFromSharedPreferences(this);
-
-            viewModel.setUserDetails(userDetails);
+            viewModel.setUserDetails(MyCustomSharedPreferences.retrieveUserDetailsFromSharedPreferences(this));
         }
 
         if (viewModel.getUserDetails() != null) {
@@ -268,13 +266,18 @@ public class MainScreenActivity
     }
 
     /**
-     * Method for setting activity & layout variables
+     * Method for setting activity variables
      */
-    private void setVariables() {
+    private void setActivityVariables() {
         binding = DataBindingUtil.setContentView(this, R.layout.main_screen_activity);
         viewModel = new ViewModelProvider(this).get(MainScreenViewModel.class);
         moneySpentPercentageLayoutParams = binding.expensesChartFragmentContainer.getLayoutParams();
+    }
 
+    /**
+     * Method for setting layout variables
+     */
+    private void setLayoutVariables() {
         binding.setActivity(this);
         binding.setAddExpenseActivity(AddExpenseActivity.class);
         binding.setAddIncomeActivity(AddIncomeActivity.class);
