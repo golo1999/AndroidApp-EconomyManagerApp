@@ -13,6 +13,10 @@
             type="androidx.fragment.app.FragmentManager" />
 
         <variable
+            name="isDarkThemeEnabled"
+            type="boolean" />
+
+        <variable
             name="viewModel"
             type="com.example.economy_manager.feature.settings.SettingsViewModel" />
 
@@ -23,6 +27,8 @@
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@{isDarkThemeEnabled ? @color/primaryDark : @color/primaryLight}"
+        tools:background="@color/primaryDark"
         tools:context=".feature.settings.SettingsActivity">
 
         <include
@@ -62,11 +68,13 @@
                         android:layout_height="wrap_content"
                         android:text="@string/dark_theme"
                         android:textAlignment="center"
+                        android:textColor="@{isDarkThemeEnabled ? @color/secondaryDark : @color/quaternaryLight}"
                         android:textSize="20sp"
                         android:textStyle="bold"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
+                        app:layout_constraintTop_toTopOf="parent"
+                        tools:textColor="@color/secondaryDark" />
 
                     <com.google.android.material.switchmaterial.SwitchMaterial
                         android:id="@+id/themeSwitch"
@@ -96,11 +104,13 @@
                         android:layout_height="wrap_content"
                         android:text="@string/currency"
                         android:textAlignment="center"
+                        android:textColor="@{isDarkThemeEnabled ? @color/secondaryDark : @color/quaternaryLight}"
                         android:textSize="20sp"
                         android:textStyle="bold"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
+                        app:layout_constraintTop_toTopOf="parent"
+                        tools:textColor="@color/secondaryDark" />
 
                     <Spinner
                         android:id="@+id/currencySpinner"
@@ -119,63 +129,79 @@
                     android:layout_width="0sp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="20sp"
+                    android:background="@{isDarkThemeEnabled ? @drawable/ic_outlined_button_dark : @drawable/ic_outlined_button_light}"
                     android:padding="10sp"
                     android:stateListAnimator="@null"
                     android:text="@string/rate_the_app"
+                    android:textColor="@{isDarkThemeEnabled ? @color/secondaryDark : @color/quaternaryLight}"
                     android:textSize="18sp"
                     android:textStyle="bold"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/currencyLayout"
-                    app:layout_constraintWidth_percent=".9" />
+                    app:layout_constraintWidth_percent=".9"
+                    tools:background="@drawable/ic_outlined_button_dark"
+                    tools:textColor="@color/secondaryDark" />
 
                 <Button
                     android:id="@+id/changePasswordButton"
                     android:layout_width="0sp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="20sp"
+                    android:background="@{isDarkThemeEnabled ? @drawable/ic_outlined_button_dark : @drawable/ic_outlined_button_light}"
                     android:onClick="@{(view) -> viewModel.onChangePasswordButtonClicked(fragmentManager, view)}"
                     android:padding="10sp"
                     android:stateListAnimator="@null"
                     android:text="@string/change_password"
+                    android:textColor="@{isDarkThemeEnabled ? @color/secondaryDark : @color/quaternaryLight}"
                     android:textSize="18sp"
                     android:textStyle="bold"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/rateButton"
-                    app:layout_constraintWidth_percent=".9" />
+                    app:layout_constraintWidth_percent=".9"
+                    tools:background="@drawable/ic_outlined_button_dark"
+                    tools:textColor="@color/secondaryDark" />
 
                 <Button
                     android:id="@+id/resetDatabaseButton"
                     android:layout_width="0sp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="20sp"
+                    android:background="@{isDarkThemeEnabled ? @drawable/ic_outlined_button_dark : @drawable/ic_outlined_button_light}"
                     android:onClick="@{(view) -> viewModel.onResetDatabaseButtonClicked(fragmentManager, view)}"
                     android:padding="10sp"
                     android:stateListAnimator="@null"
                     android:text="@string/reset_database"
+                    android:textColor="@{isDarkThemeEnabled ? @color/secondaryDark : @color/quaternaryLight}"
                     android:textSize="18sp"
                     android:textStyle="bold"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/changePasswordButton"
-                    app:layout_constraintWidth_percent=".9" />
+                    app:layout_constraintWidth_percent=".9"
+                    tools:background="@drawable/ic_outlined_button_dark"
+                    tools:textColor="@color/secondaryDark" />
 
                 <Button
                     android:id="@+id/deleteAccountButton"
                     android:layout_width="0sp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="20sp"
+                    android:background="@{isDarkThemeEnabled ? @drawable/ic_outlined_button_dark : @drawable/ic_outlined_button_light}"
                     android:onClick="@{(view) -> viewModel.onDeleteAccountButtonClicked(fragmentManager, view)}"
                     android:padding="10sp"
                     android:stateListAnimator="@null"
                     android:text="@string/delete_account"
+                    android:textColor="@{isDarkThemeEnabled ? @color/secondaryDark : @color/quaternaryLight}"
                     android:textSize="18sp"
                     android:textStyle="bold"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/resetDatabaseButton"
-                    app:layout_constraintWidth_percent=".9" />
+                    app:layout_constraintWidth_percent=".9"
+                    tools:background="@drawable/ic_outlined_button_dark"
+                    tools:textColor="@color/secondaryDark" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 

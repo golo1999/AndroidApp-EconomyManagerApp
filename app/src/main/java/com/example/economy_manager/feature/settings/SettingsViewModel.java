@@ -6,7 +6,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Color;
 import android.view.View;
 
 import androidx.annotation.NonNull;
@@ -22,7 +21,6 @@ import com.example.economy_manager.model.UserDetails;
 import com.example.economy_manager.utility.MyCustomMethods;
 import com.example.economy_manager.utility.MyCustomSharedPreferences;
 import com.example.economy_manager.utility.MyCustomVariables;
-import com.example.economy_manager.utility.Theme;
 import com.facebook.AccessToken;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -198,22 +196,6 @@ public class SettingsViewModel extends AndroidViewModel {
                     currentActivity.getResources().getString(R.string.should_not_be_empty,
                             currentActivity.getResources().getString(R.string.password)));
         }
-    }
-
-    public int getTextColor(final Context context) {
-        final boolean checked = userDetails != null ?
-                userDetails.getApplicationSettings().isDarkThemeEnabled() :
-                MyCustomVariables.getDefaultUserDetails().getApplicationSettings().isDarkThemeEnabled();
-
-        return !checked ? context.getColor(R.color.turkish_sea) : Color.WHITE;
-    }
-
-    public int getTheme(final Context context) {
-        final boolean isDarkThemeEnabled = userDetails != null ?
-                userDetails.getApplicationSettings().isDarkThemeEnabled() :
-                MyCustomVariables.getDefaultUserDetails().getApplicationSettings().isDarkThemeEnabled();
-
-        return Theme.getBackgroundColor(context, isDarkThemeEnabled);
     }
 
     public void onChangePasswordButtonClicked(final FragmentManager fragmentManager,
