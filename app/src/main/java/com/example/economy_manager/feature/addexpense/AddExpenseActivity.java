@@ -237,7 +237,6 @@ public class AddExpenseActivity
     private void setLayoutVariables() {
         binding.setActivity(this);
         binding.setFragmentManager(getSupportFragmentManager());
-//        binding.setIsDarkThemeEnabled(true);
         binding.setViewModel(viewModel);
     }
 
