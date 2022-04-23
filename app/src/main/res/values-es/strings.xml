@@ -71,8 +71,8 @@
     <string name="sign_out">Desconectar</string>
     <string name="balance">Equilibrar</string>
     <string name="please_enter_your_password">Por favor, introduzca su contraseña</string>
-    <string name="old_password">Ingrese la contraseña anterior</string>
-    <string name="new_password">Ingrese nueva clave</string>
+    <string name="old_password">La vieja contraseña</string>
+    <string name="new_password">La nueva contraseña</string>
     <string name="date">Fecha</string>
     <string name="day">Día</string>
     <string name="debt">Deuda</string>
@@ -209,4 +209,5 @@
     <string name="should_have_at_least_characters">%s debe tener al menos %d caracteres</string>
     <string name="log_in">Acceder</string>
     <string name="login">Acceso</string>
+    <string name="edit_photo">Editar foto</string>
 </resources>

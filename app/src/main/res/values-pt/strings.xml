@@ -18,8 +18,8 @@
     <string name="no_expenses_made_yet">Nenhuma despesa feita ainda</string>
     <string name="please_enter_your_password">Por favor, insira sua senha</string>
     <string name="choose">Escolher</string>
-    <string name="new_password">Insira a nova senha</string>
-    <string name="old_password">Digite a senha antiga</string>
+    <string name="new_password">A nova senha</string>
+    <string name="old_password">A senha antiga</string>
     <string name="date">Data</string>
     <string name="day">Dia</string>
     <string name="debt">Dívida</string>
@@ -209,4 +209,5 @@
     <string name="should_have_at_least_characters">%s deve ter pelo menos %d caracteres</string>
     <string name="log_in">Conecte-se</string>
     <string name="login">Conecte-se</string>
+    <string name="edit_photo">Editar foto</string>
 </resources>

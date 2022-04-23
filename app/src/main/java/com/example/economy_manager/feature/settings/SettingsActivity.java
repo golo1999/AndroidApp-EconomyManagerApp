@@ -10,6 +10,7 @@ import android.widget.AdapterView;
 import android.widget.CompoundButton;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SwitchCompat;
 import androidx.databinding.DataBindingUtil;
@@ -121,10 +122,8 @@ public class SettingsActivity extends AppCompatActivity
         viewModel = new SettingsViewModel(getApplication(), userDetails);
     }
 
-    public void setCurrencySelectorSpinnerTheme(final View v) {
-        final boolean isDarkThemeEnabled = viewModel.getUserDetails() != null ?
-                viewModel.getUserDetails().getApplicationSettings().isDarkThemeEnabled() :
-                MyCustomVariables.getDefaultUserDetails().getApplicationSettings().isDarkThemeEnabled();
+    public void setCurrencySelectorSpinnerTheme(@NonNull final View v) {
+        final boolean isDarkThemeEnabled = binding.getIsDarkThemeEnabled();
         final int itemBackgroundColor = getColor(isDarkThemeEnabled ? R.color.primaryLight : R.color.primaryDark);
         final int itemTextColor = getColor(isDarkThemeEnabled ? R.color.quaternaryLight : R.color.secondaryDark);
 
@@ -133,11 +132,7 @@ public class SettingsActivity extends AppCompatActivity
     }
 
     private void setDarkThemeSwitch(final SwitchCompat darkThemeSwitch) {
-        final boolean isDarkThemeEnabled = viewModel.getUserDetails() != null ?
-                viewModel.getUserDetails().getApplicationSettings().isDarkThemeEnabled() :
-                MyCustomVariables.getDefaultUserDetails().getApplicationSettings().isDarkThemeEnabled();
-
-        darkThemeSwitch.setChecked(isDarkThemeEnabled);
+        darkThemeSwitch.setChecked(binding.getIsDarkThemeEnabled());
     }
 
     private void setLayoutVariables() {
@@ -161,7 +156,7 @@ public class SettingsActivity extends AppCompatActivity
                     return;
                 }
 
-                final int itemTextColor = getColor(viewModel.getUserDetails().getApplicationSettings().isDarkThemeEnabled() ?
+                final int itemTextColor = getColor(binding.getIsDarkThemeEnabled() ?
                         R.color.secondaryDark : R.color.quaternaryLight);
 
                 // the first element will have the text aligned to its start and
@@ -181,13 +176,10 @@ public class SettingsActivity extends AppCompatActivity
     }
 
     private void setSpinners() {
-        final boolean isDarkThemeEnabled = viewModel.getUserDetails() != null ?
-                viewModel.getUserDetails().getApplicationSettings().isDarkThemeEnabled() :
-                MyCustomVariables.getDefaultUserDetails().getApplicationSettings().isDarkThemeEnabled();
         final String currency = viewModel.getUserDetails() != null ?
                 viewModel.getUserDetails().getApplicationSettings().getCurrency() :
                 MyCustomVariables.getDefaultCurrency();
-        final int arrowColor = getColor(isDarkThemeEnabled ? R.color.secondaryDark : R.color.quaternaryLight);
+        final int arrowColor = getColor(binding.getIsDarkThemeEnabled() ? R.color.secondaryDark : R.color.quaternaryLight);
 
         // setting arrow color
         binding.currencySpinner.getBackground().setColorFilter(arrowColor, PorterDuff.Mode.SRC_ATOP);

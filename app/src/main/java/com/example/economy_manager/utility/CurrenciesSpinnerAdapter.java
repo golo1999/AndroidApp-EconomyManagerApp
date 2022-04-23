@@ -13,13 +13,13 @@ import androidx.annotation.Nullable;
 import com.example.economy_manager.feature.settings.SettingsActivity;
 
 public class CurrenciesSpinnerAdapter extends ArrayAdapter<String> {
+
     private final Context context;
 
     public CurrenciesSpinnerAdapter(final Context context,
                                     final int textViewResourceId,
                                     final String[] currenciesList) {
         super(context, textViewResourceId, currenciesList);
-
         this.context = context;
     }
 

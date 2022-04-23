@@ -15,6 +15,7 @@ import com.example.economy_manager.R;
 import com.example.economy_manager.databinding.EditPhotoActivityBinding;
 import com.example.economy_manager.model.UserDetails;
 import com.example.economy_manager.utility.MyCustomMethods;
+import com.example.economy_manager.utility.MyCustomSharedPreferences;
 import com.example.economy_manager.utility.MyCustomVariables;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.storage.UploadTask;
@@ -33,7 +34,9 @@ public class EditPhotoActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setVariables();
+        setActivityVariables();
+        setLayoutVariables();
+        setUserDetails();
         setInitialProgressBar();
         viewModel.showPhoto(binding.uploadedPhoto);
     }
@@ -59,12 +62,30 @@ public class EditPhotoActivity extends AppCompatActivity {
         binding.progressBar.setVisibility(View.INVISIBLE);
     }
 
-    private void setVariables() {
+    private void setActivityVariables() {
         binding = DataBindingUtil.setContentView(this, R.layout.edit_photo_activity);
         viewModel = new ViewModelProvider(this).get(EditPhotoViewModel.class);
+    }
 
+    private void setLayoutVariables() {
         binding.setActivity(this);
         binding.setViewModel(viewModel);
+    }
+
+    private void setUserDetails() {
+        final String currentUserID = MyCustomVariables.getFirebaseAuth().getUid();
+
+        if (currentUserID == null) {
+            return;
+        }
+
+        if (MyCustomSharedPreferences.retrieveUserDetailsFromSharedPreferences(this) != null) {
+            viewModel.setUserDetails(MyCustomSharedPreferences.retrieveUserDetailsFromSharedPreferences(this));
+        }
+
+        if (viewModel.getUserDetails() != null) {
+            binding.setIsDarkThemeEnabled(viewModel.getUserDetails().getApplicationSettings().isDarkThemeEnabled());
+        }
     }
 
     public void uploadFile() {

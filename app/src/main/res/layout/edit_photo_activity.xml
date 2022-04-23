@@ -11,6 +11,10 @@
             type="com.example.economy_manager.feature.editphoto.EditPhotoActivity" />
 
         <variable
+            name="isDarkThemeEnabled"
+            type="boolean" />
+
+        <variable
             name="viewModel"
             type="com.example.economy_manager.feature.editphoto.EditPhotoViewModel" />
 
@@ -19,30 +23,19 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/ic_yellow_gradient_soda"
+        android:background="@{isDarkThemeEnabled ? @color/primaryDark : @color/primaryLight}"
+        tools:background="@color/primaryDark"
         tools:context=".feature.editphoto.EditPhotoActivity">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <include
             android:id="@+id/topLayout"
+            layout="@layout/top_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
-
-            <ImageView
-                android:id="@+id/goBack"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="5sp"
-                android:onClick="@{() -> activity.onBackPressed()}"
-                android:src="@drawable/ic_back"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:tint="@color/turkish_sea" />
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
+            app:activity="@{activity}"
+            app:backgroundColor="@{@color/quaternaryLight}"
+            app:titleColor="@{@color/primaryLight}"
+            app:titleText="@{@string/edit_photo}" />
 
         <ImageView
             android:id="@+id/uploadedPhoto"
@@ -63,6 +56,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="5sp"
+            android:progressTint="@{isDarkThemeEnabled ? @color/secondaryDark: @color/quaternaryLight}"
             app:layout_constraintBottom_toTopOf="@id/bottomLayout" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -81,32 +75,36 @@
                 android:layout_width="0sp"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="2.5sp"
-                android:background="@drawable/ic_outlined_button_light"
+                android:background="@{isDarkThemeEnabled ? @drawable/ic_outlined_button_dark : @drawable/ic_outlined_button_light}"
                 android:onClick="@{() -> viewModel.openFileChooser(activity)}"
                 android:text="@string/choose"
-                android:textColor="#195190"
+                android:textColor="@{isDarkThemeEnabled ? @color/secondaryDark : @color/quaternaryLight}"
                 android:textSize="18sp"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@id/uploadFileButton"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                tools:background="@drawable/ic_outlined_button_dark"
+                tools:textColor="@color/secondaryDark" />
 
             <Button
                 android:id="@+id/uploadFileButton"
                 android:layout_width="0sp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="2.5sp"
-                android:background="@drawable/ic_outlined_button_light"
+                android:background="@{isDarkThemeEnabled ? @drawable/ic_outlined_button_dark : @drawable/ic_outlined_button_light}"
                 android:onClick="@{() -> activity.uploadFile()}"
                 android:text="@string/upload"
-                android:textColor="#195190"
+                android:textColor="@{isDarkThemeEnabled ? @color/secondaryDark : @color/quaternaryLight}"
                 android:textSize="18sp"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@id/chooseFileButton"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                tools:background="@drawable/ic_outlined_button_dark"
+                tools:textColor="@color/secondaryDark" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

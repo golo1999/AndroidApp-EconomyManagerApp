@@ -86,10 +86,10 @@ public class EditProfileActivity
         final HashMap<String, Object> retrievedPersonalInformation = viewModel.getPersonalInformation(this);
 
         final String accountPhotoImageURL = String.valueOf(retrievedPersonalInformation.get("photoURL"));
-        final int accountPhotoPlaceholder = userDetails == null || !userDetails.getApplicationSettings().isDarkThemeEnabled() ?
-                R.drawable.ic_person_light : R.drawable.ic_person_dark;
-        final int accountPhotoBorderColor = userDetails == null || !userDetails.getApplicationSettings().isDarkThemeEnabled() ?
-                getColor(R.color.quaternaryLight) : getColor(R.color.secondaryDark);
+        final int accountPhotoPlaceholder =
+                binding.getIsDarkThemeEnabled() ? R.drawable.ic_person_dark : R.drawable.ic_person_light;
+        final int accountPhotoBorderColor =
+                binding.getIsDarkThemeEnabled() ? getColor(R.color.secondaryDark) : getColor(R.color.quaternaryLight);
 
         final String firstNameHint = String.valueOf(retrievedPersonalInformation.get("firstName"));
         final String lastNameHint = String.valueOf(retrievedPersonalInformation.get("lastName"));
@@ -126,7 +126,8 @@ public class EditProfileActivity
         setBirthDateText(birthDateHint);
     }
 
-    private PersonalInformation personalInformationValidation(final PersonalInformation initialPersonalInformation) {
+    @Nullable
+    private PersonalInformation personalInformationValidation(@NonNull final PersonalInformation initialPersonalInformation) {
         final String enteredFirstName = !String.valueOf(binding.firstNameField.getText()).trim().isEmpty() ?
                 String.valueOf(binding.firstNameField.getText()).trim() :
                 !String.valueOf(binding.firstNameField.getHint()).trim().equals(getResources().getString(R.string.first_name)) ?
@@ -330,9 +331,10 @@ public class EditProfileActivity
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
     }
 
-    private void setSpinner(final String spinnerType) {
+    private void setSpinner(@NonNull final String spinnerType) {
         final ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.custom_spinner_item,
                 spinnerType.equals("COUNTRY_SPINNER") ? viewModel.getCountriesList() : viewModel.getGendersList()) {
+            @NonNull
             @Override
             public View getDropDownView(final int position,
                                         final @Nullable View convertView,
@@ -369,7 +371,7 @@ public class EditProfileActivity
     /**
      * Method for styling spinner's first element
      */
-    private void setSpinnerOnSelectedItemListener(final Spinner spinner,
+    private void setSpinnerOnSelectedItemListener(@NonNull final Spinner spinner,
                                                   final String spinnerType) {
         final AdapterView.OnItemSelectedListener itemSelectedListener = new AdapterView.OnItemSelectedListener() {
             @Override
