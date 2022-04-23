@@ -171,7 +171,7 @@
     <string name="monthly_balance">Saldo mensual</string>
     <string name="income">Ingreso</string>
     <string name="incomes">Ingresos</string>
-    <string name="added_successfully">%s añadido con éxito</string>
+<!--    <string name="added_successfully">%s añadido con éxito</string>-->
     <string name="the_account_was_successfully_deleted">La cuenta fue eliminada con éxito</string>
     <string name="the_database_was_reset_successfully">La base de datos se restableció correctamente</string>
     <string name="email_and_password_do_not_match">Correo electrónico y contraseña no coinciden</string>
@@ -210,4 +210,6 @@
     <string name="log_in">Acceder</string>
     <string name="login">Acceso</string>
     <string name="edit_photo">Editar foto</string>
+    <string name="expense_added_successfully">Gasto añadido con éxito</string>
+    <string name="income_added_successfully">Ingresos añadidos con éxito</string>
 </resources>

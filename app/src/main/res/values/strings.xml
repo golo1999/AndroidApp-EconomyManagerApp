@@ -1,6 +1,6 @@
 <resources>
     <string name="account">Account</string>
-    <string name="added_successfully">%s added successfully</string>
+    <!--    <string name="added_successfully">%s added successfully</string>-->
     <string name="and_between_spaces">&#32;and&#32;</string>
     <string name="app_name" translatable="false">Economy Manager</string>
     <string name="balance">Balance</string>
@@ -23,6 +23,7 @@
     <string name="edit_transaction_date">Edit transaction date</string>
     <string name="email">Email</string>
     <string name="expense">Expense</string>
+    <string name="expense_added_successfully">Expense added successfully</string>
     <string name="expenses">Expenses</string>
     <string name="expenses_chart">Expenses chart</string>
     <string name="facebook_app_id" translatable="false">973649146445611</string>
@@ -37,6 +38,7 @@
     <string name="good_morning">Good morning!</string>
     <string name="hour">Hour</string>
     <string name="income">Income</string>
+    <string name="income_added_successfully">Income added successfully</string>
     <string name="incomes">Incomes</string>
     <string name="incorrect_phone_number">Incorrect phone number</string>
     <string name="language">Language</string>
@@ -104,7 +106,7 @@
     <string name="whitespace" translatable="false">&#160;</string>
     <string name="year">Year</string>
     <string name="yes">Yes</string>
-    <string name="you_spent_last_week">You spent %s last week</string>
+    <string name="you_spent_last_week">You spent %s in the last week</string>
     <string name="you_spent_percentage_of_your_incomes">You spent %s of your incomes</string>
 
     <!-- Countries -->

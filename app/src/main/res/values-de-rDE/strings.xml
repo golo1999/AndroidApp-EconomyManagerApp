@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="added_successfully">" %s erfolgreich hinzugefügt"</string>
+<!--    <string name="added_successfully">" %s erfolgreich hinzugefügt"</string>-->
     <string name="new_income">Neues Einkommen</string>
     <string name="cancel">Stornieren</string>
     <string name="day">Tag</string>
@@ -210,4 +210,6 @@
     <string name="login">Anmeldung</string>
     <string name="log_in">Einloggen</string>
     <string name="edit_photo">Foto bearbeiten</string>
+    <string name="expense_added_successfully">Kosten erfolgreich hinzugefügt</string>
+    <string name="income_added_successfully">Einkommen erfolgreich hinzugefügt</string>
 </resources>

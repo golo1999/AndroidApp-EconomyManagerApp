@@ -94,8 +94,7 @@ public class AddIncomeActivity
                 .setValue(newTransaction)
                 .addOnSuccessListener((final Void aVoid) -> {
                     MyCustomMethods.showShortMessage(this,
-                            getResources().getString(R.string.added_successfully,
-                                    getResources().getString(R.string.income)));
+                            getResources().getString(R.string.income_added_successfully));
 
                     finish();
                     overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);

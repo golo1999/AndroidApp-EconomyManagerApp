@@ -17,7 +17,7 @@
     <string name="november">Novembre</string>
     <string name="december">Décembre</string>
     <string name="deposits">Dépôts</string>
-    <string name="added_successfully">ajouté avec succès</string>
+<!--    <string name="added_successfully">ajouté avec succès</string>-->
     <string name="independent_sources">Sources indépendantes</string>
     <string name="new_income">Nouveau revenu</string>
     <string name="account">Compte</string>
@@ -210,4 +210,6 @@
     <string name="log_in">Connexion</string>
     <string name="login">Entrer</string>
     <string name="edit_photo">Modifier photo</string>
+    <string name="expense_added_successfully">Dépense ajoutée avec succès</string>
+    <string name="income_added_successfully">Revenu ajouté avec succès</string>
 </resources>

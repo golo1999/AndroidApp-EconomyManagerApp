@@ -16,7 +16,7 @@
     <string name="save">Salva</string>
     <string name="save_changes">Salvare le modifiche</string>
     <string name="saving">Risparmio</string>
-    <string name="added_successfully">%s aggiunto con successo</string>
+<!--    <string name="added_successfully">%s aggiunto con successo</string>-->
     <string name="new_income">Nuovo reddito</string>
     <string name="account">Conto</string>
     <string name="transactions">Transazioni</string>
@@ -210,4 +210,6 @@
     <string name="login">Accesso</string>
     <string name="log_in">Accesso</string>
     <string name="edit_photo">Modifica foto</string>
+    <string name="expense_added_successfully">Spesa aggiunta con successo</string>
+    <string name="income_added_successfully">Entrata aggiunta con successo</string>
 </resources>
