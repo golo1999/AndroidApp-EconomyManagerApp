@@ -2,7 +2,6 @@ package com.example.economy_manager.feature.addexpense;
 
 import android.app.DatePickerDialog;
 import android.content.res.ColorStateList;
-import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.widget.DatePicker;
@@ -18,6 +17,7 @@ import com.example.economy_manager.databinding.AddExpenseActivityBinding;
 import com.example.economy_manager.model.MyCustomTime;
 import com.example.economy_manager.model.Transaction;
 import com.example.economy_manager.utility.MyCustomMethods;
+import com.example.economy_manager.utility.MyCustomSharedPreferences;
 import com.example.economy_manager.utility.MyCustomVariables;
 import com.example.economy_manager.utility.Types;
 
@@ -36,7 +36,9 @@ public class AddExpenseActivity
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setVariables();
+        setActivityVariables();
+        setLayoutVariables();
+        setUserDetails();
         setDateText(viewModel.getTransactionDate());
         viewModel.limitTwoDecimals(binding.valueField);
         createRadioButtons();
@@ -53,9 +55,7 @@ public class AddExpenseActivity
                           final int year,
                           final int month,
                           final int dayOfMonth) {
-        final LocalDate newTransactionDate = LocalDate.of(year, month + 1, dayOfMonth);
-
-        setDateText(newTransactionDate);
+        setDateText(LocalDate.of(year, month + 1, dayOfMonth));
     }
 
     private void addTransactionToDatabase(final int selectedID,
@@ -113,65 +113,39 @@ public class AddExpenseActivity
 
     private void createRadioButtons() {
         final ArrayList<String> buttonTextArray = new ArrayList<>();
+        final int color = viewModel.getUserDetails().getApplicationSettings().isDarkThemeEnabled() ?
+                getColor(R.color.secondaryDark) : getColor(R.color.quaternaryLight);
 
         final String billsText = viewModel.getBillsText(this);
-
-        final int billsValue = R.id.add_money_radio_button_bills;
-
         final String carText = viewModel.getCarText(this);
-
-        final int carValue = R.id.add_money_radio_button_car;
-
         final String clothesText = viewModel.getClothesText(this);
-
-        final int clothesValue = R.id.add_money_radio_button_clothes;
-
         final String communicationsText = viewModel.getCommunicationsText(this);
-
-        final int communicationsValue = R.id.add_money_radio_button_communications;
-
         final String eatingOutText = viewModel.getEatingOutText(this);
-
-        final int eatingOutValue = R.id.add_money_radio_button_eating_out;
-
         final String entertainmentText = viewModel.getEntertainmentText(this);
-
-        final int entertainmentValue = R.id.add_money_radio_button_entertainment;
-
         final String foodText = viewModel.getFoodText(this);
-
-        final int foodValue = R.id.add_money_radio_button_food;
-
         final String giftsText = viewModel.getGiftsText(this);
-
-        final int giftsValue = R.id.add_money_radio_button_gifts;
-
         final String healthText = viewModel.getHealthText(this);
-
-        final int healthValue = R.id.add_money_radio_button_health;
-
         final String houseText = viewModel.getHouseText(this);
-
-        final int houseValue = R.id.add_money_radio_button_house;
-
         final String petsText = viewModel.getPetsText(this);
-
-        final int petsValue = R.id.add_money_radio_button_pets;
-
         final String sportsText = viewModel.getSportsText(this);
-
-        final int sportsValue = R.id.add_money_radio_button_sports;
-
         final String taxiText = viewModel.getTaxiText(this);
-
-        final int taxiValue = R.id.add_money_radio_button_taxi;
-
         final String toiletryText = viewModel.getToiletryText(this);
-
-        final int toiletryValue = R.id.add_money_radio_button_toiletry;
-
         final String transportText = viewModel.getTransportText(this);
 
+        final int billsValue = R.id.add_money_radio_button_bills;
+        final int carValue = R.id.add_money_radio_button_car;
+        final int clothesValue = R.id.add_money_radio_button_clothes;
+        final int communicationsValue = R.id.add_money_radio_button_communications;
+        final int eatingOutValue = R.id.add_money_radio_button_eating_out;
+        final int entertainmentValue = R.id.add_money_radio_button_entertainment;
+        final int foodValue = R.id.add_money_radio_button_food;
+        final int giftsValue = R.id.add_money_radio_button_gifts;
+        final int healthValue = R.id.add_money_radio_button_health;
+        final int houseValue = R.id.add_money_radio_button_house;
+        final int petsValue = R.id.add_money_radio_button_pets;
+        final int sportsValue = R.id.add_money_radio_button_sports;
+        final int taxiValue = R.id.add_money_radio_button_taxi;
+        final int toiletryValue = R.id.add_money_radio_button_toiletry;
         final int transportValue = R.id.add_money_radio_button_transport;
 
         buttonTextArray.add(billsText);
@@ -215,8 +189,8 @@ public class AddExpenseActivity
             optionsArray[i].setId(ID);
             optionsArray[i].setTextSize(18);
             optionsArray[i].setTypeface(Typeface.DEFAULT_BOLD);
-            optionsArray[i].setButtonTintList(ColorStateList.valueOf(Color.WHITE));
-            optionsArray[i].setTextColor(Color.WHITE);
+            optionsArray[i].setButtonTintList(ColorStateList.valueOf(color));
+            optionsArray[i].setTextColor(color);
 
             binding.optionsLayout.addView(optionsArray[i]);
         }
@@ -255,12 +229,30 @@ public class AddExpenseActivity
         }
     }
 
-    private void setVariables() {
+    private void setActivityVariables() {
         binding = DataBindingUtil.setContentView(this, R.layout.add_expense_activity);
         viewModel = new ViewModelProvider(this).get(AddExpenseViewModel.class);
+    }
 
+    private void setLayoutVariables() {
         binding.setActivity(this);
         binding.setFragmentManager(getSupportFragmentManager());
         binding.setViewModel(viewModel);
+    }
+
+    private void setUserDetails() {
+        final String currentUserID = MyCustomVariables.getFirebaseAuth().getUid();
+
+        if (currentUserID == null) {
+            return;
+        }
+
+        if (MyCustomSharedPreferences.retrieveUserDetailsFromSharedPreferences(this) != null) {
+            viewModel.setUserDetails(MyCustomSharedPreferences.retrieveUserDetailsFromSharedPreferences(this));
+        }
+
+        if (viewModel.getUserDetails() != null) {
+            binding.setIsDarkThemeEnabled(viewModel.getUserDetails().getApplicationSettings().isDarkThemeEnabled());
+        }
     }
 }

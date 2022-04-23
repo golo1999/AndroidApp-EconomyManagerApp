@@ -9,6 +9,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.ViewModel;
 
 import com.example.economy_manager.R;
+import com.example.economy_manager.model.UserDetails;
 import com.example.economy_manager.utility.DatePickerFragment;
 
 import java.time.LocalDate;
@@ -16,6 +17,7 @@ import java.time.LocalDate;
 public class AddExpenseViewModel extends ViewModel {
 
     private LocalDate transactionDate = LocalDate.now();
+    private UserDetails userDetails;
 
     public LocalDate getTransactionDate() {
         return transactionDate;
@@ -23,6 +25,14 @@ public class AddExpenseViewModel extends ViewModel {
 
     public void setTransactionDate(LocalDate transactionDate) {
         this.transactionDate = transactionDate;
+    }
+
+    public UserDetails getUserDetails() {
+        return userDetails;
+    }
+
+    public void setUserDetails(UserDetails userDetails) {
+        this.userDetails = userDetails;
     }
 
     public String getBillsText(final Context context) {

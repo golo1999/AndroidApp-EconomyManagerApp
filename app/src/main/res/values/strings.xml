@@ -17,8 +17,9 @@
     <string name="day">Day</string>
     <string name="debt">Debt</string>
     <string name="delete_account">Delete account</string>
+    <string name="edit_photo">Edit photo</string>
     <string name="edit_profile">Edit profile</string>
-    <string name="edit_specific_transaction">Edit specific transaction</string>
+    <string name="edit_specific_transaction">Edit a transaction</string>
     <string name="edit_transaction_date">Edit transaction date</string>
     <string name="email">Email</string>
     <string name="expense">Expense</string>

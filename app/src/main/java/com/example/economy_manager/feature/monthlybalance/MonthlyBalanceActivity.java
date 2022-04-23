@@ -15,7 +15,6 @@ import androidx.lifecycle.ViewModelProvider;
 import com.example.economy_manager.R;
 import com.example.economy_manager.databinding.MonthlyBalanceActivityBinding;
 import com.example.economy_manager.model.Transaction;
-import com.example.economy_manager.model.UserDetails;
 import com.example.economy_manager.utility.MyCustomMethods;
 import com.example.economy_manager.utility.MyCustomSharedPreferences;
 import com.example.economy_manager.utility.MyCustomVariables;
@@ -37,7 +36,8 @@ public class MonthlyBalanceActivity extends AppCompatActivity {
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setVariables();
+        setActivityVariables();
+        setLayoutVariables();
         setUserDetails();
         setActivityTheme();
         setCenterText();
@@ -50,10 +50,16 @@ public class MonthlyBalanceActivity extends AppCompatActivity {
         MyCustomMethods.finishActivityWithFadeTransition(this);
     }
 
-    private void setVariables() {
+    private void setActivityTheme() {
+        getWindow().getDecorView().setBackgroundColor(viewModel.getActivityTheme(this));
+    }
+
+    private void setActivityVariables() {
         binding = DataBindingUtil.setContentView(this, R.layout.monthly_balance_activity);
         viewModel = new ViewModelProvider(this).get(MonthlyBalanceViewModel.class);
+    }
 
+    private void setLayoutVariables() {
         binding.setActivity(this);
         binding.setActivityTitle(viewModel.getActivityTitle(this));
         binding.setContext(this);
@@ -61,13 +67,7 @@ public class MonthlyBalanceActivity extends AppCompatActivity {
     }
 
     private void setUserDetails() {
-        final UserDetails userDetails = MyCustomSharedPreferences.retrieveUserDetailsFromSharedPreferences(this);
-
-        viewModel.setUserDetails(userDetails);
-    }
-
-    private void setActivityTheme() {
-        getWindow().getDecorView().setBackgroundColor(viewModel.getActivityTheme(this));
+        viewModel.setUserDetails(MyCustomSharedPreferences.retrieveUserDetailsFromSharedPreferences(this));
     }
 
     private void setIncomesAndExpensesInParent() {

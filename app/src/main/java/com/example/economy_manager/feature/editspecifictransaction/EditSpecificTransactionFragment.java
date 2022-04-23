@@ -1,7 +1,5 @@
 package com.example.economy_manager.feature.editspecifictransaction;
 
-import android.content.res.ColorStateList;
-import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.view.Gravity;
@@ -57,7 +55,8 @@ public class EditSpecificTransactionFragment extends Fragment {
     public View onCreateView(final @NonNull LayoutInflater inflater,
                              final ViewGroup container,
                              final Bundle savedInstanceState) {
-        setVariables(inflater, container);
+        setFragmentVariables(inflater, container);
+        setLayoutVariables();
         viewModel.setBinding(binding);
 
         return binding.getRoot();
@@ -66,9 +65,7 @@ public class EditSpecificTransactionFragment extends Fragment {
     @Override
     public void onViewCreated(final @NonNull View view,
                               final @Nullable Bundle savedInstanceState) {
-        setFragmentTheme();
-        setSaveChangesButtonStyle(viewModel.getUserDetails() != null &&
-                viewModel.getUserDetails().getApplicationSettings().isDarkThemeEnabled());
+        setTheme();
         setDateText(viewModel.getUserDetails() != null ?
                 LocalDate.of(viewModel.getSelectedTransaction().getTime().getYear(),
                         viewModel.getSelectedTransaction().getTime().getMonth(),
@@ -78,43 +75,11 @@ public class EditSpecificTransactionFragment extends Fragment {
                         viewModel.getSelectedTransaction().getTime().getMinute(),
                         viewModel.getSelectedTransaction().getTime().getSecond()) : viewModel.getTransactionTime());
         setOnFocusChangeListener(viewModel.getSelectedTransaction());
-        setFragmentTitle();
         viewModel.resetTransactionTypesList();
         viewModel.setTransactionTypesList(requireContext());
-        createTransactionTypesSpinner();
+        setSpinner();
+        setSpinnerOnSelectedItemListener();
         setFieldHints();
-    }
-
-    private void createTransactionTypesSpinner() {
-        final TransactionTypesSpinnerAdapter transactionTypesSpinnerAdapter =
-                new TransactionTypesSpinnerAdapter(requireContext(),
-                        R.layout.custom_spinner_item,
-                        viewModel.getTransactionTypesList());
-
-        final AdapterView.OnItemSelectedListener listener = new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(final AdapterView<?> parent,
-                                       final View view,
-                                       final int position,
-                                       final long id) {
-                final boolean darkTheme = MyCustomVariables.getUserDetails() != null ?
-                        MyCustomVariables.getUserDetails().getApplicationSettings().isDarkThemeEnabled() :
-                        MyCustomVariables.getDefaultUserDetails().getApplicationSettings().isDarkThemeEnabled();
-
-                final int textColor = !darkTheme ? requireContext().getColor(R.color.turkish_sea) : Color.WHITE;
-
-                ((TextView) parent.getChildAt(0)).setTextColor(textColor);
-                ((TextView) parent.getChildAt(0)).setGravity(Gravity.START);
-            }
-
-            @Override
-            public void onNothingSelected(final AdapterView<?> parent) {
-
-            }
-        };
-
-        binding.typeSpinner.setAdapter(transactionTypesSpinnerAdapter);
-        binding.typeSpinner.setOnItemSelectedListener(listener);
     }
 
     public void setDateText(final LocalDate date) {
@@ -125,14 +90,6 @@ public class EditSpecificTransactionFragment extends Fragment {
         }
 
         binding.dateText.setText(formattedDate);
-    }
-
-    private void setDateTextColor(final int color) {
-        final int drawableStartIcon = color == requireContext().getColor(R.color.turkish_sea) ?
-                R.drawable.ic_calendar_blue : R.drawable.ic_calendar_white;
-
-        binding.dateText.setTextColor(color);
-        binding.dateText.setCompoundDrawablesRelativeWithIntrinsicBounds(drawableStartIcon, 0, 0, 0);
     }
 
     private void setFieldHints() {
@@ -156,43 +113,16 @@ public class EditSpecificTransactionFragment extends Fragment {
         }
     }
 
-    private void setFragmentTheme() {
-        final boolean darkTheme = MyCustomVariables.getUserDetails() != null ?
-                MyCustomVariables.getUserDetails().getApplicationSettings().isDarkThemeEnabled() :
-                MyCustomVariables.getDefaultUserDetails().getApplicationSettings().isDarkThemeEnabled();
-
-        final int color = !darkTheme ? requireContext().getColor(R.color.turkish_sea) : Color.WHITE;
-
-        final int backgroundTheme = !darkTheme ?
-                R.drawable.ic_white_gradient_tobacco_ad : R.drawable.ic_black_gradient_night_shift;
-
-        final int spinnerElementBackground = !darkTheme ?
-                R.drawable.ic_blue_gradient_unloved_teen : R.drawable.ic_white_gradient_tobacco_ad;
-
-        setTextStyleEditText(binding.noteField, color);
-        setTextStyleEditText(binding.valueField, color);
-        setDateTextColor(color);
-        setTimeTextColor(color);
-
-        requireActivity().getWindow().setBackgroundDrawableResource(backgroundTheme);
-        // setting arrow's color
-        binding.typeSpinner.getBackground().setColorFilter(color, PorterDuff.Mode.SRC_ATOP);
-        // setting items' color
-        binding.typeSpinner.setPopupBackgroundResource(spinnerElementBackground);
+    private void setFragmentVariables(final @NonNull LayoutInflater inflater,
+                                      final ViewGroup container) {
+        binding = DataBindingUtil.inflate(inflater, R.layout.edit_specific_transaction_fragment, container, false);
+        viewModel = new ViewModelProvider((ViewModelStoreOwner) requireContext()).get(EditTransactionsViewModel.class);
     }
 
-    private void setFragmentTitle() {
-        final String editSpecificTransactionText =
-                requireContext().getResources().getString(R.string.edit_specific_transaction).trim();
-
-        if (viewModel.getActivityTitle() == null ||
-                !viewModel.getActivityTitle().equals(editSpecificTransactionText)) {
-            viewModel.setActivityTitle(editSpecificTransactionText);
-        }
-
-        binding.title.setText(viewModel.getActivityTitle());
-        binding.title.setTextColor(Color.WHITE);
-        binding.title.setTextSize(18);
+    private void setLayoutVariables() {
+        binding.setActivity((EditTransactionsActivity) requireActivity());
+        binding.setFragmentManager(getChildFragmentManager());
+        binding.setViewModel(viewModel);
     }
 
     private void setOnFocusChangeListener(final Transaction selectedTransaction) {
@@ -208,47 +138,55 @@ public class EditSpecificTransactionFragment extends Fragment {
         binding.noteField.setOnFocusChangeListener(listener);
     }
 
-    private void setSaveChangesButtonStyle(final boolean darkThemeEnabled) {
-        final int background = !darkThemeEnabled ? R.drawable.ic_outlined_button_light : R.drawable.ic_outlined_button_dark;
+    private void setSpinner() {
+        final TransactionTypesSpinnerAdapter spinnerAdapter =
+                new TransactionTypesSpinnerAdapter(requireContext(),
+                        R.layout.custom_spinner_item,
+                        viewModel.getTransactionTypesList());
+        final int arrowColor = requireContext().getColor(binding.getIsDarkThemeEnabled() ?
+                R.color.secondaryDark : R.color.quaternaryLight);
 
-        final int textColor = requireContext().getColor(!darkThemeEnabled ? R.color.turkish_sea : R.color.white);
-
-        binding.saveChangesButton.setBackgroundResource(background);
-        binding.saveChangesButton.setTextColor(textColor);
+        binding.typeSpinner.setAdapter(spinnerAdapter);
+        // setting arrow color
+        binding.typeSpinner.getBackground().setColorFilter(arrowColor, PorterDuff.Mode.SRC_ATOP);
     }
 
-    private void setTextStyleEditText(final @NonNull EditText editText,
-                                      final int color) {
-        editText.setTextColor(color);
-        editText.setHintTextColor(color);
-        editText.setBackgroundTintList(ColorStateList.valueOf(color));
+    private void setSpinnerOnSelectedItemListener() {
+        final AdapterView.OnItemSelectedListener listener = new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(@NonNull final AdapterView<?> parent,
+                                       final View view,
+                                       final int position,
+                                       final long id) {
+                final int textColor = requireContext().getColor(binding.getIsDarkThemeEnabled() ?
+                        R.color.secondaryDark : R.color.quaternaryLight);
+
+                ((TextView) parent.getChildAt(0)).setTextColor(textColor);
+                ((TextView) parent.getChildAt(0)).setGravity(Gravity.START);
+            }
+
+            @Override
+            public void onNothingSelected(final AdapterView<?> parent) {
+
+            }
+        };
+
+        binding.typeSpinner.setOnItemSelectedListener(listener);
+    }
+
+    private void setTheme() {
+        final boolean isDarkThemeEnabled = MyCustomVariables.getUserDetails() != null ?
+                MyCustomVariables.getUserDetails().getApplicationSettings().isDarkThemeEnabled() :
+                MyCustomVariables.getDefaultUserDetails().getApplicationSettings().isDarkThemeEnabled();
+
+        binding.setIsDarkThemeEnabled(isDarkThemeEnabled);
     }
 
     public void setTimeText(final LocalTime time) {
-        final String formattedTime = MyCustomMethods.getFormattedTime(requireContext(), time);
-
         if (!viewModel.getTransactionTime().equals(time)) {
             viewModel.setTransactionTime(time);
         }
 
-        binding.timeText.setText(formattedTime);
-    }
-
-    private void setTimeTextColor(final int color) {
-        final int drawableStartIcon = color == requireContext().getColor(R.color.turkish_sea) ?
-                R.drawable.ic_time_blue : R.drawable.ic_time_white;
-
-        binding.timeText.setTextColor(color);
-        binding.timeText.setCompoundDrawablesRelativeWithIntrinsicBounds(drawableStartIcon, 0, 0, 0);
-    }
-
-    private void setVariables(final @NonNull LayoutInflater inflater,
-                              final ViewGroup container) {
-        binding = DataBindingUtil.inflate(inflater, R.layout.edit_specific_transaction_fragment, container, false);
-        viewModel = new ViewModelProvider((ViewModelStoreOwner) requireContext()).get(EditTransactionsViewModel.class);
-
-        binding.setActivity((EditTransactionsActivity) requireActivity());
-        binding.setFragmentManager(getChildFragmentManager());
-        binding.setViewModel(viewModel);
+        binding.timeText.setText(MyCustomMethods.getFormattedTime(requireContext(), time));
     }
 }

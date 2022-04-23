@@ -13,6 +13,10 @@
             type="androidx.fragment.app.FragmentManager" />
 
         <variable
+            name="isDarkThemeEnabled"
+            type="boolean" />
+
+        <variable
             name="viewModel"
             type="com.example.economy_manager.feature.edittransactions.EditTransactionsViewModel" />
     </data>
@@ -22,41 +26,19 @@
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@{isDarkThemeEnabled ? @color/primaryDark : @color/primaryLight}"
+        tools:background="@color/primaryDark"
         tools:context=".feature.editspecifictransaction.EditSpecificTransactionFragment">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <include
             android:id="@+id/topLayout"
-            android:layout_width="0sp"
+            layout="@layout/top_layout"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="#A2A2A1"
-            android:paddingVertical="5sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
-
-            <ImageView
-                android:id="@+id/goBack"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:onClick="@{() -> activity.onBackPressed()}"
-                android:src="@drawable/ic_back"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <TextView
-                android:id="@+id/title"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="20sp"
-                android:textAlignment="center"
-                android:textStyle="bold"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/goBack"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:text="@string/edit_specific_transaction" />
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
+            app:activity="@{activity}"
+            app:backgroundColor="@{@color/quaternaryLight}"
+            app:titleColor="@{@color/primaryLight}"
+            app:titleText="@{@string/edit_specific_transaction}" />
 
         <androidx.core.widget.NestedScrollView
             android:layout_width="0sp"
@@ -88,60 +70,91 @@
                         android:id="@+id/noteField"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_marginBottom="10sp"
+                        android:background="@{isDarkThemeEnabled ? @drawable/ic_outlined_button_dark : @drawable/ic_outlined_button_light}"
+                        android:drawableStart="@{isDarkThemeEnabled ? @drawable/ic_note_dark : @drawable/ic_note_light}"
+                        android:drawablePadding="10sp"
                         android:inputType="text"
                         android:maxLines="1"
-                        tools:text="@string/note" />
+                        android:padding="10sp"
+                        android:textColor="@{isDarkThemeEnabled ? @color/secondaryDark : @color/quaternaryLight}"
+                        android:textColorHint="@{isDarkThemeEnabled ? @color/secondaryDark : @color/quaternaryLight}"
+                        tools:background="@drawable/ic_outlined_button_dark"
+                        tools:drawableStart="@drawable/ic_note_dark"
+                        tools:text="@string/note"
+                        tools:textColor="@color/secondaryDark"
+                        tools:textColorHint="@color/secondaryDark" />
 
                     <EditText
                         android:id="@+id/valueField"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="20sp"
+                        android:layout_marginVertical="10sp"
+                        android:background="@{isDarkThemeEnabled ? @drawable/ic_outlined_button_dark : @drawable/ic_outlined_button_light}"
+                        android:drawableStart="@{isDarkThemeEnabled ? @drawable/ic_euro_dark : @drawable/ic_euro_light}"
+                        android:drawablePadding="10sp"
                         android:inputType="numberDecimal"
-                        tools:text="@string/value" />
+                        android:padding="10sp"
+                        android:textColor="@{isDarkThemeEnabled ? @color/secondaryDark : @color/quaternaryLight}"
+                        android:textColorHint="@{isDarkThemeEnabled ? @color/secondaryDark : @color/quaternaryLight}"
+                        tools:background="@drawable/ic_outlined_button_dark"
+                        tools:drawableStart="@drawable/ic_euro_dark"
+                        tools:text="@string/value"
+                        tools:textColor="@color/secondaryDark"
+                        tools:textColorHint="@color/secondaryDark" />
 
                     <TextView
                         android:id="@+id/dateText"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="20sp"
+                        android:layout_marginVertical="10sp"
+                        android:drawableStart="@{isDarkThemeEnabled ? @drawable/ic_calendar_dark : @drawable/ic_calendar_light}"
                         android:drawablePadding="10sp"
                         android:hint="@string/date"
                         android:onClick="@{() -> viewModel.onDateTextClickedInFragment(fragmentManager)}"
+                        android:textColor="@{isDarkThemeEnabled ? @color/secondaryDark : @color/quaternaryLight}"
                         android:textSize="18sp"
-                        android:textStyle="bold" />
+                        android:textStyle="bold"
+                        tools:drawableStart="@drawable/ic_calendar_dark"
+                        tools:textColor="@color/secondaryDark" />
 
                     <TextView
                         android:id="@+id/timeText"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="20sp"
+                        android:layout_marginVertical="10sp"
+                        android:drawableStart="@{isDarkThemeEnabled ? @drawable/ic_time_dark : @drawable/ic_time_light}"
                         android:drawablePadding="10sp"
                         android:hint="@string/time"
                         android:onClick="@{() -> viewModel.onTimeTextClickedInFragment(fragmentManager)}"
+                        android:textColor="@{isDarkThemeEnabled ? @color/secondaryDark : @color/quaternaryLight}"
                         android:textSize="18sp"
-                        android:textStyle="bold" />
+                        android:textStyle="bold"
+                        tools:drawableStart="@drawable/ic_time_dark"
+                        tools:textColor="@color/secondaryDark" />
 
                     <Spinner
                         android:id="@+id/typeSpinner"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="20sp"
-                        android:paddingStart="0sp"
-                        android:paddingEnd="0sp"
+                        android:layout_marginVertical="10sp"
                         android:theme="@style/Spinner" />
 
                     <Button
                         android:id="@+id/saveChangesButton"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="20sp"
+                        android:layout_marginTop="10sp"
+                        android:background="@{isDarkThemeEnabled ? @drawable/ic_outlined_button_dark : @drawable/ic_outlined_button_light}"
                         android:onClick="@{() -> viewModel.onSaveChangesButtonClicked(activity)}"
                         android:padding="10sp"
                         android:stateListAnimator="@null"
                         android:text="@string/save_changes"
+                        android:textColor="@{isDarkThemeEnabled ? @color/secondaryDark : @color/quaternaryLight}"
                         android:textSize="18sp"
-                        android:textStyle="bold" />
+                        android:textStyle="bold"
+                        tools:background="@drawable/ic_outlined_button_dark"
+                        tools:textColor="@color/secondaryDark" />
 
                 </LinearLayout>
 
@@ -150,4 +163,5 @@
         </androidx.core.widget.NestedScrollView>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+
 </layout>

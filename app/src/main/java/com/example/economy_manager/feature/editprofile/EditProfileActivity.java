@@ -2,8 +2,6 @@ package com.example.economy_manager.feature.editprofile;
 
 import android.app.DatePickerDialog;
 import android.content.SharedPreferences;
-import android.content.res.ColorStateList;
-import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.view.Gravity;
@@ -13,7 +11,6 @@ import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
-import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -60,11 +57,12 @@ public class EditProfileActivity
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setVariables();
+        setActivityVariables();
+        setLayoutVariables();
         setTheme();
         setOnClickListeners();
-        setCountrySpinner();
-        setGenderSpinner();
+        setSpinner("COUNTRY_SPINNER");
+        setSpinner("GENDER_SPINNER");
         getAndSetPersonalInformation();
         setSpinnerOnSelectedItemListener(binding.countrySpinner, "COUNTRY_SPINNER");
         setSpinnerOnSelectedItemListener(binding.genderSpinner, "GENDER_SPINNER");
@@ -88,29 +86,22 @@ public class EditProfileActivity
         final HashMap<String, Object> retrievedPersonalInformation = viewModel.getPersonalInformation(this);
 
         final String accountPhotoImageURL = String.valueOf(retrievedPersonalInformation.get("photoURL"));
-
-        final int accountPhotoPlaceholder = userDetails == null || !userDetails.getApplicationSettings().isDarkThemeEnabled() ?
-                R.drawable.ic_person_light : R.drawable.ic_person_dark;
-
-        final int accountPhotoBorderColor = userDetails == null || !userDetails.getApplicationSettings().isDarkThemeEnabled() ?
-                getColor(R.color.turkish_sea) : Color.WHITE;
+        final int accountPhotoPlaceholder =
+                binding.getIsDarkThemeEnabled() ? R.drawable.ic_person_dark : R.drawable.ic_person_light;
+        final int accountPhotoBorderColor =
+                binding.getIsDarkThemeEnabled() ? getColor(R.color.secondaryDark) : getColor(R.color.quaternaryLight);
 
         final String firstNameHint = String.valueOf(retrievedPersonalInformation.get("firstName"));
-
         final String lastNameHint = String.valueOf(retrievedPersonalInformation.get("lastName"));
-
         final String phoneNumberHint = String.valueOf(retrievedPersonalInformation.get("phoneNumber"));
-
         final String websiteHint = String.valueOf(retrievedPersonalInformation.get("website"));
 
         final int countrySpinnerSelection =
                 Integer.parseInt(String.valueOf(retrievedPersonalInformation.get("countrySpinnerSelection")));
-
         final int genderSpinnerSelection =
                 Integer.parseInt(String.valueOf(retrievedPersonalInformation.get("genderSpinnerSelection")));
 
         final LocalDate birthDateHint = (LocalDate) retrievedPersonalInformation.get("birthDate");
-
         final String careerTitleHint = String.valueOf(retrievedPersonalInformation.get("careerTitle"));
 
         if (accountPhotoImageURL.trim().isEmpty()) {
@@ -124,7 +115,6 @@ public class EditProfileActivity
         }
 
         binding.photo.setBorderColor(accountPhotoBorderColor);
-
         binding.firstNameField.setHint(firstNameHint);
         binding.lastNameField.setHint(lastNameHint);
         binding.phoneField.setHint(phoneNumberHint);
@@ -136,7 +126,8 @@ public class EditProfileActivity
         setBirthDateText(birthDateHint);
     }
 
-    private PersonalInformation personalInformationValidation(final PersonalInformation initialPersonalInformation) {
+    @Nullable
+    private PersonalInformation personalInformationValidation(@NonNull final PersonalInformation initialPersonalInformation) {
         final String enteredFirstName = !String.valueOf(binding.firstNameField.getText()).trim().isEmpty() ?
                 String.valueOf(binding.firstNameField.getText()).trim() :
                 !String.valueOf(binding.firstNameField.getHint()).trim().equals(getResources().getString(R.string.first_name)) ?
@@ -258,6 +249,13 @@ public class EditProfileActivity
                 editedPersonalInformation : null;
     }
 
+    private void setActivityVariables() {
+        binding = DataBindingUtil.setContentView(this, R.layout.edit_profile_activity);
+        preferences = getSharedPreferences(MyCustomVariables.getSharedPreferencesFileName(), MODE_PRIVATE);
+        userDetails = MyCustomSharedPreferences.retrieveUserDetailsFromSharedPreferences(this);
+        viewModel = new EditProfileViewModel(getApplication(), this, userDetails, binding);
+    }
+
     private void setBirthDateText(final LocalDate date) {
         final String formattedDate = MyCustomMethods.getFormattedDate(date);
 
@@ -270,81 +268,10 @@ public class EditProfileActivity
         }
     }
 
-    private void setBirthDateTextStyle(final int color) {
-        final int drawableStartIcon = color == getColor(R.color.turkish_sea) ?
-                R.drawable.ic_time_blue : R.drawable.ic_time_white;
-
-        binding.birthDateText.setTextColor(color);
-        binding.birthDateText.setCompoundDrawablesRelativeWithIntrinsicBounds(drawableStartIcon, 0, 0, 0);
-    }
-
-    private void setCountrySpinner() {
-        final ArrayAdapter<String> countryAdapter = new ArrayAdapter<String>(this,
-                R.layout.custom_spinner_item,
-                viewModel.getCountriesList()) {
-            @Override
-            public View getDropDownView(final int position,
-                                        final @Nullable View convertView,
-                                        final @NonNull ViewGroup parent) {
-                final View v = super.getDropDownView(position, convertView, parent);
-                // centering spinner's items' text
-                ((TextView) v).setGravity(Gravity.CENTER);
-
-                if (userDetails == null) {
-                    userDetails = MyCustomVariables.getDefaultUserDetails();
-                }
-
-                if (userDetails.getApplicationSettings().isDarkThemeEnabled() != isDarkThemeEnabled) {
-                    isDarkThemeEnabled = userDetails.getApplicationSettings().isDarkThemeEnabled();
-                }
-
-                final int itemsColor = !isDarkThemeEnabled ? Color.WHITE : Color.BLACK;
-                // setting elements' text color based on the selected theme
-                ((TextView) v).setTextColor(itemsColor);
-
-                return v;
-            }
-        };
-
-        binding.countrySpinner.setAdapter(countryAdapter);
-    }
-
-    private void setEditTextColor(final EditText editText,
-                                  final int color) {
-        editText.setHintTextColor(color);
-        editText.setTextColor(color);
-        editText.setBackgroundTintList(ColorStateList.valueOf(color));
-    }
-
-    private void setGenderSpinner() {
-        final ArrayAdapter<String> genderAdapter = new ArrayAdapter<String>(this,
-                R.layout.custom_spinner_item,
-                viewModel.getGendersList()) {
-            @Override
-            public View getDropDownView(final int position,
-                                        final @Nullable View convertView,
-                                        final @NonNull ViewGroup parent) {
-                final View v = super.getDropDownView(position, convertView, parent);
-                // centering all spinner's items' text
-                ((TextView) v).setGravity(Gravity.CENTER);
-
-                if (userDetails == null) {
-                    userDetails = MyCustomVariables.getDefaultUserDetails();
-                }
-
-                if (userDetails.getApplicationSettings().isDarkThemeEnabled() != isDarkThemeEnabled) {
-                    isDarkThemeEnabled = userDetails.getApplicationSettings().isDarkThemeEnabled();
-                }
-
-                final int itemsColor = !isDarkThemeEnabled ? Color.WHITE : Color.BLACK;
-                // setting elements' text color based on the selected theme
-                ((TextView) v).setTextColor(itemsColor);
-
-                return v;
-            }
-        };
-
-        binding.genderSpinner.setAdapter(genderAdapter);
+    private void setLayoutVariables() {
+        binding.setActivity(this);
+        binding.setFragmentManager(getSupportFragmentManager());
+        binding.setViewModel(viewModel);
     }
 
     private void setOnClickListeners() {
@@ -404,10 +331,47 @@ public class EditProfileActivity
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
     }
 
+    private void setSpinner(@NonNull final String spinnerType) {
+        final ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.custom_spinner_item,
+                spinnerType.equals("COUNTRY_SPINNER") ? viewModel.getCountriesList() : viewModel.getGendersList()) {
+            @NonNull
+            @Override
+            public View getDropDownView(final int position,
+                                        final @Nullable View convertView,
+                                        final @NonNull ViewGroup parent) {
+                final View v = super.getDropDownView(position, convertView, parent);
+
+                // centering all spinner's items' text
+                ((TextView) v).setGravity(Gravity.CENTER);
+
+                if (userDetails == null) {
+                    userDetails = MyCustomVariables.getDefaultUserDetails();
+                }
+
+                if (userDetails.getApplicationSettings().isDarkThemeEnabled() != isDarkThemeEnabled) {
+                    isDarkThemeEnabled = userDetails.getApplicationSettings().isDarkThemeEnabled();
+                }
+
+                // setting elements' text color based on the selected theme
+                v.setBackgroundColor(getColor(isDarkThemeEnabled ? R.color.primaryLight : R.color.primaryDark));
+                ((TextView) v).setTextColor(isDarkThemeEnabled ?
+                        getColor(R.color.quaternaryLight) : getColor(R.color.secondaryDark));
+
+                return v;
+            }
+        };
+
+        if (spinnerType.equals("COUNTRY_SPINNER")) {
+            binding.countrySpinner.setAdapter(adapter);
+        } else if (spinnerType.equals("GENDER_SPINNER")) {
+            binding.genderSpinner.setAdapter(adapter);
+        }
+    }
+
     /**
      * Method for styling spinner's first element
      */
-    private void setSpinnerOnSelectedItemListener(final Spinner spinner,
+    private void setSpinnerOnSelectedItemListener(@NonNull final Spinner spinner,
                                                   final String spinnerType) {
         final AdapterView.OnItemSelectedListener itemSelectedListener = new AdapterView.OnItemSelectedListener() {
             @Override
@@ -423,7 +387,7 @@ public class EditProfileActivity
                     isDarkThemeEnabled = userDetails.getApplicationSettings().isDarkThemeEnabled();
                 }
 
-                final int color = !isDarkThemeEnabled ? getColor(R.color.turkish_sea) : Color.WHITE;
+                final int color = isDarkThemeEnabled ? getColor(R.color.secondaryDark) : getColor(R.color.quaternaryLight);
                 // centering spinner's first item's text and setting its color based on the selected theme
                 ((TextView) parent.getChildAt(0)).setTextColor(color);
                 ((TextView) parent.getChildAt(0)).setGravity(Gravity.START);
@@ -451,36 +415,10 @@ public class EditProfileActivity
 
         binding.setIsDarkThemeEnabled(isDarkThemeEnabled);
 
-        // turkish sea (blue) if dark theme is enabled or white if it's not
-        final int color = !isDarkThemeEnabled ? getColor(R.color.turkish_sea) : Color.WHITE;
-
-        final int dropDownTheme = !isDarkThemeEnabled ?
-                R.drawable.ic_blue_gradient_unloved_teen : R.drawable.ic_white_gradient_tobacco_ad;
+        final int color = getColor(isDarkThemeEnabled ? R.color.secondaryDark : R.color.quaternaryLight);
 
         // setting arrow color
         binding.countrySpinner.getBackground().setColorFilter(color, PorterDuff.Mode.SRC_ATOP);
-        // setting element's color
-        binding.countrySpinner.setPopupBackgroundResource(dropDownTheme);
         binding.genderSpinner.getBackground().setColorFilter(color, PorterDuff.Mode.SRC_ATOP);
-        binding.genderSpinner.setPopupBackgroundResource(dropDownTheme);
-
-//        setEditTextColor(binding.firstNameField, color);
-//        setEditTextColor(binding.lastNameField, color);
-//        setEditTextColor(binding.phoneField, color);
-//        setEditTextColor(binding.websiteField, color);
-//        setEditTextColor(binding.careerTitleField, color);
-
-        setBirthDateTextStyle(color);
-    }
-
-    private void setVariables() {
-        binding = DataBindingUtil.setContentView(this, R.layout.edit_profile_activity);
-        preferences = getSharedPreferences(MyCustomVariables.getSharedPreferencesFileName(), MODE_PRIVATE);
-        userDetails = MyCustomSharedPreferences.retrieveUserDetailsFromSharedPreferences(this);
-        viewModel = new EditProfileViewModel(getApplication(), this, userDetails, binding);
-
-        binding.setActivity(this);
-        binding.setFragmentManager(getSupportFragmentManager());
-        binding.setViewModel(viewModel);
     }
 }

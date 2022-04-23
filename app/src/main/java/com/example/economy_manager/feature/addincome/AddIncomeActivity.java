@@ -2,7 +2,6 @@ package com.example.economy_manager.feature.addincome;
 
 import android.app.DatePickerDialog;
 import android.content.res.ColorStateList;
-import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.widget.DatePicker;
@@ -18,6 +17,7 @@ import com.example.economy_manager.databinding.AddIncomeActivityBinding;
 import com.example.economy_manager.model.MyCustomTime;
 import com.example.economy_manager.model.Transaction;
 import com.example.economy_manager.utility.MyCustomMethods;
+import com.example.economy_manager.utility.MyCustomSharedPreferences;
 import com.example.economy_manager.utility.MyCustomVariables;
 import com.example.economy_manager.utility.Types;
 
@@ -36,7 +36,9 @@ public class AddIncomeActivity
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setVariables();
+        setActivityVariables();
+        setLayoutVariables();
+        setUserDetails();
         setDateText(viewModel.getTransactionDate());
         viewModel.limitTwoDecimals(binding.valueField);
         createRadioButtons();
@@ -53,9 +55,7 @@ public class AddIncomeActivity
                           final int year,
                           final int month,
                           final int dayOfMonth) {
-        final LocalDate newTransactionDate = LocalDate.of(year, month + 1, dayOfMonth);
-
-        setDateText(newTransactionDate);
+        setDateText(LocalDate.of(year, month + 1, dayOfMonth));
     }
 
     private void addTransactionToDatabase(final int selectedID,
@@ -114,21 +114,17 @@ public class AddIncomeActivity
 
     private void createRadioButtons() {
         final ArrayList<String> buttonTextArray = new ArrayList<>();
+        final int color = viewModel.getUserDetails().getApplicationSettings().isDarkThemeEnabled() ?
+                getColor(R.color.secondaryDark) : getColor(R.color.quaternaryLight);
 
         final String depositsText = viewModel.getDepositsText(this);
-
-        final int depositsValue = R.id.add_money_radio_button_deposits;
-
         final String independentSourcesText = viewModel.getIndependentSourcesText(this);
-
-        final int independentSourcesValue = R.id.add_money_radio_button_independent_sources;
-
         final String salaryText = viewModel.getSalaryText(this);
-
-        final int salaryValue = R.id.add_money_radio_button_salary;
-
         final String savingText = viewModel.getSavingText(this);
 
+        final int depositsValue = R.id.add_money_radio_button_deposits;
+        final int independentSourcesValue = R.id.add_money_radio_button_independent_sources;
+        final int salaryValue = R.id.add_money_radio_button_salary;
         final int savingValue = R.id.add_money_radio_button_saving;
 
         buttonTextArray.add(depositsText);
@@ -150,8 +146,8 @@ public class AddIncomeActivity
             optionsArray[i].setId(ID);
             optionsArray[i].setTextSize(18);
             optionsArray[i].setTypeface(Typeface.DEFAULT_BOLD);
-            optionsArray[i].setButtonTintList(ColorStateList.valueOf(Color.WHITE));
-            optionsArray[i].setTextColor(Color.WHITE);
+            optionsArray[i].setButtonTintList(ColorStateList.valueOf(color));
+            optionsArray[i].setTextColor(color);
 
             binding.optionsLayout.addView(optionsArray[i]);
         }
@@ -192,12 +188,30 @@ public class AddIncomeActivity
         }
     }
 
-    private void setVariables() {
+    private void setActivityVariables() {
         binding = DataBindingUtil.setContentView(this, R.layout.add_income_activity);
         viewModel = new ViewModelProvider(this).get(AddIncomeViewModel.class);
+    }
 
+    private void setLayoutVariables() {
         binding.setActivity(this);
         binding.setFragmentManager(getSupportFragmentManager());
         binding.setViewModel(viewModel);
+    }
+
+    private void setUserDetails() {
+        final String currentUserID = MyCustomVariables.getFirebaseAuth().getUid();
+
+        if (currentUserID == null) {
+            return;
+        }
+
+        if (MyCustomSharedPreferences.retrieveUserDetailsFromSharedPreferences(this) != null) {
+            viewModel.setUserDetails(MyCustomSharedPreferences.retrieveUserDetailsFromSharedPreferences(this));
+        }
+
+        if (viewModel.getUserDetails() != null) {
+            binding.setIsDarkThemeEnabled(viewModel.getUserDetails().getApplicationSettings().isDarkThemeEnabled());
+        }
     }
 }

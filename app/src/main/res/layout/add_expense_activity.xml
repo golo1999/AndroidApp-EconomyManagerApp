@@ -15,6 +15,10 @@
             type="androidx.fragment.app.FragmentManager" />
 
         <variable
+            name="isDarkThemeEnabled"
+            type="boolean" />
+
+        <variable
             name="viewModel"
             type="com.example.economy_manager.feature.addexpense.AddExpenseViewModel" />
 
@@ -24,142 +28,160 @@
         android:id="@+id/scrollView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/ic_red_gradient_slow_internet"
+        android:background="@{isDarkThemeEnabled ? @color/primaryDark : @color/primaryLight}"
         android:fillViewport="true"
+        tools:background="@color/primaryDark"
         tools:context=".feature.addincome.AddIncomeActivity">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
             android:orientation="vertical">
 
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/topLayout"
+            <TextView
+                android:id="@+id/title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="20sp"
-                android:focusable="true"
-                android:focusableInTouchMode="true">
+                android:layout_marginHorizontal="20sp"
+                android:layout_marginTop="20sp"
+                android:layout_marginBottom="10sp"
+                android:text="@string/new_expense"
+                android:textAlignment="center"
+                android:textColor="@{isDarkThemeEnabled ? @color/secondaryDark : @color/quaternaryLight}"
+                android:textSize="30sp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toTopOf="@id/dateText"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:textColor="@color/secondaryDark" />
 
-                <TextView
-                    android:id="@+id/title"
-                    android:layout_width="0sp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="10sp"
-                    android:text="@string/new_expense"
-                    android:textAlignment="center"
-                    android:textColor="@color/SecondColor"
-                    android:textSize="30sp"
-                    android:textStyle="bold"
-                    app:layout_constraintBottom_toTopOf="@id/dateText"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+            <TextView
+                android:id="@+id/dateText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="20sp"
+                android:layout_marginVertical="10sp"
+                android:drawableStart="@{isDarkThemeEnabled ? @drawable/ic_calendar_dark : @drawable/ic_calendar_light}"
+                android:drawablePadding="10sp"
+                android:onClick="@{() -> viewModel.onDateTextClicked(fragmentManager)}"
+                android:textAlignment="viewStart"
+                android:textColor="@{isDarkThemeEnabled ? @color/secondaryDark : @color/quaternaryLight}"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toTopOf="@id/valueField"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/title"
+                tools:drawableStart="@drawable/ic_calendar_dark"
+                tools:text="@string/date"
+                tools:textColor="@color/secondaryDark" />
 
-                <TextView
-                    android:id="@+id/dateText"
-                    android:layout_width="0sp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginVertical="10sp"
-                    android:drawablePadding="10sp"
-                    android:onClick="@{() -> viewModel.onDateTextClicked(fragmentManager)}"
-                    android:textAlignment="viewStart"
-                    android:textColor="@color/white"
-                    android:textSize="18sp"
-                    android:textStyle="bold"
-                    app:drawableStartCompat="@drawable/ic_calendar_white"
-                    app:layout_constraintBottom_toTopOf="@id/valueField"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/title"
-                    tools:text="@string/date" />
+            <EditText
+                android:id="@+id/valueField"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="20sp"
+                android:layout_marginVertical="10sp"
+                android:background="@{isDarkThemeEnabled ? @drawable/ic_outlined_button_dark : @drawable/ic_outlined_button_light}"
+                android:drawableStart="@{isDarkThemeEnabled ? @drawable/ic_euro_dark : @drawable/ic_euro_light}"
+                android:drawablePadding="10sp"
+                android:hint="@string/value"
+                android:importantForAutofill="no"
+                android:inputType="numberDecimal"
+                android:padding="10sp"
+                android:textColor="@{isDarkThemeEnabled ? @color/secondaryDark : @color/quaternaryLight}"
+                android:textColorHint="@{isDarkThemeEnabled ? @color/secondaryDark : @color/quaternaryLight}"
+                android:textSize="18sp"
+                app:layout_constraintBottom_toTopOf="@id/noteField"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/dateText"
+                tools:background="@drawable/ic_outlined_button_dark"
+                tools:drawableStart="@drawable/ic_euro_dark"
+                tools:textColor="@color/secondaryDark"
+                tools:textColorHint="@color/secondaryDark" />
 
-                <EditText
-                    android:id="@+id/valueField"
-                    android:layout_width="0sp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginVertical="10sp"
-                    android:background="@drawable/ic_outlined_button_dark"
-                    android:hint="@string/value"
-                    android:importantForAutofill="no"
-                    android:inputType="numberDecimal"
-                    android:padding="10sp"
-                    android:textColor="@color/white"
-                    android:textColorHint="@color/white"
-                    android:textCursorDrawable="@color/white"
-                    android:textSize="18sp"
-                    app:layout_constraintBottom_toTopOf="@id/noteField"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/dateText" />
-
-                <EditText
-                    android:id="@+id/noteField"
-                    android:layout_width="0sp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10sp"
-                    android:background="@drawable/ic_outlined_button_dark"
-                    android:hint="@string/note"
-                    android:importantForAutofill="no"
-                    android:inputType="text"
-                    android:padding="10sp"
-                    android:textColor="@color/white"
-                    android:textColorHint="@color/white"
-                    android:textCursorDrawable="@color/white"
-                    android:textSize="18sp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/valueField" />
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
+            <EditText
+                android:id="@+id/noteField"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="20sp"
+                android:layout_marginVertical="10sp"
+                android:background="@{isDarkThemeEnabled ? @drawable/ic_outlined_button_dark : @drawable/ic_outlined_button_light}"
+                android:drawableStart="@{isDarkThemeEnabled ? @drawable/ic_note_dark : @drawable/ic_note_light}"
+                android:drawablePadding="10sp"
+                android:hint="@string/note"
+                android:importantForAutofill="no"
+                android:inputType="text"
+                android:padding="10sp"
+                android:textColor="@{isDarkThemeEnabled ? @color/secondaryDark : @color/quaternaryLight}"
+                android:textColorHint="@{isDarkThemeEnabled ? @color/secondaryDark : @color/quaternaryLight}"
+                android:textSize="18sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/valueField"
+                tools:background="@drawable/ic_outlined_button_dark"
+                tools:drawableStart="@drawable/ic_note_dark"
+                tools:textColor="@color/secondaryDark"
+                tools:textColorHint="@color/secondaryDark" />
 
             <RadioGroup
                 android:id="@+id/optionsLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="20sp"
+                android:layout_marginVertical="10sp"
                 android:orientation="vertical" />
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/bottomLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="20sp">
+                android:layout_marginHorizontal="20sp"
+                android:layout_marginTop="10sp"
+                android:layout_marginBottom="20sp">
 
                 <Button
                     android:id="@+id/cancelButton"
                     android:layout_width="0sp"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="10sp"
-                    android:background="@drawable/ic_outlined_button_dark"
+                    android:background="@{isDarkThemeEnabled ? @drawable/ic_outlined_button_dark : @drawable/ic_outlined_button_light}"
                     android:onClick="@{() -> activity.onBackPressed()}"
                     android:padding="10sp"
                     android:text="@string/cancel"
-                    android:textColor="@color/white"
+                    android:textColor="@{isDarkThemeEnabled ? @color/secondaryDark : @color/quaternaryLight}"
                     android:textSize="18sp"
                     android:textStyle="bold"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toStartOf="@id/saveButton"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:background="@drawable/ic_outlined_button_dark"
+                    tools:textColor="@color/secondaryDark" />
 
                 <Button
                     android:id="@+id/saveButton"
                     android:layout_width="0sp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10sp"
-                    android:background="@drawable/ic_outlined_button_dark"
+                    android:background="@{isDarkThemeEnabled ? @drawable/ic_outlined_button_dark : @drawable/ic_outlined_button_light}"
                     android:onClick="@{() -> activity.onSaveButtonClicked()}"
                     android:padding="10sp"
                     android:text="@string/save"
-                    android:textColor="@color/white"
+                    android:textColor="@{isDarkThemeEnabled ? @color/secondaryDark : @color/quaternaryLight}"
                     android:textSize="18sp"
                     android:textStyle="bold"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@id/cancelButton"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:background="@drawable/ic_outlined_button_dark"
+                    tools:textColor="@color/secondaryDark" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 

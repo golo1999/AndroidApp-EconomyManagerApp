@@ -1,17 +1,16 @@
 package com.example.economy_manager.feature.settings;
 
 import android.content.SharedPreferences;
-import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SwitchCompat;
 import androidx.databinding.DataBindingUtil;
@@ -43,11 +42,9 @@ public class SettingsActivity extends AppCompatActivity
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setVariables();
-        setTheme();
-        setAllButtonsStyle();
+        setActivityVariables();
+        setLayoutVariables();
         setDarkThemeSwitch(binding.themeSwitch);
-        setTexts();
         createCurrencySelectorSpinner();
         setSpinners();
         setSelectedItemColorSpinner();
@@ -88,7 +85,6 @@ public class SettingsActivity extends AppCompatActivity
 
     private void createCurrencySelectorSpinner() {
         final String[] currenciesList = getResources().getStringArray(R.array.currencies);
-
         final CurrenciesSpinnerAdapter adapter =
                 new CurrenciesSpinnerAdapter(this, R.layout.custom_spinner_item, currenciesList);
 
@@ -118,39 +114,32 @@ public class SettingsActivity extends AppCompatActivity
         viewModel.saveSelectedCurrencyHandler(String.valueOf(binding.currencySpinner.getSelectedItem()), preferences);
     }
 
-    private void setAllButtonsStyle() {
-        setButtonStyle(binding.rateButton, viewModel.getUserDetails() != null &&
-                viewModel.getUserDetails().getApplicationSettings().isDarkThemeEnabled());
-        setButtonStyle(binding.changePasswordButton, viewModel.getUserDetails() != null &&
-                viewModel.getUserDetails().getApplicationSettings().isDarkThemeEnabled());
-        setButtonStyle(binding.resetDatabaseButton, viewModel.getUserDetails() != null &&
-                viewModel.getUserDetails().getApplicationSettings().isDarkThemeEnabled());
-        setButtonStyle(binding.deleteAccountButton, viewModel.getUserDetails() != null &&
-                viewModel.getUserDetails().getApplicationSettings().isDarkThemeEnabled());
+    private void setActivityVariables() {
+        final UserDetails userDetails = MyCustomSharedPreferences.retrieveUserDetailsFromSharedPreferences(this);
+
+        binding = DataBindingUtil.setContentView(this, R.layout.settings_activity);
+        preferences = getSharedPreferences(MyCustomVariables.getSharedPreferencesFileName(), MODE_PRIVATE);
+        viewModel = new SettingsViewModel(getApplication(), userDetails);
     }
 
-    private void setButtonStyle(final Button button,
-                                final boolean darkThemeEnabled) {
-        button.setBackgroundResource(!darkThemeEnabled ? R.drawable.ic_outlined_button_light : R.drawable.ic_outlined_button_dark);
-        button.setTextColor(getColor(!darkThemeEnabled ? R.color.turkish_sea : R.color.white));
-    }
+    public void setCurrencySelectorSpinnerTheme(@NonNull final View v) {
+        final boolean isDarkThemeEnabled = binding.getIsDarkThemeEnabled();
+        final int itemBackgroundColor = getColor(isDarkThemeEnabled ? R.color.primaryLight : R.color.primaryDark);
+        final int itemTextColor = getColor(isDarkThemeEnabled ? R.color.quaternaryLight : R.color.secondaryDark);
 
-    public void setCurrencySelectorSpinnerTheme(final View v) {
-        final boolean darkThemeEnabled = viewModel.getUserDetails() != null ?
-                viewModel.getUserDetails().getApplicationSettings().isDarkThemeEnabled() :
-                MyCustomVariables.getDefaultUserDetails().getApplicationSettings().isDarkThemeEnabled();
-
-        final int itemsColor = !darkThemeEnabled ? Color.WHITE : Color.BLACK;
-        // setting elements' text color based on the selected theme
-        ((TextView) v).setTextColor(itemsColor);
+        ((TextView) v).setTextColor(itemTextColor);
+        v.setBackgroundColor(itemBackgroundColor);
     }
 
     private void setDarkThemeSwitch(final SwitchCompat darkThemeSwitch) {
-        final boolean darkThemeEnabled = viewModel.getUserDetails() != null ?
-                viewModel.getUserDetails().getApplicationSettings().isDarkThemeEnabled() :
-                MyCustomVariables.getDefaultUserDetails().getApplicationSettings().isDarkThemeEnabled();
+        darkThemeSwitch.setChecked(binding.getIsDarkThemeEnabled());
+    }
 
-        darkThemeSwitch.setChecked(darkThemeEnabled);
+    private void setLayoutVariables() {
+        binding.setActivity(this);
+        binding.setFragmentManager(getSupportFragmentManager());
+        binding.setIsDarkThemeEnabled(viewModel.getUserDetails().getApplicationSettings().isDarkThemeEnabled());
+        binding.setViewModel(viewModel);
     }
 
     /**
@@ -167,9 +156,12 @@ public class SettingsActivity extends AppCompatActivity
                     return;
                 }
 
+                final int itemTextColor = getColor(binding.getIsDarkThemeEnabled() ?
+                        R.color.secondaryDark : R.color.quaternaryLight);
+
                 // the first element will have the text aligned to its start and
                 // the color based on the selected theme
-                ((TextView) parent.getChildAt(0)).setTextColor(viewModel.getTextColor(SettingsActivity.this));
+                ((TextView) parent.getChildAt(0)).setTextColor(itemTextColor);
                 ((TextView) parent.getChildAt(0)).setGravity(Gravity.END);
                 ((TextView) parent.getChildAt(0)).setTypeface(null, Typeface.BOLD);
             }
@@ -184,24 +176,13 @@ public class SettingsActivity extends AppCompatActivity
     }
 
     private void setSpinners() {
-        final boolean darkThemeEnabled = viewModel.getUserDetails() != null ?
-                viewModel.getUserDetails().getApplicationSettings().isDarkThemeEnabled() :
-                MyCustomVariables.getDefaultUserDetails().getApplicationSettings().isDarkThemeEnabled();
-
         final String currency = viewModel.getUserDetails() != null ?
                 viewModel.getUserDetails().getApplicationSettings().getCurrency() :
                 MyCustomVariables.getDefaultCurrency();
-        // turkish sea (blue) or white
-        final int color = viewModel.getTextColor(this);
-
-        final int dropDownTheme = !darkThemeEnabled ?
-                R.drawable.ic_blue_gradient_unloved_teen : R.drawable.ic_white_gradient_tobacco_ad;
+        final int arrowColor = getColor(binding.getIsDarkThemeEnabled() ? R.color.secondaryDark : R.color.quaternaryLight);
 
         // setting arrow color
-        binding.currencySpinner.getBackground().setColorFilter(color, PorterDuff.Mode.SRC_ATOP);
-
-        // setting elements' color
-        binding.currencySpinner.setPopupBackgroundResource(dropDownTheme);
+        binding.currencySpinner.getBackground().setColorFilter(arrowColor, PorterDuff.Mode.SRC_ATOP);
 
         binding.currencySpinner.setSelection(currency.equals("AUD") ?
                 0 : currency.equals("BRL") ?
@@ -233,28 +214,5 @@ public class SettingsActivity extends AppCompatActivity
             MyCustomVariables.setUserDetails(viewModel.getUserDetails());
             MyCustomMethods.restartCurrentActivity(this);
         });
-    }
-
-    private void setTexts() {
-        final int color = viewModel.getTextColor(this);
-
-        binding.themeText.setTextColor(color);
-        binding.currencyText.setTextColor(color);
-    }
-
-    private void setTheme() {
-        getWindow().getDecorView().setBackgroundColor(viewModel.getTheme(this));
-    }
-
-    private void setVariables() {
-        final UserDetails userDetails = MyCustomSharedPreferences.retrieveUserDetailsFromSharedPreferences(this);
-
-        binding = DataBindingUtil.setContentView(this, R.layout.settings_activity);
-        preferences = getSharedPreferences(MyCustomVariables.getSharedPreferencesFileName(), MODE_PRIVATE);
-        viewModel = new SettingsViewModel(getApplication(), userDetails);
-
-        binding.setActivity(this);
-        binding.setFragmentManager(getSupportFragmentManager());
-        binding.setViewModel(viewModel);
     }
 }

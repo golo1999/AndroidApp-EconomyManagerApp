@@ -5,8 +5,8 @@
     <string name="transactions">Tranzacții</string>
     <string name="change_password">Schimbați parola</string>
     <string name="choose">Alegeți</string>
-    <string name="new_password">Introduceți noua parolă</string>
-    <string name="old_password">Introduceți vechea parolă</string>
+    <string name="new_password">Noua parolă</string>
+    <string name="old_password">Vechea parolă</string>
     <string name="date">Dată</string>
     <string name="day">Zi</string>
     <string name="delete_account">Ștergeți contul</string>
@@ -66,12 +66,12 @@
     <string name="no_money_records_this_month">Nicio tranzacție înregistrată în această lună</string>
     <string name="edit_profile">Editați profilul</string>
     <string name="incorrect_phone_number">Număr de telefon incorect</string>
-    <string name="edit_specific_transaction">Editați o anumită tranzacție</string>
+    <string name="edit_specific_transaction">Editați tranzacția</string>
     <string name="upload_successful">Încărcat cu succes</string>
     <string name="please_select_a_file_first">Vă rugăm să selectați un fișier mai întâi</string>
     <string name="change_account_image">Schimbați imaginea contului</string>
     <string name="please_enter_a_valid_birth_date">Vă rugăm să introduceți o dată de naștere validă</string>
-    <string name="added_successfully">adăugat/ă cu succes</string>
+    <string name="added_successfully">%s adăugat/ă cu succes</string>
     <string name="email">Email</string>
     <string name="bills">Facturi</string>
     <string name="car">Automobil</string>
@@ -209,4 +209,5 @@
     <string name="should_have_at_least_characters">%s trebuie să aibă cel puțin %d caractere</string>
     <string name="login">Autentificare</string>
     <string name="log_in">Autentificare</string>
+    <string name="edit_photo">Editați poza</string>
 </resources>

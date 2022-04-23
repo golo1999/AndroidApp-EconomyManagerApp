@@ -16,7 +16,7 @@
     <string name="save">Salva</string>
     <string name="save_changes">Salvare le modifiche</string>
     <string name="saving">Risparmio</string>
-    <string name="added_successfully">è stato aggiunto con successo</string>
+    <string name="added_successfully">%s aggiunto con successo</string>
     <string name="new_income">Nuovo reddito</string>
     <string name="account">Conto</string>
     <string name="transactions">Transazioni</string>
@@ -26,8 +26,8 @@
     <string name="change_password">Cambia la password</string>
     <string name="choose">Scegli</string>
     <string name="please_enter_your_password">Per favore inserisci la tua password</string>
-    <string name="new_password">Inserire la nuova password</string>
-    <string name="old_password">Inserire la vecchia password</string>
+    <string name="new_password">La nuova password</string>
+    <string name="old_password">La vecchia password</string>
     <string name="date">Data</string>
     <string name="day">Giorno</string>
     <string name="debt">Debito</string>
@@ -209,4 +209,5 @@
     <string name="should_have_at_least_characters">%s dovrebbe avere almeno %d caratteri</string>
     <string name="login">Accesso</string>
     <string name="log_in">Accesso</string>
+    <string name="edit_photo">Modifica foto</string>
 </resources>
