@@ -13,6 +13,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.example.economy_manager.R;
 import com.example.economy_manager.databinding.EditPhotoActivityBinding;
+import com.example.economy_manager.feature.editprofile.EditProfileActivity;
 import com.example.economy_manager.model.UserDetails;
 import com.example.economy_manager.utility.MyCustomMethods;
 import com.example.economy_manager.utility.MyCustomSharedPreferences;
@@ -135,6 +136,10 @@ public class EditPhotoActivity extends AppCompatActivity {
 
                                     MyCustomVariables.setUserDetails(userDetailsFromSharedPreferences);
                                 }
+                            }
+
+                            if (!EditProfileActivity.isPhotoUrlModified()) {
+                                EditProfileActivity.setIsPhotoUrlModified(true);
                             }
                         })
                         .addOnFailureListener((final Exception e) ->
