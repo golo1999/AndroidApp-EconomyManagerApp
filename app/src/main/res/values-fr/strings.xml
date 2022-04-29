@@ -212,4 +212,6 @@
     <string name="edit_photo">Modifier photo</string>
     <string name="expense_added_successfully">Dépense ajoutée avec succès</string>
     <string name="income_added_successfully">Revenu ajouté avec succès</string>
+    <string name="unknown_country">Pays inconnu</string>
+    <string name="unknown_gender">Sexe inconnu</string>
 </resources>

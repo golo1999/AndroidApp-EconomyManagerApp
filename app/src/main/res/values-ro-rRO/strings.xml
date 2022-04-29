@@ -212,4 +212,6 @@
     <string name="edit_photo">Editați poza</string>
     <string name="expense_added_successfully">Cheltuială adăugată cu succes</string>
     <string name="income_added_successfully">Venit adăugat cu succes</string>
+    <string name="unknown_country">Țară necunoscută</string>
+    <string name="unknown_gender">Sex necunoscut</string>
 </resources>

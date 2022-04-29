@@ -1,7 +1,5 @@
 package com.example.economy_manager.feature.editprofile;
 
-import android.app.DatePickerDialog;
-import android.content.SharedPreferences;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.view.Gravity;
@@ -10,7 +8,6 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.DatePicker;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -22,32 +19,23 @@ import androidx.databinding.DataBindingUtil;
 import com.example.economy_manager.R;
 import com.example.economy_manager.databinding.EditProfileActivityBinding;
 import com.example.economy_manager.feature.editphoto.EditPhotoActivity;
-import com.example.economy_manager.model.BirthDate;
-import com.example.economy_manager.model.PersonalInformation;
 import com.example.economy_manager.model.UserDetails;
-import com.example.economy_manager.utility.Countries;
-import com.example.economy_manager.utility.Genders;
-import com.example.economy_manager.utility.Languages;
 import com.example.economy_manager.utility.MyCustomMethods;
 import com.example.economy_manager.utility.MyCustomSharedPreferences;
 import com.example.economy_manager.utility.MyCustomVariables;
 import com.squareup.picasso.Picasso;
 
-import java.time.LocalDate;
 import java.util.HashMap;
-import java.util.Locale;
 
 public class EditProfileActivity
-        extends AppCompatActivity
-        implements DatePickerDialog.OnDateSetListener {
+        extends AppCompatActivity {
 
     private EditProfileActivityBinding binding;
     private EditProfileViewModel viewModel;
-    private SharedPreferences preferences;
+    //    private SharedPreferences preferences;
     private UserDetails userDetails;
     private boolean isDarkThemeEnabled;
-    private boolean personalInformationHasBeenModified;
-    private static boolean isPhotoUrlModified = false;
+    private static boolean isPhotoUrlModified;
 
     public static boolean isPhotoUrlModified() {
         return isPhotoUrlModified;
@@ -93,18 +81,6 @@ public class EditProfileActivity
     }
 
     /**
-     * Method for retrieving the birthdate from the fragment
-     * and setting it to the corresponding field
-     */
-    @Override
-    public void onDateSet(final DatePicker datePicker,
-                          final int year,
-                          final int month,
-                          final int dayOfMonth) {
-        setBirthDateText(LocalDate.of(year, month + 1, dayOfMonth));
-    }
-
-    /**
      * Method for retrieving user's personal information from SharedPreferences
      * and filling the fields with the info
      */
@@ -114,171 +90,35 @@ public class EditProfileActivity
         final int accountPhotoBorderColor = binding.getIsDarkThemeEnabled() ?
                 getColor(R.color.secondaryDark) : getColor(R.color.quaternaryLight);
 
-        final String firstNameHint = String.valueOf(retrievedPersonalInformation.get("firstName"));
-        final String lastNameHint = String.valueOf(retrievedPersonalInformation.get("lastName"));
-        final String phoneNumberHint = String.valueOf(retrievedPersonalInformation.get("phoneNumber"));
-        final String websiteHint = String.valueOf(retrievedPersonalInformation.get("website"));
-
-        final int countrySpinnerSelection =
-                Integer.parseInt(String.valueOf(retrievedPersonalInformation.get("countrySpinnerSelection")));
-        final int genderSpinnerSelection =
-                Integer.parseInt(String.valueOf(retrievedPersonalInformation.get("genderSpinnerSelection")));
-
-        final LocalDate birthDateHint = (LocalDate) retrievedPersonalInformation.get("birthDate");
-        final String careerTitleHint = String.valueOf(retrievedPersonalInformation.get("careerTitle"));
+        final String retrievedFirstName =
+                String.valueOf(retrievedPersonalInformation.get("firstName"));
+        final String retrievedLastName =
+                String.valueOf(retrievedPersonalInformation.get("lastName"));
+        final String retrievedPhoneNumber =
+                String.valueOf(retrievedPersonalInformation.get("phoneNumber"));
+        final String retrievedWebsite = String.valueOf(retrievedPersonalInformation.get("website"));
+        final int countrySpinnerSelection = Integer.parseInt(String.
+                valueOf(retrievedPersonalInformation.get("countrySpinnerSelection")));
+        final int genderSpinnerSelection = Integer.parseInt(String.
+                valueOf(retrievedPersonalInformation.get("genderSpinnerSelection")));
+        final String retrievedCareerTitle =
+                String.valueOf(retrievedPersonalInformation.get("careerTitle"));
 
         binding.photo.setBorderColor(accountPhotoBorderColor);
-        binding.firstNameField.setHint(firstNameHint);
-        binding.lastNameField.setHint(lastNameHint);
-        binding.phoneField.setHint(phoneNumberHint);
-        binding.websiteField.setHint(websiteHint);
+        viewModel.setFirstName(retrievedFirstName);
+        viewModel.setLastName(retrievedLastName);
+        viewModel.setPhoneNumber(retrievedPhoneNumber);
+        viewModel.setWebsite(retrievedWebsite);
         binding.countrySpinner.setSelection(countrySpinnerSelection);
         binding.genderSpinner.setSelection(genderSpinnerSelection);
-        binding.careerTitleField.setHint(careerTitleHint);
-
-        setBirthDateText(birthDateHint);
-    }
-
-    @Nullable
-    private PersonalInformation personalInformationValidation(@NonNull final PersonalInformation initialPersonalInformation) {
-        final String enteredFirstName = !String.valueOf(binding.firstNameField.getText()).trim().isEmpty() ?
-                String.valueOf(binding.firstNameField.getText()).trim() :
-                !String.valueOf(binding.firstNameField.getHint()).trim().equals(getResources().getString(R.string.first_name)) ?
-                        String.valueOf(binding.firstNameField.getHint()).trim() : "";
-
-        final String enteredLastName = !String.valueOf(binding.lastNameField.getText()).trim().isEmpty() ?
-                String.valueOf(binding.lastNameField.getText()).trim() :
-                !String.valueOf(binding.lastNameField.getHint()).trim().equals(getResources().getString(R.string.last_name)) ?
-                        String.valueOf(binding.lastNameField.getHint()).trim() : "";
-
-        final String enteredPhoneNumber = !String.valueOf(binding.phoneField.getText()).trim().isEmpty() ?
-                String.valueOf(binding.phoneField.getText()).trim() :
-                !String.valueOf(binding.phoneField.getHint()).trim().equals(getResources().getString(R.string.phone_number)) ?
-                        String.valueOf(binding.phoneField.getHint()).trim() : "";
-
-        final String enteredWebsite = !String.valueOf(binding.websiteField.getText()).trim().isEmpty() ?
-                String.valueOf(binding.websiteField.getText()).trim() :
-                !String.valueOf(binding.websiteField.getHint()).trim().equals(getResources().getString(R.string.website)) ?
-                        String.valueOf(binding.websiteField.getHint()).trim() : "";
-
-        final String enteredCountry = Locale.getDefault().getDisplayLanguage().equals(Languages.ENGLISH_LANGUAGE) ?
-                String.valueOf(binding.countrySpinner.getSelectedItem()).trim() :
-                String.valueOf(Countries.getCountryNameInEnglish(this,
-                        String.valueOf(binding.countrySpinner.getSelectedItem()))).trim();
-
-        final String enteredGender = Locale.getDefault().getDisplayLanguage().equals(Languages.ENGLISH_LANGUAGE) ?
-                String.valueOf(binding.genderSpinner.getSelectedItem()).trim() :
-                String.valueOf(Genders.getGenderInEnglish(this,
-                        String.valueOf(binding.genderSpinner.getSelectedItem()))).trim();
-
-        final int birthDateYear = viewModel.getTransactionDate().getYear();
-
-        final int birthDateMonth = viewModel.getTransactionDate().getMonthValue();
-
-        final int birthDateDay = viewModel.getTransactionDate().getDayOfMonth();
-
-        final BirthDate enteredBirthDate = new BirthDate(birthDateYear, birthDateMonth, birthDateDay);
-
-        final String enteredCareerTitle = !String.valueOf(binding.careerTitleField.getText()).trim().isEmpty() ?
-                String.valueOf(binding.careerTitleField.getText()).trim() :
-                !String.valueOf(binding.careerTitleField.getHint()).trim()
-                        .equals(getResources().getString(R.string.career_title)) ?
-                        String.valueOf(binding.careerTitleField.getHint()).trim() : "";
-
-        final String enteredPhotoURL = initialPersonalInformation.getPhotoURL();
-
-        final PersonalInformation editedPersonalInformation =
-                new PersonalInformation(enteredFirstName,
-                        enteredLastName,
-                        enteredPhoneNumber,
-                        enteredWebsite,
-                        enteredCountry,
-                        enteredGender,
-                        enteredBirthDate,
-                        enteredCareerTitle,
-                        enteredPhotoURL);
-
-        final boolean firstNameIsOK = !enteredFirstName.isEmpty() ||
-                !String.valueOf(binding.firstNameField.getHint()).trim()
-                        .equals(getResources().getString(R.string.first_name).trim());
-
-        final boolean lastNameIsOK = !enteredLastName.isEmpty() ||
-                !String.valueOf(binding.lastNameField.getHint()).trim()
-                        .equals(getResources().getString(R.string.last_name).trim());
-
-        final boolean phoneNumberIsOK = !enteredPhoneNumber.isEmpty() ||
-                !String.valueOf(binding.phoneField.getHint()).trim()
-                        .equals(getResources().getString(R.string.phone_number).trim());
-
-        final boolean websiteIsOK = !enteredWebsite.isEmpty() ||
-                !String.valueOf(binding.websiteField.getHint()).trim()
-                        .equals(getResources().getString(R.string.website).trim());
-
-        final boolean countryNameIsOK = !enteredCountry.isEmpty();
-
-        final boolean genderIsOK = !enteredGender.isEmpty();
-
-        final boolean careerTitleIsOK = !enteredCareerTitle.isEmpty() ||
-                !String.valueOf(binding.careerTitleField.getHint()).trim()
-                        .equals(getResources().getString(R.string.career_title).trim());
-
-        final boolean firstNameHasBeenModified = !enteredFirstName.isEmpty() &&
-                !enteredFirstName.equals(String.valueOf(binding.firstNameField.getHint()));
-
-        final boolean lastNameHasBeenModified = !enteredLastName.isEmpty() &&
-                !enteredLastName.equals(String.valueOf(binding.lastNameField.getHint()));
-
-        final boolean phoneNumberHasBeenModified = !enteredPhoneNumber.isEmpty() &&
-                !enteredPhoneNumber.equals(String.valueOf(binding.phoneField.getHint()));
-
-        final boolean websiteHasBeenModified = !enteredWebsite.isEmpty() &&
-                !enteredWebsite.equals(String.valueOf(binding.websiteField.getHint()));
-
-        final boolean countryHasBeenModified = !enteredCountry.isEmpty() &&
-                !enteredCountry.equals(initialPersonalInformation.getCountry());
-
-        final boolean genderHasBeenModified = !enteredGender.isEmpty() &&
-                !enteredGender.equals(initialPersonalInformation.getGender());
-
-        final boolean careerTitleHasBeenModified = !enteredCareerTitle.isEmpty() &&
-                !enteredCareerTitle.equals(String.valueOf(binding.careerTitleField.getHint()));
-
-        personalInformationHasBeenModified = firstNameHasBeenModified ||
-                lastNameHasBeenModified ||
-                phoneNumberHasBeenModified ||
-                websiteHasBeenModified ||
-                countryHasBeenModified ||
-                genderHasBeenModified ||
-                careerTitleHasBeenModified;
-
-        return !initialPersonalInformation.equals(editedPersonalInformation) &&
-                firstNameIsOK &&
-                lastNameIsOK &&
-                phoneNumberIsOK &&
-                websiteIsOK &&
-                countryNameIsOK &&
-                genderIsOK &&
-                careerTitleIsOK ?
-                editedPersonalInformation : null;
+        viewModel.setCareerTitle(retrievedCareerTitle);
     }
 
     private void setActivityVariables() {
         binding = DataBindingUtil.setContentView(this, R.layout.edit_profile_activity);
-        preferences = getSharedPreferences(MyCustomVariables.getSharedPreferencesFileName(), MODE_PRIVATE);
+//        preferences = getSharedPreferences(MyCustomVariables.getSharedPreferencesFileName(), MODE_PRIVATE);
         userDetails = MyCustomSharedPreferences.retrieveUserDetailsFromSharedPreferences(this);
         viewModel = new EditProfileViewModel(getApplication(), this, userDetails, binding);
-    }
-
-    private void setBirthDateText(final LocalDate date) {
-        final String formattedDate = MyCustomMethods.getFormattedDate(date);
-
-        if (!viewModel.getTransactionDate().equals(date)) {
-            viewModel.setTransactionDate(date);
-        }
-
-        if (!String.valueOf(binding.birthDateText.getText()).trim().equals(formattedDate)) {
-            binding.birthDateText.setText(formattedDate);
-        }
     }
 
     private void setLayoutVariables() {
@@ -291,55 +131,6 @@ public class EditProfileActivity
         binding.photo.setOnClickListener((final View view) ->
                 MyCustomMethods.goToActivityWithFadeTransition(EditProfileActivity.this,
                         EditPhotoActivity.class));
-
-//        binding.updateProfileButton.setOnClickListener((final View view) -> {
-//            final PersonalInformation editedPersonalInformation =
-//                    personalInformationValidation(userDetails.getPersonalInformation());
-//
-//            if (editedPersonalInformation != null && MyCustomVariables.getFirebaseAuth().getUid() != null) {
-//                final boolean firstNameIsEmpty = editedPersonalInformation.getFirstName().trim().isEmpty();
-//
-//                final boolean lastNameIsEmpty = editedPersonalInformation.getLastName().trim().isEmpty();
-//
-//                final boolean phoneNumberIsEmpty = editedPersonalInformation.getPhoneNumber().trim().isEmpty();
-//
-//                final boolean websiteIsEmpty = editedPersonalInformation.getWebsite().trim().isEmpty();
-//
-//                final boolean countryIsEmpty = editedPersonalInformation.getCountry().trim().isEmpty();
-//
-//                final boolean genderIsEmpty = editedPersonalInformation.getGender().trim().isEmpty();
-//
-//                final boolean careerTitleIsEmpty = editedPersonalInformation.getCareerTitle().trim().isEmpty();
-//
-//                final boolean allInformationIsCompleted =
-//                        !firstNameIsEmpty && !lastNameIsEmpty && !phoneNumberIsEmpty && !websiteIsEmpty &&
-//                                !countryIsEmpty && !genderIsEmpty && !careerTitleIsEmpty;
-//
-//                // updating user's new info into the database, into SharedPreferences and into utilities
-//                MyCustomVariables.getDatabaseReference()
-//                        .child(MyCustomVariables.getFirebaseAuth().getUid())
-//                        .child("PersonalInformation")
-//                        .setValue(editedPersonalInformation)
-//                        .addOnCompleteListener((final Task<Void> task) -> MyCustomMethods.showShortMessage(this,
-//                                getResources().getString(R.string.profile_updated_successfully)));
-//
-//                userDetails.setPersonalInformation(editedPersonalInformation);
-//                MyCustomSharedPreferences.saveUserDetailsToSharedPreferences(preferences, userDetails);
-//
-//                MyCustomVariables.setUserDetails(userDetails);
-//
-//                onBackPressed();
-//
-//            }
-//            // here we need to set the case when all information is completed
-//            else if (!personalInformationHasBeenModified) {
-//                MyCustomMethods.showShortMessage(this, getResources().getString(R.string.no_changes_have_been_made));
-//                onBackPressed();
-//            } else {
-//                MyCustomMethods.showShortMessage(this,
-//                        getResources().getString(R.string.please_complete_all_fields));
-//            }
-//        });
 
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
     }
