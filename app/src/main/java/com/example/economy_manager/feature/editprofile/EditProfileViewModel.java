@@ -6,14 +6,12 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.databinding.ObservableField;
-import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.AndroidViewModel;
 
 import com.example.economy_manager.R;
 import com.example.economy_manager.databinding.EditProfileActivityBinding;
 import com.example.economy_manager.model.UserDetails;
 import com.example.economy_manager.utility.Countries;
-import com.example.economy_manager.utility.DatePickerFragment;
 import com.example.economy_manager.utility.Genders;
 import com.example.economy_manager.utility.MyCustomMethods;
 
@@ -29,7 +27,6 @@ public class EditProfileViewModel extends AndroidViewModel {
     private final ObservableField<String> website = new ObservableField<>("");
     private final ObservableField<String> country = new ObservableField<>("");
     private final ObservableField<String> gender = new ObservableField<>("");
-    private LocalDate birthDate = LocalDate.now();
     private final ObservableField<String> careerTitle = new ObservableField<>("");
 
     private final EditProfileActivityBinding binding;
@@ -101,14 +98,6 @@ public class EditProfileViewModel extends AndroidViewModel {
         this.gender.set(gender);
     }
 
-    public LocalDate getBirthDate() {
-        return birthDate;
-    }
-
-    public void setBirthDate(LocalDate birthDate) {
-        this.birthDate = birthDate;
-    }
-
     public ObservableField<String> getCareerTitle() {
         return careerTitle;
     }
@@ -167,19 +156,15 @@ public class EditProfileViewModel extends AndroidViewModel {
                 activity.getResources().getString(R.string.website).trim() :
                 getUserDetails().getPersonalInformation().getWebsite().trim();
 
-        final Object countrySpinnerSelection = Countries.getCountryPositionInList(getApplication(), countriesList,
-                getUserDetails() != null ? getUserDetails().getPersonalInformation().getCountry().trim() : "");
+        final Object countrySpinnerSelection =
+                Countries.getCountryPositionInList(getApplication(), countriesList,
+                        getUserDetails() != null ?
+                                getUserDetails().getPersonalInformation().getCountry().trim() : "");
 
-        final Object genderSpinnerSelection = Genders.getPositionInGenderList(activity, gendersList,
-                getUserDetails() != null ? getUserDetails().getPersonalInformation().getGender().trim() : "");
-
-        final Object birthDate = getUserDetails() == null ||
-                getUserDetails().getPersonalInformation() == null ||
-                getUserDetails().getPersonalInformation().getBirthDate() == null ?
-                LocalDate.now() :
-                LocalDate.of(getUserDetails().getPersonalInformation().getBirthDate().getYear(),
-                        getUserDetails().getPersonalInformation().getBirthDate().getMonth(),
-                        getUserDetails().getPersonalInformation().getBirthDate().getDay());
+        final Object genderSpinnerSelection =
+                Genders.getPositionInGenderList(activity, gendersList,
+                        getUserDetails() != null ?
+                                getUserDetails().getPersonalInformation().getGender().trim() : "");
 
         final Object careerTitle = getUserDetails() == null ||
                 getUserDetails().getPersonalInformation().getCareerTitle().trim().isEmpty() ?
@@ -194,14 +179,9 @@ public class EditProfileViewModel extends AndroidViewModel {
         personalInformationMap.put("website", website);
         personalInformationMap.put("countrySpinnerSelection", countrySpinnerSelection);
         personalInformationMap.put("genderSpinnerSelection", genderSpinnerSelection);
-        personalInformationMap.put("birthDate", birthDate);
         personalInformationMap.put("careerTitle", careerTitle);
 
         return personalInformationMap;
-    }
-
-    public void onBirthDateTextClicked(final FragmentManager fragmentManager) {
-        new DatePickerFragment(getTransactionDate()).show(fragmentManager, "date_picker");
     }
 
     public void updateProfileHandler(@NonNull Activity activity) {
@@ -223,7 +203,8 @@ public class EditProfileViewModel extends AndroidViewModel {
             return;
         }
 
-        final String enteredCountryInEnglish = Countries.getCountryNameInEnglish(activity, enteredCountry);
+        final String enteredCountryInEnglish =
+                Countries.getCountryNameInEnglish(activity, enteredCountry);
         final String enteredGenderInEnglish = Genders.getGenderInEnglish(activity, enteredGender);
 
         MyCustomMethods.showShortMessage(activity, enteredFirstName + " " +
@@ -245,13 +226,15 @@ public class EditProfileViewModel extends AndroidViewModel {
 
                 binding.firstNameField.setError(error);
             } else if (MyCustomMethods.nameIsValid(enteredFirstName.trim()) == 0) {
-                final String error = activity.getResources().getString(R.string.should_have_at_least_characters,
-                        activity.getResources().getString(R.string.first_name), 2);
+                final String error =
+                        activity.getResources().getString(R.string.should_have_at_least_characters,
+                                activity.getResources().getString(R.string.first_name), 2);
 
                 binding.firstNameField.setError(error);
             } else if (MyCustomMethods.nameIsValid(enteredFirstName.trim()) == -1) {
-                final String error = activity.getResources().getString(R.string.contains_invalid_characters,
-                        activity.getResources().getString(R.string.first_name));
+                final String error =
+                        activity.getResources().getString(R.string.contains_invalid_characters,
+                                activity.getResources().getString(R.string.first_name));
 
                 binding.firstNameField.setError(error);
             }
@@ -262,13 +245,15 @@ public class EditProfileViewModel extends AndroidViewModel {
 
                 binding.lastNameField.setError(error);
             } else if (MyCustomMethods.nameIsValid(enteredLastName.trim()) == 0) {
-                final String error = activity.getResources().getString(R.string.should_have_at_least_characters,
-                        activity.getResources().getString(R.string.last_name), 2);
+                final String error =
+                        activity.getResources().getString(R.string.should_have_at_least_characters,
+                                activity.getResources().getString(R.string.last_name), 2);
 
                 binding.lastNameField.setError(error);
             } else if (MyCustomMethods.nameIsValid(enteredLastName.trim()) == -1) {
-                final String error = activity.getResources().getString(R.string.contains_invalid_characters,
-                        activity.getResources().getString(R.string.last_name));
+                final String error =
+                        activity.getResources().getString(R.string.contains_invalid_characters,
+                                activity.getResources().getString(R.string.last_name));
 
                 binding.lastNameField.setError(error);
             }

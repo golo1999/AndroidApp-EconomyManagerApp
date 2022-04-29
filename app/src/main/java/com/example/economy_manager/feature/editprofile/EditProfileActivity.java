@@ -1,6 +1,5 @@
 package com.example.economy_manager.feature.editprofile;
 
-import android.app.DatePickerDialog;
 import android.content.SharedPreferences;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
@@ -10,7 +9,6 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.DatePicker;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -22,7 +20,6 @@ import androidx.databinding.DataBindingUtil;
 import com.example.economy_manager.R;
 import com.example.economy_manager.databinding.EditProfileActivityBinding;
 import com.example.economy_manager.feature.editphoto.EditPhotoActivity;
-import com.example.economy_manager.model.BirthDate;
 import com.example.economy_manager.model.PersonalInformation;
 import com.example.economy_manager.model.UserDetails;
 import com.example.economy_manager.utility.Countries;
@@ -33,13 +30,11 @@ import com.example.economy_manager.utility.MyCustomSharedPreferences;
 import com.example.economy_manager.utility.MyCustomVariables;
 import com.squareup.picasso.Picasso;
 
-import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Locale;
 
 public class EditProfileActivity
-        extends AppCompatActivity
-        implements DatePickerDialog.OnDateSetListener {
+        extends AppCompatActivity {
 
     private EditProfileActivityBinding binding;
     private EditProfileViewModel viewModel;
@@ -47,7 +42,7 @@ public class EditProfileActivity
     private UserDetails userDetails;
     private boolean isDarkThemeEnabled;
     private boolean personalInformationHasBeenModified;
-    private static boolean isPhotoUrlModified = false;
+    private static boolean isPhotoUrlModified;
 
     public static boolean isPhotoUrlModified() {
         return isPhotoUrlModified;
@@ -93,18 +88,6 @@ public class EditProfileActivity
     }
 
     /**
-     * Method for retrieving the birthdate from the fragment
-     * and setting it to the corresponding field
-     */
-    @Override
-    public void onDateSet(final DatePicker datePicker,
-                          final int year,
-                          final int month,
-                          final int dayOfMonth) {
-        setBirthDateText(LocalDate.of(year, month + 1, dayOfMonth));
-    }
-
-    /**
      * Method for retrieving user's personal information from SharedPreferences
      * and filling the fields with the info
      */
@@ -114,29 +97,28 @@ public class EditProfileActivity
         final int accountPhotoBorderColor = binding.getIsDarkThemeEnabled() ?
                 getColor(R.color.secondaryDark) : getColor(R.color.quaternaryLight);
 
-        final String firstNameHint = String.valueOf(retrievedPersonalInformation.get("firstName"));
-        final String lastNameHint = String.valueOf(retrievedPersonalInformation.get("lastName"));
-        final String phoneNumberHint = String.valueOf(retrievedPersonalInformation.get("phoneNumber"));
-        final String websiteHint = String.valueOf(retrievedPersonalInformation.get("website"));
-
-        final int countrySpinnerSelection =
-                Integer.parseInt(String.valueOf(retrievedPersonalInformation.get("countrySpinnerSelection")));
-        final int genderSpinnerSelection =
-                Integer.parseInt(String.valueOf(retrievedPersonalInformation.get("genderSpinnerSelection")));
-
-        final LocalDate birthDateHint = (LocalDate) retrievedPersonalInformation.get("birthDate");
-        final String careerTitleHint = String.valueOf(retrievedPersonalInformation.get("careerTitle"));
+        final String retrievedFirstName =
+                String.valueOf(retrievedPersonalInformation.get("firstName"));
+        final String retrievedLastName =
+                String.valueOf(retrievedPersonalInformation.get("lastName"));
+        final String retrievedPhoneNumber =
+                String.valueOf(retrievedPersonalInformation.get("phoneNumber"));
+        final String retrievedWebsite = String.valueOf(retrievedPersonalInformation.get("website"));
+        final int countrySpinnerSelection = Integer.parseInt(String.
+                valueOf(retrievedPersonalInformation.get("countrySpinnerSelection")));
+        final int genderSpinnerSelection = Integer.parseInt(String.
+                valueOf(retrievedPersonalInformation.get("genderSpinnerSelection")));
+        final String retrievedCareerTitle =
+                String.valueOf(retrievedPersonalInformation.get("careerTitle"));
 
         binding.photo.setBorderColor(accountPhotoBorderColor);
-        binding.firstNameField.setHint(firstNameHint);
-        binding.lastNameField.setHint(lastNameHint);
-        binding.phoneField.setHint(phoneNumberHint);
-        binding.websiteField.setHint(websiteHint);
+        viewModel.setFirstName(retrievedFirstName);
+        viewModel.setLastName(retrievedLastName);
+        viewModel.setPhoneNumber(retrievedPhoneNumber);
+        viewModel.setWebsite(retrievedWebsite);
         binding.countrySpinner.setSelection(countrySpinnerSelection);
         binding.genderSpinner.setSelection(genderSpinnerSelection);
-        binding.careerTitleField.setHint(careerTitleHint);
-
-        setBirthDateText(birthDateHint);
+        viewModel.setCareerTitle(retrievedCareerTitle);
     }
 
     @Nullable
@@ -171,14 +153,6 @@ public class EditProfileActivity
                 String.valueOf(Genders.getGenderInEnglish(this,
                         String.valueOf(binding.genderSpinner.getSelectedItem()))).trim();
 
-        final int birthDateYear = viewModel.getTransactionDate().getYear();
-
-        final int birthDateMonth = viewModel.getTransactionDate().getMonthValue();
-
-        final int birthDateDay = viewModel.getTransactionDate().getDayOfMonth();
-
-        final BirthDate enteredBirthDate = new BirthDate(birthDateYear, birthDateMonth, birthDateDay);
-
         final String enteredCareerTitle = !String.valueOf(binding.careerTitleField.getText()).trim().isEmpty() ?
                 String.valueOf(binding.careerTitleField.getText()).trim() :
                 !String.valueOf(binding.careerTitleField.getHint()).trim()
@@ -194,7 +168,6 @@ public class EditProfileActivity
                         enteredWebsite,
                         enteredCountry,
                         enteredGender,
-                        enteredBirthDate,
                         enteredCareerTitle,
                         enteredPhotoURL);
 
@@ -267,18 +240,6 @@ public class EditProfileActivity
         preferences = getSharedPreferences(MyCustomVariables.getSharedPreferencesFileName(), MODE_PRIVATE);
         userDetails = MyCustomSharedPreferences.retrieveUserDetailsFromSharedPreferences(this);
         viewModel = new EditProfileViewModel(getApplication(), this, userDetails, binding);
-    }
-
-    private void setBirthDateText(final LocalDate date) {
-        final String formattedDate = MyCustomMethods.getFormattedDate(date);
-
-        if (!viewModel.getTransactionDate().equals(date)) {
-            viewModel.setTransactionDate(date);
-        }
-
-        if (!String.valueOf(binding.birthDateText.getText()).trim().equals(formattedDate)) {
-            binding.birthDateText.setText(formattedDate);
-        }
     }
 
     private void setLayoutVariables() {
