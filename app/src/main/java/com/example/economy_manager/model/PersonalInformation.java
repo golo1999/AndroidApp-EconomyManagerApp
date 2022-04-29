@@ -10,16 +10,18 @@ public class PersonalInformation {
     private String website;
     private String country;
     private String gender;
-    //    private BirthDate birthDate;
     private String careerTitle;
     private String photoURL;
 
     public PersonalInformation() {
         // Required empty public constructor
-        this("", "", "", "", "", "",
-//                new BirthDate(),
-                "",
-                "");
+        this("", "", "", "", "Unknown country", "Unknown gender", "", "");
+    }
+
+    public PersonalInformation(final String firstName,
+                               final String lastName) {
+        this.firstName = firstName;
+        this.lastName = lastName;
     }
 
     public PersonalInformation(final String firstName,
@@ -28,7 +30,6 @@ public class PersonalInformation {
                                final String website,
                                final String country,
                                final String gender,
-//                               final BirthDate birthDate,
                                final String careerTitle,
                                final String photoURL) {
         this.firstName = firstName;
@@ -37,7 +38,6 @@ public class PersonalInformation {
         this.website = website;
         this.country = country;
         this.gender = gender;
-//        this.birthDate = birthDate;
         this.careerTitle = careerTitle;
         this.photoURL = photoURL;
     }

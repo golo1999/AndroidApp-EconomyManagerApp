@@ -2,7 +2,6 @@ package com.example.economy_manager.feature.editprofile;
 
 import android.app.Activity;
 import android.app.Application;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.databinding.ObservableField;
@@ -10,10 +9,16 @@ import androidx.lifecycle.AndroidViewModel;
 
 import com.example.economy_manager.R;
 import com.example.economy_manager.databinding.EditProfileActivityBinding;
+import com.example.economy_manager.model.PersonalInformation;
 import com.example.economy_manager.model.UserDetails;
 import com.example.economy_manager.utility.Countries;
 import com.example.economy_manager.utility.Genders;
 import com.example.economy_manager.utility.MyCustomMethods;
+import com.example.economy_manager.utility.MyCustomVariables;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.ValueEventListener;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -82,16 +87,8 @@ public class EditProfileViewModel extends AndroidViewModel {
         this.website.set(website);
     }
 
-    public ObservableField<String> getCountry() {
-        return country;
-    }
-
     public void setCountry(String country) {
         this.country.set(country);
-    }
-
-    public ObservableField<String> getGender() {
-        return gender;
     }
 
     public void setGender(String gender) {
@@ -138,23 +135,19 @@ public class EditProfileViewModel extends AndroidViewModel {
 
         final Object firstName = getUserDetails() == null ||
                 getUserDetails().getPersonalInformation().getFirstName().trim().isEmpty() ?
-                activity.getResources().getString(R.string.first_name).trim() :
-                getUserDetails().getPersonalInformation().getFirstName().trim();
+                "" : getUserDetails().getPersonalInformation().getFirstName().trim();
 
         final Object lastName = getUserDetails() == null ||
                 getUserDetails().getPersonalInformation().getLastName().trim().isEmpty() ?
-                activity.getResources().getString(R.string.last_name).trim() :
-                getUserDetails().getPersonalInformation().getLastName().trim();
+                "" : getUserDetails().getPersonalInformation().getLastName().trim();
 
         final Object phoneNumber = getUserDetails() == null ||
                 getUserDetails().getPersonalInformation().getPhoneNumber().trim().isEmpty() ?
-                activity.getResources().getString(R.string.phone_number).trim() :
-                getUserDetails().getPersonalInformation().getPhoneNumber().trim();
+                "" : getUserDetails().getPersonalInformation().getPhoneNumber().trim();
 
         final Object website = getUserDetails() == null ||
                 getUserDetails().getPersonalInformation().getWebsite().trim().isEmpty() ?
-                activity.getResources().getString(R.string.website).trim() :
-                getUserDetails().getPersonalInformation().getWebsite().trim();
+                "" : getUserDetails().getPersonalInformation().getWebsite().trim();
 
         final Object countrySpinnerSelection =
                 Countries.getCountryPositionInList(getApplication(), countriesList,
@@ -168,8 +161,7 @@ public class EditProfileViewModel extends AndroidViewModel {
 
         final Object careerTitle = getUserDetails() == null ||
                 getUserDetails().getPersonalInformation().getCareerTitle().trim().isEmpty() ?
-                activity.getResources().getString(R.string.career_title).trim() :
-                getUserDetails().getPersonalInformation().getCareerTitle().trim();
+                "" : getUserDetails().getPersonalInformation().getCareerTitle().trim();
 
 
         personalInformationMap.put("photoURL", photoURL);
@@ -207,18 +199,9 @@ public class EditProfileViewModel extends AndroidViewModel {
                 Countries.getCountryNameInEnglish(activity, enteredCountry);
         final String enteredGenderInEnglish = Genders.getGenderInEnglish(activity, enteredGender);
 
-        MyCustomMethods.showShortMessage(activity, enteredFirstName + " " +
-                enteredCountryInEnglish + " " +
-                enteredGenderInEnglish);
-
-        // if all fields & spinners are valid
-        if (MyCustomMethods.nameIsValid(enteredFirstName) == 1 &&
-                MyCustomMethods.nameIsValid(enteredLastName) == 1 &&
-                MyCustomMethods.stringIsNotEmpty(enteredCountry) &&
-                MyCustomMethods.stringIsNotEmpty(enteredGender) &&
-                MyCustomMethods.stringIsNotEmpty(enteredCareerTitle)) {
-            MyCustomMethods.showShortMessage(activity, "OK");
-        } else {
+        // if there are invalid fields
+        if (MyCustomMethods.nameIsValid(enteredFirstName) != 1 ||
+                MyCustomMethods.nameIsValid(enteredLastName) != 1) {
             // first name input errors
             if (enteredFirstName.trim().isEmpty()) {
                 final String error = activity.getResources().getString(R.string.should_not_be_empty,
@@ -257,41 +240,109 @@ public class EditProfileViewModel extends AndroidViewModel {
 
                 binding.lastNameField.setError(error);
             }
-            // phone number errors
-            if (enteredPhoneNumber.trim().isEmpty()) {
-                final String error = activity.getResources().getString(R.string.should_not_be_empty,
-                        activity.getResources().getString(R.string.phone_number));
 
-                binding.phoneField.setError(error);
-            }
-            // website errors
-            if (enteredWebsite.trim().isEmpty()) {
-                final String error = activity.getResources().getString(R.string.should_not_be_empty,
-                        activity.getResources().getString(R.string.website));
-
-                binding.websiteField.setError(error);
-            }
-            // country spinner errors
-            if (enteredCountryInEnglish == null) {
-                final String error = activity.getResources().getString(R.string.should_not_be_empty,
-                        activity.getResources().getString(R.string.country));
-
-                ((TextView) binding.countrySpinner.getSelectedView()).setError(error);
-            }
-            // gender spinner errors
-            if (enteredGenderInEnglish == null) {
-                final String error = activity.getResources().getString(R.string.should_not_be_empty,
-                        activity.getResources().getString(R.string.country));
-
-                ((TextView) binding.countrySpinner.getSelectedView()).setError(error);
-            }
-            // career title errors
-            if (enteredCareerTitle.trim().isEmpty()) {
-                final String error = activity.getResources().getString(R.string.should_not_be_empty,
-                        activity.getResources().getString(R.string.career_title));
-
-                binding.careerTitleField.setError(error);
-            }
+            return;
         }
+
+        final String currentUserID = MyCustomVariables.getFirebaseAuth().getUid();
+
+        if (currentUserID == null) {
+            return;
+        }
+
+        MyCustomVariables.getDatabaseReference()
+                .child(MyCustomVariables.getFirebaseAuth().getUid())
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        if (!snapshot.exists() || !snapshot.hasChild("personalInformation")) {
+                            return;
+                        }
+
+                        final PersonalInformation personalInformation =
+                                snapshot.child("personalInformation")
+                                        .getValue(PersonalInformation.class);
+
+                        if (personalInformation == null) {
+                            return;
+                        }
+
+                        final boolean enteredFirstNameIsTheSame =
+                                enteredFirstName.trim().equals(personalInformation.getFirstName());
+                        final boolean enteredLastNameIsTheSame =
+                                enteredLastName.trim().equals(personalInformation.getLastName());
+                        final boolean enteredPhoneNumberIsTheSame =
+                                enteredPhoneNumber.trim().equals(personalInformation.getPhoneNumber());
+                        final boolean enteredWebsiteIsTheSame =
+                                enteredWebsite.trim().equals(personalInformation.getWebsite());
+                        final boolean enteredCountryIsTheSame =
+                                enteredCountryInEnglish.trim().equals(personalInformation.getCountry());
+                        final boolean enteredGenderIsTheSame =
+                                enteredGenderInEnglish.trim().equals(personalInformation.getGender());
+                        final boolean enteredCareerTitleIsTheSame =
+                                enteredCareerTitle.trim().equals(personalInformation.getCareerTitle());
+
+                        boolean isProfileModified = false;
+
+                        if (!enteredFirstNameIsTheSame) {
+                            personalInformation.setFirstName(enteredFirstName);
+                            isProfileModified = true;
+                        }
+
+                        if (!enteredLastNameIsTheSame) {
+                            personalInformation.setLastName(enteredLastName);
+                            isProfileModified = true;
+                        }
+
+                        if (!enteredPhoneNumberIsTheSame) {
+                            personalInformation.setPhoneNumber(enteredPhoneNumber);
+                            isProfileModified = true;
+                        }
+
+                        if (!enteredWebsiteIsTheSame) {
+                            personalInformation.setWebsite(enteredWebsite);
+                            isProfileModified = true;
+                        }
+
+                        if (!enteredCountryIsTheSame) {
+                            personalInformation.setCountry(enteredCountryInEnglish);
+                            isProfileModified = true;
+                        }
+
+                        if (!enteredGenderIsTheSame) {
+                            personalInformation.setGender(enteredGenderInEnglish);
+                            isProfileModified = true;
+                        }
+
+                        if (!enteredCareerTitleIsTheSame) {
+                            personalInformation.setCareerTitle(enteredCareerTitle);
+                            isProfileModified = true;
+                        }
+
+                        if (isProfileModified) {
+                            MyCustomVariables.getDatabaseReference()
+                                    .child(MyCustomVariables.getFirebaseAuth().getUid())
+                                    .child("personalInformation")
+                                    .setValue(personalInformation)
+                                    .addOnCompleteListener((Task<Void> updateProfileTask) ->
+                                            MyCustomMethods.showShortMessage(activity,
+                                                    activity.getResources().getString(R.string
+                                                            .profile_updated_successfully)))
+                                    .addOnFailureListener((Exception updateProfileException) ->
+                                            MyCustomMethods.showShortMessage(activity,
+                                                    activity.getResources().getString(R.string
+                                                            .please_try_again)));
+                        } else {
+                            MyCustomMethods.showShortMessage(activity,
+                                    activity.getResources().getString(R.string
+                                            .no_changes_have_been_made));
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
+                    }
+                });
     }
 }

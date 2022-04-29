@@ -3,8 +3,6 @@ package com.example.economy_manager.utility;
 import android.app.Activity;
 import android.app.Application;
 
-import androidx.annotation.Nullable;
-
 import com.example.economy_manager.R;
 
 import java.util.ArrayList;
@@ -15,7 +13,6 @@ public final class Countries {
 
     }
 
-    @Nullable
     public static String getCountryNameInEnglish(final Activity activity,
                                                  final String countryName) {
         return countryName.equals(activity.getResources().getString(R.string.albania)) ?
@@ -68,7 +65,7 @@ public final class Countries {
                 "Turkey" : countryName.equals(activity.getResources().getString(R.string.ukraine)) ?
                 "Ukraine" : countryName.equals(activity.getResources().getString(R.string.united_kingdom)) ?
                 "United Kingdom" : countryName.equals(activity.getResources().getString(R.string.vatican_city)) ?
-                "Vatican City" : null;
+                "Vatican City" : "Unknown country";
     }
 
     public static int getCountryPositionInList(final Application app,
@@ -124,7 +121,8 @@ public final class Countries {
                 app.getResources().getString(R.string.turkey) : countryName.equals("Ukraine") ?
                 app.getResources().getString(R.string.ukraine) : countryName.equals("United Kingdom") ?
                 app.getResources().getString(R.string.united_kingdom) : countryName.equals("Vatican City") ?
-                app.getResources().getString(R.string.vatican_city) : " ";
+                app.getResources().getString(R.string.vatican_city) :
+                app.getResources().getString(R.string.unknown_country);
 
         return Collections.binarySearch(countriesList, translatedCountryName);
     }
@@ -180,7 +178,7 @@ public final class Countries {
         countriesList.add(app.getResources().getString(R.string.turkey));
         countriesList.add(app.getResources().getString(R.string.ukraine));
         countriesList.add(app.getResources().getString(R.string.united_kingdom));
+        countriesList.add(app.getResources().getString(R.string.unknown_country));
         countriesList.add(app.getResources().getString(R.string.vatican_city));
-        countriesList.add(app.getResources().getString(R.string.space_character));
     }
 }

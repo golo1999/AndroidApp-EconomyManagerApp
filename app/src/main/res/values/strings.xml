@@ -97,6 +97,8 @@
     <string name="top_five_expenses">Top 5 expenses</string>
     <string name="transactions">Transactions</string>
     <string name="type">Type</string>
+    <string name="unknown_country">Unknown country</string>
+    <string name="unknown_gender">Unknown gender</string>
     <string name="update">Update</string>
     <string name="upload">Upload</string>
     <string name="upload_successful">Upload successful</string>
