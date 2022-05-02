@@ -9,9 +9,10 @@ import lombok.Data;
 
 @Data
 public class Transaction {
-    private static final String[] categoryList = new String[]{"Deposits", "Independent sources", "Salary", "Saving",
-            "Bills", "Car", "Clothes", "Communications", "Eating out", "Entertainment", "Food", "Gifts", "Health",
-            "House", "Pets", "Sports", "Taxi", "Toiletry", "Transport"};
+    private static final String[] categoriesList = new String[]{"Deposits",
+            "Independent sources", "Salary", "Saving", "Bills", "Car", "Clothes", "Communications",
+            "Eating out", "Entertainment", "Food", "Gifts", "Health", "House", "Pets", "Sports",
+            "Taxi", "Toiletry", "Transport"};
     private String id;
     private int category;
     private MyCustomTime time;
@@ -70,7 +71,7 @@ public class Transaction {
     public static int getIndexFromCategory(final String categoryName) {
         int index = -1;
 
-        for (final String category : categoryList) {
+        for (final String category : categoriesList) {
             ++index;
 
             if (category.equals(categoryName.trim())) {
@@ -82,7 +83,7 @@ public class Transaction {
     }
 
     public static String getTypeFromIndexInEnglish(final int index) {
-        return index <= categoryList.length ? categoryList[index] : "";
+        return index <= categoriesList.length ? categoriesList[index] : "";
     }
 
     public static int getIndexFromType(@NonNull final String typeName) {

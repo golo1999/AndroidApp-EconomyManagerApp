@@ -14,6 +14,7 @@ import com.example.economy_manager.model.Transaction;
 import com.example.economy_manager.model.UserDetails;
 import com.example.economy_manager.utility.MyCustomMethods;
 import com.example.economy_manager.utility.MyCustomVariables;
+import com.example.economy_manager.utility.Types;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
@@ -102,13 +103,15 @@ public class FavoriteExpensesCategoryFragment extends Fragment {
                             }
                         }
 
+                        Log.d("expensesMap", expensesMap.toString());
+
                         if (!expensesMap.isEmpty()) {
                             MyCustomMethods.sortMapDescendingByValue(expensesMap);
+                            Log.d("favoriteExpense", Types.getTranslatedType(requireContext(),
+                                    Transaction.getTypeFromIndexInEnglish((Integer) expensesMap.keySet().toArray()[0])));
                         } else {
-
+                            Log.d("favoriteExpense", "No expenses yet");
                         }
-
-                        Log.d("expensesMap", expensesMap.toString());
                     }
 
                     @Override
