@@ -32,7 +32,6 @@ public class EditProfileActivity
 
     private EditProfileActivityBinding binding;
     private EditProfileViewModel viewModel;
-    //    private SharedPreferences preferences;
     private UserDetails userDetails;
     private boolean isDarkThemeEnabled;
     private static boolean isPhotoUrlModified;
@@ -116,7 +115,6 @@ public class EditProfileActivity
 
     private void setActivityVariables() {
         binding = DataBindingUtil.setContentView(this, R.layout.edit_profile_activity);
-//        preferences = getSharedPreferences(MyCustomVariables.getSharedPreferencesFileName(), MODE_PRIVATE);
         userDetails = MyCustomSharedPreferences.retrieveUserDetailsFromSharedPreferences(this);
         viewModel = new EditProfileViewModel(getApplication(), this, userDetails, binding);
     }
