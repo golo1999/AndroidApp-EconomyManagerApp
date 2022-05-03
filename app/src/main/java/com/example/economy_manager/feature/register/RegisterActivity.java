@@ -5,7 +5,6 @@ import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
-import androidx.lifecycle.ViewModelProvider;
 
 import com.example.economy_manager.R;
 import com.example.economy_manager.databinding.RegisterActivityBinding;
@@ -19,7 +18,8 @@ public class RegisterActivity extends AppCompatActivity {
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setVariables();
+        setActivityVariables();
+        setLayoutVariables();
         setPreferences();
     }
 
@@ -29,10 +29,12 @@ public class RegisterActivity extends AppCompatActivity {
         MyCustomMethods.finishActivityWithSlideTransition(this, 0);
     }
 
-    private void setVariables() {
+    private void setActivityVariables() {
         binding = DataBindingUtil.setContentView(this, R.layout.register_activity);
-        viewModel = new ViewModelProvider(this).get(RegisterViewModel.class);
+        viewModel = new RegisterViewModel(binding);
+    }
 
+    private void setLayoutVariables() {
         binding.setActivity(this);
         binding.setViewModel(viewModel);
     }

@@ -7,7 +7,6 @@ import android.view.View;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
-import androidx.lifecycle.ViewModelProvider;
 
 import com.example.economy_manager.R;
 import com.example.economy_manager.databinding.LoginActivityBinding;
@@ -53,7 +52,8 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setVariables();
+        setActivityVariables();
+        setLayoutVariables();
         setGoogleButtonSize();
         setGoogleRequest();
         initializeFacebookLogin();
@@ -66,10 +66,12 @@ public class LoginActivity extends AppCompatActivity {
         finish();
     }
 
-    private void setVariables() {
+    private void setActivityVariables() {
         binding = DataBindingUtil.setContentView(this, R.layout.login_activity);
-        viewModel = new ViewModelProvider(this).get(LoginViewModel.class);
+        viewModel = new LoginViewModel(binding);
+    }
 
+    private void setLayoutVariables() {
         binding.setActivity(this);
         binding.setForgotPasswordActivity(ForgotPasswordActivity.class);
         binding.setRegisterActivity(RegisterActivity.class);

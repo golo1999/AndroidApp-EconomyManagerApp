@@ -8,6 +8,7 @@ import androidx.databinding.ObservableField;
 import androidx.lifecycle.ViewModel;
 
 import com.example.economy_manager.R;
+import com.example.economy_manager.databinding.LoginActivityBinding;
 import com.example.economy_manager.feature.mainscreen.MainScreenActivity;
 import com.example.economy_manager.model.UserDetails;
 import com.example.economy_manager.utility.MyCustomMethods;
@@ -21,8 +22,13 @@ import com.google.firebase.database.ValueEventListener;
 public class LoginViewModel extends ViewModel {
 
     private final ObservableField<String> enteredEmail = new ObservableField<>("");
-
     private final ObservableField<String> enteredPassword = new ObservableField<>("");
+
+    private final LoginActivityBinding binding;
+
+    public LoginViewModel(final LoginActivityBinding binding) {
+        this.binding = binding;
+    }
 
     public ObservableField<String> getEnteredEmail() {
         return enteredEmail;
@@ -54,72 +60,61 @@ public class LoginViewModel extends ViewModel {
     public void onLogInButtonClicked(final @NonNull Activity activity,
                                      final String emailValue,
                                      final String passwordValue) {
-        // proceeding to login if the email is valid & the password has got at least 7 characters
-        if (Patterns.EMAIL_ADDRESS.matcher(emailValue).matches() &&
-                passwordValue.length() >= 7) {
-            MyCustomVariables.getFirebaseAuth()
-                    .signInWithEmailAndPassword(emailValue, passwordValue)
-                    .addOnCompleteListener((final Task<AuthResult> task) -> {
-                        MyCustomMethods.closeTheKeyboard(activity);
-                        // verifying if user's email is verified if the credentials match
-                        if (task.isSuccessful()) {
-                            if (MyCustomVariables.getFirebaseAuth().getCurrentUser() == null) {
-                                return;
-                            }
+        final boolean inputsAreValid =
+                Patterns.EMAIL_ADDRESS.matcher(emailValue).matches() && passwordValue.length() > 6;
 
-                            if (MyCustomVariables.getFirebaseAuth().getCurrentUser().isEmailVerified()) {
-                                setUserDetailsToSharedPreferences(activity);
-                                goToTheMainScreen(activity);
-                            } else {
-                                MyCustomMethods.showShortMessage(activity,
-                                        activity.getResources().getString(R.string.please_verify_your_email));
-                                setEnteredPassword("");
-                            }
+        MyCustomMethods.closeTheKeyboard(activity);
+
+        if (!inputsAreValid) {
+            if (emailValue.isEmpty()) {
+                final String error = activity.getResources().getString(R.string.should_not_be_empty,
+                        activity.getResources().getString(R.string.email));
+
+                binding.emailField.setError(error);
+            } else if (!MyCustomMethods.emailIsValid(emailValue)) {
+                binding.emailField.setError(activity.getResources().getString(R.string.email_address_is_not_valid));
+            }
+
+            if (passwordValue.isEmpty()) {
+                final String error = activity.getResources().getString(R.string.should_not_be_empty,
+                        activity.getResources().getString(R.string.password));
+
+                binding.passwordField.setError(error);
+            } else if (passwordValue.length() <= 6) {
+                final String error = activity.getResources().getString(R.string.should_have_at_least_characters,
+                        activity.getResources().getString(R.string.password), 7);
+
+                binding.passwordField.setError(error);
+            }
+
+            return;
+        }
+
+        MyCustomVariables.getFirebaseAuth()
+                .signInWithEmailAndPassword(emailValue, passwordValue)
+                .addOnCompleteListener((final Task<AuthResult> signInTask) -> {
+                    // verifying if user's email is verified if the credentials match
+                    if (signInTask.isSuccessful()) {
+                        if (MyCustomVariables.getFirebaseAuth().getCurrentUser() == null) {
+                            return;
                         }
-                        // removing the entered password & showing message if the credentials don't match
-                        else {
+
+                        if (MyCustomVariables.getFirebaseAuth().getCurrentUser().isEmailVerified()) {
+                            setUserDetailsToSharedPreferences(activity);
+                            goToTheMainScreen(activity);
+                        } else {
                             MyCustomMethods.showShortMessage(activity,
-                                    activity.getResources().getString(R.string.incorrect_username_or_password));
+                                    activity.getResources().getString(R.string.please_verify_your_email));
                             setEnteredPassword("");
                         }
-                    });
-        }
-        // showing error messages if the login condition isn't respected
-        else {
-            MyCustomMethods.closeTheKeyboard(activity);
-            // if both the email & the password are empty
-            if (emailValue.isEmpty() && passwordValue.isEmpty()) {
-                MyCustomMethods.showShortMessage(activity, activity.getResources().getString(R.string.email_and_password_should_not_be_empty));
-            }
-            // if the email is empty
-            else if (emailValue.isEmpty()) {
-                MyCustomMethods.showShortMessage(activity, activity.getResources().getString(R.string.should_not_be_empty));
-                setEnteredPassword("");
-            }
-            // if the password is empty
-            else if (passwordValue.isEmpty()) {
-                MyCustomMethods.showShortMessage(activity,
-                        activity.getResources().getString(R.string.should_not_be_empty,
-                                activity.getResources().getString(R.string.password)));
-            }
-            // if the email isn't valid & the password is too short
-            else if (!Patterns.EMAIL_ADDRESS.matcher(emailValue).matches() && passwordValue.length() < 4) {
-                MyCustomMethods.showShortMessage(activity, activity.getResources().getString(R.string.email_and_password_are_not_valid));
-                setEnteredPassword("");
-            }
-            // if the email isn't valid & the password is
-            else if (!Patterns.EMAIL_ADDRESS.matcher(emailValue).matches()) {
-                MyCustomMethods.showShortMessage(activity, activity.getResources().getString(R.string.email_address_is_not_valid));
-                setEnteredPassword("");
-            }
-            // if the email is valid & the password is too short
-            else {
-                MyCustomMethods.showShortMessage(activity,
-                        activity.getResources().getString(R.string.should_have_at_least_characters,
-                                activity.getResources().getString(R.string.password), 7));
-                setEnteredPassword("");
-            }
-        }
+                    }
+                    // removing the entered password & showing message if the credentials don't match
+                    else {
+                        MyCustomMethods.showShortMessage(activity,
+                                activity.getResources().getString(R.string.incorrect_username_or_password));
+                        setEnteredPassword("");
+                    }
+                });
     }
 
     private void setUserDetailsToSharedPreferences(final @NonNull Activity parentActivity) {
