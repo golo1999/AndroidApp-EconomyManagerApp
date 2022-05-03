@@ -47,7 +47,6 @@ public class MoneySpentPercentageFragment extends Fragment {
 
     public static MoneySpentPercentageFragment newInstance() {
         final MoneySpentPercentageFragment fragment = new MoneySpentPercentageFragment();
-
         final Bundle args = new Bundle();
 
         fragment.setArguments(args);
@@ -81,7 +80,7 @@ public class MoneySpentPercentageFragment extends Fragment {
     public View onCreateView(@NonNull final LayoutInflater inflater,
                              final ViewGroup container,
                              final Bundle savedInstanceState) {
-        setVariables(inflater, container);
+        setActivityVariables(inflater, container);
 
         return binding.getRoot();
     }
@@ -93,14 +92,17 @@ public class MoneySpentPercentageFragment extends Fragment {
         populateMap();
     }
 
-    private void setUserDetails() {
-        userDetails = MyCustomSharedPreferences.retrieveUserDetailsFromSharedPreferences(requireContext());
+    private void addPieChartDetail(final int categoryIndex,
+                                   final int categoryPercentage,
+                                   final int categoryColor) {
+        final LinearLayout categoryLayout =
+                viewModel.getPieChartDetail(requireContext(), categoryIndex, categoryPercentage, categoryColor);
+
+        binding.detailsLayout.addView(categoryLayout);
     }
 
-    private void setVariables(final @NonNull LayoutInflater inflater,
-                              final ViewGroup container) {
-        binding = DataBindingUtil.inflate(inflater, R.layout.money_spent_percentage_fragment, container, false);
-        viewModel = new ViewModelProvider((ViewModelStoreOwner) requireContext()).get(MainScreenViewModel.class);
+    private void clearPieChart() {
+        binding.detailsLayout.removeAllViews();
     }
 
     /**
@@ -182,6 +184,10 @@ public class MoneySpentPercentageFragment extends Fragment {
                             binding.pieChart.setVisibility(View.GONE);
                             binding.noExpensesMadeText.setVisibility(View.VISIBLE);
 
+                            if (binding.detailsLayout.getChildCount() > 0) {
+                                clearPieChart();
+                            }
+
                             return;
                         }
 
@@ -200,6 +206,13 @@ public class MoneySpentPercentageFragment extends Fragment {
                 });
     }
 
+    private void setActivityVariables(final @NonNull LayoutInflater inflater,
+                                      final ViewGroup container) {
+        binding = DataBindingUtil.inflate(inflater, R.layout.money_spent_percentage_fragment,
+                container, false);
+        viewModel = new ViewModelProvider((ViewModelStoreOwner) requireContext()).get(MainScreenViewModel.class);
+    }
+
     private void setPieChartData(final LinkedHashMap<Integer, Float> transactionTypesMap,
                                  final float totalMonthlyExpenses) {
         final AtomicInteger transactionTypesIndex = new AtomicInteger(0);
@@ -212,13 +225,10 @@ public class MoneySpentPercentageFragment extends Fragment {
 
         transactionTypesMap.forEach((final Integer key, final Float value) -> {
             final int categoryPercentage = (int) (100 * (value / totalMonthlyExpenses));
-
             final int categoryColor = viewModel.getPieChartCategoryColor(requireContext(), key);
-
             final PieModel pieSlice = new PieModel("category" + key, categoryPercentage, categoryColor);
 
             binding.pieChart.addPieSlice(pieSlice);
-
             transactionTypesIndex.getAndIncrement();
 
             if (transactionTypesIndex.get() <= 5) {
@@ -227,12 +237,7 @@ public class MoneySpentPercentageFragment extends Fragment {
         });
     }
 
-    private void addPieChartDetail(final int categoryIndex,
-                                   final int categoryPercentage,
-                                   final int categoryColor) {
-        final LinearLayout categoryLayout =
-                viewModel.getPieChartDetail(requireContext(), categoryIndex, categoryPercentage, categoryColor);
-
-        binding.detailsLayout.addView(categoryLayout);
+    private void setUserDetails() {
+        userDetails = MyCustomSharedPreferences.retrieveUserDetailsFromSharedPreferences(requireContext());
     }
 }
