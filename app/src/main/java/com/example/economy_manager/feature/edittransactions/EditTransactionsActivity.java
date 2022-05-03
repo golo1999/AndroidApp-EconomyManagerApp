@@ -135,18 +135,19 @@ public class EditTransactionsActivity
                                       final @NonNull EditTransactionsRecyclerViewAdapter adapter,
                                       final int positionInList) {
         final String currentUserID = MyCustomVariables.getFirebaseAuth().getUid();
+        final Transaction transaction = transactionsList.get(positionInList);
 
         transactionsList.remove(positionInList);
         adapter.notifyItemRemoved(positionInList);
 
-        if (currentUserID == null) {
+        if (currentUserID == null || transaction == null) {
             return;
         }
 
         MyCustomVariables.getDatabaseReference()
                 .child(currentUserID)
                 .child("personalTransactions")
-                .child(transactionsList.get(positionInList).getId())
+                .child(transaction.getId())
                 .removeValue();
     }
 
