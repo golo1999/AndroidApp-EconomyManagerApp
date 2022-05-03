@@ -8,7 +8,6 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.example.economy_manager.R;
 import com.example.economy_manager.databinding.ForgotPasswordActivityBinding;
-import com.example.economy_manager.feature.forgotpassword.ForgotPasswordViewModel;
 import com.example.economy_manager.utility.MyCustomMethods;
 
 public class ForgotPasswordActivity extends AppCompatActivity {
@@ -19,7 +18,8 @@ public class ForgotPasswordActivity extends AppCompatActivity {
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setVariables();
+        setActivityVariables();
+        setLayoutVariables();
     }
 
     @Override
@@ -28,10 +28,12 @@ public class ForgotPasswordActivity extends AppCompatActivity {
         MyCustomMethods.finishActivityWithSlideTransition(this, 1);
     }
 
-    private void setVariables() {
+    private void setActivityVariables() {
         binding = DataBindingUtil.setContentView(this, R.layout.forgot_password_activity);
         viewModel = new ViewModelProvider(this).get(ForgotPasswordViewModel.class);
+    }
 
+    private void setLayoutVariables() {
         binding.setActivity(this);
         binding.setViewModel(viewModel);
     }

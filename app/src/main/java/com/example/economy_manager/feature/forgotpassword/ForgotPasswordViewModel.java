@@ -1,7 +1,6 @@
 package com.example.economy_manager.feature.forgotpassword;
 
 import android.app.Activity;
-import android.util.Patterns;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.ViewModel;
@@ -28,11 +27,11 @@ public class ForgotPasswordViewModel extends ViewModel {
                                              final String emailText) {
         MyCustomMethods.closeTheKeyboard(currentActivity);
 
-        if (Patterns.EMAIL_ADDRESS.matcher(emailText).matches()) {
+        if (MyCustomMethods.emailIsValid(emailText)) {
             MyCustomVariables.getFirebaseAuth()
                     .sendPasswordResetEmail(emailText)
-                    .addOnCompleteListener((final Task<Void> task) -> {
-                        if (task.isSuccessful()) {
+                    .addOnCompleteListener((final Task<Void> sendPasswordResetEmailTask) -> {
+                        if (sendPasswordResetEmailTask.isSuccessful()) {
                             MyCustomMethods.showLongMessage(currentActivity,
                                     currentActivity.getResources().getString(R.string.please_verify_your_email));
                             MyCustomMethods.finishActivityWithSlideTransition(currentActivity,

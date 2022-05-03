@@ -37,12 +37,14 @@ public final class MyCustomMethods {
     public static void closeTheKeyboard(final @NonNull Activity parentActivity) {
         final View view = parentActivity.getCurrentFocus();
 
-        if (view != null) {
-            final InputMethodManager manager =
-                    (InputMethodManager) parentActivity.getSystemService(Context.INPUT_METHOD_SERVICE);
-
-            manager.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        if (view == null) {
+            return;
         }
+
+        final InputMethodManager manager =
+                (InputMethodManager) parentActivity.getSystemService(Context.INPUT_METHOD_SERVICE);
+
+        manager.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
 
     public static boolean stringIsNotEmpty(final @NonNull String enteredString) {
@@ -70,6 +72,7 @@ public final class MyCustomMethods {
                 direction == 0 ? R.anim.slide_out_right : R.anim.slide_out_left);
     }
 
+    @NonNull
     public static String getCurrencySymbol() {
         final String displayLanguage = Locale.getDefault().getDisplayLanguage();
 
@@ -82,13 +85,12 @@ public final class MyCustomMethods {
                 "RON" : "£";
     }
 
-    public static String getFormattedDate(final LocalDate date) {
+    @NonNull
+    public static String getFormattedDate(@NonNull final LocalDate date) {
         final String dayName = date.getDayOfWeek().name().charAt(0) +
                 date.getDayOfWeek().name().substring(1).toLowerCase();
-
         final String monthName = String.valueOf(date.getMonth()).charAt(0) +
                 String.valueOf(date.getMonth()).substring(1).toLowerCase();
-
         final int day = date.getDayOfMonth();
 
         final StringBuilder transactionDate = new StringBuilder(dayName)
@@ -106,15 +108,14 @@ public final class MyCustomMethods {
         return String.valueOf(transactionDate);
     }
 
+    @NonNull
     public static String getFormattedTime(final Context context,
-                                          final LocalTime time) {
+                                          @NonNull final LocalTime time) {
         final String hour = time.getHour() < 10 ?
                 "0" + time.getHour() : time.getHour() > 12 && !DateFormat.is24HourFormat(context) ?
                 String.valueOf(time.getHour() - 12) : String.valueOf(time.getHour());
-
         final String minute = time.getMinute() < 10 ?
                 "0" + time.getMinute() : String.valueOf(time.getMinute());
-
         final String second = time.getSecond() < 10 ?
                 "0" + time.getSecond() : String.valueOf(time.getSecond());
 
@@ -157,9 +158,7 @@ public final class MyCustomMethods {
 
         sortedEntries.sort((final Map.Entry<Integer, Float> firstEntry, final Map.Entry<Integer, Float> secondEntry) ->
                 secondEntry.getValue().compareTo(firstEntry.getValue()));
-
         map.clear();
-
         sortedEntries.forEach((final Map.Entry<Integer, Float> entry) -> map.put(entry.getKey(), entry.getValue()));
 
     }
@@ -189,12 +188,12 @@ public final class MyCustomMethods {
         currentActivity.finish();
     }
 
-    public static int nameIsValid(final String name) {
+    public static int nameIsValid(@NonNull final String name) {
         if (name.length() < 2) {
             return 0;
         } else for (final char character : name.toCharArray()) {
-            // if the character is not a letter
-            if (!Character.isLetter(character)) {
+            // if the character is a digit
+            if (Character.isDigit(character)) {
                 return -1;
             }
         }
@@ -205,13 +204,11 @@ public final class MyCustomMethods {
     public static <T> boolean objectExistsInSharedPreferences(@NonNull Activity parentActivity,
                                                               @NonNull String key,
                                                               Class<T> tClass,
-                                                              T givenObject) {
-        T retrievedObject = retrieveObjectFromSharedPreferences(parentActivity, key, tClass);
-
-        return givenObject.equals(retrievedObject);
+                                                              @NonNull T givenObject) {
+        return givenObject.equals(retrieveObjectFromSharedPreferences(parentActivity, key, tClass));
     }
 
-    public static void restartCurrentActivity(final Activity activity) {
+    public static void restartCurrentActivity(@NonNull final Activity activity) {
         activity.startActivity(activity.getIntent());
         activity.finish();
         activity.overridePendingTransition(0, 0);
@@ -267,12 +264,10 @@ public final class MyCustomMethods {
 
     public static boolean transactionWasMadeInTheLastWeek(final @NonNull MyCustomTime transactionTime) {
         final LocalDate oneWeekAgoDate = LocalDate.now().minusDays(8);
-
         final LocalDateTime oneWeekAgoDateTime =
                 LocalDateTime.of(oneWeekAgoDate, LocalTime.of(23, 59, 59));
 
         final LocalDate nextDayDate = LocalDate.now().plusDays(1);
-
         final LocalDateTime nextDayDateTime = LocalDateTime.of(nextDayDate, LocalTime.of(0, 0));
 
         final LocalDateTime transactionTimeParsed = LocalDateTime.of(transactionTime.getYear(),
@@ -280,7 +275,6 @@ public final class MyCustomMethods {
                 transactionTime.getMinute(), transactionTime.getSecond());
 
         final boolean isAfterOneWeekAgoDate = transactionTimeParsed.isAfter(oneWeekAgoDateTime);
-
         final boolean isBeforeCurrentDate = transactionTimeParsed.isBefore(nextDayDateTime);
 
         return isAfterOneWeekAgoDate && isBeforeCurrentDate;
