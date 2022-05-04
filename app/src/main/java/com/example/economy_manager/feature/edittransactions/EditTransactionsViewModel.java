@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Context;
 
 import androidx.annotation.NonNull;
-import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.ViewModel;
@@ -31,7 +30,6 @@ import java.util.List;
 public class EditTransactionsViewModel extends ViewModel {
 
     private EditSpecificTransactionFragmentBinding binding;
-    private String activityTitle;
     private Fragment editSpecificTransactionFragment;
     private EditTransactionsRecyclerViewAdapter editTransactionsRecyclerViewAdapter;
     private Transaction selectedTransaction;
@@ -47,14 +45,6 @@ public class EditTransactionsViewModel extends ViewModel {
 
     public EditSpecificTransactionFragmentBinding getBinding() {
         return binding;
-    }
-
-    public String getActivityTitle() {
-        return activityTitle;
-    }
-
-    public void setActivityTitle(String activityTitle) {
-        this.activityTitle = activityTitle;
     }
 
     public Fragment getEditSpecificTransactionFragment() {
@@ -190,27 +180,19 @@ public class EditTransactionsViewModel extends ViewModel {
 
         final String editedNote = !String.valueOf(getBinding().noteField.getText()).trim().isEmpty() ?
                 String.valueOf(getBinding().noteField.getText()).trim() : selectedTransaction.getNote();
-
         final String editedValue = !String.valueOf(getBinding().valueField.getText()).trim().isEmpty() ?
                 String.valueOf(getBinding().valueField.getText()).trim() : selectedTransaction.getValue();
-
         final int parsedCategoryIndex = Transaction.getIndexFromCategory(Types.
                 getTypeInEnglish(activity, String.valueOf(getBinding().typeSpinner.getSelectedItem()).trim()));
-
         final int editedCategoryIndex = parsedCategoryIndex >= 0 && parsedCategoryIndex <= 18 &&
                 parsedCategoryIndex != selectedTransaction.getCategory() ?
                 parsedCategoryIndex : selectedTransaction.getCategory();
 
         final int selectedYear = getTransactionDate().getYear();
-
         final int selectedMonth = getTransactionDate().getMonthValue();
-
         final int selectedDay = getTransactionDate().getDayOfMonth();
-
         final int selectedHour = getTransactionTime().getHour();
-
         final int selectedMinute = getTransactionTime().getMinute();
-
         final int selectedSecond =
                 (selectedYear != selectedTransaction.getTime().getYear() &&
                         selectedMonth != selectedTransaction.getTime().getMonth() &&
@@ -230,9 +212,7 @@ public class EditTransactionsViewModel extends ViewModel {
                 selectedHour,
                 selectedMinute,
                 selectedSecond);
-
         final int editedCategoryType = (editedCategoryIndex >= 0 && editedCategoryIndex <= 3) ? 1 : 0;
-
         final Transaction editedTransaction = new Transaction(selectedTransaction.getId(),
                 editedCategoryIndex, editedTime, editedCategoryType, editedNote, editedValue);
 
@@ -243,24 +223,18 @@ public class EditTransactionsViewModel extends ViewModel {
             return;
         }
 
-        final int selectedTransactionListPosition = getSelectedTransactionListPosition();
-
-        getEditTransactionsRecyclerViewAdapter().notifyItemChanged(selectedTransactionListPosition);
+        getEditTransactionsRecyclerViewAdapter().notifyItemChanged(getSelectedTransactionListPosition());
     }
 
     public void onDateTextClickedInFragment(final FragmentManager fragmentManager) {
         final int selectedTransactionYear = getSelectedTransaction().getTime().getYear();
-
         final int selectedTransactionMonth = getSelectedTransaction().getTime().getMonth();
-
         final int selectedTransactionDay = getSelectedTransaction().getTime().getDay();
 
         final LocalDate selectedTransactionDate =
                 LocalDate.of(selectedTransactionYear, selectedTransactionMonth, selectedTransactionDay);
 
-        final DialogFragment datePickerFragment = new DatePickerFragment(selectedTransactionDate);
-
-        datePickerFragment.show(fragmentManager, "date_picker");
+        new DatePickerFragment(selectedTransactionDate).show(fragmentManager, "date_picker");
     }
 
     public void onSaveChangesButtonClicked(final @NonNull Activity currentActivity) {
@@ -275,31 +249,22 @@ public class EditTransactionsViewModel extends ViewModel {
 
     public void onTimeTextClickedInFragment(final FragmentManager fragmentManager) {
         final int selectedTransactionHour = getSelectedTransaction().getTime().getHour();
-
         final int selectedTransactionMinute = getSelectedTransaction().getTime().getMinute();
-
         final int selectedTransactionSecond = getSelectedTransaction().getTime().getSecond();
 
         final LocalTime selectedTransactionTime =
                 LocalTime.of(selectedTransactionHour, selectedTransactionMinute, selectedTransactionSecond);
 
-        final DialogFragment timePickerFragment = new TimePickerFragment(selectedTransactionTime);
-
-        timePickerFragment.show(fragmentManager, "time_picker");
+        new TimePickerFragment(selectedTransactionTime).show(fragmentManager, "time_picker");
     }
 
     private void updateTransaction(final @NonNull Activity activity,
                                    final @NonNull Transaction initialTransaction) {
         final int selectedYear = getTransactionDate().getYear();
-
         final int selectedMonth = getTransactionDate().getMonthValue();
-
         final int selectedDay = getTransactionDate().getDayOfMonth();
-
         final int selectedHour = getTransactionTime().getHour();
-
         final int selectedMinute = getTransactionTime().getMinute();
-
         final int selectedSecond =
                 (selectedYear != initialTransaction.getTime().getYear() &&
                         selectedMonth != initialTransaction.getTime().getMonth() &&
@@ -330,7 +295,6 @@ public class EditTransactionsViewModel extends ViewModel {
                     String.valueOf(getBinding().noteField.getText()).trim() : null;
 
             initialTransaction.setNote(editedNote);
-
             hasBeenModified = true;
         }
 
@@ -362,7 +326,6 @@ public class EditTransactionsViewModel extends ViewModel {
         if (initialCategoryName != null && !initialCategoryName.equals(selectedCategoryName)) {
             final int editedCategory =
                     Transaction.getIndexFromCategory(Types.getTypeInEnglish(activity, selectedCategoryName));
-
             final int editedType = editedCategory >= 0 && editedCategory <= 3 ? 1 : 0;
 
             initialTransaction.setCategory(editedCategory);
