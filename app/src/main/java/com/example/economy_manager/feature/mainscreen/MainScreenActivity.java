@@ -145,6 +145,10 @@ public class MainScreenActivity
                         final UserDetails details = snapshot.getValue(UserDetails.class);
 
                         if (details == null || details.getPersonalTransactions() == null) {
+                            binding.firebaseLoadingProgressBar.setVisibility(View.GONE);
+                            binding.firebaseLoadingProgressBarLayout.setVisibility(View.GONE);
+                            binding.setMoneySpentPercentageText(getResources().getString(R.string.no_money_records_yet));
+
                             return;
                         }
 

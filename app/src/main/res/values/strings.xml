@@ -1,6 +1,5 @@
 <resources>
     <string name="account">Account</string>
-    <!--    <string name="added_successfully">%s added successfully</string>-->
     <string name="and_between_spaces">&#32;and&#32;</string>
     <string name="app_name" translatable="false">Economy Manager</string>
     <string name="balance">Balance</string>

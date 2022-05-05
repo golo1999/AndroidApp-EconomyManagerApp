@@ -79,6 +79,8 @@ public class FavoriteExpensesCategoryFragment extends Fragment {
                         final UserDetails details = snapshot.getValue(UserDetails.class);
 
                         if (details == null || details.getPersonalTransactions() == null) {
+                            binding.text.setText(requireContext().getResources()
+                                    .getString(R.string.no_expenses_made_yet));
                             return;
                         }
 

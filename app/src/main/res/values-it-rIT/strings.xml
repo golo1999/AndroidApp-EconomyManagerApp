@@ -16,7 +16,6 @@
     <string name="save">Salva</string>
     <string name="save_changes">Salvare le modifiche</string>
     <string name="saving">Risparmio</string>
-<!--    <string name="added_successfully">%s aggiunto con successo</string>-->
     <string name="new_income">Nuovo reddito</string>
     <string name="account">Conto</string>
     <string name="transactions">Transazioni</string>

@@ -516,8 +516,8 @@ public class EditTransactionsActivity
                                 userDetails.getApplicationSettings().isDarkThemeEnabled() :
                                 MyCustomVariables.getDefaultUserDetails().getApplicationSettings().isDarkThemeEnabled();
 
-                        binding.centerText.setTextColor(!isDarkThemeEnabled ?
-                                getColor(R.color.primaryDark) : getColor(R.color.quaternaryLight));
+                        binding.centerText.setTextColor(isDarkThemeEnabled ?
+                                getColor(R.color.secondaryDark) : getColor(R.color.quaternaryLight));
                         binding.centerText.setTextSize(20);
                         binding.recyclerView.setEnabled(false);
                         binding.recyclerView.setVisibility(View.GONE);
