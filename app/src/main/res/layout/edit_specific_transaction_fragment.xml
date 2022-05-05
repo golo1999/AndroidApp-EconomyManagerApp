@@ -75,6 +75,7 @@
                         android:background="@{isDarkThemeEnabled ? @drawable/ic_outlined_button_dark : @drawable/ic_outlined_button_light}"
                         android:drawableStart="@{isDarkThemeEnabled ? @drawable/ic_note_dark : @drawable/ic_note_light}"
                         android:drawablePadding="10sp"
+                        android:hint="@string/note"
                         android:inputType="text"
                         android:maxLines="1"
                         android:padding="10sp"
@@ -82,7 +83,6 @@
                         android:textColorHint="@{isDarkThemeEnabled ? @color/secondaryDark : @color/quaternaryLight}"
                         tools:background="@drawable/ic_outlined_button_dark"
                         tools:drawableStart="@drawable/ic_note_dark"
-                        tools:text="@string/note"
                         tools:textColor="@color/secondaryDark"
                         tools:textColorHint="@color/secondaryDark" />
 
@@ -94,13 +94,13 @@
                         android:background="@{isDarkThemeEnabled ? @drawable/ic_outlined_button_dark : @drawable/ic_outlined_button_light}"
                         android:drawableStart="@{isDarkThemeEnabled ? @drawable/ic_euro_dark : @drawable/ic_euro_light}"
                         android:drawablePadding="10sp"
+                        android:hint="@string/value"
                         android:inputType="numberDecimal"
                         android:padding="10sp"
                         android:textColor="@{isDarkThemeEnabled ? @color/secondaryDark : @color/quaternaryLight}"
                         android:textColorHint="@{isDarkThemeEnabled ? @color/secondaryDark : @color/quaternaryLight}"
                         tools:background="@drawable/ic_outlined_button_dark"
                         tools:drawableStart="@drawable/ic_euro_dark"
-                        tools:text="@string/value"
                         tools:textColor="@color/secondaryDark"
                         tools:textColorHint="@color/secondaryDark" />
 

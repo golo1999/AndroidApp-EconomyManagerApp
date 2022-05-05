@@ -191,10 +191,24 @@ public final class MyCustomMethods {
     public static int nameIsValid(@NonNull final String name) {
         if (name.length() < 2) {
             return 0;
-        } else for (final char character : name.toCharArray()) {
-            // if the character is a digit
-            if (Character.isDigit(character)) {
+        } else {
+            // if the first or the last character is not a letter
+            if (!Character.isLetter(name.charAt(0)) || !Character.isLetter(name.charAt(name.length() - 1))) {
                 return -1;
+            }
+
+            int index = -1;
+
+            for (final char character : name.toCharArray()) {
+                ++index;
+                // if there are consecutive non-letter characters
+                if (!Character.isLetter(character) && !Character.isLetter(name.charAt(index + 1))) {
+                    return -1;
+                }
+                // if the character is a digit
+                if (Character.isDigit(character)) {
+                    return -1;
+                }
             }
         }
 

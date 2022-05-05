@@ -216,10 +216,10 @@ public class EditTransactionsActivity
                                         final @Nullable View convertView,
                                         final @NonNull ViewGroup parent) {
                 final View v = super.getDropDownView(position, convertView, parent);
-                final boolean darkThemeEnabled = userDetails != null ?
+                final boolean isDarkThemeEnabled = userDetails != null ?
                         userDetails.getApplicationSettings().isDarkThemeEnabled() :
                         MyCustomVariables.getDefaultUserDetails().getApplicationSettings().isDarkThemeEnabled();
-                final int itemsColor = !darkThemeEnabled ? Color.WHITE : Color.BLACK;
+                final int itemsColor = getColor(isDarkThemeEnabled ? R.color.primaryDark : R.color.primaryLight);
                 // all spinner elements are aligned to center
                 ((TextView) v).setGravity(Gravity.CENTER);
                 // setting text color based on the selected theme
@@ -298,10 +298,10 @@ public class EditTransactionsActivity
                                         final @Nullable View convertView,
                                         final @NonNull ViewGroup parent) {
                 final View v = super.getDropDownView(position, convertView, parent);
-                final boolean darkThemeEnabled = userDetails != null ?
+                final boolean isDarkThemeEnabled = userDetails != null ?
                         userDetails.getApplicationSettings().isDarkThemeEnabled() :
                         MyCustomVariables.getDefaultUserDetails().getApplicationSettings().isDarkThemeEnabled();
-                final int itemsColor = !darkThemeEnabled ? Color.WHITE : Color.BLACK;
+                final int itemsColor = getColor(isDarkThemeEnabled ? R.color.primaryDark : R.color.primaryLight);
                 // all spinner elements are aligned to center
                 ((TextView) v).setGravity(Gravity.CENTER);
                 // setting text color based on the selected theme

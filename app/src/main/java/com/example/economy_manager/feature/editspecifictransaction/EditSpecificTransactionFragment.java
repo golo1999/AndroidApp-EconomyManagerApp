@@ -79,7 +79,7 @@ public class EditSpecificTransactionFragment extends Fragment {
         viewModel.setTransactionTypesList(requireContext());
         setSpinner();
         setSpinnerOnSelectedItemListener();
-        setFieldHints();
+        setFieldTexts();
     }
 
     public void setDateText(final LocalDate date) {
@@ -92,30 +92,35 @@ public class EditSpecificTransactionFragment extends Fragment {
         binding.dateText.setText(formattedDate);
     }
 
-    private void setFieldHints() {
-        if (viewModel.getSelectedTransaction() != null) {
-            final Transaction selectedTransaction = viewModel.getSelectedTransaction();
-
-            final String translatedType = Types.getTranslatedType(requireContext(),
-                    String.valueOf(Transaction.getTypeFromIndexInEnglish(selectedTransaction.getCategory())));
-
-            int positionInTheTransactionTypesList = viewModel.getTransactionPositionInList(translatedType);
-
-            binding.noteField.setHint(selectedTransaction.getNote() != null ?
-                    selectedTransaction.getNote() : requireContext().getResources().getString(R.string.note));
-
-            binding.valueField.setHint(selectedTransaction.getValue() != null ?
-                    selectedTransaction.getValue() : requireContext().getResources().getString(R.string.value));
-
-            if (positionInTheTransactionTypesList != -1) {
-                binding.typeSpinner.setSelection(positionInTheTransactionTypesList);
-            }
+    private void setFieldTexts() {
+        if (viewModel.getSelectedTransaction() == null) {
+            return;
         }
+
+        final Transaction selectedTransaction = viewModel.getSelectedTransaction();
+        final String translatedType = Types.getTranslatedType(requireContext(),
+                String.valueOf(Transaction.getTypeFromIndexInEnglish(selectedTransaction.getCategory())));
+        int positionInTheTransactionTypesList = viewModel.getTransactionPositionInList(translatedType);
+
+        if (selectedTransaction.getNote() != null) {
+            binding.noteField.setText(selectedTransaction.getNote());
+        }
+
+        if (selectedTransaction.getValue() != null) {
+            binding.valueField.setText(selectedTransaction.getValue());
+        }
+
+        if (positionInTheTransactionTypesList < 0) {
+            return;
+        }
+
+        binding.typeSpinner.setSelection(positionInTheTransactionTypesList);
     }
 
     private void setFragmentVariables(final @NonNull LayoutInflater inflater,
                                       final ViewGroup container) {
-        binding = DataBindingUtil.inflate(inflater, R.layout.edit_specific_transaction_fragment, container, false);
+        binding = DataBindingUtil.inflate(inflater, R.layout.edit_specific_transaction_fragment,
+                container, false);
         viewModel = new ViewModelProvider((ViewModelStoreOwner) requireContext()).get(EditTransactionsViewModel.class);
     }
 

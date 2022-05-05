@@ -71,13 +71,13 @@ public class EditTransactionsRecyclerViewAdapter
                 String.valueOf(Transaction.getTypeFromIndexInEnglish(transaction.getCategory())));
         final String currencySymbol = userDetails != null ?
                 userDetails.getApplicationSettings().getCurrencySymbol() : MyCustomMethods.getCurrencySymbol();
-        final boolean darkThemeEnabled = userDetails != null && userDetails.getApplicationSettings().isDarkThemeEnabled();
+        final boolean isDarkThemeEnabled = userDetails != null &&
+                userDetails.getApplicationSettings().isDarkThemeEnabled();
         final String transactionPriceText = Locale.getDefault().getDisplayLanguage().equals("English") ?
                 currencySymbol + transaction.getValue() : transaction.getValue() + " " + currencySymbol;
 
-        holder.mainLayout.setBackgroundResource(!darkThemeEnabled ?
+        holder.mainLayout.setBackgroundResource(!isDarkThemeEnabled ?
                 R.drawable.ic_yellow_gradient_soda : R.drawable.ic_white_gradient_tobacco_ad);
-
         holder.transactionPrice.setText(transactionPriceText);
         holder.transactionCategory.setText(translatedCategory);
         holder.transactionNote.setText(transaction.getNote() != null ? String.valueOf(transaction.getNote()) : "");
@@ -123,7 +123,7 @@ public class EditTransactionsRecyclerViewAdapter
             setOnClickListeners();
         }
 
-        private void setVariables(final View v) {
+        private void setVariables(@NonNull final View v) {
             preferences = context.getSharedPreferences(MyCustomVariables.getSharedPreferencesFileName(), MODE_PRIVATE);
             transactionCategory = v.findViewById(R.id.transaction_category);
             transactionPrice = v.findViewById(R.id.transaction_price);
@@ -138,7 +138,6 @@ public class EditTransactionsRecyclerViewAdapter
                 if (getBindingAdapterPosition() < 0) {
                     return;
                 }
-
                 // retrieving the selected transaction from the list
                 selectedTransaction = transactionsList.get(getBindingAdapterPosition());
 
@@ -162,7 +161,6 @@ public class EditTransactionsRecyclerViewAdapter
             transactionDelete.setOnClickListener(view -> {
                 final EditTransactionsRecyclerViewAdapter adapter =
                         (EditTransactionsRecyclerViewAdapter) recyclerView.getAdapter();
-
                 final int positionInList = getBindingAdapterPosition();
 
                 if (adapter == null || positionInList < 0) {
@@ -176,10 +174,8 @@ public class EditTransactionsRecyclerViewAdapter
         private void showTransactionDeleteDialog(final ArrayList<Transaction> transactionsList,
                                                  final EditTransactionsRecyclerViewAdapter adapter,
                                                  final int positionInList) {
-            DeleteTransactionCustomDialog deleteTransactionCustomDialog =
-                    new DeleteTransactionCustomDialog(transactionsList, adapter, positionInList);
-
-            deleteTransactionCustomDialog.show(fragmentManager, "deleteDialogFragment");
+            new DeleteTransactionCustomDialog(transactionsList, adapter, positionInList)
+                    .show(fragmentManager, "deleteDialogFragment");
         }
     }
 }
