@@ -26,6 +26,7 @@ import java.time.LocalDate;
 import java.util.Locale;
 
 public class MonthlySavingsFragment extends Fragment {
+
     private MonthlySavingsFragmentBinding binding;
     private MainScreenViewModel viewModel;
 
@@ -38,6 +39,7 @@ public class MonthlySavingsFragment extends Fragment {
         final Bundle args = new Bundle();
 
         fragment.setArguments(args);
+
         return fragment;
     }
 
@@ -50,7 +52,7 @@ public class MonthlySavingsFragment extends Fragment {
     public View onCreateView(@NonNull final LayoutInflater inflater,
                              final ViewGroup container,
                              final Bundle savedInstanceState) {
-        setVariables(inflater, container);
+        setFragmentVariables(inflater, container);
 
         return binding.getRoot();
     }
@@ -61,8 +63,8 @@ public class MonthlySavingsFragment extends Fragment {
         setSavings();
     }
 
-    private void setVariables(final @NonNull LayoutInflater inflater,
-                              final ViewGroup container) {
+    private void setFragmentVariables(final @NonNull LayoutInflater inflater,
+                                      final ViewGroup container) {
         binding = DataBindingUtil.inflate(inflater, R.layout.monthly_savings_fragment, container, false);
         viewModel = new ViewModelProvider((ViewModelStoreOwner) requireContext()).get(MainScreenViewModel.class);
     }
@@ -78,6 +80,7 @@ public class MonthlySavingsFragment extends Fragment {
                                     MyCustomMethods.getCurrencySymbol();
                             float totalMonthlyIncomes = 0f;
                             float totalMonthlyExpenses = 0f;
+                            int numberOfTransactionsMadeThisMonth = 0;
 
                             if (snapshot.exists() && snapshot.hasChild("personalTransactions") &&
                                     snapshot.child("personalTransactions").hasChildren()) {
@@ -88,6 +91,10 @@ public class MonthlySavingsFragment extends Fragment {
                                     if (transaction != null && transaction.getTime() != null &&
                                             transaction.getTime().getYear() == LocalDate.now().getYear() &&
                                             transaction.getTime().getMonth() == LocalDate.now().getMonthValue()) {
+                                        if (numberOfTransactionsMadeThisMonth == 0) {
+                                            ++numberOfTransactionsMadeThisMonth;
+                                        }
+
                                         if (transaction.getType() == 1) {
                                             totalMonthlyIncomes += Float.parseFloat(transaction.getValue());
                                         } else {
@@ -102,14 +109,14 @@ public class MonthlySavingsFragment extends Fragment {
                             totalMonthlySavings =
                                     MyCustomMethods.getRoundedNumberToNDecimalPlaces(totalMonthlySavings, 2);
 
-                            final String savingsText =
+                            final String savingsText = numberOfTransactionsMadeThisMonth == 0 ?
+                                    requireContext().getResources().getString(R.string.no_transactions_made_this_month) :
                                     !Locale.getDefault().getDisplayLanguage().equals(Languages.ENGLISH_LANGUAGE) ?
                                             totalMonthlySavings + " " + currencySymbol : totalMonthlySavings < 0f ?
                                             "-" + currencySymbol + Math.abs(totalMonthlySavings) :
                                             currencySymbol + totalMonthlySavings;
 
                             binding.monthlySavingsText.setText(savingsText);
-
                             binding.monthlySavingsText.setTextColor(totalMonthlySavings > 0f ?
                                     requireContext().getColor(R.color.secondaryLight) :
                                     totalMonthlySavings == 0f ?

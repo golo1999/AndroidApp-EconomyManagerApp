@@ -22,6 +22,7 @@ import com.example.economy_manager.utility.MyCustomVariables;
 import com.example.economy_manager.utility.Types;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Collections;
 
@@ -61,10 +62,10 @@ public class AddIncomeActivity
     private void addTransactionToDatabase(final int selectedID,
                                           final @NonNull String userID) {
         final RadioButton radioButton = findViewById(selectedID);
+        final LocalTime currentTime = LocalTime.now();
 
         final int transactionCategoryIndex = Transaction.getIndexFromCategory(Types.
                 getTypeInEnglish(this, String.valueOf(radioButton.getText()).trim()));
-
         final Transaction newTransaction = !String.valueOf(binding.noteField.getText()).trim().isEmpty() ?
                 new Transaction(transactionCategoryIndex,
                         1,
@@ -73,7 +74,6 @@ public class AddIncomeActivity
                 new Transaction(transactionCategoryIndex,
                         1,
                         String.valueOf(binding.valueField.getText()).trim());
-
         // setting transaction's time
         final LocalDate newTransactionDate = viewModel.getTransactionDate();
 
@@ -82,9 +82,9 @@ public class AddIncomeActivity
                 String.valueOf(newTransactionDate.getMonth()),
                 newTransactionDate.getDayOfMonth(),
                 String.valueOf(newTransactionDate.getDayOfWeek()),
-                0,
-                0,
-                0));
+                currentTime.getHour(),
+                currentTime.getMinute(),
+                currentTime.getSecond()));
 
 
         MyCustomVariables.getDatabaseReference()
@@ -157,22 +157,19 @@ public class AddIncomeActivity
 
         MyCustomMethods.closeTheKeyboard(AddIncomeActivity.this);
 
+        // if the entered value is empty
+        if (String.valueOf(binding.valueField.getText()).trim().isEmpty()) {
+            binding.valueField.setError(getResources().getString(R.string.should_not_be_empty,
+                    getResources().getString(R.string.value)));
+            return;
+        }
         // if there was NOT any radio button checked
         if (selectedID == -1 || MyCustomVariables.getFirebaseAuth().getUid() == null) {
             MyCustomMethods.showShortMessage(this, getResources().getString(R.string.please_select_an_option));
             return;
         }
 
-        // if the entered value is empty
-        if (String.valueOf(binding.valueField.getText()).trim().isEmpty()) {
-            MyCustomMethods.showShortMessage(this,
-                    getResources().getString(R.string.should_not_be_empty, getResources().getString(R.string.value)));
-            return;
-        }
-
-        final String userID = MyCustomVariables.getFirebaseAuth().getUid();
-
-        addTransactionToDatabase(selectedID, userID);
+        addTransactionToDatabase(selectedID, MyCustomVariables.getFirebaseAuth().getUid());
     }
 
     private void setDateText(final LocalDate date) {
