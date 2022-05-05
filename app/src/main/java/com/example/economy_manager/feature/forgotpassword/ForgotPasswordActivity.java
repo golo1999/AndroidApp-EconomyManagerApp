@@ -4,7 +4,6 @@ import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
-import androidx.lifecycle.ViewModelProvider;
 
 import com.example.economy_manager.R;
 import com.example.economy_manager.databinding.ForgotPasswordActivityBinding;
@@ -30,7 +29,7 @@ public class ForgotPasswordActivity extends AppCompatActivity {
 
     private void setActivityVariables() {
         binding = DataBindingUtil.setContentView(this, R.layout.forgot_password_activity);
-        viewModel = new ViewModelProvider(this).get(ForgotPasswordViewModel.class);
+        viewModel = new ForgotPasswordViewModel(binding);
     }
 
     private void setLayoutVariables() {

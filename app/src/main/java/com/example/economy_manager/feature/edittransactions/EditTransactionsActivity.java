@@ -78,7 +78,8 @@ public class EditTransactionsActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setVariables();
+        setActivityVariables();
+        setLayoutVariables();
         setUserDetailsInViewModel(userDetails != null ? userDetails : MyCustomVariables.getDefaultUserDetails());
         setTheme();
         setRecyclerView();
@@ -157,13 +158,9 @@ public class EditTransactionsActivity
         final String[] months = getResources().getStringArray(R.array.months);
         // frequency array
         final int[] frequency = new int[12];
-
         final Calendar currentTime = Calendar.getInstance();
-
         final SimpleDateFormat monthFormat = new SimpleDateFormat("LLLL", Locale.ENGLISH);
-
         int positionOfCurrentMonth = -1;
-
         // initializing frequency array's elements with 0
         Arrays.fill(frequency, 0);
 
@@ -184,7 +181,6 @@ public class EditTransactionsActivity
         list.clear();
 
         int counter = 0;
-
         // adding the month to the list if its frequency is 1
         for (final int frequencyIterator : frequency) {
             counter++;
@@ -198,13 +194,11 @@ public class EditTransactionsActivity
         }
 
         counter = -1;
-
         // saving current month's position if it has been found => for setting the default month spinner's selected
         // item as the current month
         for (final String listIterator : list) {
             final String listIteratorInEnglish =
                     Months.getMonthInEnglish(EditTransactionsActivity.this, listIterator);
-
             final String currentMonthNameFormatted = monthFormat.format(currentTime.getTime());
 
             counter++;
@@ -222,15 +216,12 @@ public class EditTransactionsActivity
                                         final @Nullable View convertView,
                                         final @NonNull ViewGroup parent) {
                 final View v = super.getDropDownView(position, convertView, parent);
-
                 final boolean darkThemeEnabled = userDetails != null ?
                         userDetails.getApplicationSettings().isDarkThemeEnabled() :
                         MyCustomVariables.getDefaultUserDetails().getApplicationSettings().isDarkThemeEnabled();
-
                 final int itemsColor = !darkThemeEnabled ? Color.WHITE : Color.BLACK;
                 // all spinner elements are aligned to center
                 ((TextView) v).setGravity(Gravity.CENTER);
-
                 // setting text color based on the selected theme
                 ((TextView) v).setTextColor(itemsColor);
 
@@ -239,7 +230,6 @@ public class EditTransactionsActivity
         };
 
         binding.monthsSpinner.setAdapter(monthAdapter);
-
         // if the current month exists in the list and the selected year is the current one
         if (positionOfCurrentMonth >= 0 &&
                 selectedYear.equals(String.valueOf(currentTime.get(Calendar.YEAR)))) {
@@ -308,11 +298,9 @@ public class EditTransactionsActivity
                                         final @Nullable View convertView,
                                         final @NonNull ViewGroup parent) {
                 final View v = super.getDropDownView(position, convertView, parent);
-
                 final boolean darkThemeEnabled = userDetails != null ?
                         userDetails.getApplicationSettings().isDarkThemeEnabled() :
                         MyCustomVariables.getDefaultUserDetails().getApplicationSettings().isDarkThemeEnabled();
-
                 final int itemsColor = !darkThemeEnabled ? Color.WHITE : Color.BLACK;
                 // all spinner elements are aligned to center
                 ((TextView) v).setGravity(Gravity.CENTER);
@@ -326,11 +314,8 @@ public class EditTransactionsActivity
         binding.yearsSpinner.setAdapter(yearAdapter);
 
         final Calendar currentTime = Calendar.getInstance();
-
         int positionOfCurrentYear = -1;
-
         int secondCounter = -1;
-
         // searching the current year into the years list and saving its position if it has been found
         for (final String listIterator : list) {
             secondCounter++;
@@ -357,9 +342,7 @@ public class EditTransactionsActivity
         allTransactionsList.forEach((final Transaction transaction) -> {
             final String transactionMonthParsed = transaction.getTime().getMonthName().charAt(0) +
                     transaction.getTime().getMonthName().substring(1).toLowerCase();
-
             final String transactionYear = String.valueOf(transaction.getTime().getYear());
-
             final String selectedMonthNameInEnglish = Months.getMonthInEnglish(this, selectedMonth);
 
             if (transactionYear.equals(selectedYear) &&
@@ -370,7 +353,6 @@ public class EditTransactionsActivity
 
         transactionsList.sort((final Transaction transaction1, final Transaction transaction2) ->
                 Float.compare(Float.parseFloat(transaction2.getValue()), Float.parseFloat(transaction1.getValue())));
-
         recyclerViewAdapter.notifyItemRangeChanged(0, transactionsList.size());
     }
 
@@ -379,11 +361,21 @@ public class EditTransactionsActivity
                 .beginTransaction()
                 .remove(viewModel.getEditSpecificTransactionFragment())
                 .commit();
-
         viewModel.setEditSpecificTransactionFragment(null);
-
         binding.editSpecificTransactionFragmentLayout.setVisibility(View.INVISIBLE);
         binding.mainLayout.setVisibility(View.VISIBLE);
+    }
+
+    private void setActivityVariables() {
+        binding = DataBindingUtil.setContentView(this, R.layout.edit_transactions_activity);
+        userDetails = MyCustomSharedPreferences.retrieveUserDetailsFromSharedPreferences(this);
+        viewModel = new ViewModelProvider(this).get(EditTransactionsViewModel.class);
+        recyclerViewAdapter = new EditTransactionsRecyclerViewAdapter(viewModel,
+                transactionsList,
+                this,
+                userDetails,
+                binding.recyclerView,
+                getSupportFragmentManager());
     }
 
     private void setBottomLayout() {
@@ -400,7 +392,6 @@ public class EditTransactionsActivity
                         if (snapshot.exists() &&
                                 snapshot.hasChildren()) {
                             final ArrayList<String> yearsList = new ArrayList<>();
-
                             final ArrayList<String> monthsList = new ArrayList<>();
 
                             if (!allTransactionsList.isEmpty()) {
@@ -521,11 +512,12 @@ public class EditTransactionsActivity
                                     .getString(R.string.no_transactions_made_yet).trim());
                         }
 
-                        final boolean darkThemeEnabled = userDetails != null ?
+                        final boolean isDarkThemeEnabled = userDetails != null ?
                                 userDetails.getApplicationSettings().isDarkThemeEnabled() :
                                 MyCustomVariables.getDefaultUserDetails().getApplicationSettings().isDarkThemeEnabled();
 
-                        binding.centerText.setTextColor(!darkThemeEnabled ? getColor(R.color.turkish_sea) : Color.WHITE);
+                        binding.centerText.setTextColor(!isDarkThemeEnabled ?
+                                getColor(R.color.primaryDark) : getColor(R.color.quaternaryLight));
                         binding.centerText.setTextSize(20);
                         binding.recyclerView.setEnabled(false);
                         binding.recyclerView.setVisibility(View.GONE);
@@ -540,19 +532,22 @@ public class EditTransactionsActivity
 
     public void setEditSpecificTransactionFragment() {
         viewModel.setEditSpecificTransactionFragment(new EditSpecificTransactionFragment());
-
         getSupportFragmentManager()
                 .beginTransaction()
                 .replace(binding.editSpecificTransactionFragmentLayout.getId(),
                         viewModel.getEditSpecificTransactionFragment())
                 .commit();
-
         binding.mainLayout.setVisibility(View.INVISIBLE);
         binding.editSpecificTransactionFragmentLayout.setVisibility(View.VISIBLE);
     }
 
+    private void setLayoutVariables() {
+        binding.setActivity(this);
+    }
+
     private void setRecyclerView() {
-        binding.recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        binding.recyclerView.setLayoutManager(new WrapContentLinearLayoutManager(this,
+                LinearLayoutManager.VERTICAL, false));
         binding.recyclerView.setAdapter(recyclerViewAdapter);
     }
 
@@ -563,26 +558,10 @@ public class EditTransactionsActivity
 
         binding.setActivityBackgroundColor(Theme.getBackgroundColor(this, isDarkThemeEnabled));
         binding.setDropdownBackgroundColor(Theme.getDropdownBackgroundColor(this, isDarkThemeEnabled));
-
         // setting arrow color
         binding.monthsSpinner.getBackground().setColorFilter(Color.WHITE, PorterDuff.Mode.SRC_ATOP);
-
         // setting elements' color
         binding.yearsSpinner.getBackground().setColorFilter(Color.WHITE, PorterDuff.Mode.SRC_ATOP);
-    }
-
-    private void setVariables() {
-        binding = DataBindingUtil.setContentView(this, R.layout.edit_transactions_activity);
-        userDetails = MyCustomSharedPreferences.retrieveUserDetailsFromSharedPreferences(this);
-        viewModel = new ViewModelProvider(this).get(EditTransactionsViewModel.class);
-        recyclerViewAdapter = new EditTransactionsRecyclerViewAdapter(viewModel,
-                transactionsList,
-                this,
-                userDetails,
-                binding.recyclerView,
-                getSupportFragmentManager());
-
-        binding.setActivity(this);
     }
 
     public void setUserDetailsInViewModel(final UserDetails details) {
