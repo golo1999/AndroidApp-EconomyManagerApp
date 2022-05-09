@@ -124,8 +124,8 @@ public class LastWeekExpensesFragment extends Fragment {
                                     currencySymbol + moneySpentLastWeek :
                                     moneySpentLastWeek + currencySymbol;
 
-                            final String youSpentText =
-                                    requireContext().getResources().getString(R.string.you_spent_last_week,
+                            final String youSpentText = requireContext().getResources()
+                                    .getString(R.string.you_spent_last_week,
                                             moneyPlusCurrencySymbol);
 
                             binding.moneySpentText.setText(youSpentText.trim());

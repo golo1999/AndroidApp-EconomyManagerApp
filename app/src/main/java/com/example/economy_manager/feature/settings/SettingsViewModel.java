@@ -32,12 +32,12 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 
 public class SettingsViewModel extends AndroidViewModel {
+
     private UserDetails userDetails;
 
     public SettingsViewModel(final @NonNull Application application,
                              final UserDetails userDetails) {
         super(application);
-
         this.userDetails = userDetails;
     }
 
@@ -72,11 +72,14 @@ public class SettingsViewModel extends AndroidViewModel {
                                             }
 
                                             MyCustomMethods.showShortMessage(currentActivity,
-                                                    currentActivity.getResources().getString(R.string.password_updated_successfully));
+                                                    currentActivity.getResources()
+                                                            .getString(R.string
+                                                                    .password_updated_successfully));
                                         });
                             } else {
                                 MyCustomMethods.showShortMessage(currentActivity,
-                                        currentActivity.getResources().getString(R.string.email_and_password_do_not_match));
+                                        currentActivity.getResources()
+                                                .getString(R.string.email_and_password_do_not_match));
                             }
                         });
             }
@@ -84,15 +87,15 @@ public class SettingsViewModel extends AndroidViewModel {
                 newPassword.trim().isEmpty()) {
             MyCustomMethods.showShortMessage(currentActivity,
                     currentActivity.getResources().getString(R.string.should_not_be_empty,
-                            currentActivity.getResources().getString(R.string.passwords)));
+                            currentActivity.getResources().getString(R.string.the_passwords)));
         } else if (oldPassword.trim().isEmpty()) {
             MyCustomMethods.showShortMessage(currentActivity,
                     currentActivity.getResources().getString(R.string.should_not_be_empty,
-                            currentActivity.getResources().getString(R.string.old_password)));
+                            currentActivity.getResources().getString(R.string.the_old_password)));
         } else {
             MyCustomMethods.showShortMessage(currentActivity,
                     currentActivity.getResources().getString(R.string.should_not_be_empty,
-                            currentActivity.getResources().getString(R.string.new_password)));
+                            currentActivity.getResources().getString(R.string.the_new_password)));
         }
 
         MyCustomMethods.closeTheKeyboard(currentActivity);
@@ -142,8 +145,10 @@ public class SettingsViewModel extends AndroidViewModel {
 
                                 MyCustomVariables.getFirebaseAuth().signOut();
                                 currentActivity.finishAffinity();
-                                currentActivity.startActivity(new Intent(currentActivity, LoginActivity.class));
-                                currentActivity.overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+                                currentActivity.startActivity(new Intent(currentActivity,
+                                        LoginActivity.class));
+                                currentActivity.overridePendingTransition(R.anim.slide_in_right,
+                                        R.anim.slide_out_left);
 
                                 MyCustomMethods.showShortMessage(currentActivity,
                                         currentActivity.getResources().getString(R.string.the_account_was_successfully_deleted));
@@ -180,21 +185,26 @@ public class SettingsViewModel extends AndroidViewModel {
 
                                 MyCustomVariables.getFirebaseAuth().signOut();
                                 currentActivity.finishAffinity();
-                                currentActivity.startActivity(new Intent(currentActivity, LoginActivity.class));
-                                currentActivity.overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+                                currentActivity.startActivity(new Intent(currentActivity,
+                                        LoginActivity.class));
+                                currentActivity.overridePendingTransition(R.anim.slide_in_right,
+                                        R.anim.slide_out_left);
 
                                 MyCustomMethods.showShortMessage(currentActivity,
-                                        currentActivity.getResources().getString(R.string.the_account_was_successfully_deleted));
+                                        currentActivity.getResources()
+                                                .getString(R.string
+                                                        .the_account_was_successfully_deleted));
                             });
                         } else
                             MyCustomMethods.showShortMessage(currentActivity,
-                                    currentActivity.getResources().getString(R.string.email_and_password_do_not_match));
+                                    currentActivity.getResources()
+                                            .getString(R.string.email_and_password_do_not_match));
                         MyCustomMethods.closeTheKeyboard(currentActivity);
                     });
         } else {
             MyCustomMethods.showShortMessage(currentActivity,
                     currentActivity.getResources().getString(R.string.should_not_be_empty,
-                            currentActivity.getResources().getString(R.string.password)));
+                            currentActivity.getResources().getString(R.string.the_password)));
         }
     }
 
@@ -208,10 +218,12 @@ public class SettingsViewModel extends AndroidViewModel {
 
         new AlertDialog.Builder(context)
                 .setTitle(context.getResources().getString(R.string.warning).trim())
-                .setMessage(context.getResources().getString(R.string.are_you_sure_you_want_to_change_your_password).trim())
+                .setMessage(context.getResources()
+                        .getString(R.string.are_you_sure_you_want_to_change_your_password).trim())
                 .setPositiveButton(context.getResources().getString(R.string.yes).trim(),
                         (final DialogInterface dialog, final int which) ->
-                                new ChangePasswordCustomDialog().show(fragmentManager, "example dialog"))
+                                new ChangePasswordCustomDialog().show(fragmentManager,
+                                        "example dialog"))
                 .setNegativeButton(context.getResources().getString(R.string.cancel).trim(),
                         (final DialogInterface dialog, final int which) -> {
 
@@ -235,14 +247,17 @@ public class SettingsViewModel extends AndroidViewModel {
                             int choice = 0;
 
                             if (MyCustomVariables.getFirebaseAuth().getCurrentUser() != null &&
-                                    !MyCustomVariables.getFirebaseAuth().getCurrentUser().getProviderData()
-                                            .get(MyCustomVariables.getFirebaseAuth().getCurrentUser()
+                                    !MyCustomVariables.getFirebaseAuth().getCurrentUser()
+                                            .getProviderData()
+                                            .get(MyCustomVariables.getFirebaseAuth()
+                                                    .getCurrentUser()
                                                     .getProviderData().size() - 1)
                                             .getProviderId().equals("password")) {
                                 choice = 2;
                             }
 
-                            new DeleteAccountCustomDialog(choice).show(fragmentManager, "example dialog");
+                            new DeleteAccountCustomDialog(choice).show(fragmentManager,
+                                    "example dialog");
                         })
                 .setNegativeButton(context.getResources().getString(R.string.cancel).trim(),
                         (final DialogInterface dialog, final int which) -> {
@@ -261,20 +276,24 @@ public class SettingsViewModel extends AndroidViewModel {
 
         new AlertDialog.Builder(context)
                 .setTitle(context.getResources().getString(R.string.warning).trim())
-                .setMessage(context.getResources().getString(R.string.are_you_sure_you_want_to_reset_the_database).trim())
+                .setMessage(context.getResources()
+                        .getString(R.string.are_you_sure_you_want_to_reset_the_database).trim())
                 .setPositiveButton(context.getResources().getString(R.string.yes).trim(),
                         (final DialogInterface dialog, final int which) -> {
                             int choice = 1;
 
                             if (MyCustomVariables.getFirebaseAuth().getCurrentUser() != null &&
-                                    !MyCustomVariables.getFirebaseAuth().getCurrentUser().getProviderData()
-                                            .get(MyCustomVariables.getFirebaseAuth().getCurrentUser()
+                                    !MyCustomVariables.getFirebaseAuth().getCurrentUser()
+                                            .getProviderData()
+                                            .get(MyCustomVariables.getFirebaseAuth()
+                                                    .getCurrentUser()
                                                     .getProviderData().size() - 1)
                                             .getProviderId().equals("password")) {
                                 choice = 3;
                             }
 
-                            new DeleteAccountCustomDialog(choice).show(fragmentManager, "example dialog");
+                            new DeleteAccountCustomDialog(choice).show(fragmentManager,
+                                    "example dialog");
                         })
                 .setNegativeButton(context.getResources().getString(R.string.cancel).trim(),
                         (final DialogInterface dialog, final int which) -> {
@@ -317,10 +336,12 @@ public class SettingsViewModel extends AndroidViewModel {
                                 .removeValue();
 
                         MyCustomMethods.showShortMessage(currentActivity,
-                                currentActivity.getResources().getString(R.string.the_database_was_reset_successfully));
+                                currentActivity.getResources()
+                                        .getString(R.string.the_database_was_reset_successfully));
                     } else {
                         MyCustomMethods.showShortMessage(currentActivity,
-                                currentActivity.getResources().getString(R.string.email_and_password_do_not_match));
+                                currentActivity.getResources()
+                                        .getString(R.string.email_and_password_do_not_match));
                         MyCustomMethods.closeTheKeyboard(currentActivity);
                     }
                 });
@@ -350,10 +371,13 @@ public class SettingsViewModel extends AndroidViewModel {
                                     .removeValue();
 
                             MyCustomMethods.showShortMessage(currentActivity,
-                                    currentActivity.getResources().getString(R.string.the_database_was_reset_successfully));
+                                    currentActivity.getResources()
+                                            .getString(R.string
+                                                    .the_database_was_reset_successfully));
                         } else {
                             MyCustomMethods.showShortMessage(currentActivity,
-                                    currentActivity.getResources().getString(R.string.email_and_password_do_not_match));
+                                    currentActivity.getResources()
+                                            .getString(R.string.email_and_password_do_not_match));
                         }
 
                         MyCustomMethods.closeTheKeyboard(currentActivity);
@@ -361,7 +385,7 @@ public class SettingsViewModel extends AndroidViewModel {
         } else {
             MyCustomMethods.showShortMessage(currentActivity,
                     currentActivity.getResources().getString(R.string.should_not_be_empty,
-                            currentActivity.getResources().getString(R.string.password)));
+                            currentActivity.getResources().getString(R.string.the_password)));
         }
     }
 

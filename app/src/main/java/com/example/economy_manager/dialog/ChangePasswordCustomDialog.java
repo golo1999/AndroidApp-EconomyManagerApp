@@ -15,6 +15,7 @@ import com.example.economy_manager.R;
 import com.example.economy_manager.databinding.ChangePasswordCustomDialogBinding;
 
 public class ChangePasswordCustomDialog extends AppCompatDialogFragment {
+
     private ChangePasswordCustomDialogBinding binding;
     private CustomDialogListener listener;
 
@@ -30,7 +31,9 @@ public class ChangePasswordCustomDialog extends AppCompatDialogFragment {
         try {
             listener = (CustomDialogListener) context;
         } catch (ClassCastException e) {
-            throw new ClassCastException(context.toString() + " must implement the listener");
+            throw new ClassCastException(context.getResources()
+                    .getString(R.string.must_implement_the_listener, context,
+                            context.getResources().getString(R.string.custom_dialog_listener)));
         }
     }
 
@@ -41,12 +44,15 @@ public class ChangePasswordCustomDialog extends AppCompatDialogFragment {
 
         if (getActivity() != null) {
             builder.setView(binding.getRoot())
-                    .setPositiveButton(getResources().getString(R.string.proceed), (dialog, which) -> {
-                        final String typedOldPassword = String.valueOf(binding.oldPasswordField.getText());
-                        final String typedNewPassword = String.valueOf(binding.newPasswordField.getText());
+                    .setPositiveButton(getResources().getString(R.string.proceed),
+                            (dialog, which) -> {
+                                final String typedOldPassword =
+                                        String.valueOf(binding.oldPasswordField.getText());
+                                final String typedNewPassword =
+                                        String.valueOf(binding.newPasswordField.getText());
 
-                        listener.changePassword(typedOldPassword, typedNewPassword);
-                    })
+                                listener.changePassword(typedOldPassword, typedNewPassword);
+                            })
                     .setNegativeButton(getResources().getString(R.string.cancel), (dialog, which) -> {
 
                     });

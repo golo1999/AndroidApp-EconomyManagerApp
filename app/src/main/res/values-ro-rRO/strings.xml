@@ -5,8 +5,8 @@
     <string name="transactions">Tranzacții</string>
     <string name="change_password">Schimbați parola</string>
     <string name="choose">Alegeți</string>
-    <string name="new_password">Noua parolă</string>
-    <string name="old_password">Vechea parolă</string>
+    <string name="new_password">Parola nouă</string>
+    <string name="old_password">Parola veche</string>
     <string name="date">Dată</string>
     <string name="day">Zi</string>
     <string name="delete_account">Ștergeți contul</string>
@@ -23,10 +23,10 @@
     <string name="settings">Setări</string>
     <string name="second">Secundă</string>
     <string name="currency">Monedă</string>
-    <string name="email_already_exists">Emailul există deja</string>
-    <string name="email_and_password_should_not_be_empty">Emailul și parola nu trebuie să fie goale</string>
+    <string name="email_already_exists">Email-ul există deja</string>
+    <string name="email_and_password_should_not_be_empty">Email-ul și parola nu trebuie să fie goale</string>
     <string name="should_not_be_empty">%s nu trebuie să fie gol</string>
-    <string name="email_and_password_are_not_valid">Emailul și parola nu sunt valide</string>
+    <string name="email_and_password_are_not_valid">Email-ul și parola nu sunt valide</string>
     <string name="please_enter_a_valid_email">Vă rugăm să introduceți un email valid</string>
     <string name="minute">Minut</string>
     <string name="password">Parolă</string>
@@ -37,7 +37,7 @@
     <string name="save_changes">Salvați modificările</string>
     <string name="saving">Economie</string>
     <string name="cancel">Anulare</string>
-    <string name="please_enter_your_password">Vă rugăm introduceți parola</string>
+    <string name="please_enter_your_password">Vă rugăm să introduceți parola</string>
     <string name="debt">Datorie</string>
     <string name="select_the_month_and_the_year">Selectați luna și anul</string>
     <string name="monthly_transactions">Tranzacțiile lunare</string>
@@ -55,7 +55,7 @@
     <string name="last_week_expenses">Cheltuieli în ultima săptămână</string>
     <string name="forgot_password">Am uitat parola</string>
     <string name="incorrect_username_or_password">Numele de utilizator sau parolă incorectă</string>
-    <string name="email_address_is_not_valid">Email-ul nu este valid</string>
+    <string name="email_is_not_valid">Email-ul nu este valid</string>
     <string name="please_select_an_option">Vă rugăm să selectați o opțiune</string>
     <string name="rate_the_app">Evaluați aplicația</string>
     <string name="monthly_balance">Balanță lunară</string>
@@ -174,7 +174,7 @@
     <string name="the_account_was_successfully_deleted">Contul a fost șters cu succes</string>
     <string name="the_database_was_reset_successfully">Baza de date a fost resetată cu succes</string>
     <string name="password_updated_successfully">Parola a fost actualizată cu succes</string>
-    <string name="email_and_password_do_not_match">Emailul și parola nu se potrivesc</string>
+    <string name="email_and_password_do_not_match">Email-ul și parola nu se potrivesc</string>
     <string name="and_between_spaces">&#32;și&#32;</string>
     <string name="should_have_maximum_days">&#32;trebuie să aibă maxim 29 de zile</string>
     <string name="no_month_should_have_more_than_thirty_one_days">Nicio lună nu trebuie să aibă mai mult de 31 de zile</string>
@@ -188,7 +188,7 @@
     <string name="please_complete_all_fields">Vă rugăm să completați toate câmpurile</string>
     <string name="please_try_again">Vă rugăm să încercați din nou</string>
     <string name="login_successful">Autentificare reușită</string>
-    <string name="facebook_authentication_failed">Autentificarea Facebook a eșuat</string>
+    <string name="facebook_authentication_failed">Autentificarea cu Facebook a eșuat</string>
     <string name="google_authentication_failed">Autentificarea Google a eșuat</string>
     <string name="title">Titlu</string>
     <string name="country">Țara</string>
@@ -213,4 +213,13 @@
     <string name="income_added_successfully">Venit adăugat cu succes</string>
     <string name="unknown_country">Țară necunoscută</string>
     <string name="unknown_gender">Sex necunoscut</string>
+    <string name="must_implement_the_listener">%s trebuie să implementeze %s</string>
+    <string name="the_value">Valoarea</string>
+    <string name="the_passwords">Parolele</string>
+    <string name="the_password">Parola</string>
+    <string name="the_first_name">Prenumele</string>
+    <string name="the_email">Email-ul</string>
+    <string name="the_last_name">Numele</string>
+    <string name="the_old_password">Vechea parolă</string>
+    <string name="the_new_password">Noua parolă</string>
 </resources>

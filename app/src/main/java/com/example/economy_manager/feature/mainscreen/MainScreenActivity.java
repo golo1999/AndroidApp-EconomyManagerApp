@@ -36,7 +36,8 @@ import java.util.TimerTask;
 
 public class MainScreenActivity
         extends AppCompatActivity
-        implements MoneySpentPercentageFragment.IMoneySpentPercentageListener {
+        implements MoneySpentPercentageFragment.MoneySpentPercentageListener {
+
     private MainScreenActivityBinding binding;
     private MainScreenViewModel viewModel;
     private ViewGroup.LayoutParams moneySpentPercentageLayoutParams;
@@ -53,7 +54,6 @@ public class MainScreenActivity
             backToast = Toast.makeText(this,
                     getResources().getString(R.string.press_again_exit),
                     Toast.LENGTH_SHORT);
-
             backToast.show();
         }
 
@@ -115,10 +115,14 @@ public class MainScreenActivity
                 .replace(R.id.showSavingsFragmentContainer, viewModel.getFragmentShowSavings())
                 .replace(R.id.budgetReviewFragmentContainer, viewModel.getFragmentBudgetReview())
                 .replace(R.id.moneySpentFragmentContainer, viewModel.getFragmentMoneySpent())
-                .replace(R.id.lastTenTransactionsFragmentContainer, viewModel.getFragmentLastTenTransactions())
-                .replace(R.id.topFiveExpensesFragmentContainer, viewModel.getFragmentTopFiveExpenses())
-                .replace(R.id.favoriteExpensesCategoryFragmentContainer, viewModel.getFavoriteExpensesCategoryFragment())
-                .replace(R.id.expensesChartFragmentContainer, viewModel.getFragmentMoneySpentPercentage())
+                .replace(R.id.lastTenTransactionsFragmentContainer,
+                        viewModel.getFragmentLastTenTransactions())
+                .replace(R.id.topFiveExpensesFragmentContainer,
+                        viewModel.getFragmentTopFiveExpenses())
+                .replace(R.id.favoriteExpensesCategoryFragmentContainer,
+                        viewModel.getFavoriteExpensesCategoryFragment())
+                .replace(R.id.expensesChartFragmentContainer,
+                        viewModel.getFragmentMoneySpentPercentage())
                 .commit();
     }
 
@@ -158,31 +162,39 @@ public class MainScreenActivity
                                 final Transaction transaction = transactionEntry.getValue();
 
                                 if (transaction != null &&
-                                        transaction.getTime().getYear() == LocalDate.now().getYear() &&
-                                        transaction.getTime().getMonth() == LocalDate.now().getMonthValue()) {
+                                        transaction.getTime().getYear() ==
+                                                LocalDate.now().getYear() &&
+                                        transaction.getTime().getMonth() ==
+                                                LocalDate.now().getMonthValue()) {
                                     if (!currentMonthTransactionsExist) {
                                         currentMonthTransactionsExist = true;
                                     }
 
-                                    if (transaction.getCategory() > 0 && transaction.getCategory() < 4) {
-                                        totalMonthlyIncomes += Float.parseFloat(transaction.getValue());
+                                    if (transaction.getCategory() > 0 &&
+                                            transaction.getCategory() < 4) {
+                                        totalMonthlyIncomes +=
+                                                Float.parseFloat(transaction.getValue());
                                     } else {
-                                        totalMonthlyExpenses += Float.parseFloat(transaction.getValue());
+                                        totalMonthlyExpenses +=
+                                                Float.parseFloat(transaction.getValue());
                                     }
                                 }
                             }
 
                             final int percentage =
-                                    Float.valueOf(totalMonthlyExpenses / totalMonthlyIncomes * 100).intValue();
+                                    Float.valueOf(totalMonthlyExpenses / totalMonthlyIncomes * 100)
+                                            .intValue();
 
                             final String percentageText = currentMonthTransactionsExist ?
-                                    getResources().getString(R.string.you_spent_percentage_of_your_incomes,
+                                    getResources().getString(R
+                                                    .string.you_spent_percentage_of_your_incomes,
                                             Math.min(percentage, 100) + "%") :
                                     getResources().getString(R.string.no_money_records_this_month);
 
                             binding.setMoneySpentPercentageText(percentageText);
                         } else {
-                            binding.setMoneySpentPercentageText(getResources().getString(R.string.no_money_records_yet));
+                            binding.setMoneySpentPercentageText(getResources()
+                                    .getString(R.string.no_money_records_yet));
                         }
 
                         binding.firebaseLoadingProgressBar.setVisibility(View.GONE);
@@ -221,12 +233,15 @@ public class MainScreenActivity
             return;
         }
 
-        if (MyCustomSharedPreferences.retrieveUserDetailsFromSharedPreferences(this) != null) {
-            viewModel.setUserDetails(MyCustomSharedPreferences.retrieveUserDetailsFromSharedPreferences(this));
+        if (MyCustomSharedPreferences.retrieveUserDetailsFromSharedPreferences(this)
+                != null) {
+            viewModel.setUserDetails(MyCustomSharedPreferences
+                    .retrieveUserDetailsFromSharedPreferences(this));
         }
 
         if (viewModel.getUserDetails() != null) {
-            binding.setIsDarkThemeEnabled(viewModel.getUserDetails().getApplicationSettings().isDarkThemeEnabled());
+            binding.setIsDarkThemeEnabled(viewModel.getUserDetails().getApplicationSettings()
+                    .isDarkThemeEnabled());
         }
 
         MyCustomVariables.getDatabaseReference()

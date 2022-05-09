@@ -17,8 +17,10 @@ import java.util.Calendar;
 import java.util.Locale;
 
 public class MonthlyBalanceViewModel extends ViewModel {
+
     private UserDetails userDetails;
-    private final SimpleDateFormat currentMonthFormat = new SimpleDateFormat("LLLL", Locale.ENGLISH);
+    private final SimpleDateFormat currentMonthFormat =
+            new SimpleDateFormat("LLLL", Locale.ENGLISH);
     private final Calendar currentTime = Calendar.getInstance();
 
     public boolean checkIfDayCanBeAddedToList(final ArrayList<Integer> daysList,
@@ -37,7 +39,8 @@ public class MonthlyBalanceViewModel extends ViewModel {
     public int getActivityTheme(final Context context) {
         final boolean isDarkThemeEnabled = getUserDetails() != null ?
                 getUserDetails().getApplicationSettings().isDarkThemeEnabled() :
-                MyCustomVariables.getDefaultUserDetails().getApplicationSettings().isDarkThemeEnabled();
+                MyCustomVariables.getDefaultUserDetails().getApplicationSettings()
+                        .isDarkThemeEnabled();
 
         return Theme.getBackgroundColor(context, isDarkThemeEnabled);
     }
@@ -79,10 +82,12 @@ public class MonthlyBalanceViewModel extends ViewModel {
                 // german
                 "der" :
                 Locale.getDefault().getDisplayLanguage().equals(Languages.SPANISH_LANGUAGE) ||
-                        Locale.getDefault().getDisplayLanguage().equals(Languages.PORTUGUESE_LANGUAGE) ?
+                        Locale.getDefault().getDisplayLanguage()
+                                .equals(Languages.PORTUGUESE_LANGUAGE) ?
                         // spanish or portuguese
                         "de" :
-                        Locale.getDefault().getDisplayLanguage().equals(Languages.ITALIAN_LANGUAGE) ?
+                        Locale.getDefault().getDisplayLanguage()
+                                .equals(Languages.ITALIAN_LANGUAGE) ?
                                 // italian
                                 "il" :
                                 // everything else
@@ -103,26 +108,33 @@ public class MonthlyBalanceViewModel extends ViewModel {
         final LocalDate currentDate = LocalDate.now();
 
         return Months.getTranslatedMonth(context, String.valueOf(currentDate.getMonth())
-                .charAt(0) + String.valueOf(currentDate.getMonth()).substring(1).toLowerCase()).trim();
+                .charAt(0) + String.valueOf(currentDate.getMonth()).substring(1).toLowerCase())
+                .trim();
     }
 
     public String getDateTranslated(final Context context, final int dayFromDaysList) {
         return Locale.getDefault().getDisplayLanguage().equals(Languages.GERMAN_LANGUAGE) ?
                 // german
-                getDayPrefix(dayFromDaysList) + " " + dayFromDaysList + " " + getTranslatedMonth(context) :
+                getDayPrefix(dayFromDaysList) + " " + dayFromDaysList + " " +
+                        getTranslatedMonth(context) :
                 Locale.getDefault().getDisplayLanguage().equals(Languages.SPANISH_LANGUAGE) ||
-                        Locale.getDefault().getDisplayLanguage().equals(Languages.PORTUGUESE_LANGUAGE) ?
+                        Locale.getDefault().getDisplayLanguage()
+                                .equals(Languages.PORTUGUESE_LANGUAGE) ?
                         // spanish or portuguese
                         dayFromDaysList + " " + getDayPrefix(dayFromDaysList) + " " +
                                 getTranslatedMonth(context).toLowerCase() :
-                        Locale.getDefault().getDisplayLanguage().equals(Languages.FRENCH_LANGUAGE) ||
-                                Locale.getDefault().getDisplayLanguage().equals(Languages.ROMANIAN_LANGUAGE) ?
+                        Locale.getDefault().getDisplayLanguage()
+                                .equals(Languages.FRENCH_LANGUAGE) ||
+                                Locale.getDefault().getDisplayLanguage()
+                                        .equals(Languages.ROMANIAN_LANGUAGE) ?
                                 // french or romanian
                                 dayFromDaysList + " " + getTranslatedMonth(context).toLowerCase() :
-                                Locale.getDefault().getDisplayLanguage().equals(Languages.ITALIAN_LANGUAGE) ?
+                                Locale.getDefault().getDisplayLanguage()
+                                        .equals(Languages.ITALIAN_LANGUAGE) ?
                                         // italian
                                         getDayPrefix(dayFromDaysList) + " " +
-                                                dayFromDaysList + " " + getTranslatedMonth(context).toLowerCase() :
+                                                dayFromDaysList + " " +
+                                                getTranslatedMonth(context).toLowerCase() :
                                         // english
                                         getTranslatedMonth(context) + " " +
                                                 dayFromDaysList + getDayPrefix(dayFromDaysList);

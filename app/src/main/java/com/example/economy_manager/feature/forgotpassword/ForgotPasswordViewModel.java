@@ -40,8 +40,8 @@ public class ForgotPasswordViewModel extends ViewModel {
         if (!MyCustomMethods.emailIsValid(emailText)) {
             final String error = emailText.isEmpty() ?
                     currentActivity.getResources().getString(R.string.should_not_be_empty,
-                            currentActivity.getResources().getString(R.string.email)) :
-                    currentActivity.getResources().getString(R.string.email_address_is_not_valid);
+                            currentActivity.getResources().getString(R.string.the_email)) :
+                    currentActivity.getResources().getString(R.string.email_is_not_valid);
 
             binding.emailField.setError(error);
 

@@ -37,7 +37,8 @@ public class EditSpecificTransactionFragment extends Fragment {
 
     /**
      * The received date & time from the pickers are sent to the parent activity
-     * Interfaces for passing the received date & time from EditTransactionsActivity (parent) to this fragment (child)
+     * Interfaces for passing the received date
+     * and time from EditTransactionsActivity (parent) to this fragment (child)
      */
     public interface OnDateReceivedCallBack {
         void onDateReceived(final LocalDate newDate);
@@ -69,11 +70,13 @@ public class EditSpecificTransactionFragment extends Fragment {
         setDateText(viewModel.getUserDetails() != null ?
                 LocalDate.of(viewModel.getSelectedTransaction().getTime().getYear(),
                         viewModel.getSelectedTransaction().getTime().getMonth(),
-                        viewModel.getSelectedTransaction().getTime().getDay()) : viewModel.getTransactionDate());
+                        viewModel.getSelectedTransaction().getTime().getDay()) :
+                viewModel.getTransactionDate());
         setTimeText(viewModel.getUserDetails() != null ?
                 LocalTime.of(viewModel.getSelectedTransaction().getTime().getHour(),
                         viewModel.getSelectedTransaction().getTime().getMinute(),
-                        viewModel.getSelectedTransaction().getTime().getSecond()) : viewModel.getTransactionTime());
+                        viewModel.getSelectedTransaction().getTime().getSecond()) :
+                viewModel.getTransactionTime());
         setOnFocusChangeListener(viewModel.getSelectedTransaction());
         viewModel.resetTransactionTypesList();
         viewModel.setTransactionTypesList(requireContext());
@@ -99,8 +102,10 @@ public class EditSpecificTransactionFragment extends Fragment {
 
         final Transaction selectedTransaction = viewModel.getSelectedTransaction();
         final String translatedType = Types.getTranslatedType(requireContext(),
-                String.valueOf(Transaction.getTypeFromIndexInEnglish(selectedTransaction.getCategory())));
-        int positionInTheTransactionTypesList = viewModel.getTransactionPositionInList(translatedType);
+                String.valueOf(Transaction
+                        .getTypeFromIndexInEnglish(selectedTransaction.getCategory())));
+        int positionInTheTransactionTypesList =
+                viewModel.getTransactionPositionInList(translatedType);
 
         if (selectedTransaction.getNote() != null) {
             binding.noteField.setText(selectedTransaction.getNote());
@@ -121,7 +126,8 @@ public class EditSpecificTransactionFragment extends Fragment {
                                       final ViewGroup container) {
         binding = DataBindingUtil.inflate(inflater, R.layout.edit_specific_transaction_fragment,
                 container, false);
-        viewModel = new ViewModelProvider((ViewModelStoreOwner) requireContext()).get(EditTransactionsViewModel.class);
+        viewModel = new ViewModelProvider((ViewModelStoreOwner) requireContext())
+                .get(EditTransactionsViewModel.class);
     }
 
     private void setLayoutVariables() {
@@ -157,7 +163,8 @@ public class EditSpecificTransactionFragment extends Fragment {
     }
 
     private void setSpinnerOnSelectedItemListener() {
-        final AdapterView.OnItemSelectedListener listener = new AdapterView.OnItemSelectedListener() {
+        final AdapterView.OnItemSelectedListener listener = new AdapterView
+                .OnItemSelectedListener() {
             @Override
             public void onItemSelected(@NonNull final AdapterView<?> parent,
                                        final View view,
@@ -182,7 +189,8 @@ public class EditSpecificTransactionFragment extends Fragment {
     private void setTheme() {
         final boolean isDarkThemeEnabled = MyCustomVariables.getUserDetails() != null ?
                 MyCustomVariables.getUserDetails().getApplicationSettings().isDarkThemeEnabled() :
-                MyCustomVariables.getDefaultUserDetails().getApplicationSettings().isDarkThemeEnabled();
+                MyCustomVariables.getDefaultUserDetails().getApplicationSettings()
+                        .isDarkThemeEnabled();
 
         binding.setIsDarkThemeEnabled(isDarkThemeEnabled);
     }

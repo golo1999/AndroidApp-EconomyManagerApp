@@ -63,16 +63,19 @@ public class MyCustomTime implements Serializable, Comparable<MyCustomTime> {
         final String minuteParsed = minute < 10 ? "0" + minute : String.valueOf(minute);
         final String secondParsed = second < 10 ? "0" + second : String.valueOf(second);
 
-        return year + "-" + monthParsed + "-" + dayParsed + " " + hourParsed + ":" + minuteParsed + ":" + secondParsed;
+        return year + "-" + monthParsed + "-" + dayParsed + " " +
+                hourParsed + ":" + minuteParsed + ":" + secondParsed;
     }
 
     @Override
     public int compareTo(MyCustomTime myCustomTime) {
         final LocalDateTime localDateTime1 =
-                LocalDateTime.of(getYear(), getMonth(), getDay(), getHour(), getMinute(), getSecond());
+                LocalDateTime.of(getYear(), getMonth(), getDay(), getHour(), getMinute(),
+                        getSecond());
         final LocalDateTime localDateTime2 =
-                LocalDateTime.of(myCustomTime.getYear(), myCustomTime.getMonth(), myCustomTime.getDay(),
-                        myCustomTime.getHour(), myCustomTime.getMinute(), myCustomTime.getSecond());
+                LocalDateTime.of(myCustomTime.getYear(), myCustomTime.getMonth(),
+                        myCustomTime.getDay(), myCustomTime.getHour(), myCustomTime.getMinute(),
+                        myCustomTime.getSecond());
 
         return localDateTime1.isBefore(localDateTime2) ?
                 -1 : localDateTime1.isEqual(localDateTime2) ?

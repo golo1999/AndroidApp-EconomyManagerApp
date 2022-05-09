@@ -11,6 +11,7 @@ import androidx.fragment.app.DialogFragment;
 import java.time.LocalDate;
 
 public class DatePickerFragment extends DialogFragment {
+
     private LocalDate datePickerStartDate = LocalDate.now();
 
     public DatePickerFragment() {

@@ -80,7 +80,8 @@ public class EditTransactionsActivity
         super.onCreate(savedInstanceState);
         setActivityVariables();
         setLayoutVariables();
-        setUserDetailsInViewModel(userDetails != null ? userDetails : MyCustomVariables.getDefaultUserDetails());
+        setUserDetailsInViewModel(userDetails != null ?
+                userDetails : MyCustomVariables.getDefaultUserDetails());
         setTheme();
         setRecyclerView();
         setBottomLayout();
@@ -188,13 +189,15 @@ public class EditTransactionsActivity
             if (frequencyIterator == 1) {
                 // translating the month name if it's not in english
                 list.add(!Locale.getDefault().getDisplayLanguage().equals("English") ?
-                        Months.getTranslatedMonth(EditTransactionsActivity.this, months[counter]) :
+                        Months.getTranslatedMonth(EditTransactionsActivity.this,
+                                months[counter]) :
                         months[counter]);
             }
         }
 
         counter = -1;
-        // saving current month's position if it has been found => for setting the default month spinner's selected
+        // saving current month's position if it has been found
+        // => for setting the default month spinner's selected
         // item as the current month
         for (final String listIterator : list) {
             final String listIteratorInEnglish =
@@ -210,7 +213,8 @@ public class EditTransactionsActivity
         }
 
         // creating and setting the month spinner adapter's styling
-        final ArrayAdapter<String> monthAdapter = new ArrayAdapter<String>(this, R.layout.custom_spinner_item, list) {
+        final ArrayAdapter<String> monthAdapter = new ArrayAdapter<String>(this,
+                R.layout.custom_spinner_item, list) {
             @Override
             public View getDropDownView(final int position,
                                         final @Nullable View convertView,
@@ -218,8 +222,10 @@ public class EditTransactionsActivity
                 final View v = super.getDropDownView(position, convertView, parent);
                 final boolean isDarkThemeEnabled = userDetails != null ?
                         userDetails.getApplicationSettings().isDarkThemeEnabled() :
-                        MyCustomVariables.getDefaultUserDetails().getApplicationSettings().isDarkThemeEnabled();
-                final int itemsColor = getColor(isDarkThemeEnabled ? R.color.primaryDark : R.color.primaryLight);
+                        MyCustomVariables.getDefaultUserDetails().getApplicationSettings()
+                                .isDarkThemeEnabled();
+                final int itemsColor = getColor(isDarkThemeEnabled ?
+                        R.color.primaryDark : R.color.primaryLight);
                 // all spinner elements are aligned to center
                 ((TextView) v).setGravity(Gravity.CENTER);
                 // setting text color based on the selected theme
@@ -233,7 +239,8 @@ public class EditTransactionsActivity
         // if the current month exists in the list and the selected year is the current one
         if (positionOfCurrentMonth >= 0 &&
                 selectedYear.equals(String.valueOf(currentTime.get(Calendar.YEAR)))) {
-            // setting the current month as default when opening the activity or when selecting the current year
+            // setting the current month as default when opening the activity
+            // or when selecting the current year
             binding.monthsSpinner.setSelection(positionOfCurrentMonth);
         } else {
             // subtracting 1 because we start from index 0
@@ -245,7 +252,8 @@ public class EditTransactionsActivity
                 for (int monthCounter = currentMonthIndex - 1; monthCounter >= 0; --monthCounter) {
                     if (frequency[monthCounter] == 1) {
                         final int nearbyMonthIndexFromSpinner =
-                                viewModel.getNearestMonthPositionFromSpinner(this, list, monthCounter);
+                                viewModel.getNearestMonthPositionFromSpinner(this, list,
+                                        monthCounter);
 
                         nearbyMonthFound = true;
 
@@ -258,10 +266,12 @@ public class EditTransactionsActivity
                 }
 
                 if (!nearbyMonthFound) {
-                    for (int monthCounter = currentMonthIndex; monthCounter < frequency.length; ++monthCounter) {
+                    for (int monthCounter = currentMonthIndex; monthCounter < frequency.length;
+                         ++monthCounter) {
                         if (frequency[monthCounter] == 1) {
                             final int nearbyMonthIndexFromSpinner =
-                                    viewModel.getNearestMonthPositionFromSpinner(this, list, monthCounter);
+                                    viewModel.getNearestMonthPositionFromSpinner(this, list,
+                                            monthCounter);
 
                             if (nearbyMonthIndexFromSpinner >= -1) {
                                 binding.monthsSpinner.setSelection(nearbyMonthIndexFromSpinner);
@@ -274,10 +284,12 @@ public class EditTransactionsActivity
             }
             // if the current month is January
             else {
-                for (int monthCounter = currentMonthIndex; monthCounter < frequency.length; ++monthCounter) {
+                for (int monthCounter = currentMonthIndex; monthCounter < frequency.length;
+                     ++monthCounter) {
                     if (frequency[monthCounter] == 1) {
                         final int nearbyMonthIndexFromSpinner =
-                                viewModel.getNearestMonthPositionFromSpinner(this, list, monthCounter);
+                                viewModel.getNearestMonthPositionFromSpinner(this, list,
+                                        monthCounter);
 
                         if (nearbyMonthIndexFromSpinner >= -1) {
                             binding.monthsSpinner.setSelection(nearbyMonthIndexFromSpinner);
@@ -292,7 +304,8 @@ public class EditTransactionsActivity
 
     private void createYearSpinner(final ArrayList<String> list) {
         // creating and setting the year spinner adapter's styling
-        final ArrayAdapter<String> yearAdapter = new ArrayAdapter<String>(this, R.layout.custom_spinner_item, list) {
+        final ArrayAdapter<String> yearAdapter = new ArrayAdapter<String>(this,
+                R.layout.custom_spinner_item, list) {
             @Override
             public View getDropDownView(final int position,
                                         final @Nullable View convertView,
@@ -300,8 +313,10 @@ public class EditTransactionsActivity
                 final View v = super.getDropDownView(position, convertView, parent);
                 final boolean isDarkThemeEnabled = userDetails != null ?
                         userDetails.getApplicationSettings().isDarkThemeEnabled() :
-                        MyCustomVariables.getDefaultUserDetails().getApplicationSettings().isDarkThemeEnabled();
-                final int itemsColor = getColor(isDarkThemeEnabled ? R.color.primaryDark : R.color.primaryLight);
+                        MyCustomVariables.getDefaultUserDetails().getApplicationSettings()
+                                .isDarkThemeEnabled();
+                final int itemsColor = getColor(isDarkThemeEnabled ?
+                        R.color.primaryDark : R.color.primaryLight);
                 // all spinner elements are aligned to center
                 ((TextView) v).setGravity(Gravity.CENTER);
                 // setting text color based on the selected theme
@@ -316,7 +331,8 @@ public class EditTransactionsActivity
         final Calendar currentTime = Calendar.getInstance();
         int positionOfCurrentYear = -1;
         int secondCounter = -1;
-        // searching the current year into the years list and saving its position if it has been found
+        // searching the current year into the years list
+        // and saving its position if it has been found
         for (final String listIterator : list) {
             secondCounter++;
 
@@ -343,7 +359,8 @@ public class EditTransactionsActivity
             final String transactionMonthParsed = transaction.getTime().getMonthName().charAt(0) +
                     transaction.getTime().getMonthName().substring(1).toLowerCase();
             final String transactionYear = String.valueOf(transaction.getTime().getYear());
-            final String selectedMonthNameInEnglish = Months.getMonthInEnglish(this, selectedMonth);
+            final String selectedMonthNameInEnglish =
+                    Months.getMonthInEnglish(this, selectedMonth);
 
             if (transactionYear.equals(selectedYear) &&
                     transactionMonthParsed.equals(selectedMonthNameInEnglish)) {
@@ -352,7 +369,8 @@ public class EditTransactionsActivity
         });
 
         transactionsList.sort((final Transaction transaction1, final Transaction transaction2) ->
-                Float.compare(Float.parseFloat(transaction2.getValue()), Float.parseFloat(transaction1.getValue())));
+                Float.compare(Float.parseFloat(transaction2.getValue()),
+                        Float.parseFloat(transaction1.getValue())));
         recyclerViewAdapter.notifyItemRangeChanged(0, transactionsList.size());
     }
 
@@ -399,9 +417,11 @@ public class EditTransactionsActivity
                             }
 
                             snapshot.getChildren().forEach((final DataSnapshot transaction) -> {
-                                final Transaction databaseTransaction = transaction.getValue(Transaction.class);
+                                final Transaction databaseTransaction =
+                                        transaction.getValue(Transaction.class);
 
-                                if (databaseTransaction != null && databaseTransaction.getTime() != null) {
+                                if (databaseTransaction != null &&
+                                        databaseTransaction.getTime() != null) {
                                     final String transactionYear =
                                             String.valueOf(databaseTransaction.getTime().getYear());
 
@@ -427,28 +447,33 @@ public class EditTransactionsActivity
 
                             createYearSpinner(yearsList);
 
-                            binding.yearsSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                            binding.yearsSpinner.setOnItemSelectedListener(new AdapterView
+                                    .OnItemSelectedListener() {
                                 @Override
                                 public void onItemSelected(final AdapterView<?> parent,
                                                            final View view,
                                                            final int position,
                                                            final long id) {
                                     final String selectedYear =
-                                            String.valueOf(binding.yearsSpinner.getItemAtPosition(position));
+                                            String.valueOf(binding.yearsSpinner
+                                                    .getItemAtPosition(position));
 
-                                    ((TextView) parent.getChildAt(0)).setTextColor(Color.WHITE);
-                                    ((TextView) parent.getChildAt(0)).setGravity(Gravity.CENTER);
+                                    ((TextView) parent.getChildAt(0))
+                                            .setTextColor(Color.WHITE);
+                                    ((TextView) parent.getChildAt(0))
+                                            .setGravity(Gravity.CENTER);
 
                                     if (!monthsList.isEmpty()) {
                                         monthsList.clear();
                                     }
 
                                     allTransactionsList.forEach((final Transaction transaction) -> {
-                                        if (String.valueOf(transaction.getTime().getYear()).equals(selectedYear)) {
+                                        if (String.valueOf(transaction.getTime().getYear())
+                                                .equals(selectedYear)) {
                                             final String transactionMonthParsed =
                                                     transaction.getTime().getMonthName().charAt(0) +
-                                                            transaction.getTime().getMonthName().substring(1)
-                                                                    .toLowerCase();
+                                                            transaction.getTime().getMonthName()
+                                                                    .substring(1).toLowerCase();
 
                                             if (monthsList.isEmpty()) {
                                                 monthsList.add(transactionMonthParsed);
@@ -470,17 +495,21 @@ public class EditTransactionsActivity
 
                                     createMonthSpinner(monthsList, selectedYear);
 
-                                    binding.monthsSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                                    binding.monthsSpinner.setOnItemSelectedListener(new AdapterView
+                                            .OnItemSelectedListener() {
                                         @Override
                                         public void onItemSelected(final AdapterView<?> parent,
                                                                    final View view,
                                                                    final int position,
                                                                    final long id) {
                                             final String selectedMonth =
-                                                    String.valueOf(binding.monthsSpinner.getItemAtPosition(position));
+                                                    String.valueOf(binding.monthsSpinner
+                                                            .getItemAtPosition(position));
 
-                                            ((TextView) parent.getChildAt(0)).setTextColor(Color.WHITE);
-                                            ((TextView) parent.getChildAt(0)).setGravity(Gravity.CENTER);
+                                            ((TextView) parent.getChildAt(0))
+                                                    .setTextColor(Color.WHITE);
+                                            ((TextView) parent.getChildAt(0))
+                                                    .setGravity(Gravity.CENTER);
 
                                             if (!monthsList.isEmpty()) {
                                                 binding.centerText.setText("");
@@ -514,7 +543,8 @@ public class EditTransactionsActivity
 
                         final boolean isDarkThemeEnabled = userDetails != null ?
                                 userDetails.getApplicationSettings().isDarkThemeEnabled() :
-                                MyCustomVariables.getDefaultUserDetails().getApplicationSettings().isDarkThemeEnabled();
+                                MyCustomVariables.getDefaultUserDetails().getApplicationSettings()
+                                        .isDarkThemeEnabled();
 
                         binding.centerText.setTextColor(isDarkThemeEnabled ?
                                 getColor(R.color.secondaryDark) : getColor(R.color.quaternaryLight));
@@ -554,10 +584,13 @@ public class EditTransactionsActivity
     private void setTheme() {
         final boolean isDarkThemeEnabled = userDetails != null ?
                 userDetails.getApplicationSettings().isDarkThemeEnabled() :
-                MyCustomVariables.getDefaultUserDetails().getApplicationSettings().isDarkThemeEnabled();
+                MyCustomVariables.getDefaultUserDetails().getApplicationSettings()
+                        .isDarkThemeEnabled();
 
-        binding.setActivityBackgroundColor(Theme.getBackgroundColor(this, isDarkThemeEnabled));
-        binding.setDropdownBackgroundColor(Theme.getDropdownBackgroundColor(this, isDarkThemeEnabled));
+        binding.setActivityBackgroundColor(Theme.getBackgroundColor(this,
+                isDarkThemeEnabled));
+        binding.setDropdownBackgroundColor(Theme.getDropdownBackgroundColor(this,
+                isDarkThemeEnabled));
         // setting arrow color
         binding.monthsSpinner.getBackground().setColorFilter(Color.WHITE, PorterDuff.Mode.SRC_ATOP);
         // setting elements' color

@@ -9,7 +9,8 @@ import com.google.firebase.database.FirebaseDatabase;
 
 public final class MyCustomVariables {
 
-    private static final DatabaseReference DATABASE_REFERENCE = FirebaseDatabase.getInstance().getReference();
+    private static final DatabaseReference DATABASE_REFERENCE =
+            FirebaseDatabase.getInstance().getReference();
     private static final String defaultCurrency = "GBP";
     private static final UserDetails defaultUserDetails =
             new UserDetails(new ApplicationSettings(), new PersonalInformation());

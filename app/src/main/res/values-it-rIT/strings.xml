@@ -48,11 +48,11 @@
     <string name="rate_the_app">Valuta l\'applicazione</string>
     <string name="remaining_monthly_income">Reddito mensile rimanente</string>
     <string name="reset_database">Reimposta le base dei dati</string>
-    <string name="email_already_exists">Email già esistente</string>
-    <string name="email_and_password_should_not_be_empty">Email e password non devono essere vuote</string>
+    <string name="email_already_exists">L\'e-mail già esistente</string>
+    <string name="email_and_password_should_not_be_empty">L\'e-mail e la password non devono essere vuote</string>
     <string name="should_not_be_empty">%s non deve essere vuota</string>
-    <string name="please_enter_a_valid_email">Per favore inserisci una email valida</string>
-    <string name="email_and_password_are_not_valid">Email e password non sono valide</string>
+    <string name="please_enter_a_valid_email">Per favore inserisci una e-mail valida</string>
+    <string name="email_and_password_are_not_valid">L\'e-mail e la password non sono valide</string>
     <string name="good_morning">Buongiorno!</string>
     <string name="good_afternoon">Buon pomeriggio!</string>
     <string name="good_evening">Buonasera!</string>
@@ -62,8 +62,8 @@
     <string name="last_week_expenses">Spese della scorsa settimana</string>
     <string name="forgot_password">Ha dimenticato la password</string>
     <string name="incorrect_username_or_password">Nome utente o password errati</string>
-    <string name="email_does_not_exist_in_the_database">L\'email non esiste nel le base dei dati</string>
-    <string name="email_address_is_not_valid">Email non valido</string>
+    <string name="email_does_not_exist_in_the_database">L\'e-mail non esiste nel le base dei dati</string>
+    <string name="email_is_not_valid">L\'e-mail non valido</string>
     <string name="minute">Minuto</string>
     <string name="please_select_an_option">Per favore selezionate un\'opzione</string>
     <string name="no_transactions_made_this_year">Nessuna transazione effettuata quest\'anno</string>
@@ -114,7 +114,7 @@
     <string name="are_you_sure_you_want_to_change_your_password">Sei sicuro di voler cambiare la tua password?</string>
     <string name="are_you_sure_you_want_to_reset_the_database">Sei sicuro di voler ripristinare il database?</string>
     <string name="are_you_sure_you_want_to_delete_your_account">Sei sicuro di voler eliminare il tuo account?</string>
-    <string name="please_verify_your_email">Per favore verifica la tua email</string>
+    <string name="please_verify_your_email">Per favore verifica la tua e-mail</string>
     <string name="romania">Romania</string>
     <string name="italy">Italia</string>
     <string name="azerbaijan">Azerbaigian</string>
@@ -173,7 +173,7 @@
     <string name="edit_transaction_date">Modifica la data della transazione</string>
     <string name="the_account_was_successfully_deleted">L\'account è stato eliminato con successo</string>
     <string name="the_database_was_reset_successfully">Il database è stato reimpostato correttamente</string>
-    <string name="email_and_password_do_not_match">Email e password non corrispondono</string>
+    <string name="email_and_password_do_not_match">L\'e-mail e la password non corrispondono</string>
     <string name="password_updated_successfully">Password aggiornata con successo</string>
     <string name="no_month_should_have_more_than_thirty_one_days">Nessun mese deve avere più di 31 giorni</string>
     <string name="and_between_spaces">&#32;e&#32;</string>
@@ -213,4 +213,13 @@
     <string name="income_added_successfully">Entrata aggiunta con successo</string>
     <string name="unknown_country">Paese sconosciuto</string>
     <string name="unknown_gender">Genere sconosciuto</string>
+    <string name="must_implement_the_listener">%s deve implementare il %s</string>
+    <string name="the_value">Il valore</string>
+    <string name="the_email">L\'e-mail</string>
+    <string name="the_first_name">Il nome</string>
+    <string name="the_last_name">Il cognome</string>
+    <string name="the_password">La password</string>
+    <string name="the_passwords">Le password</string>
+    <string name="the_new_password">La nuova password</string>
+    <string name="the_old_password">La vecchia password</string>
 </resources>

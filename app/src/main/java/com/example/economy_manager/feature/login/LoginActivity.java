@@ -79,7 +79,8 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void setOnClickListeners() {
-        binding.facebookLogInButton.setOnClickListener((final View view) -> onFacebookLogInButtonClicked());
+        binding.facebookLogInButton.setOnClickListener((final View view) ->
+                onFacebookLogInButtonClicked());
 
         binding.googleLogInButton.setOnClickListener((final View v) -> {
             googleOrFacebookInsideOnActivityResult = 1;
@@ -166,8 +167,10 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void setGoogleRequest() {
-        GoogleSignInOptions signInOptions = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestIdToken("236665611938-1kbke01jbeuq0pfa5n5n4ggt279qrkaj.apps.googleusercontent.com").requestEmail().build();
+        GoogleSignInOptions signInOptions =
+                new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                        .requestIdToken("236665611938-1kbke01jbeuq0pfa5n5n4ggt279qrkaj.apps.googleusercontent.com")
+                        .requestEmail().build();
         mGoogleSignInClient = GoogleSignIn.getClient(this, signInOptions);
     }
 
@@ -177,7 +180,8 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void firebaseAuthWithGoogle(GoogleSignInAccount account) {
-        final AuthCredential credential = GoogleAuthProvider.getCredential(account.getIdToken(), null);
+        final AuthCredential credential =
+                GoogleAuthProvider.getCredential(account.getIdToken(), null);
 
         MyCustomVariables.getFirebaseAuth()
                 .signInWithCredential(credential)
@@ -228,7 +232,9 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void goToTheMainScreen() {
-        MyCustomMethods.showShortMessage(this, getResources().getString(R.string.login_successful));
-        MyCustomMethods.signInWithFadeTransition(LoginActivity.this, MainScreenActivity.class);
+        MyCustomMethods.showShortMessage(this,
+                getResources().getString(R.string.login_successful));
+        MyCustomMethods.signInWithFadeTransition(LoginActivity.this,
+                MainScreenActivity.class);
     }
 }

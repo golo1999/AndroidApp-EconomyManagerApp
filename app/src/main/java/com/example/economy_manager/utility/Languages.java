@@ -1,6 +1,7 @@
 package com.example.economy_manager.utility;
 
 public final class Languages {
+
     private Languages() {
 
     }

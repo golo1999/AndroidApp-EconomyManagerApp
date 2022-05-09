@@ -63,14 +63,14 @@
     <string name="health">Salud</string>
     <string name="house">Casa</string>
     <string name="new_expense">Nuevo gasto</string>
-    <string name="email_already_exists">El Email ya existe</string>
-    <string name="email_and_password_should_not_be_empty">El Email no debe estar vacío</string>
+    <string name="email_already_exists">El correo electrónico ya existe</string>
+    <string name="email_and_password_should_not_be_empty">El correo electrónico no debe estar vacío</string>
     <string name="cancel">Cancelar</string>
     <string name="change_password">Cambia la contraseña</string>
     <string name="choose">Escoger</string>
     <string name="sign_out">Desconectar</string>
     <string name="balance">Equilibrar</string>
-    <string name="please_enter_your_password">Por favor, introduzca su contraseña</string>
+    <string name="please_enter_your_password">Por favor introduzca su contraseña</string>
     <string name="old_password">La vieja contraseña</string>
     <string name="new_password">La nueva contraseña</string>
     <string name="date">Fecha</string>
@@ -130,8 +130,8 @@
     <string name="last_week_expenses">Gastos de la semana pasada</string>
     <string name="last_ten_transactions">Últimas 10 transacciones</string>
     <string name="forgot_password">Se te olvidó tu contraseña</string>
-    <string name="incorrect_username_or_password">Nombre de usuario o contraseña incorrecta</string>
-    <string name="email_address_is_not_valid">El correo no es válido</string>
+    <string name="incorrect_username_or_password">El Nombre de usuario o contraseña incorrecta</string>
+    <string name="email_is_not_valid">El correo no es válido</string>
     <string name="please_verify_your_email">Verifique su correo electrónico</string>
     <string name="minute">Minuto</string>
     <string name="please_enter_a_valid_email">Por favor introduzca una dirección de correo electrónico válida</string>
@@ -173,7 +173,7 @@
     <string name="incomes">Ingresos</string>
     <string name="the_account_was_successfully_deleted">La cuenta fue eliminada con éxito</string>
     <string name="the_database_was_reset_successfully">La base de datos se restableció correctamente</string>
-    <string name="email_and_password_do_not_match">Correo electrónico y contraseña no coinciden</string>
+    <string name="email_and_password_do_not_match">El correo electrónico y la contraseña no coinciden</string>
     <string name="password_updated_successfully">Contraseña actualizada exitosamente</string>
     <string name="no_month_should_have_more_than_thirty_one_days">Ningún mes debe tener más de 31 días</string>
     <string name="and_between_spaces">&#32;y&#32;</string>
@@ -188,7 +188,7 @@
     <string name="press_again_exit">Presione de nuevo para salir</string>
     <string name="please_try_again">Inténtalo de nuevo</string>
     <string name="login_successful">Inicio de sesión exitoso</string>
-    <string name="facebook_authentication_failed">" Falló la autenticación de Facebook"</string>
+    <string name="facebook_authentication_failed">Falló la autenticación de Facebook</string>
     <string name="google_authentication_failed">Falló la autenticación de Google</string>
     <string name="country">País</string>
     <string name="gender">Género</string>
@@ -213,4 +213,13 @@
     <string name="income_added_successfully">Ingresos añadidos con éxito</string>
     <string name="unknown_country">País desconocido</string>
     <string name="unknown_gender">Género desconocido</string>
+    <string name="must_implement_the_listener">%s debe implementar el %s</string>
+    <string name="the_value">El valor</string>
+    <string name="the_email">El correo electrónico</string>
+    <string name="the_first_name">El primer nombre</string>
+    <string name="the_last_name">El apellido</string>
+    <string name="the_password">La contraseña</string>
+    <string name="the_passwords">Las contraseñas</string>
+    <string name="the_new_password">La nueva contraseña</string>
+    <string name="the_old_password">La antigua contraseña</string>
 </resources>

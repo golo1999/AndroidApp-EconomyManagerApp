@@ -51,7 +51,8 @@ public class EditPhotoActivity extends AppCompatActivity {
         if (requestCode == viewModel.getRequestId() &&
                 data != null &&
                 data.getData() != null) {
-            final int screenWidthPixels = (int) (0.75 * getResources().getDisplayMetrics().widthPixels);
+            final int screenWidthPixels =
+                    (int) (0.75 * getResources().getDisplayMetrics().widthPixels);
 
             viewModel.setImageUri(data.getData());
             binding.uploadedPhoto.setImageURI(viewModel.getImageUri());
@@ -80,12 +81,15 @@ public class EditPhotoActivity extends AppCompatActivity {
             return;
         }
 
-        if (MyCustomSharedPreferences.retrieveUserDetailsFromSharedPreferences(this) != null) {
-            viewModel.setUserDetails(MyCustomSharedPreferences.retrieveUserDetailsFromSharedPreferences(this));
+        if (MyCustomSharedPreferences.retrieveUserDetailsFromSharedPreferences(this)
+                != null) {
+            viewModel.setUserDetails(MyCustomSharedPreferences
+                    .retrieveUserDetailsFromSharedPreferences(this));
         }
 
         if (viewModel.getUserDetails() != null) {
-            binding.setIsDarkThemeEnabled(viewModel.getUserDetails().getApplicationSettings().isDarkThemeEnabled());
+            binding.setIsDarkThemeEnabled(viewModel.getUserDetails().getApplicationSettings()
+                    .isDarkThemeEnabled());
         }
     }
 
@@ -118,23 +122,29 @@ public class EditPhotoActivity extends AppCompatActivity {
                                     .setValue(String.valueOf(url));
 
                             final UserDetails userDetailsFromSharedPreferences =
-                                    MyCustomMethods.retrieveObjectFromSharedPreferences(EditPhotoActivity.this,
-                                            "currentUserDetails", UserDetails.class);
+                                    MyCustomMethods
+                                            .retrieveObjectFromSharedPreferences(EditPhotoActivity.this,
+                                                    "currentUserDetails", UserDetails.class);
 
                             // updating current user's photo url if it's not the same as before
                             if (userDetailsFromSharedPreferences != null) {
-                                if (!userDetailsFromSharedPreferences.getPersonalInformation().getPhotoURL()
-                                        .equals(String.valueOf(url))) {
+                                if (!userDetailsFromSharedPreferences.getPersonalInformation()
+                                        .getPhotoURL().equals(String.valueOf(url))) {
                                     userDetailsFromSharedPreferences.getPersonalInformation()
                                             .setPhotoURL(String.valueOf(url));
                                 }
 
-                                if (MyCustomMethods.objectExistsInSharedPreferences(EditPhotoActivity.this,
-                                        "currentUserDetails", UserDetails.class, userDetailsFromSharedPreferences)) {
-                                    MyCustomMethods.saveObjectToSharedPreferences(EditPhotoActivity.this,
-                                            userDetailsFromSharedPreferences, "currentUserDetails");
+                                if (MyCustomMethods
+                                        .objectExistsInSharedPreferences(EditPhotoActivity.this,
+                                                "currentUserDetails", UserDetails.class,
+                                                userDetailsFromSharedPreferences)) {
+                                    MyCustomMethods
+                                            .saveObjectToSharedPreferences(EditPhotoActivity.this,
+                                                    userDetailsFromSharedPreferences,
+                                                    "currentUserDetails");
 
-                                    MyCustomVariables.setUserDetails(userDetailsFromSharedPreferences);
+                                    MyCustomVariables
+                                            .setUserDetails(userDetailsFromSharedPreferences);
                                 }
                             }
 
@@ -145,17 +155,19 @@ public class EditPhotoActivity extends AppCompatActivity {
                         .addOnFailureListener((final Exception e) ->
                                 MyCustomMethods.showShortMessage(this, e.getMessage()))
                         .addOnProgressListener((final UploadTask.TaskSnapshot taskSnapshot) -> {
-                            final long taskSnapshotBytesTransferred = taskSnapshot.getBytesTransferred();
-
-                            final float taskSnapshotTotalByteCount = (float) taskSnapshot.getTotalByteCount();
-
-                            final float progress = 100 * taskSnapshotBytesTransferred / taskSnapshotTotalByteCount;
+                            final long taskSnapshotBytesTransferred =
+                                    taskSnapshot.getBytesTransferred();
+                            final float taskSnapshotTotalByteCount =
+                                    (float) taskSnapshot.getTotalByteCount();
+                            final float progress =
+                                    100 * taskSnapshotBytesTransferred / taskSnapshotTotalByteCount;
 
                             binding.progressBar.setProgress((int) progress);
                         });
             }
         } else {
-            MyCustomMethods.showShortMessage(this, getResources().getString(R.string.please_select_a_file_first));
+            MyCustomMethods.showShortMessage(this,
+                    getResources().getString(R.string.please_select_a_file_first));
         }
     }
 }

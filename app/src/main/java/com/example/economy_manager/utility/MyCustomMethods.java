@@ -30,6 +30,7 @@ import java.util.Locale;
 import java.util.Map;
 
 public final class MyCustomMethods {
+
     private MyCustomMethods() {
 
     }
@@ -156,10 +157,12 @@ public final class MyCustomMethods {
     public static void sortMapDescendingByValue(final @NonNull LinkedHashMap<Integer, Float> map) {
         final List<Map.Entry<Integer, Float>> sortedEntries = new ArrayList<>(map.entrySet());
 
-        sortedEntries.sort((final Map.Entry<Integer, Float> firstEntry, final Map.Entry<Integer, Float> secondEntry) ->
+        sortedEntries.sort((final Map.Entry<Integer, Float> firstEntry, final Map.Entry<Integer,
+                Float> secondEntry) ->
                 secondEntry.getValue().compareTo(firstEntry.getValue()));
         map.clear();
-        sortedEntries.forEach((final Map.Entry<Integer, Float> entry) -> map.put(entry.getKey(), entry.getValue()));
+        sortedEntries.forEach((final Map.Entry<Integer, Float> entry) -> map.put(entry.getKey(),
+                entry.getValue()));
 
     }
 
@@ -193,7 +196,8 @@ public final class MyCustomMethods {
             return 0;
         } else {
             // if the first or the last character is not a letter
-            if (!Character.isLetter(name.charAt(0)) || !Character.isLetter(name.charAt(name.length() - 1))) {
+            if (!Character.isLetter(name.charAt(0)) ||
+                    !Character.isLetter(name.charAt(name.length() - 1))) {
                 return -1;
             }
 
@@ -232,7 +236,8 @@ public final class MyCustomMethods {
                                                             @NonNull String key,
                                                             Class<T> tClass) {
         SharedPreferences preferences =
-                parentActivity.getSharedPreferences(MyCustomVariables.getSharedPreferencesFileName(), MODE_PRIVATE);
+                parentActivity.getSharedPreferences(MyCustomVariables
+                        .getSharedPreferencesFileName(), MODE_PRIVATE);
         Gson gson = new Gson();
         String json = preferences.getString(key, "");
 
@@ -243,7 +248,8 @@ public final class MyCustomMethods {
                                                          @NonNull T object,
                                                          @NonNull String key) {
         SharedPreferences preferences =
-                parentActivity.getSharedPreferences(MyCustomVariables.getSharedPreferencesFileName(), MODE_PRIVATE);
+                parentActivity.getSharedPreferences(MyCustomVariables
+                        .getSharedPreferencesFileName(), MODE_PRIVATE);
 
         SharedPreferences.Editor editor = preferences.edit();
         Gson gson = new Gson();

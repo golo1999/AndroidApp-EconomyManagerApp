@@ -10,6 +10,7 @@ import com.google.gson.Gson;
 import static android.content.Context.MODE_PRIVATE;
 
 public final class MyCustomSharedPreferences {
+
     private MyCustomSharedPreferences() {
 
     }

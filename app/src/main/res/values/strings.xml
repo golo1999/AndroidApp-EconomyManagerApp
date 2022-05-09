@@ -11,11 +11,13 @@
     <string name="choose">Choose</string>
     <string name="country">Country</string>
     <string name="currency">Currency</string>
+    <string name="custom_dialog_listener" translatable="false">CustomDialogListener</string>
     <string name="dark_theme">Dark theme</string>
     <string name="date">Date</string>
     <string name="day">Day</string>
     <string name="debt">Debt</string>
     <string name="delete_account">Delete account</string>
+    <string name="delete_dialog_listener" translatable="false">DeleteDialogListener</string>
     <string name="edit_photo">Edit photo</string>
     <string name="edit_profile">Edit profile</string>
     <string name="edit_specific_transaction">Edit a transaction</string>
@@ -48,8 +50,10 @@
     <string name="login">Login</string>
     <string name="login_successful">Login successful</string>
     <string name="minute">Minute</string>
+    <string name="money_spent_percentage_listener" translatable="false">MoneySpentPercentageListener</string>
     <string name="monthly_balance">Monthly balance</string>
     <string name="monthly_transactions">Monthly transactions</string>
+    <string name="must_implement_the_listener">%s must implement %s</string>
     <string name="new_expense">New expense</string>
     <string name="new_income">New income</string>
     <string name="new_password">New password</string>
@@ -91,6 +95,14 @@
     <string name="the_account_was_successfully_deleted">The account was successfully deleted</string>
     <string name="the_database_was_reset_successfully">The database was reset successfully</string>
     <string name="the_deletion_could_not_be_performed">The deletion could not be performed</string>
+    <string name="the_email">The email</string>
+    <string name="the_first_name">The first name</string>
+    <string name="the_last_name">The last name</string>
+    <string name="the_new_password">The new password</string>
+    <string name="the_old_password">The old password</string>
+    <string name="the_password">The password</string>
+    <string name="the_passwords">The passwords</string>
+    <string name="the_value">The value</string>
     <string name="time">Time</string>
     <string name="title">Title</string>
     <string name="top_five_expenses">Top 5 expenses</string>
@@ -166,12 +178,12 @@
     <!-- Errors -->
 
     <string name="contains_invalid_characters">%s contains invalid characters</string>
-    <string name="email_address_is_not_valid">Email address is not valid</string>
-    <string name="email_already_exists">Email already exists</string>
-    <string name="email_and_password_are_not_valid">Email and password are not valid</string>
-    <string name="email_and_password_do_not_match">Email and password do not match</string>
-    <string name="email_and_password_should_not_be_empty">Email and password should not be empty</string>
-    <string name="email_does_not_exist_in_the_database">Email does not exist in the database</string>
+    <string name="email_already_exists">The email already exists</string>
+    <string name="email_and_password_are_not_valid">The email and the password are not valid</string>
+    <string name="email_and_password_do_not_match">The email and the password do not match</string>
+    <string name="email_and_password_should_not_be_empty">The email and the password should not be empty</string>
+    <string name="email_does_not_exist_in_the_database">The email does not exist in the database</string>
+    <string name="email_is_not_valid">The email is not valid</string>
     <string name="facebook_authentication_failed">Facebook authentication failed</string>
     <string name="google_authentication_failed">Google authentication failed</string>
     <string name="incorrect_username_or_password">Incorrect username or password</string>

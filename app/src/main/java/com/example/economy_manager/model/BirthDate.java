@@ -13,7 +13,8 @@ public class BirthDate implements Serializable {
 
     public BirthDate() {
         // Required empty public constructor
-        this(LocalDate.now().getYear(), LocalDate.now().getMonthValue(), LocalDate.now().getDayOfMonth());
+        this(LocalDate.now().getYear(), LocalDate.now().getMonthValue(),
+                LocalDate.now().getDayOfMonth());
     }
 
     public BirthDate(final LocalDate date) {

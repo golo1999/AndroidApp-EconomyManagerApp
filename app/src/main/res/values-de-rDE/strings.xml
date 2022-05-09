@@ -65,8 +65,8 @@
     <string name="no_money_records_yet">Noch keine Geldaufzeichnungen</string>
     <string name="no_transactions_made_this_month">In diesem Monat wurden keine Transaktionen durchgeführt</string>
     <string name="no_transactions_made_this_year">In diesem Jahr wurden keine Transaktionen durchgeführt</string>
-    <string name="email_does_not_exist_in_the_database">E-Mail existiert nicht in der Datenbank</string>
-    <string name="email_address_is_not_valid">Email Adresse ist nicht gültig</string>
+    <string name="email_does_not_exist_in_the_database">Die E-Mail existiert nicht in der Datenbank</string>
+    <string name="email_is_not_valid">Die E-Mail ist nicht gültig</string>
     <string name="incorrect_username_or_password">Falscher Benutzername oder falsches Passwort</string>
     <string name="forgot_password">Passwort vergessen</string>
     <string name="last_week_expenses">Letzte Woche Ausgaben</string>
@@ -173,7 +173,7 @@
     <string name="edit_transaction_date">Transaktionsdatum bearbeiten</string>
     <string name="the_account_was_successfully_deleted">Das Konto wurde erfolgreich gelöscht</string>
     <string name="the_database_was_reset_successfully">Die Datenbank wurde erfolgreich zurückgesetzt</string>
-    <string name="email_and_password_do_not_match">Email und Passwort stimmen nicht überein</string>
+    <string name="email_and_password_do_not_match">Die E-Mail und das Passwort stimmen nicht überein</string>
     <string name="password_updated_successfully">Passwort erfolgreich aktualisiert</string>
     <string name="no_month_should_have_more_than_thirty_one_days">Kein Monat sollte mehr als 31 Tage haben</string>
     <string name="and_between_spaces">&#32;und&#32;</string>
@@ -213,4 +213,13 @@
     <string name="income_added_successfully">Einkommen erfolgreich hinzugefügt</string>
     <string name="unknown_gender">Unbekanntes Geschlecht</string>
     <string name="unknown_country">Unbekanntes Land</string>
+    <string name="must_implement_the_listener">%s muss %s implementieren</string>
+    <string name="the_value">Der Wert</string>
+    <string name="the_email">Die E-Mail</string>
+    <string name="the_first_name">Der Vorname</string>
+    <string name="the_last_name">Der Nachname</string>
+    <string name="the_password">Das Passwort</string>
+    <string name="the_passwords">Die Passwörter</string>
+    <string name="the_new_password">Das neue Passwort</string>
+    <string name="the_old_password">Das alte Passwort</string>
 </resources>
