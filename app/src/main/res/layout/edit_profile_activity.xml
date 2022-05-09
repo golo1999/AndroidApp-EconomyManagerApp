@@ -33,12 +33,13 @@
             android:layout_height="match_parent"
             android:fillViewport="true">
 
-            <androidx.constraintlayout.widget.ConstraintLayout
+            <androidx.appcompat.widget.LinearLayoutCompat
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@{isDarkThemeEnabled ? @color/primaryDark : @color/primaryLight}"
                 android:focusable="true"
                 android:focusableInTouchMode="true"
+                android:orientation="vertical"
                 tools:background="@color/primaryDark">
 
                 <include
@@ -51,24 +52,36 @@
                     app:titleColor="@{@color/primaryLight}"
                     app:titleText="@{@string/edit_profile}" />
 
-                <de.hdodenhof.circleimageview.CircleImageView
-                    android:id="@+id/photo"
-                    android:layout_width="0sp"
-                    android:layout_height="0sp"
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/photoContainer"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="30sp"
                     android:layout_marginTop="20sp"
-                    app:civ_border_width="10sp"
-                    app:layout_constraintDimensionRatio="1:1"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/topLayout"
-                    app:layout_constraintWidth_percent=".4"
-                    tools:src="@drawable/ic_person_dark" />
+                    android:layout_marginBottom="10sp"
+                    app:layout_constraintTop_toBottomOf="@id/topLayout">
+
+                    <de.hdodenhof.circleimageview.CircleImageView
+                        android:id="@+id/photo"
+                        android:layout_width="0sp"
+                        android:layout_height="0sp"
+                        app:civ_border_width="10sp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintDimensionRatio="1:1"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintWidth_percent=".5"
+                        tools:src="@drawable/ic_person_dark" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
 
                 <EditText
                     android:id="@+id/firstNameField"
-                    android:layout_width="0sp"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="20sp"
+                    android:layout_marginHorizontal="30sp"
+                    android:layout_marginVertical="10sp"
                     android:autofillHints="name"
                     android:background="@{isDarkThemeEnabled ? @drawable/ic_outlined_button_dark : @drawable/ic_outlined_button_light}"
                     android:drawableStart="@{isDarkThemeEnabled ? @drawable/ic_person_dark : @drawable/ic_person_light}"
@@ -83,7 +96,7 @@
                     android:textSize="18sp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/photo"
+                    app:layout_constraintTop_toBottomOf="@id/photoContainer"
                     app:layout_constraintWidth_percent=".8"
                     tools:background="@drawable/ic_outlined_button_dark"
                     tools:drawableStart="@drawable/ic_person_dark"
@@ -93,9 +106,10 @@
 
                 <EditText
                     android:id="@+id/lastNameField"
-                    android:layout_width="0sp"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="20sp"
+                    android:layout_marginHorizontal="30sp"
+                    android:layout_marginVertical="10sp"
                     android:autofillHints="name"
                     android:background="@{isDarkThemeEnabled ? @drawable/ic_outlined_button_dark : @drawable/ic_outlined_button_light}"
                     android:drawableStart="@{isDarkThemeEnabled ? @drawable/ic_person_dark : @drawable/ic_person_light}"
@@ -119,9 +133,10 @@
 
                 <EditText
                     android:id="@+id/phoneField"
-                    android:layout_width="0sp"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="20sp"
+                    android:layout_marginHorizontal="30sp"
+                    android:layout_marginVertical="10sp"
                     android:autofillHints="phone"
                     android:background="@{isDarkThemeEnabled ? @drawable/ic_outlined_button_dark : @drawable/ic_outlined_button_light}"
                     android:drawableStart="@{isDarkThemeEnabled ? @drawable/ic_phone_dark : @drawable/ic_phone_light}"
@@ -145,9 +160,10 @@
 
                 <EditText
                     android:id="@+id/websiteField"
-                    android:layout_width="0sp"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="20sp"
+                    android:layout_marginHorizontal="30sp"
+                    android:layout_marginVertical="10sp"
                     android:autofillHints="name"
                     android:background="@{isDarkThemeEnabled ? @drawable/ic_outlined_button_dark : @drawable/ic_outlined_button_light}"
                     android:drawableStart="@{isDarkThemeEnabled ? @drawable/ic_website_dark : @drawable/ic_website_light}"
@@ -171,9 +187,10 @@
 
                 <Spinner
                     android:id="@+id/countrySpinner"
-                    android:layout_width="0sp"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="20sp"
+                    android:layout_marginHorizontal="30sp"
+                    android:layout_marginVertical="10sp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/websiteField"
@@ -181,9 +198,10 @@
 
                 <Spinner
                     android:id="@+id/genderSpinner"
-                    android:layout_width="0sp"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="20sp"
+                    android:layout_marginHorizontal="30sp"
+                    android:layout_marginVertical="10sp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/countrySpinner"
@@ -191,9 +209,10 @@
 
                 <EditText
                     android:id="@+id/careerTitleField"
-                    android:layout_width="0sp"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="20sp"
+                    android:layout_marginHorizontal="30sp"
+                    android:layout_marginVertical="10sp"
                     android:autofillHints="name"
                     android:background="@{isDarkThemeEnabled ? @drawable/ic_outlined_button_dark : @drawable/ic_outlined_button_light}"
                     android:drawableStart="@{isDarkThemeEnabled ? @drawable/ic_business_dark : @drawable/ic_business_light}"
@@ -217,9 +236,11 @@
 
                 <Button
                     android:id="@+id/updateProfileButton"
-                    android:layout_width="0sp"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginVertical="20sp"
+                    android:layout_marginHorizontal="30sp"
+                    android:layout_marginTop="10sp"
+                    android:layout_marginBottom="20sp"
                     android:background="@{isDarkThemeEnabled ? @drawable/ic_outlined_button_dark : @drawable/ic_outlined_button_light}"
                     android:onClick="@{() -> viewModel.updateProfileHandler(activity)}"
                     android:padding="10sp"
@@ -228,7 +249,6 @@
                     android:textColor="@{isDarkThemeEnabled ? @color/secondaryDark : @color/quaternaryLight}"
                     android:textSize="18sp"
                     android:textStyle="bold"
-                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/careerTitleField"
@@ -236,7 +256,7 @@
                     tools:background="@drawable/ic_outlined_button_dark"
                     tools:textColor="@color/secondaryDark" />
 
-            </androidx.constraintlayout.widget.ConstraintLayout>
+            </androidx.appcompat.widget.LinearLayoutCompat>
 
         </ScrollView>
 
