@@ -28,6 +28,7 @@
                 android:drawableStart="@drawable/ic_password_light"
                 android:drawablePadding="10sp"
                 android:hint="@string/password"
+                android:importantForAutofill="no"
                 android:inputType="textPassword"
                 android:padding="10sp"
                 android:textColor="@color/quaternaryLight"

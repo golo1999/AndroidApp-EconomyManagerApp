@@ -67,14 +67,15 @@ public class AddExpenseActivity
         final int transactionCategoryIndex = Transaction.getIndexFromCategory(Types.
                 getTypeInEnglish(AddExpenseActivity.this,
                         String.valueOf(radioButton.getText()).trim()));
-        final Transaction newTransaction = !String.valueOf(binding.noteField.getText()).trim().isEmpty() ?
-                new Transaction(transactionCategoryIndex,
-                        0,
-                        String.valueOf(binding.noteField.getText()).trim(),
-                        String.valueOf(binding.valueField.getText()).trim()) :
-                new Transaction(transactionCategoryIndex,
-                        0,
-                        String.valueOf(binding.valueField.getText()).trim());
+        final Transaction newTransaction =
+                !String.valueOf(binding.noteField.getText()).trim().isEmpty() ?
+                        new Transaction(transactionCategoryIndex,
+                                0,
+                                String.valueOf(binding.noteField.getText()).trim(),
+                                String.valueOf(binding.valueField.getText()).trim()) :
+                        new Transaction(transactionCategoryIndex,
+                                0,
+                                String.valueOf(binding.valueField.getText()).trim());
         // setting transaction's time
         final LocalDate newTransactionDate = viewModel.getTransactionDate();
 
@@ -202,12 +203,13 @@ public class AddExpenseActivity
         // if the entered value is empty
         if (String.valueOf(binding.valueField.getText()).trim().isEmpty()) {
             binding.valueField.setError(getResources().getString(R.string.should_not_be_empty,
-                    getResources().getString(R.string.value)));
+                    getResources().getString(R.string.the_value)));
             return;
         }
         // if there was NOT any radio button checked or the user is not logged in
         if (selectedID == -1 || MyCustomVariables.getFirebaseAuth().getUid() == null) {
-            MyCustomMethods.showShortMessage(this, getResources().getString(R.string.please_select_an_option));
+            MyCustomMethods.showShortMessage(this,
+                    getResources().getString(R.string.please_select_an_option));
             return;
         }
 
@@ -244,12 +246,15 @@ public class AddExpenseActivity
             return;
         }
 
-        if (MyCustomSharedPreferences.retrieveUserDetailsFromSharedPreferences(this) != null) {
-            viewModel.setUserDetails(MyCustomSharedPreferences.retrieveUserDetailsFromSharedPreferences(this));
+        if (MyCustomSharedPreferences.retrieveUserDetailsFromSharedPreferences(this)
+                != null) {
+            viewModel.setUserDetails(MyCustomSharedPreferences
+                    .retrieveUserDetailsFromSharedPreferences(this));
         }
 
         if (viewModel.getUserDetails() != null) {
-            binding.setIsDarkThemeEnabled(viewModel.getUserDetails().getApplicationSettings().isDarkThemeEnabled());
+            binding.setIsDarkThemeEnabled(viewModel.getUserDetails().getApplicationSettings()
+                    .isDarkThemeEnabled());
         }
     }
 }

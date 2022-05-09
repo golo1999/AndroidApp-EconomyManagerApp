@@ -59,7 +59,8 @@ public class EditTransactionsViewModel extends ViewModel {
         return editTransactionsRecyclerViewAdapter;
     }
 
-    public void setEditTransactionsRecyclerViewAdapter(EditTransactionsRecyclerViewAdapter recyclerViewAdapter) {
+    public void setEditTransactionsRecyclerViewAdapter(EditTransactionsRecyclerViewAdapter
+                                                               recyclerViewAdapter) {
         this.editTransactionsRecyclerViewAdapter = recyclerViewAdapter;
     }
 
@@ -96,7 +97,8 @@ public class EditTransactionsViewModel extends ViewModel {
         transactionTypesList.add(context.getResources().getString(R.string.health).trim());
         transactionTypesList.add(context.getResources().getString(R.string.house).trim());
         transactionTypesList.add(context.getResources().getString(R.string.pets).trim());
-        transactionTypesList.add(context.getResources().getString(R.string.independent_sources).trim());
+        transactionTypesList.add(context.getResources()
+                .getString(R.string.independent_sources).trim());
         transactionTypesList.add(context.getResources().getString(R.string.salary).trim());
         transactionTypesList.add(context.getResources().getString(R.string.saving).trim());
         transactionTypesList.add(context.getResources().getString(R.string.sports).trim());
@@ -145,7 +147,8 @@ public class EditTransactionsViewModel extends ViewModel {
     public int getNearestMonthPositionFromSpinner(final Context context,
                                                   final @NonNull ArrayList<String> monthsList,
                                                   final int monthIndex) {
-        for (int listIteratorCounter = 0; listIteratorCounter < monthsList.size(); ++listIteratorCounter) {
+        for (int listIteratorCounter = 0; listIteratorCounter < monthsList.size();
+             ++listIteratorCounter) {
             final String listIteratorInEnglish = Months.getMonthInEnglish(context,
                     monthsList.get(listIteratorCounter));
 
@@ -178,12 +181,17 @@ public class EditTransactionsViewModel extends ViewModel {
             return;
         }
 
-        final String editedNote = !String.valueOf(getBinding().noteField.getText()).trim().isEmpty() ?
-                String.valueOf(getBinding().noteField.getText()).trim() : selectedTransaction.getNote();
-        final String editedValue = !String.valueOf(getBinding().valueField.getText()).trim().isEmpty() ?
-                String.valueOf(getBinding().valueField.getText()).trim() : selectedTransaction.getValue();
+        final String editedNote =
+                !String.valueOf(getBinding().noteField.getText()).trim().isEmpty() ?
+                        String.valueOf(getBinding().noteField.getText()).trim() :
+                        selectedTransaction.getNote();
+        final String editedValue =
+                !String.valueOf(getBinding().valueField.getText()).trim().isEmpty() ?
+                        String.valueOf(getBinding().valueField.getText()).trim() :
+                        selectedTransaction.getValue();
         final int parsedCategoryIndex = Transaction.getIndexFromCategory(Types.
-                getTypeInEnglish(activity, String.valueOf(getBinding().typeSpinner.getSelectedItem()).trim()));
+                getTypeInEnglish(activity,
+                        String.valueOf(getBinding().typeSpinner.getSelectedItem()).trim()));
         final int editedCategoryIndex = parsedCategoryIndex >= 0 && parsedCategoryIndex <= 18 &&
                 parsedCategoryIndex != selectedTransaction.getCategory() ?
                 parsedCategoryIndex : selectedTransaction.getCategory();
@@ -212,7 +220,8 @@ public class EditTransactionsViewModel extends ViewModel {
                 selectedHour,
                 selectedMinute,
                 selectedSecond);
-        final int editedCategoryType = (editedCategoryIndex >= 0 && editedCategoryIndex <= 3) ? 1 : 0;
+        final int editedCategoryType =
+                (editedCategoryIndex >= 0 && editedCategoryIndex <= 3) ? 1 : 0;
         final Transaction editedTransaction = new Transaction(selectedTransaction.getId(),
                 editedCategoryIndex, editedTime, editedCategoryType, editedNote, editedValue);
 
@@ -223,7 +232,8 @@ public class EditTransactionsViewModel extends ViewModel {
             return;
         }
 
-        getEditTransactionsRecyclerViewAdapter().notifyItemChanged(getSelectedTransactionListPosition());
+        getEditTransactionsRecyclerViewAdapter()
+                .notifyItemChanged(getSelectedTransactionListPosition());
     }
 
     public void onDateTextClickedInFragment(final FragmentManager fragmentManager) {
@@ -232,7 +242,8 @@ public class EditTransactionsViewModel extends ViewModel {
         final int selectedTransactionDay = getSelectedTransaction().getTime().getDay();
 
         final LocalDate selectedTransactionDate =
-                LocalDate.of(selectedTransactionYear, selectedTransactionMonth, selectedTransactionDay);
+                LocalDate.of(selectedTransactionYear, selectedTransactionMonth,
+                        selectedTransactionDay);
 
         new DatePickerFragment(selectedTransactionDate).show(fragmentManager, "date_picker");
     }
@@ -253,7 +264,8 @@ public class EditTransactionsViewModel extends ViewModel {
         final int selectedTransactionSecond = getSelectedTransaction().getTime().getSecond();
 
         final LocalTime selectedTransactionTime =
-                LocalTime.of(selectedTransactionHour, selectedTransactionMinute, selectedTransactionSecond);
+                LocalTime.of(selectedTransactionHour, selectedTransactionMinute,
+                        selectedTransactionSecond);
 
         new TimePickerFragment(selectedTransactionTime).show(fragmentManager, "time_picker");
     }
@@ -288,11 +300,14 @@ public class EditTransactionsViewModel extends ViewModel {
         boolean hasBeenModified = false;
 
         if ((initialTransaction.getNote() != null &&
-                !String.valueOf(getBinding().noteField.getText()).trim().equals(initialTransaction.getNote().trim()) &&
+                !String.valueOf(getBinding().noteField.getText()).trim()
+                        .equals(initialTransaction.getNote().trim()) &&
                 !String.valueOf(getBinding().noteField.getText()).trim().isEmpty()) ||
-                (initialTransaction.getNote() == null && !String.valueOf(getBinding().noteField.getText()).trim().isEmpty())) {
-            final String editedNote = !String.valueOf(getBinding().noteField.getText()).trim().isEmpty() ?
-                    String.valueOf(getBinding().noteField.getText()).trim() : null;
+                (initialTransaction.getNote() == null &&
+                        !String.valueOf(getBinding().noteField.getText()).trim().isEmpty())) {
+            final String editedNote =
+                    !String.valueOf(getBinding().noteField.getText()).trim().isEmpty() ?
+                            String.valueOf(getBinding().noteField.getText()).trim() : null;
 
             initialTransaction.setNote(editedNote);
             hasBeenModified = true;
@@ -321,11 +336,13 @@ public class EditTransactionsViewModel extends ViewModel {
         final String initialCategoryName = Types.getTranslatedType(activity,
                 Transaction.getTypeFromIndexInEnglish(initialTransaction.getCategory()));
 
-        final String selectedCategoryName = String.valueOf(getBinding().typeSpinner.getSelectedItem()).trim();
+        final String selectedCategoryName =
+                String.valueOf(getBinding().typeSpinner.getSelectedItem()).trim();
 
         if (initialCategoryName != null && !initialCategoryName.equals(selectedCategoryName)) {
             final int editedCategory =
-                    Transaction.getIndexFromCategory(Types.getTypeInEnglish(activity, selectedCategoryName));
+                    Transaction.getIndexFromCategory(Types.getTypeInEnglish(activity,
+                            selectedCategoryName));
             final int editedType = editedCategory >= 0 && editedCategory <= 3 ? 1 : 0;
 
             initialTransaction.setCategory(editedCategory);

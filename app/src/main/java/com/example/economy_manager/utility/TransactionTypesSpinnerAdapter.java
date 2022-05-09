@@ -32,7 +32,8 @@ public class TransactionTypesSpinnerAdapter extends ArrayAdapter<String> {
         final View dropDownView = super.getDropDownView(position, convertView, parent);
         final boolean isDarkThemeEnabled = MyCustomVariables.getUserDetails() != null ?
                 MyCustomVariables.getUserDetails().getApplicationSettings().isDarkThemeEnabled() :
-                MyCustomVariables.getDefaultUserDetails().getApplicationSettings().isDarkThemeEnabled();
+                MyCustomVariables.getDefaultUserDetails().getApplicationSettings()
+                        .isDarkThemeEnabled();
 
         // centering all spinner's items' text
         ((TextView) dropDownView).setGravity(Gravity.CENTER);

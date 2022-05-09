@@ -67,7 +67,8 @@ public class MonthlyBalanceActivity extends AppCompatActivity {
     }
 
     private void setUserDetails() {
-        viewModel.setUserDetails(MyCustomSharedPreferences.retrieveUserDetailsFromSharedPreferences(this));
+        viewModel.setUserDetails(MyCustomSharedPreferences
+                .retrieveUserDetailsFromSharedPreferences(this));
     }
 
     private void setIncomesAndExpensesInParent() {
@@ -81,7 +82,8 @@ public class MonthlyBalanceActivity extends AppCompatActivity {
                     @Override
                     public void onDataChange(final @NonNull DataSnapshot snapshot) {
                         final String currencySymbol = viewModel.getUserDetails() != null ?
-                                viewModel.getUserDetails().getApplicationSettings().getCurrencySymbol() :
+                                viewModel.getUserDetails().getApplicationSettings()
+                                        .getCurrencySymbol() :
                                 MyCustomMethods.getCurrencySymbol();
                         final ArrayList<Transaction> transactionsList = new ArrayList<>();
 
@@ -95,23 +97,29 @@ public class MonthlyBalanceActivity extends AppCompatActivity {
 
                         for (final DataSnapshot databaseTransaction :
                                 snapshot.child("personalTransactions").getChildren()) {
-                            final Transaction transaction = databaseTransaction.getValue(Transaction.class);
+                            final Transaction transaction =
+                                    databaseTransaction.getValue(Transaction.class);
 
                             if (transaction != null && transaction.getTime() != null &&
                                     transaction.getTime().getYear() == LocalDate.now().getYear() &&
-                                    transaction.getTime().getMonth() == LocalDate.now().getMonthValue()) {
+                                    transaction.getTime().getMonth() ==
+                                            LocalDate.now().getMonthValue()) {
                                 transactionsList.add(transaction);
 
-                                if (viewModel.checkIfDayCanBeAddedToList(daysList, transaction.getTime().getDay())) {
+                                if (viewModel.checkIfDayCanBeAddedToList(daysList,
+                                        transaction.getTime().getDay())) {
                                     daysList.add(transaction.getTime().getDay());
                                 }
                             }
                         }
 
                         // sorting the list by value descending
-                        transactionsList.sort((final Transaction firstTransaction, final Transaction secondTransaction) ->
-                                Float.compare(Float.parseFloat(String.valueOf(secondTransaction.getValue())),
-                                        Float.parseFloat(String.valueOf(firstTransaction.getValue()))));
+                        transactionsList.sort((final Transaction firstTransaction,
+                                               final Transaction secondTransaction) ->
+                                Float.compare(Float.parseFloat(String
+                                                .valueOf(secondTransaction.getValue())),
+                                        Float.parseFloat(String
+                                                .valueOf(firstTransaction.getValue()))));
                         daysList.sort(Collections.reverseOrder());
 
                         // setting the balance for each day from the list
@@ -122,7 +130,8 @@ public class MonthlyBalanceActivity extends AppCompatActivity {
                             float dateTotalExpense = 0f;
 
                             final String dateTranslated = viewModel
-                                    .getDateTranslated(MonthlyBalanceActivity.this, dayFromDaysList);
+                                    .getDateTranslated(MonthlyBalanceActivity.this,
+                                            dayFromDaysList);
 
                             final ConstraintLayout dayAndSumLayout =
                                     (ConstraintLayout) View.inflate(MonthlyBalanceActivity.this,
@@ -139,11 +148,14 @@ public class MonthlyBalanceActivity extends AppCompatActivity {
                             dayText.setTextSize(25);
 
                             dayText.setTextColor(viewModel.getUserDetails() == null ||
-                                    viewModel.getUserDetails().getApplicationSettings().isDarkThemeEnabled()
-                                    ? getColor(R.color.secondaryDark) : getColor(R.color.secondaryLight));
+                                    viewModel.getUserDetails().getApplicationSettings()
+                                            .isDarkThemeEnabled() ?
+                                    getColor(R.color.secondaryDark) :
+                                    getColor(R.color.secondaryLight));
 
                             for (final Transaction transactionsListIterator : transactionsList) {
-                                if (dayFromDaysList == transactionsListIterator.getTime().getDay()) {
+                                if (dayFromDaysList ==
+                                        transactionsListIterator.getTime().getDay()) {
                                     if (transactionsListIterator.getType() == 1) {
                                         dateTotalIncome += Float
                                                 .parseFloat(transactionsListIterator.getValue());
@@ -162,23 +174,29 @@ public class MonthlyBalanceActivity extends AppCompatActivity {
                                     final TextView valueText = transactionLayout
                                             .findViewById(R.id.monthly_balance_relative_layout_value);
 
-                                    typeText.setText(Types.getTranslatedType(MonthlyBalanceActivity.this,
-                                            String.valueOf(Transaction
-                                                    .getTypeFromIndexInEnglish(transactionsListIterator
-                                                            .getCategory()))));
+                                    typeText.setText(Types
+                                            .getTranslatedType(MonthlyBalanceActivity.this,
+                                                    String.valueOf(Transaction
+                                                            .getTypeFromIndexInEnglish(transactionsListIterator
+                                                                    .getCategory()))));
 
                                     typeText.setTextColor(viewModel.getUserDetails() == null ||
-                                            viewModel.getUserDetails().getApplicationSettings().isDarkThemeEnabled() ?
-                                            getColor(R.color.tertiaryDark) : getColor(R.color.quaternaryLight));
+                                            viewModel.getUserDetails().getApplicationSettings()
+                                                    .isDarkThemeEnabled() ?
+                                            getColor(R.color.tertiaryDark) :
+                                            getColor(R.color.quaternaryLight));
                                     valueText.setTextColor(viewModel.getUserDetails() == null ||
-                                            !viewModel.getUserDetails().getApplicationSettings().isDarkThemeEnabled() ?
+                                            !viewModel.getUserDetails().getApplicationSettings()
+                                                    .isDarkThemeEnabled() ?
                                             Color.BLACK : Color.WHITE);
 
                                     typeText.setTextSize(19);
 
-                                    String text = Locale.getDefault().getDisplayLanguage().equals("English") ?
+                                    String text = Locale.getDefault().getDisplayLanguage()
+                                            .equals("English") ?
                                             currencySymbol + transactionsListIterator.getValue() :
-                                            transactionsListIterator.getValue() + " " + currencySymbol;
+                                            transactionsListIterator.getValue() + " " +
+                                                    currencySymbol;
 
                                     text = transactionsListIterator.getType() == 1 ?
                                             "+" + text : "-" + text;
@@ -193,7 +211,8 @@ public class MonthlyBalanceActivity extends AppCompatActivity {
                             final String textForTotalSum = Locale.getDefault().getDisplayLanguage()
                                     .equals("English") ?
                                     currencySymbol + Math.abs(dateTotalIncome - dateTotalExpense) :
-                                    Math.abs(dateTotalIncome - dateTotalExpense) + " " + currencySymbol;
+                                    Math.abs(dateTotalIncome - dateTotalExpense) + " " +
+                                            currencySymbol;
 
                             totalSumText.setText(textForTotalSum);
                             totalSumText.setTextSize(25);
@@ -217,7 +236,8 @@ public class MonthlyBalanceActivity extends AppCompatActivity {
 
         final boolean darkThemeEnabled = viewModel.getUserDetails() != null ?
                 viewModel.getUserDetails().getApplicationSettings().isDarkThemeEnabled() :
-                MyCustomVariables.getDefaultUserDetails().getApplicationSettings().isDarkThemeEnabled();
+                MyCustomVariables.getDefaultUserDetails().getApplicationSettings()
+                        .isDarkThemeEnabled();
 
         MyCustomVariables.getDatabaseReference()
                 .child(MyCustomVariables.getFirebaseAuth().getUid())
@@ -231,11 +251,15 @@ public class MonthlyBalanceActivity extends AppCompatActivity {
 
                             for (final DataSnapshot transaction :
                                     snapshot.child("personalTransactions").getChildren()) {
-                                final Transaction databaseTransaction = transaction.getValue(Transaction.class);
+                                final Transaction databaseTransaction =
+                                        transaction.getValue(Transaction.class);
 
-                                if (databaseTransaction != null && databaseTransaction.getTime() != null &&
-                                        databaseTransaction.getTime().getYear() == LocalDate.now().getYear() &&
-                                        databaseTransaction.getTime().getMonth() == LocalDate.now().getMonthValue()) {
+                                if (databaseTransaction != null &&
+                                        databaseTransaction.getTime() != null &&
+                                        databaseTransaction.getTime().getYear() ==
+                                                LocalDate.now().getYear() &&
+                                        databaseTransaction.getTime().getMonth() ==
+                                                LocalDate.now().getMonthValue()) {
                                     ++numberOfCurrentMonthTransactions;
                                     break;
                                 }

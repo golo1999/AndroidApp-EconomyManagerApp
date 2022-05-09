@@ -52,7 +52,8 @@ public class LastTenTransactionsFragment extends Fragment {
     public View onCreateView(final @NonNull LayoutInflater inflater,
                              final ViewGroup container,
                              final Bundle savedInstanceState) {
-        final View v = inflater.inflate(R.layout.last_ten_transactions_fragment, container, false);
+        final View v = inflater.inflate(R.layout.last_ten_transactions_fragment, container,
+                false);
 
         setVariables(v);
 
@@ -66,7 +67,8 @@ public class LastTenTransactionsFragment extends Fragment {
     }
 
     private void setVariables(final @NonNull View v) {
-        viewModel = new ViewModelProvider((ViewModelStoreOwner) requireContext()).get(MainScreenViewModel.class);
+        viewModel = new ViewModelProvider((ViewModelStoreOwner) requireContext())
+                .get(MainScreenViewModel.class);
         mainLayout = v.findViewById(R.id.mainLayout);
     }
 
@@ -85,7 +87,8 @@ public class LastTenTransactionsFragment extends Fragment {
                     public void onDataChange(final @NonNull DataSnapshot snapshot) {
                         final ArrayList<Transaction> transactionsList = new ArrayList<>();
                         final String currencySymbol = viewModel.getUserDetails() != null ?
-                                viewModel.getUserDetails().getApplicationSettings().getCurrencySymbol() :
+                                viewModel.getUserDetails().getApplicationSettings()
+                                        .getCurrencySymbol() :
                                 MyCustomMethods.getCurrencySymbol();
 
                         if (snapshot.exists() &&
@@ -93,16 +96,18 @@ public class LastTenTransactionsFragment extends Fragment {
                                 snapshot.child("personalTransactions").hasChildren()) {
                             for (DataSnapshot transactionIterator :
                                     snapshot.child("personalTransactions").getChildren()) {
-                                final Transaction transaction = transactionIterator.getValue(Transaction.class);
+                                final Transaction transaction =
+                                        transactionIterator.getValue(Transaction.class);
 
                                 if (transaction != null && transaction.getTime() != null &&
-                                        transaction.getTime().getYear() == LocalDate.now().getYear() &&
-                                        transaction.getTime().getMonth() == LocalDate.now().getMonthValue()) {
+                                        transaction.getTime().getYear() ==
+                                                LocalDate.now().getYear() &&
+                                        transaction.getTime().getMonth() ==
+                                                LocalDate.now().getMonthValue()) {
                                     transactionsList.add(transaction);
                                 }
                             }
                         }
-
                         // displaying the list on the screen
                         showLastTransactions(mainLayout, transactionsList, currencySymbol);
                     }
@@ -122,8 +127,8 @@ public class LastTenTransactionsFragment extends Fragment {
         mainLayout.removeAllViews();
 
         if (transactionsList.size() == 0) {
-            showNoTransactionsLayout(mainLayout,
-                    requireContext().getResources().getString(R.string.no_transactions_made_this_month));
+            showNoTransactionsLayout(mainLayout, requireContext().getResources()
+                    .getString(R.string.no_transactions_made_this_month));
 
             return;
         }
@@ -153,11 +158,14 @@ public class LastTenTransactionsFragment extends Fragment {
             final TextView valueFromChildLayout =
                     childLayout.findViewById(R.id.transactionValue);
 
-            final String valueWithCurrency = Locale.getDefault().getDisplayLanguage().equals("English") ?
-                    currencySymbol + transaction.getValue() : transaction.getValue() + " " + currencySymbol;
+            final String valueWithCurrency =
+                    Locale.getDefault().getDisplayLanguage().equals("English") ?
+                            currencySymbol + transaction.getValue() :
+                            transaction.getValue() + " " + currencySymbol;
 
             final String translatedType = Types.getTranslatedType(requireContext(),
-                    String.valueOf(Transaction.getTypeFromIndexInEnglish(transaction.getCategory())));
+                    String.valueOf(Transaction.getTypeFromIndexInEnglish(transaction
+                            .getCategory())));
 
             valueFromChildLayout.setTextColor(transaction.getType() == 1 ?
                     requireContext().getColor(R.color.secondaryLight) :
@@ -181,8 +189,9 @@ public class LastTenTransactionsFragment extends Fragment {
     private void showNoTransactionsLayout(final LinearLayout mainLayout,
                                           final String message) {
         final TextView noTransactions = new TextView(getContext());
-        final LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
-                ViewGroup.LayoutParams.WRAP_CONTENT);
+        final LinearLayout.LayoutParams params =
+                new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
+                        ViewGroup.LayoutParams.WRAP_CONTENT);
 
         params.setMargins(0, 20, 0, 20);
 

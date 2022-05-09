@@ -205,38 +205,38 @@ public class EditProfileViewModel extends AndroidViewModel {
             // first name input errors
             if (enteredFirstName.trim().isEmpty()) {
                 final String error = activity.getResources().getString(R.string.should_not_be_empty,
-                        activity.getResources().getString(R.string.first_name));
+                        activity.getResources().getString(R.string.the_first_name));
 
                 binding.firstNameField.setError(error);
             } else if (MyCustomMethods.nameIsValid(enteredFirstName.trim()) == 0) {
                 final String error =
                         activity.getResources().getString(R.string.should_have_at_least_characters,
-                                activity.getResources().getString(R.string.first_name), 2);
+                                activity.getResources().getString(R.string.the_first_name), 2);
 
                 binding.firstNameField.setError(error);
             } else if (MyCustomMethods.nameIsValid(enteredFirstName.trim()) == -1) {
                 final String error =
                         activity.getResources().getString(R.string.contains_invalid_characters,
-                                activity.getResources().getString(R.string.first_name));
+                                activity.getResources().getString(R.string.the_first_name));
 
                 binding.firstNameField.setError(error);
             }
             // last name input errors
             if (enteredLastName.trim().isEmpty()) {
                 final String error = activity.getResources().getString(R.string.should_not_be_empty,
-                        activity.getResources().getString(R.string.last_name));
+                        activity.getResources().getString(R.string.the_last_name));
 
                 binding.lastNameField.setError(error);
             } else if (MyCustomMethods.nameIsValid(enteredLastName.trim()) == 0) {
                 final String error =
                         activity.getResources().getString(R.string.should_have_at_least_characters,
-                                activity.getResources().getString(R.string.last_name), 2);
+                                activity.getResources().getString(R.string.the_last_name), 2);
 
                 binding.lastNameField.setError(error);
             } else if (MyCustomMethods.nameIsValid(enteredLastName.trim()) == -1) {
                 final String error =
                         activity.getResources().getString(R.string.contains_invalid_characters,
-                                activity.getResources().getString(R.string.last_name));
+                                activity.getResources().getString(R.string.the_last_name));
 
                 binding.lastNameField.setError(error);
             }

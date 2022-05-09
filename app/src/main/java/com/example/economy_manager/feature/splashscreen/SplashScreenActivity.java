@@ -19,6 +19,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
 
 public class SplashScreenActivity extends AppCompatActivity {
+
     private SplashScreenActivityBinding binding;
     private SplashScreenViewModel viewModel;
     private final LogoLauncher launcher = new LogoLauncher();
@@ -59,8 +60,9 @@ public class SplashScreenActivity extends AppCompatActivity {
                                         return;
                                     }
 
-                                    MyCustomMethods.saveObjectToSharedPreferences(SplashScreenActivity.this,
-                                            details, "currentUserDetails");
+                                    MyCustomMethods
+                                            .saveObjectToSharedPreferences(SplashScreenActivity.this,
+                                                    details, "currentUserDetails");
 
 
                                     final UserDetails retrievedUserDetails = MyCustomMethods.

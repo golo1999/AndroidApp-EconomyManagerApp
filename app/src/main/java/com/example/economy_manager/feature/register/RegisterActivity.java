@@ -12,6 +12,7 @@ import com.example.economy_manager.utility.MyCustomMethods;
 import com.example.economy_manager.utility.MyCustomVariables;
 
 public class RegisterActivity extends AppCompatActivity {
+
     private RegisterActivityBinding binding;
     private RegisterViewModel viewModel;
 

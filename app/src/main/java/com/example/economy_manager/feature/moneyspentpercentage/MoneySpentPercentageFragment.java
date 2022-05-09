@@ -39,7 +39,7 @@ public class MoneySpentPercentageFragment extends Fragment {
     private MainScreenViewModel viewModel;
     private UserDetails userDetails;
     private final LinkedHashMap<Integer, Float> transactionTypesMap = new LinkedHashMap<>();
-    private IMoneySpentPercentageListener listener;
+    private MoneySpentPercentageListener listener;
 
     public MoneySpentPercentageFragment() {
         // Required empty public constructor
@@ -54,7 +54,7 @@ public class MoneySpentPercentageFragment extends Fragment {
         return fragment;
     }
 
-    public interface IMoneySpentPercentageListener {
+    public interface MoneySpentPercentageListener {
         void onEmptyPieChart();
 
         void onNotEmptyPieChart();
@@ -65,9 +65,11 @@ public class MoneySpentPercentageFragment extends Fragment {
         super.onAttach(context);
 
         try {
-            listener = (IMoneySpentPercentageListener) context;
+            listener = (MoneySpentPercentageListener) context;
         } catch (ClassCastException e) {
-            throw new ClassCastException(context.toString() + " " + "must implement MoneySpentPercentageListener");
+            throw new ClassCastException(context.getResources()
+                    .getString(R.string.must_implement_the_listener, context, context.getResources()
+                            .getString(R.string.money_spent_percentage_listener)));
         }
     }
 
@@ -96,7 +98,8 @@ public class MoneySpentPercentageFragment extends Fragment {
                                    final int categoryPercentage,
                                    final int categoryColor) {
         final LinearLayout categoryLayout =
-                viewModel.getPieChartDetail(requireContext(), categoryIndex, categoryPercentage, categoryColor);
+                viewModel.getPieChartDetail(requireContext(), categoryIndex, categoryPercentage,
+                        categoryColor);
 
         binding.detailsLayout.addView(categoryLayout);
     }
@@ -126,11 +129,8 @@ public class MoneySpentPercentageFragment extends Fragment {
 
                         final Iterable<DataSnapshot> personalTransactions =
                                 snapshot.child("personalTransactions").getChildren();
-
                         final int currentMonthIndex = LocalDate.now().getMonthValue();
-
                         final int currentYear = LocalDate.now().getYear();
-
                         final AtomicReference<Float> currentMonthExpensesTotal =
                                 new AtomicReference<>(0f);
 
@@ -138,46 +138,53 @@ public class MoneySpentPercentageFragment extends Fragment {
                             transactionTypesMap.clear();
                         }
 
-                        personalTransactions.forEach((final DataSnapshot personalTransactionIterator) -> {
-                            final Transaction personalTransaction =
-                                    personalTransactionIterator.getValue(Transaction.class);
+                        personalTransactions
+                                .forEach((final DataSnapshot transactionsIterator) -> {
+                                    final Transaction transaction =
+                                            transactionsIterator.getValue(Transaction.class);
 
-                            // if the transaction is a current month & year expense
-                            if (personalTransaction != null &&
-                                    personalTransaction.getType() == 0 &&
-                                    personalTransaction.getTime().getYear() == currentYear &&
-                                    personalTransaction.getTime().getMonth() == currentMonthIndex) {
-                                final int personalTransactionCategory = personalTransaction.getCategory();
+                                    // if the transaction is a current month & year expense
+                                    if (transaction != null && transaction.getType() == 0 &&
+                                            transaction.getTime().getYear() == currentYear &&
+                                            transaction.getTime().getMonth() == currentMonthIndex) {
+                                        final int transactionCategory =
+                                                transaction.getCategory();
 
-                                currentMonthExpensesTotal.updateAndGet((final Float value) ->
-                                        value + Float.parseFloat(personalTransaction.getValue()));
+                                        currentMonthExpensesTotal.updateAndGet((final Float value) ->
+                                                value + Float
+                                                        .parseFloat(transaction.getValue()));
 
-                                // updating current category's total value if it already exists
-                                if (!transactionTypesMap.containsKey(personalTransactionCategory)) {
-                                    final float personalTransactionValue =
-                                            Float.parseFloat(String.format(Locale.getDefault(),
-                                                    "%.0f",
-                                                    Float.parseFloat(personalTransaction.getValue())));
+                                        // updating current category's total value
+                                        // if it already exists
+                                        if (!transactionTypesMap
+                                                .containsKey(transactionCategory)) {
+                                            final float transactionValue =
+                                                    Float.parseFloat(String
+                                                            .format(Locale.getDefault(), "%.0f",
+                                                                    Float.parseFloat(transaction
+                                                                            .getValue())));
 
-                                    transactionTypesMap.put(personalTransactionCategory,
-                                            personalTransactionValue);
-                                }
-                                // if the current category doesn't exist yet
-                                else {
-                                    final float personalTransactionCategoryCurrentSum =
-                                            Float.parseFloat(String.valueOf(transactionTypesMap
-                                                    .get(personalTransactionCategory)));
+                                            transactionTypesMap.put(transactionCategory,
+                                                    transactionValue);
+                                        }
+                                        // if the current category doesn't exist yet
+                                        else {
+                                            final float currentSumOfCurrentCategory =
+                                                    Float.parseFloat(String.valueOf(transactionTypesMap
+                                                            .get(transactionCategory)));
 
-                                    final float personalTransactionValue =
-                                            Float.parseFloat(String.format(Locale.getDefault(),
-                                                    "%.0f",
-                                                    Float.parseFloat(personalTransaction.getValue())));
+                                            final float transactionValue =
+                                                    Float.parseFloat(String
+                                                            .format(Locale.getDefault(), "%.0f",
+                                                                    Float.parseFloat(transaction
+                                                                            .getValue())));
 
-                                    transactionTypesMap.put(personalTransactionCategory,
-                                            personalTransactionCategoryCurrentSum + personalTransactionValue);
-                                }
-                            }
-                        });
+                                            transactionTypesMap.put(transactionCategory,
+                                                    currentSumOfCurrentCategory +
+                                                            transactionValue);
+                                        }
+                                    }
+                                });
 
                         if (transactionTypesMap.isEmpty()) {
                             listener.onEmptyPieChart();
@@ -210,7 +217,8 @@ public class MoneySpentPercentageFragment extends Fragment {
                                       final ViewGroup container) {
         binding = DataBindingUtil.inflate(inflater, R.layout.money_spent_percentage_fragment,
                 container, false);
-        viewModel = new ViewModelProvider((ViewModelStoreOwner) requireContext()).get(MainScreenViewModel.class);
+        viewModel = new ViewModelProvider((ViewModelStoreOwner) requireContext())
+                .get(MainScreenViewModel.class);
     }
 
     private void setPieChartData(final LinkedHashMap<Integer, Float> transactionTypesMap,
@@ -226,7 +234,8 @@ public class MoneySpentPercentageFragment extends Fragment {
         transactionTypesMap.forEach((final Integer key, final Float value) -> {
             final int categoryPercentage = (int) (100 * (value / totalMonthlyExpenses));
             final int categoryColor = viewModel.getPieChartCategoryColor(requireContext(), key);
-            final PieModel pieSlice = new PieModel("category" + key, categoryPercentage, categoryColor);
+            final PieModel pieSlice =
+                    new PieModel("category" + key, categoryPercentage, categoryColor);
 
             binding.pieChart.addPieSlice(pieSlice);
             transactionTypesIndex.getAndIncrement();
@@ -238,6 +247,7 @@ public class MoneySpentPercentageFragment extends Fragment {
     }
 
     private void setUserDetails() {
-        userDetails = MyCustomSharedPreferences.retrieveUserDetailsFromSharedPreferences(requireContext());
+        userDetails = MyCustomSharedPreferences
+                .retrieveUserDetailsFromSharedPreferences(requireContext());
     }
 }

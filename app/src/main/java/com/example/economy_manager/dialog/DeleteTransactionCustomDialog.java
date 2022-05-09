@@ -45,8 +45,8 @@ public class DeleteTransactionCustomDialog extends DialogFragment {
 
         builder.setMessage(R.string.are_you_sure_you_want_to_delete_this_transaction)
                 .setPositiveButton(R.string.ok, (dialog, id) ->
-                        listener.onDialogPositiveClick(DeleteTransactionCustomDialog.this, transactionsList,
-                                adapter, positionInList))
+                        listener.onDialogPositiveClick(DeleteTransactionCustomDialog.this,
+                                transactionsList, adapter, positionInList))
                 .setNegativeButton(R.string.cancel, (dialog, id) ->
                         listener.onDialogNegativeClick(DeleteTransactionCustomDialog.this));
 
@@ -60,7 +60,9 @@ public class DeleteTransactionCustomDialog extends DialogFragment {
         try {
             listener = (DeleteDialogListener) context;
         } catch (ClassCastException e) {
-            throw new ClassCastException(context.toString() + " must implement NoticeDialogListener");
+            throw new ClassCastException(context.getResources()
+                    .getString(R.string.must_implement_the_listener, context,
+                            context.getResources().getString(R.string.delete_dialog_listener)));
         }
     }
 }

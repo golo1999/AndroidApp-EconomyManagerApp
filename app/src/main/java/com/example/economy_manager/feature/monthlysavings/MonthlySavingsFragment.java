@@ -65,40 +65,50 @@ public class MonthlySavingsFragment extends Fragment {
 
     private void setFragmentVariables(final @NonNull LayoutInflater inflater,
                                       final ViewGroup container) {
-        binding = DataBindingUtil.inflate(inflater, R.layout.monthly_savings_fragment, container, false);
-        viewModel = new ViewModelProvider((ViewModelStoreOwner) requireContext()).get(MainScreenViewModel.class);
+        binding = DataBindingUtil.inflate(inflater, R.layout.monthly_savings_fragment, container,
+                false);
+        viewModel = new ViewModelProvider((ViewModelStoreOwner) requireContext())
+                .get(MainScreenViewModel.class);
     }
 
     private void setSavings() {
         if (MyCustomVariables.getFirebaseAuth().getUid() != null) {
-            MyCustomVariables.getDatabaseReference().child(MyCustomVariables.getFirebaseAuth().getUid())
+            MyCustomVariables.getDatabaseReference()
+                    .child(MyCustomVariables.getFirebaseAuth().getUid())
                     .addValueEventListener(new ValueEventListener() {
                         @Override
                         public void onDataChange(final @NonNull DataSnapshot snapshot) {
                             final String currencySymbol = viewModel.getUserDetails() != null ?
-                                    viewModel.getUserDetails().getApplicationSettings().getCurrencySymbol() :
+                                    viewModel.getUserDetails().getApplicationSettings()
+                                            .getCurrencySymbol() :
                                     MyCustomMethods.getCurrencySymbol();
                             float totalMonthlyIncomes = 0f;
                             float totalMonthlyExpenses = 0f;
                             int numberOfTransactionsMadeThisMonth = 0;
 
-                            if (snapshot.exists() && snapshot.hasChild("personalTransactions") &&
+                            if (snapshot.exists() &&
+                                    snapshot.hasChild("personalTransactions") &&
                                     snapshot.child("personalTransactions").hasChildren()) {
                                 for (final DataSnapshot databaseTransaction :
                                         snapshot.child("personalTransactions").getChildren()) {
-                                    final Transaction transaction = databaseTransaction.getValue(Transaction.class);
+                                    final Transaction transaction =
+                                            databaseTransaction.getValue(Transaction.class);
 
                                     if (transaction != null && transaction.getTime() != null &&
-                                            transaction.getTime().getYear() == LocalDate.now().getYear() &&
-                                            transaction.getTime().getMonth() == LocalDate.now().getMonthValue()) {
+                                            transaction.getTime().getYear() ==
+                                                    LocalDate.now().getYear() &&
+                                            transaction.getTime().getMonth() ==
+                                                    LocalDate.now().getMonthValue()) {
                                         if (numberOfTransactionsMadeThisMonth == 0) {
                                             ++numberOfTransactionsMadeThisMonth;
                                         }
 
                                         if (transaction.getType() == 1) {
-                                            totalMonthlyIncomes += Float.parseFloat(transaction.getValue());
+                                            totalMonthlyIncomes +=
+                                                    Float.parseFloat(transaction.getValue());
                                         } else {
-                                            totalMonthlyExpenses += Float.parseFloat(transaction.getValue());
+                                            totalMonthlyExpenses +=
+                                                    Float.parseFloat(transaction.getValue());
                                         }
                                     }
                                 }
@@ -106,15 +116,19 @@ public class MonthlySavingsFragment extends Fragment {
 
                             float totalMonthlySavings = totalMonthlyIncomes - totalMonthlyExpenses;
 
-                            totalMonthlySavings =
-                                    MyCustomMethods.getRoundedNumberToNDecimalPlaces(totalMonthlySavings, 2);
+                            totalMonthlySavings = MyCustomMethods
+                                    .getRoundedNumberToNDecimalPlaces(totalMonthlySavings, 2);
 
                             final String savingsText = numberOfTransactionsMadeThisMonth == 0 ?
-                                    requireContext().getResources().getString(R.string.no_transactions_made_this_month) :
-                                    !Locale.getDefault().getDisplayLanguage().equals(Languages.ENGLISH_LANGUAGE) ?
-                                            totalMonthlySavings + " " + currencySymbol : totalMonthlySavings < 0f ?
-                                            "-" + currencySymbol + Math.abs(totalMonthlySavings) :
-                                            currencySymbol + totalMonthlySavings;
+                                    requireContext().getResources()
+                                            .getString(R.string.no_transactions_made_this_month) :
+                                    !Locale.getDefault().getDisplayLanguage()
+                                            .equals(Languages.ENGLISH_LANGUAGE) ?
+                                            totalMonthlySavings + " " + currencySymbol :
+                                            totalMonthlySavings < 0f ?
+                                                    "-" + currencySymbol +
+                                                            Math.abs(totalMonthlySavings) :
+                                                    currencySymbol + totalMonthlySavings;
 
                             binding.monthlySavingsText.setText(savingsText);
                             binding.monthlySavingsText.setTextColor(totalMonthlySavings > 0f ?
@@ -139,7 +153,8 @@ public class MonthlySavingsFragment extends Fragment {
 
             final String savingsText =
                     Locale.getDefault().getDisplayLanguage().equals(Languages.ENGLISH_LANGUAGE) ?
-                            currencySymbol + totalMonthlySavings : totalMonthlySavings + " " + currencySymbol;
+                            currencySymbol + totalMonthlySavings :
+                            totalMonthlySavings + " " + currencySymbol;
 
             binding.monthlySavingsText.setText(savingsText);
         }

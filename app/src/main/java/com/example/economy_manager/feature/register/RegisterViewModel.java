@@ -18,6 +18,7 @@ import com.example.economy_manager.utility.MyCustomVariables;
 import com.google.firebase.auth.FirebaseUser;
 
 public class RegisterViewModel extends ViewModel {
+
     private final ObservableField<String> enteredEmail = new ObservableField<>("");
     private final ObservableField<String> enteredPassword = new ObservableField<>("");
 
@@ -88,28 +89,31 @@ public class RegisterViewModel extends ViewModel {
     public void onSignUpButtonClicked(final @NonNull Activity activity,
                                       final String emailValue,
                                       final String passwordValue) {
-        final boolean inputsAreValid = passwordValue.length() > 6 && MyCustomMethods.emailIsValid(emailValue);
+        final boolean inputsAreValid =
+                passwordValue.length() > 6 && MyCustomMethods.emailIsValid(emailValue);
 
         MyCustomMethods.closeTheKeyboard(activity);
 
         if (!inputsAreValid) {
             if (emailValue.isEmpty()) {
                 final String error = activity.getResources().getString(R.string.should_not_be_empty,
-                        activity.getResources().getString(R.string.email));
+                        activity.getResources().getString(R.string.the_email));
 
                 binding.emailField.setError(error);
             } else if (!MyCustomMethods.emailIsValid(emailValue)) {
-                binding.emailField.setError(activity.getResources().getString(R.string.email_address_is_not_valid));
+                binding.emailField.setError(activity.getResources()
+                        .getString(R.string.email_is_not_valid));
             }
 
             if (passwordValue.isEmpty()) {
                 final String error = activity.getResources().getString(R.string.should_not_be_empty,
-                        activity.getResources().getString(R.string.password));
+                        activity.getResources().getString(R.string.the_password));
 
                 binding.passwordField.setError(error);
             } else if (passwordValue.length() <= 6) {
-                final String error = activity.getResources().getString(R.string.should_have_at_least_characters,
-                        activity.getResources().getString(R.string.password), 7);
+                final String error = activity.getResources()
+                        .getString(R.string.should_have_at_least_characters,
+                                activity.getResources().getString(R.string.the_password), 7);
 
                 binding.passwordField.setError(error);
             }
@@ -119,32 +123,39 @@ public class RegisterViewModel extends ViewModel {
 
         // calling Firebase's register with email and password method
         MyCustomVariables.getFirebaseAuth()
-                .createUserWithEmailAndPassword(emailValue, passwordValue).addOnCompleteListener(createUserTask -> {
-            // if the account can be created
-            if (createUserTask.isSuccessful()) {
-                final FirebaseUser firebaseUser = MyCustomVariables.getFirebaseAuth().getCurrentUser();
+                .createUserWithEmailAndPassword(emailValue, passwordValue)
+                .addOnCompleteListener(createUserTask -> {
+                    // if the account can be created
+                    if (createUserTask.isSuccessful()) {
+                        final FirebaseUser firebaseUser =
+                                MyCustomVariables.getFirebaseAuth().getCurrentUser();
 
-                if (firebaseUser == null) {
-                    return;
-                }
+                        if (firebaseUser == null) {
+                            return;
+                        }
 
-                firebaseUser.sendEmailVerification().addOnCompleteListener(sendEmailVerificationTask -> {
-                    if (sendEmailVerificationTask.isSuccessful()) {
-                        MyCustomMethods.showShortMessage(activity,
-                                activity.getResources().getString(R.string.please_verify_your_email));
-                        createPersonalInformationPath();
-                        createApplicationSettingsPath();
-                        MyCustomSharedPreferences.saveUserDetailsToSharedPreferences(getPreferences(),
-                                getUserDetails());
-                        MyCustomVariables.getFirebaseAuth().signOut();
-                        activity.onBackPressed();
+                        firebaseUser.sendEmailVerification()
+                                .addOnCompleteListener(sendEmailVerificationTask -> {
+                                    if (sendEmailVerificationTask.isSuccessful()) {
+                                        MyCustomMethods.showShortMessage(activity,
+                                                activity.getResources()
+                                                        .getString(R.string
+                                                                .please_verify_your_email));
+                                        createPersonalInformationPath();
+                                        createApplicationSettingsPath();
+                                        MyCustomSharedPreferences
+                                                .saveUserDetailsToSharedPreferences(getPreferences(),
+                                                        getUserDetails());
+                                        MyCustomVariables.getFirebaseAuth().signOut();
+                                        activity.onBackPressed();
+                                    }
+                                });
+                    }
+                    // if the email address already exists into the database
+                    else {
+                        binding.emailField.setError(activity.getResources()
+                                .getString(R.string.email_already_exists));
                     }
                 });
-            }
-            // if the email address already exists into the database
-            else {
-                binding.emailField.setError(activity.getResources().getString(R.string.email_already_exists));
-            }
-        });
     }
 }

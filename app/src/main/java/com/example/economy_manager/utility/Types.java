@@ -8,12 +8,14 @@ import androidx.annotation.Nullable;
 import com.example.economy_manager.R;
 
 public final class Types {
+
     private Types() {
 
     }
 
     @Nullable
-    public static String getTranslatedType(final Context context, @NonNull final String typeInEnglish) {
+    public static String getTranslatedType(final Context context,
+                                           @NonNull final String typeInEnglish) {
         return typeInEnglish.equals("Deposits") ?
                 context.getString(R.string.deposits) : typeInEnglish.equals("Independent sources") ?
                 context.getString(R.string.independent_sources) : typeInEnglish.equals("Salary") ?
@@ -37,7 +39,8 @@ public final class Types {
     }
 
     @Nullable
-    public static String getTypeInEnglish(@NonNull final Context context, @NonNull final String translatedType) {
+    public static String getTypeInEnglish(@NonNull final Context context,
+                                          @NonNull final String translatedType) {
         return translatedType.equals(context.getString(R.string.deposits)) ?
                 "Deposits" : translatedType.equals(context.getString(R.string.independent_sources)) ?
                 "Independent sources" : translatedType.equals(context.getString(R.string.saving)) ?

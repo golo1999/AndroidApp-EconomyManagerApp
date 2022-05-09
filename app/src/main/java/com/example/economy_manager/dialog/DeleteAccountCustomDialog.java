@@ -16,6 +16,7 @@ import com.example.economy_manager.R;
 import com.example.economy_manager.databinding.CustomDialogBinding;
 
 public class DeleteAccountCustomDialog extends AppCompatDialogFragment {
+
     private CustomDialogBinding binding;
     private CustomDialogListener listener;
     private final int choice;
@@ -42,7 +43,9 @@ public class DeleteAccountCustomDialog extends AppCompatDialogFragment {
         try {
             listener = (CustomDialogListener) context;
         } catch (ClassCastException e) {
-            throw new ClassCastException(context.toString() + " must implement the listener");
+            throw new ClassCastException(context.getResources()
+                    .getString(R.string.must_implement_the_listener, context,
+                            context.getResources().getString(R.string.custom_dialog_listener)));
         }
     }
 
@@ -56,16 +59,16 @@ public class DeleteAccountCustomDialog extends AppCompatDialogFragment {
                 case 0:
                 case 1:
                     builder.setView(binding.getRoot())
-                            .setPositiveButton(getResources().getString(R.string.proceed),
-                                    (DialogInterface dialog, int which) -> {
-                                        final String typedPassword = String.valueOf(binding.passwordField.getText());
+                            .setPositiveButton(getResources().getString(R.string.proceed), (DialogInterface dialog, int which) -> {
+                                final String typedPassword =
+                                        String.valueOf(binding.passwordField.getText());
 
-                                        if (choice == 0) {
-                                            listener.getTypedPasswordAndDeleteTheAccount(typedPassword);
-                                        } else {
-                                            listener.getTypedPasswordAndResetTheDatabase(typedPassword);
-                                        }
-                                    })
+                                if (choice == 0) {
+                                    listener.getTypedPasswordAndDeleteTheAccount(typedPassword);
+                                } else {
+                                    listener.getTypedPasswordAndResetTheDatabase(typedPassword);
+                                }
+                            })
                             .setNegativeButton(getResources().getString(R.string.cancel), (dialog, which) -> {
 
                             });

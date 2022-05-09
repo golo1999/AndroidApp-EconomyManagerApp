@@ -35,7 +35,6 @@ public class BudgetReviewFragment extends Fragment {
 
     public static BudgetReviewFragment newInstance() {
         final BudgetReviewFragment fragment = new BudgetReviewFragment();
-
         final Bundle args = new Bundle();
 
         fragment.setArguments(args);
@@ -61,29 +60,32 @@ public class BudgetReviewFragment extends Fragment {
 
     private void setVariables(final @NonNull LayoutInflater inflater,
                               final ViewGroup container) {
-        binding = DataBindingUtil.inflate(inflater, R.layout.budget_review_fragment, container, false);
+        binding = DataBindingUtil.inflate(inflater, R.layout.budget_review_fragment, container,
+                false);
     }
 
     public void setUserDetails() {
-        userDetails = MyCustomSharedPreferences.retrieveUserDetailsFromSharedPreferences(requireContext());
+        userDetails = MyCustomSharedPreferences
+                .retrieveUserDetailsFromSharedPreferences(requireContext());
     }
 
     private void updateMoneyBalance() {
         if (MyCustomVariables.getFirebaseAuth().getUid() == null) {
             final String currencySymbol = userDetails != null ?
-                    userDetails.getApplicationSettings().getCurrencySymbol() : MyCustomMethods.getCurrencySymbol();
+                    userDetails.getApplicationSettings().getCurrencySymbol() :
+                    MyCustomMethods.getCurrencySymbol();
 
             final float totalMonthlyIncomes = 0f;
-
             final float totalMonthlyExpenses = 0f;
 
             final String totalMonthlyIncomesText =
                     Locale.getDefault().getDisplayLanguage().equals(Languages.ENGLISH_LANGUAGE) ?
-                            currencySymbol + totalMonthlyIncomes : totalMonthlyIncomes + " " + currencySymbol;
-
+                            currencySymbol + totalMonthlyIncomes :
+                            totalMonthlyIncomes + " " + currencySymbol;
             final String totalMonthlyExpensesText =
                     Locale.getDefault().getDisplayLanguage().equals(Languages.ENGLISH_LANGUAGE) ?
-                            currencySymbol + totalMonthlyExpenses : totalMonthlyExpenses + " " + currencySymbol;
+                            currencySymbol + totalMonthlyExpenses :
+                            totalMonthlyExpenses + " " + currencySymbol;
 
             binding.incomesValue.setText(totalMonthlyIncomesText);
             binding.expensesValue.setText(totalMonthlyExpensesText);
@@ -101,47 +103,47 @@ public class BudgetReviewFragment extends Fragment {
                                 MyCustomMethods.getCurrencySymbol();
 
                         float totalMonthlyIncomes = 0f;
-
                         float totalMonthlyExpenses = 0f;
 
                         if (snapshot.exists() && snapshot.hasChild("personalTransactions") &&
                                 snapshot.child("personalTransactions").hasChildren()) {
                             for (final DataSnapshot databaseTransaction :
                                     snapshot.child("personalTransactions").getChildren()) {
-                                final Transaction transaction = databaseTransaction.getValue(Transaction.class);
+                                final Transaction transaction =
+                                        databaseTransaction.getValue(Transaction.class);
 
                                 if (transaction != null && transaction.getTime() != null &&
-                                        transaction.getTime().getYear() == LocalDate.now().getYear() &&
-                                        transaction.getTime().getMonth() == LocalDate.now().getMonthValue()) {
+                                        transaction.getTime().getYear() ==
+                                                LocalDate.now().getYear() &&
+                                        transaction.getTime().getMonth() ==
+                                                LocalDate.now().getMonthValue()) {
                                     if (transaction.getType() == 1) {
-                                        totalMonthlyIncomes += Float.parseFloat(transaction.getValue());
+                                        totalMonthlyIncomes +=
+                                                Float.parseFloat(transaction.getValue());
                                     } else {
-                                        totalMonthlyExpenses += Float.parseFloat(transaction.getValue());
+                                        totalMonthlyExpenses +=
+                                                Float.parseFloat(transaction.getValue());
                                     }
                                 }
                             }
                         }
 
-                        totalMonthlyIncomes =
-                                MyCustomMethods.getRoundedNumberToNDecimalPlaces(totalMonthlyIncomes, 2);
+                        totalMonthlyIncomes = MyCustomMethods
+                                .getRoundedNumberToNDecimalPlaces(totalMonthlyIncomes, 2);
+                        totalMonthlyExpenses = MyCustomMethods
+                                .getRoundedNumberToNDecimalPlaces(totalMonthlyExpenses, 2);
 
-                        totalMonthlyExpenses =
-                                MyCustomMethods.getRoundedNumberToNDecimalPlaces(totalMonthlyExpenses, 2);
-
-                        final String totalMonthlyIncomesText =
-                                Locale.getDefault().getDisplayLanguage().equals(Languages.ENGLISH_LANGUAGE) ?
-                                        currencySymbol + totalMonthlyIncomes :
-                                        totalMonthlyIncomes + " " + currencySymbol;
-
-                        final String totalMonthlyExpensesText =
-                                Locale.getDefault().getDisplayLanguage().equals(Languages.ENGLISH_LANGUAGE) ?
-                                        currencySymbol + totalMonthlyExpenses :
-                                        totalMonthlyExpenses + " " + currencySymbol;
+                        final String totalMonthlyIncomesText = Locale.getDefault()
+                                .getDisplayLanguage().equals(Languages.ENGLISH_LANGUAGE) ?
+                                currencySymbol + totalMonthlyIncomes :
+                                totalMonthlyIncomes + " " + currencySymbol;
+                        final String totalMonthlyExpensesText = Locale.getDefault()
+                                .getDisplayLanguage().equals(Languages.ENGLISH_LANGUAGE) ?
+                                currencySymbol + totalMonthlyExpenses :
+                                totalMonthlyExpenses + " " + currencySymbol;
 
                         binding.incomesValue.setText(totalMonthlyIncomesText);
-
                         binding.expensesValue.setText(totalMonthlyExpensesText);
-
                     }
 
                     @Override

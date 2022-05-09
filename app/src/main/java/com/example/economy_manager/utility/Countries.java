@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 public final class Countries {
+
     private Countries() {
 
     }
@@ -16,55 +17,91 @@ public final class Countries {
     public static String getCountryNameInEnglish(final Activity activity,
                                                  final String countryName) {
         return countryName.equals(activity.getResources().getString(R.string.albania)) ?
-                "Albania" : countryName.equals(activity.getResources().getString(R.string.andorra)) ?
-                "Andorra" : countryName.equals(activity.getResources().getString(R.string.armenia)) ?
-                "Armenia" : countryName.equals(activity.getResources().getString(R.string.austria)) ?
-                "Austria" : countryName.equals(activity.getResources().getString(R.string.azerbaijan)) ?
-                "Azerbaijan" : countryName.equals(activity.getResources().getString(R.string.belarus)) ?
-                "Belarus" : countryName.equals(activity.getResources().getString(R.string.belgium)) ?
-                "Belgium" : countryName.equals(activity.getResources().getString(R.string.bosnia_and_herzegovina)) ?
-                "Bosnia and Herzegovina" : countryName.equals(activity.getResources().getString(R.string.bulgaria)) ?
-                "Bulgaria" : countryName.equals(activity.getResources().getString(R.string.croatia)) ?
+                "Albania" : countryName.equals(activity.getResources()
+                .getString(R.string.andorra)) ?
+                "Andorra" : countryName.equals(activity.getResources()
+                .getString(R.string.armenia)) ?
+                "Armenia" : countryName.equals(activity.getResources()
+                .getString(R.string.austria)) ?
+                "Austria" : countryName.equals(activity.getResources()
+                .getString(R.string.azerbaijan)) ?
+                "Azerbaijan" : countryName.equals(activity.getResources()
+                .getString(R.string.belarus)) ?
+                "Belarus" : countryName.equals(activity.getResources()
+                .getString(R.string.belgium)) ?
+                "Belgium" : countryName.equals(activity.getResources()
+                .getString(R.string.bosnia_and_herzegovina)) ?
+                "Bosnia and Herzegovina" : countryName.equals(activity.getResources()
+                .getString(R.string.bulgaria)) ?
+                "Bulgaria" : countryName.equals(activity.getResources()
+                .getString(R.string.croatia)) ?
                 "Croatia" : countryName.equals(activity.getResources().getString(R.string.cyprus)) ?
-                "Cyprus" : countryName.equals(activity.getResources().getString(R.string.czech_republic)) ?
-                "Czech Republic" : countryName.equals(activity.getResources().getString(R.string.denmark)) ?
-                "Denmark" : countryName.equals(activity.getResources().getString(R.string.estonia)) ?
-                "Estonia" : countryName.equals(activity.getResources().getString(R.string.finland)) ?
+                "Cyprus" : countryName.equals(activity.getResources()
+                .getString(R.string.czech_republic)) ?
+                "Czech Republic" : countryName.equals(activity.getResources()
+                .getString(R.string.denmark)) ?
+                "Denmark" : countryName.equals(activity.getResources()
+                .getString(R.string.estonia)) ?
+                "Estonia" : countryName.equals(activity.getResources()
+                .getString(R.string.finland)) ?
                 "Finland" : countryName.equals(activity.getResources().getString(R.string.france)) ?
                 "France" : countryName.equals(activity.getResources().getString(R.string.georgia)) ?
-                "Georgia" : countryName.equals(activity.getResources().getString(R.string.germany)) ?
+                "Georgia" : countryName.equals(activity.getResources()
+                .getString(R.string.germany)) ?
                 "Germany" : countryName.equals(activity.getResources().getString(R.string.greece)) ?
                 "Greece" : countryName.equals(activity.getResources().getString(R.string.hungary)) ?
-                "Hungary" : countryName.equals(activity.getResources().getString(R.string.iceland)) ?
-                "Iceland" : countryName.equals(activity.getResources().getString(R.string.ireland)) ?
+                "Hungary" : countryName.equals(activity.getResources()
+                .getString(R.string.iceland)) ?
+                "Iceland" : countryName.equals(activity.getResources()
+                .getString(R.string.ireland)) ?
                 "Ireland" : countryName.equals(activity.getResources().getString(R.string.italy)) ?
-                "Italy" : countryName.equals(activity.getResources().getString(R.string.kazakhstan)) ?
-                "Kazakhstan" : countryName.equals(activity.getResources().getString(R.string.latvia)) ?
-                "Latvia" : countryName.equals(activity.getResources().getString(R.string.liechtenstein)) ?
-                "Liechtenstein" : countryName.equals(activity.getResources().getString(R.string.lithuania)) ?
-                "Lithuania" : countryName.equals(activity.getResources().getString(R.string.luxembourg)) ?
-                "Luxembourg" : countryName.equals(activity.getResources().getString(R.string.malta)) ?
+                "Italy" : countryName.equals(activity.getResources()
+                .getString(R.string.kazakhstan)) ?
+                "Kazakhstan" : countryName.equals(activity.getResources()
+                .getString(R.string.latvia)) ?
+                "Latvia" : countryName.equals(activity.getResources()
+                .getString(R.string.liechtenstein)) ?
+                "Liechtenstein" : countryName.equals(activity.getResources()
+                .getString(R.string.lithuania)) ?
+                "Lithuania" : countryName.equals(activity.getResources()
+                .getString(R.string.luxembourg)) ?
+                "Luxembourg" : countryName.equals(activity.getResources()
+                .getString(R.string.malta)) ?
                 "Malta" : countryName.equals(activity.getResources().getString(R.string.moldova)) ?
                 "Moldova" : countryName.equals(activity.getResources().getString(R.string.monaco)) ?
-                "Monaco" : countryName.equals(activity.getResources().getString(R.string.montenegro)) ?
-                "Montenegro" : countryName.equals(activity.getResources().getString(R.string.netherlands)) ?
-                "Netherlands" : countryName.equals(activity.getResources().getString(R.string.north_macedonia)) ?
-                "North Macedonia" : countryName.equals(activity.getResources().getString(R.string.norway)) ?
+                "Monaco" : countryName.equals(activity.getResources()
+                .getString(R.string.montenegro)) ?
+                "Montenegro" : countryName.equals(activity.getResources()
+                .getString(R.string.netherlands)) ?
+                "Netherlands" : countryName.equals(activity.getResources()
+                .getString(R.string.north_macedonia)) ?
+                "North Macedonia" : countryName.equals(activity.getResources()
+                .getString(R.string.norway)) ?
                 "Norway" : countryName.equals(activity.getResources().getString(R.string.poland)) ?
-                "Poland" : countryName.equals(activity.getResources().getString(R.string.portugal)) ?
-                "Portugal" : countryName.equals(activity.getResources().getString(R.string.romania)) ?
+                "Poland" : countryName.equals(activity.getResources()
+                .getString(R.string.portugal)) ?
+                "Portugal" : countryName.equals(activity.getResources()
+                .getString(R.string.romania)) ?
                 "Romania" : countryName.equals(activity.getResources().getString(R.string.russia)) ?
-                "Russia" : countryName.equals(activity.getResources().getString(R.string.san_marino)) ?
-                "San Marino" : countryName.equals(activity.getResources().getString(R.string.serbia)) ?
-                "Serbia" : countryName.equals(activity.getResources().getString(R.string.slovakia)) ?
-                "Slovakia" : countryName.equals(activity.getResources().getString(R.string.slovenia)) ?
+                "Russia" : countryName.equals(activity.getResources()
+                .getString(R.string.san_marino)) ?
+                "San Marino" : countryName.equals(activity.getResources()
+                .getString(R.string.serbia)) ?
+                "Serbia" : countryName.equals(activity.getResources()
+                .getString(R.string.slovakia)) ?
+                "Slovakia" : countryName.equals(activity.getResources()
+                .getString(R.string.slovenia)) ?
                 "Slovenia" : countryName.equals(activity.getResources().getString(R.string.spain)) ?
                 "Spain" : countryName.equals(activity.getResources().getString(R.string.sweden)) ?
-                "Sweden" : countryName.equals(activity.getResources().getString(R.string.switzerland)) ?
-                "Switzerland" : countryName.equals(activity.getResources().getString(R.string.turkey)) ?
+                "Sweden" : countryName.equals(activity.getResources()
+                .getString(R.string.switzerland)) ?
+                "Switzerland" : countryName.equals(activity.getResources()
+                .getString(R.string.turkey)) ?
                 "Turkey" : countryName.equals(activity.getResources().getString(R.string.ukraine)) ?
-                "Ukraine" : countryName.equals(activity.getResources().getString(R.string.united_kingdom)) ?
-                "United Kingdom" : countryName.equals(activity.getResources().getString(R.string.vatican_city)) ?
+                "Ukraine" : countryName.equals(activity.getResources()
+                .getString(R.string.united_kingdom)) ?
+                "United Kingdom" : countryName.equals(activity.getResources()
+                .getString(R.string.vatican_city)) ?
                 "Vatican City" : "Unknown country";
     }
 

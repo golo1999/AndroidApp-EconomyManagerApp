@@ -29,6 +29,7 @@ import com.google.firebase.auth.FirebaseUser;
 public class SettingsActivity extends AppCompatActivity
         implements DeleteAccountCustomDialog.CustomDialogListener,
         ChangePasswordCustomDialog.CustomDialogListener {
+
     private SettingsActivityBinding binding;
     private SettingsViewModel viewModel;
     private SharedPreferences preferences;
@@ -85,8 +86,8 @@ public class SettingsActivity extends AppCompatActivity
 
     private void createCurrencySelectorSpinner() {
         final String[] currenciesList = getResources().getStringArray(R.array.currencies);
-        final CurrenciesSpinnerAdapter adapter =
-                new CurrenciesSpinnerAdapter(this, R.layout.custom_spinner_item, currenciesList);
+        final CurrenciesSpinnerAdapter adapter = new CurrenciesSpinnerAdapter(this,
+                R.layout.custom_spinner_item, currenciesList);
 
         binding.currencySpinner.setAdapter(adapter);
     }
@@ -111,21 +112,26 @@ public class SettingsActivity extends AppCompatActivity
     }
 
     private void saveSelectedCurrency() {
-        viewModel.saveSelectedCurrencyHandler(String.valueOf(binding.currencySpinner.getSelectedItem()), preferences);
+        viewModel.saveSelectedCurrencyHandler(String
+                .valueOf(binding.currencySpinner.getSelectedItem()), preferences);
     }
 
     private void setActivityVariables() {
-        final UserDetails userDetails = MyCustomSharedPreferences.retrieveUserDetailsFromSharedPreferences(this);
+        final UserDetails userDetails =
+                MyCustomSharedPreferences.retrieveUserDetailsFromSharedPreferences(this);
 
         binding = DataBindingUtil.setContentView(this, R.layout.settings_activity);
-        preferences = getSharedPreferences(MyCustomVariables.getSharedPreferencesFileName(), MODE_PRIVATE);
+        preferences = getSharedPreferences(MyCustomVariables.getSharedPreferencesFileName(),
+                MODE_PRIVATE);
         viewModel = new SettingsViewModel(getApplication(), userDetails);
     }
 
     public void setCurrencySelectorSpinnerTheme(@NonNull final View v) {
         final boolean isDarkThemeEnabled = binding.getIsDarkThemeEnabled();
-        final int itemBackgroundColor = getColor(isDarkThemeEnabled ? R.color.primaryLight : R.color.primaryDark);
-        final int itemTextColor = getColor(isDarkThemeEnabled ? R.color.quaternaryLight : R.color.secondaryDark);
+        final int itemBackgroundColor = getColor(isDarkThemeEnabled ?
+                R.color.primaryLight : R.color.primaryDark);
+        final int itemTextColor = getColor(isDarkThemeEnabled ?
+                R.color.quaternaryLight : R.color.secondaryDark);
 
         ((TextView) v).setTextColor(itemTextColor);
         v.setBackgroundColor(itemBackgroundColor);
@@ -138,7 +144,8 @@ public class SettingsActivity extends AppCompatActivity
     private void setLayoutVariables() {
         binding.setActivity(this);
         binding.setFragmentManager(getSupportFragmentManager());
-        binding.setIsDarkThemeEnabled(viewModel.getUserDetails().getApplicationSettings().isDarkThemeEnabled());
+        binding.setIsDarkThemeEnabled(viewModel.getUserDetails().getApplicationSettings()
+                .isDarkThemeEnabled());
         binding.setViewModel(viewModel);
     }
 
@@ -146,31 +153,31 @@ public class SettingsActivity extends AppCompatActivity
      * Method for styling spinner's first item
      */
     private void setSelectedItemColorSpinner() {
-        final AdapterView.OnItemSelectedListener itemSelectedListener = new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(final AdapterView<?> parent,
-                                       final View view,
-                                       final int position,
-                                       long id) {
-                if (MyCustomVariables.getFirebaseAuth().getUid() == null) {
-                    return;
-                }
+        final AdapterView.OnItemSelectedListener itemSelectedListener =
+                new AdapterView.OnItemSelectedListener() {
+                    @Override
+                    public void onItemSelected(final AdapterView<?> parent,
+                                               final View view,
+                                               final int position,
+                                               long id) {
+                        if (MyCustomVariables.getFirebaseAuth().getUid() == null) {
+                            return;
+                        }
 
-                final int itemTextColor = getColor(binding.getIsDarkThemeEnabled() ?
-                        R.color.secondaryDark : R.color.quaternaryLight);
+                        final int itemTextColor = getColor(binding.getIsDarkThemeEnabled() ?
+                                R.color.secondaryDark : R.color.quaternaryLight);
+                        // the first element will have the text aligned to its start and
+                        // the color based on the selected theme
+                        ((TextView) parent.getChildAt(0)).setTextColor(itemTextColor);
+                        ((TextView) parent.getChildAt(0)).setGravity(Gravity.END);
+                        ((TextView) parent.getChildAt(0)).setTypeface(null, Typeface.BOLD);
+                    }
 
-                // the first element will have the text aligned to its start and
-                // the color based on the selected theme
-                ((TextView) parent.getChildAt(0)).setTextColor(itemTextColor);
-                ((TextView) parent.getChildAt(0)).setGravity(Gravity.END);
-                ((TextView) parent.getChildAt(0)).setTypeface(null, Typeface.BOLD);
-            }
+                    @Override
+                    public void onNothingSelected(AdapterView<?> parent) {
 
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        };
+                    }
+                };
 
         binding.currencySpinner.setOnItemSelectedListener(itemSelectedListener);
     }
@@ -179,7 +186,8 @@ public class SettingsActivity extends AppCompatActivity
         final String currency = viewModel.getUserDetails() != null ?
                 viewModel.getUserDetails().getApplicationSettings().getCurrency() :
                 MyCustomVariables.getDefaultCurrency();
-        final int arrowColor = getColor(binding.getIsDarkThemeEnabled() ? R.color.secondaryDark : R.color.quaternaryLight);
+        final int arrowColor = getColor(binding.getIsDarkThemeEnabled() ?
+                R.color.secondaryDark : R.color.quaternaryLight);
 
         // setting arrow color
         binding.currencySpinner.getBackground().setColorFilter(arrowColor, PorterDuff.Mode.SRC_ATOP);
@@ -197,7 +205,8 @@ public class SettingsActivity extends AppCompatActivity
                 9 : currency.equals("RUB") ?
                 10 : 11);
 
-        binding.themeSwitch.setOnCheckedChangeListener((final CompoundButton buttonView, final boolean isChecked) -> {
+        binding.themeSwitch.setOnCheckedChangeListener((final CompoundButton buttonView,
+                                                        final boolean isChecked) -> {
             if (MyCustomVariables.getFirebaseAuth().getUid() == null) {
                 return;
             }
@@ -209,7 +218,8 @@ public class SettingsActivity extends AppCompatActivity
                     .setValue(isChecked);
 
             viewModel.getUserDetails().getApplicationSettings().setDarkThemeEnabled(isChecked);
-            MyCustomSharedPreferences.saveUserDetailsToSharedPreferences(preferences, viewModel.getUserDetails());
+            MyCustomSharedPreferences.saveUserDetailsToSharedPreferences(preferences,
+                    viewModel.getUserDetails());
 
             MyCustomVariables.setUserDetails(viewModel.getUserDetails());
             MyCustomMethods.restartCurrentActivity(this);

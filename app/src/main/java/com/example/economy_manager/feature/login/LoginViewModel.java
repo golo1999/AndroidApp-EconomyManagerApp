@@ -53,7 +53,8 @@ public class LoginViewModel extends ViewModel {
     }
 
     public void goToTheMainScreen(final @NonNull Activity currentActivity) {
-        MyCustomMethods.showShortMessage(currentActivity, currentActivity.getResources().getString(R.string.login_successful));
+        MyCustomMethods.showShortMessage(currentActivity,
+                currentActivity.getResources().getString(R.string.login_successful));
         MyCustomMethods.signInWithFadeTransition(currentActivity, MainScreenActivity.class);
     }
 
@@ -68,21 +69,23 @@ public class LoginViewModel extends ViewModel {
         if (!inputsAreValid) {
             if (emailValue.isEmpty()) {
                 final String error = activity.getResources().getString(R.string.should_not_be_empty,
-                        activity.getResources().getString(R.string.email));
+                        activity.getResources().getString(R.string.the_email));
 
                 binding.emailField.setError(error);
             } else if (!MyCustomMethods.emailIsValid(emailValue)) {
-                binding.emailField.setError(activity.getResources().getString(R.string.email_address_is_not_valid));
+                binding.emailField.setError(activity.getResources()
+                        .getString(R.string.email_is_not_valid));
             }
 
             if (passwordValue.isEmpty()) {
                 final String error = activity.getResources().getString(R.string.should_not_be_empty,
-                        activity.getResources().getString(R.string.password));
+                        activity.getResources().getString(R.string.the_password));
 
                 binding.passwordField.setError(error);
             } else if (passwordValue.length() <= 6) {
-                final String error = activity.getResources().getString(R.string.should_have_at_least_characters,
-                        activity.getResources().getString(R.string.password), 7);
+                final String error =
+                        activity.getResources().getString(R.string.should_have_at_least_characters,
+                                activity.getResources().getString(R.string.the_password), 7);
 
                 binding.passwordField.setError(error);
             }
@@ -103,15 +106,16 @@ public class LoginViewModel extends ViewModel {
                             setUserDetailsToSharedPreferences(activity);
                             goToTheMainScreen(activity);
                         } else {
-                            MyCustomMethods.showShortMessage(activity,
-                                    activity.getResources().getString(R.string.please_verify_your_email));
+                            MyCustomMethods.showShortMessage(activity, activity.getResources().
+                                    getString(R.string.please_verify_your_email));
                             setEnteredPassword("");
                         }
                     }
-                    // removing the entered password & showing message if the credentials don't match
+                    // removing the entered password
+                    // and showing message if the credentials don't match
                     else {
-                        MyCustomMethods.showShortMessage(activity,
-                                activity.getResources().getString(R.string.incorrect_username_or_password));
+                        MyCustomMethods.showShortMessage(activity, activity.getResources()
+                                .getString(R.string.incorrect_username_or_password));
                         setEnteredPassword("");
                     }
                 });
