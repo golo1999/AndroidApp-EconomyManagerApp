@@ -70,6 +70,7 @@
     <string name="note">Note</string>
     <string name="ok" translatable="false">OK</string>
     <string name="old_password">Old password</string>
+    <string name="overall_profit">Overall profit</string>
     <string name="password">Password</string>
     <string name="passwords">Passwords</string>
     <string name="password_updated_successfully">Password updated successfully</string>

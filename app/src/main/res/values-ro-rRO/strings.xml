@@ -222,4 +222,5 @@
     <string name="the_last_name">Numele</string>
     <string name="the_old_password">Vechea parolă</string>
     <string name="the_new_password">Noua parolă</string>
+    <string name="overall_profit">Profit total</string>
 </resources>

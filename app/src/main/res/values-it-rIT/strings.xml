@@ -222,4 +222,5 @@
     <string name="the_passwords">Le password</string>
     <string name="the_new_password">La nuova password</string>
     <string name="the_old_password">La vecchia password</string>
+    <string name="overall_profit">Profitto complessivo</string>
 </resources>

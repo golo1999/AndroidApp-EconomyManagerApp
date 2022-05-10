@@ -18,6 +18,7 @@ import com.example.economy_manager.feature.lasttentransactions.LastTenTransactio
 import com.example.economy_manager.feature.lastweekexpenses.LastWeekExpensesFragment;
 import com.example.economy_manager.feature.moneyspentpercentage.MoneySpentPercentageFragment;
 import com.example.economy_manager.feature.monthlysavings.MonthlySavingsFragment;
+import com.example.economy_manager.feature.overallprofit.OverallProfitFragment;
 import com.example.economy_manager.feature.topfiveexpenses.TopFiveExpensesFragment;
 import com.example.economy_manager.model.Transaction;
 import com.example.economy_manager.model.UserDetails;
@@ -36,6 +37,7 @@ public class MainScreenViewModel extends ViewModel {
     private final MonthlySavingsFragment monthlySavingsFragment =
             MonthlySavingsFragment.newInstance();
     private final BudgetReviewFragment budgetReviewFragment = BudgetReviewFragment.newInstance();
+    private final OverallProfitFragment overallProfitFragment = OverallProfitFragment.newInstance();
     private final LastWeekExpensesFragment lastWeekExpensesFragment =
             LastWeekExpensesFragment.newInstance();
     private final LastTenTransactionsFragment lastTenTransactionsFragment =
@@ -148,23 +150,27 @@ public class MainScreenViewModel extends ViewModel {
         this.userDetails = userDetails;
     }
 
-    public MonthlySavingsFragment getFragmentShowSavings() {
+    public MonthlySavingsFragment getShowSavingsFragment() {
         return monthlySavingsFragment;
     }
 
-    public BudgetReviewFragment getFragmentBudgetReview() {
+    public BudgetReviewFragment getBudgetReviewFragment() {
         return budgetReviewFragment;
     }
 
-    public LastWeekExpensesFragment getFragmentMoneySpent() {
+    public OverallProfitFragment getOverallProfitFragment() {
+        return overallProfitFragment;
+    }
+
+    public LastWeekExpensesFragment getMoneySpentFragment() {
         return lastWeekExpensesFragment;
     }
 
-    public LastTenTransactionsFragment getFragmentLastTenTransactions() {
+    public LastTenTransactionsFragment getLastTenTransactionsFragment() {
         return lastTenTransactionsFragment;
     }
 
-    public TopFiveExpensesFragment getFragmentTopFiveExpenses() {
+    public TopFiveExpensesFragment getTopFiveExpensesFragment() {
         return topFiveExpensesFragment;
     }
 
@@ -172,7 +178,7 @@ public class MainScreenViewModel extends ViewModel {
         return favoriteExpensesCategoryFragment;
     }
 
-    public MoneySpentPercentageFragment getFragmentMoneySpentPercentage() {
+    public MoneySpentPercentageFragment getMoneySpentPercentageFragment() {
         return moneySpentPercentageFragment;
     }
 
