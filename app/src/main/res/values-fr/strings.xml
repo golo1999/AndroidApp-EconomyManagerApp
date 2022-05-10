@@ -222,4 +222,5 @@
     <string name="the_passwords">Les mots de passe</string>
     <string name="the_new_password">Le nouveau mot de passe</string>
     <string name="the_old_password">L\'ancien mot de passe</string>
+    <string name="overall_profit">Bénéfice global</string>
 </resources>

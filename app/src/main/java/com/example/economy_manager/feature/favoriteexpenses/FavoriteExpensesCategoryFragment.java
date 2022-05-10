@@ -51,7 +51,7 @@ public class FavoriteExpensesCategoryFragment extends Fragment {
     public View onCreateView(final @NonNull LayoutInflater inflater,
                              final ViewGroup container,
                              final Bundle savedInstanceState) {
-        setVariables(inflater, container);
+        setFragmentVariables(inflater, container);
 
         return binding.getRoot();
     }
@@ -59,10 +59,10 @@ public class FavoriteExpensesCategoryFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
-        setExpensesMap();
+        setFavoriteExpenses();
     }
 
-    private void setExpensesMap() {
+    private void setFavoriteExpenses() {
         if (MyCustomVariables.getFirebaseAuth().getUid() == null) {
             return;
         }
@@ -152,8 +152,8 @@ public class FavoriteExpensesCategoryFragment extends Fragment {
                 });
     }
 
-    private void setVariables(final @NonNull LayoutInflater inflater,
-                              final ViewGroup container) {
+    private void setFragmentVariables(final @NonNull LayoutInflater inflater,
+                                      final ViewGroup container) {
         binding = DataBindingUtil.inflate(inflater, R.layout.favorite_expenses_category_fragment,
                 container, false);
         viewModel = new ViewModelProvider((ViewModelStoreOwner) requireContext())

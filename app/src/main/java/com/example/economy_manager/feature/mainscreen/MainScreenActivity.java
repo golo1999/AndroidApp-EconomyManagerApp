@@ -112,17 +112,18 @@ public class MainScreenActivity
     private void setFragments() {
         getSupportFragmentManager()
                 .beginTransaction()
-                .replace(R.id.showSavingsFragmentContainer, viewModel.getFragmentShowSavings())
-                .replace(R.id.budgetReviewFragmentContainer, viewModel.getFragmentBudgetReview())
-                .replace(R.id.moneySpentFragmentContainer, viewModel.getFragmentMoneySpent())
+                .replace(R.id.showSavingsFragmentContainer, viewModel.getShowSavingsFragment())
+                .replace(R.id.budgetReviewFragmentContainer, viewModel.getBudgetReviewFragment())
+                .replace(R.id.moneySpentFragmentContainer, viewModel.getMoneySpentFragment())
                 .replace(R.id.lastTenTransactionsFragmentContainer,
-                        viewModel.getFragmentLastTenTransactions())
+                        viewModel.getLastTenTransactionsFragment())
                 .replace(R.id.topFiveExpensesFragmentContainer,
-                        viewModel.getFragmentTopFiveExpenses())
+                        viewModel.getTopFiveExpensesFragment())
                 .replace(R.id.favoriteExpensesCategoryFragmentContainer,
                         viewModel.getFavoriteExpensesCategoryFragment())
                 .replace(R.id.expensesChartFragmentContainer,
-                        viewModel.getFragmentMoneySpentPercentage())
+                        viewModel.getMoneySpentPercentageFragment())
+                .replace(R.id.overallProfitFragmentContainer, viewModel.getOverallProfitFragment())
                 .commit();
     }
 
