@@ -86,7 +86,7 @@
                 android:layout_marginHorizontal="20sp"
                 android:layout_marginVertical="10sp"
                 android:background="@{isDarkThemeEnabled ? @drawable/ic_outlined_button_dark : @drawable/ic_outlined_button_light}"
-                android:drawableStart="@{isDarkThemeEnabled ? @drawable/ic_euro_dark : @drawable/ic_euro_light}"
+                android:drawableStart="@{isDarkThemeEnabled ? @drawable/ic_wallet_dark : @drawable/ic_wallet_light}"
                 android:drawablePadding="10sp"
                 android:hint="@string/value"
                 android:importantForAutofill="no"
@@ -100,7 +100,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/dateText"
                 tools:background="@drawable/ic_outlined_button_dark"
-                tools:drawableStart="@drawable/ic_euro_dark"
+                tools:drawableStart="@drawable/ic_wallet_dark"
                 tools:textColor="@color/secondaryDark"
                 tools:textColorHint="@color/secondaryDark" />
 
