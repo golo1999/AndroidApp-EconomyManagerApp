@@ -1,7 +1,10 @@
 package com.example.economy_manager.feature.mainscreen;
 
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
@@ -22,6 +25,8 @@ import com.example.economy_manager.feature.monthlybalance.MonthlyBalanceActivity
 import com.example.economy_manager.feature.settings.SettingsActivity;
 import com.example.economy_manager.model.Transaction;
 import com.example.economy_manager.model.UserDetails;
+import com.example.economy_manager.model.currencyconversionresult.CurrencyConversionResult;
+import com.example.economy_manager.utility.JsonPlaceholderAPI;
 import com.example.economy_manager.utility.MyCustomMethods;
 import com.example.economy_manager.utility.MyCustomSharedPreferences;
 import com.example.economy_manager.utility.MyCustomVariables;
@@ -34,6 +39,12 @@ import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
+
 public class MainScreenActivity
         extends AppCompatActivity
         implements MoneySpentPercentageFragment.MoneySpentPercentageListener {
@@ -43,6 +54,7 @@ public class MainScreenActivity
     private ViewGroup.LayoutParams moneySpentPercentageLayoutParams;
     private long backPressedTime;
     private Toast backToast;
+    private JsonPlaceholderAPI api;
 
     @Override
     public void onBackPressed() {
@@ -67,6 +79,7 @@ public class MainScreenActivity
         setActivityVariables();
         setLayoutVariables();
         setFragments();
+//        getConversionRate("GBP", "RON", 10);
     }
 
     @Override
@@ -292,6 +305,10 @@ public class MainScreenActivity
         binding = DataBindingUtil.setContentView(this, R.layout.main_screen_activity);
         viewModel = new ViewModelProvider(this).get(MainScreenViewModel.class);
         moneySpentPercentageLayoutParams = binding.expensesChartFragmentContainer.getLayoutParams();
+
+        api = new Retrofit.Builder().baseUrl(MyCustomVariables.getCurrencyConverterApiDomain())
+                .addConverterFactory(GsonConverterFactory.create())
+                .build().create(JsonPlaceholderAPI.class);
     }
 
     /**
@@ -306,5 +323,48 @@ public class MainScreenActivity
         binding.setMonthlyBalanceActivity(MonthlyBalanceActivity.class);
         binding.setSettingsActivity(SettingsActivity.class);
         binding.setViewModel(viewModel);
+    }
+
+    private void getConversionRate(final String from,
+                                   final String to,
+                                   final double amount) {
+        try {
+            final ApplicationInfo applicationInfo = getApplicationContext()
+                    .getPackageManager()
+                    .getApplicationInfo(getApplicationContext().getPackageName(),
+                            PackageManager.GET_META_DATA);
+
+            final String CURRENCY_CONVERTER_API_KEY =
+                    String.valueOf(applicationInfo.metaData.get("CURRENCY_CONVERTER_API_KEY"));
+
+            final Call<CurrencyConversionResult> currencyConversionResultCall =
+                    api.getConversionRateBetween(from, to, amount, CURRENCY_CONVERTER_API_KEY);
+
+            currencyConversionResultCall.enqueue(new Callback<CurrencyConversionResult>() {
+                @Override
+                public void onResponse(@NonNull Call<CurrencyConversionResult> call,
+                                       @NonNull Response<CurrencyConversionResult> response) {
+                    CurrencyConversionResult currencyConversionResult =
+                            response.body();
+
+                    if (currencyConversionResult == null) {
+                        MyCustomMethods.showShortMessage(MainScreenActivity.this,
+                                "conversion result null");
+                        return;
+                    }
+
+                    Log.d("conversionResponse", currencyConversionResult.toString());
+                }
+
+                @Override
+                public void onFailure(@NonNull Call<CurrencyConversionResult> call,
+                                      @NonNull Throwable t) {
+
+                }
+            });
+        } catch (PackageManager.NameNotFoundException e) {
+            Log.d("currencyConverterApiKey", "COULDN'T BE FETCHED FROM BUILD CONFIG");
+            e.printStackTrace();
+        }
     }
 }
