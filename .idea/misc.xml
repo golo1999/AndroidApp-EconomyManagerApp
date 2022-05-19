@@ -101,6 +101,8 @@
         <entry key="..\:/AndroidStudioApps/3/app/src/main/res/layout/budget_review_cardview.xml" value="0.36666666666666664" />
         <entry key="..\:/AndroidStudioApps/3/app/src/main/res/layout/budget_review_fragment.xml" value="0.36666666666666664" />
         <entry key="..\:/AndroidStudioApps/3/app/src/main/res/layout/change_password_custom_dialog.xml" value="0.36666666666666664" />
+        <entry key="..\:/AndroidStudioApps/3/app/src/main/res/layout/currency_conversion_fragment.xml" value="0.36666666666666664" />
+        <entry key="..\:/AndroidStudioApps/3/app/src/main/res/layout/currency_conversion_item_layout.xml" value="0.36666666666666664" />
         <entry key="..\:/AndroidStudioApps/3/app/src/main/res/layout/custom_dialog.xml" value="0.36666666666666664" />
         <entry key="..\:/AndroidStudioApps/3/app/src/main/res/layout/custom_dialog_linearlayout.xml" value="0.36666666666666664" />
         <entry key="..\:/AndroidStudioApps/3/app/src/main/res/layout/custom_spinner_item.xml" value="0.3278985507246377" />
@@ -115,9 +117,11 @@
         <entry key="..\:/AndroidStudioApps/3/app/src/main/res/layout/edit_transactions_activity.xml" value="0.3278985507246377" />
         <entry key="..\:/AndroidStudioApps/3/app/src/main/res/layout/favorite_expenses_category_fragment.xml" value="0.36666666666666664" />
         <entry key="..\:/AndroidStudioApps/3/app/src/main/res/layout/forgot_password_activity.xml" value="0.36666666666666664" />
+        <entry key="..\:/AndroidStudioApps/3/app/src/main/res/layout/fragment_currency_conversion.xml" value="0.36666666666666664" />
         <entry key="..\:/AndroidStudioApps/3/app/src/main/res/layout/fragment_date_picker.xml" value="0.36666666666666664" />
         <entry key="..\:/AndroidStudioApps/3/app/src/main/res/layout/greeting_card.xml" value="0.36666666666666664" />
         <entry key="..\:/AndroidStudioApps/3/app/src/main/res/layout/last_ten_transactions_fragment.xml" value="0.36666666666666664" />
+        <entry key="..\:/AndroidStudioApps/3/app/src/main/res/layout/last_ten_transactions_item_layout.xml" value="0.36666666666666664" />
         <entry key="..\:/AndroidStudioApps/3/app/src/main/res/layout/last_ten_transactions_linearlayout.xml" value="0.36666666666666664" />
         <entry key="..\:/AndroidStudioApps/3/app/src/main/res/layout/last_week_expenses_fragment.xml" value="0.36666666666666664" />
         <entry key="..\:/AndroidStudioApps/3/app/src/main/res/layout/log_in_activity.xml" value="0.36666666666666664" />
@@ -130,10 +134,12 @@
         <entry key="..\:/AndroidStudioApps/3/app/src/main/res/layout/money_spent_fragment.xml" value="0.36666666666666664" />
         <entry key="..\:/AndroidStudioApps/3/app/src/main/res/layout/money_spent_percentage_fragment.xml" value="0.33" />
         <entry key="..\:/AndroidStudioApps/3/app/src/main/res/layout/monthly_balance_activity.xml" value="0.36666666666666664" />
+        <entry key="..\:/AndroidStudioApps/3/app/src/main/res/layout/monthly_balance_item_layout.xml" value="0.36666666666666664" />
         <entry key="..\:/AndroidStudioApps/3/app/src/main/res/layout/monthly_balance_linearlayout.xml" value="0.36666666666666664" />
         <entry key="..\:/AndroidStudioApps/3/app/src/main/res/layout/monthly_balance_title_layout.xml" value="0.36666666666666664" />
         <entry key="..\:/AndroidStudioApps/3/app/src/main/res/layout/monthly_balance_title_linearlayout.xml" value="0.36666666666666664" />
         <entry key="..\:/AndroidStudioApps/3/app/src/main/res/layout/monthly_savings_fragment.xml" value="0.36666666666666664" />
+        <entry key="..\:/AndroidStudioApps/3/app/src/main/res/layout/overall_profit_fragment.xml" value="0.36666666666666664" />
         <entry key="..\:/AndroidStudioApps/3/app/src/main/res/layout/register_activity.xml" value="0.36666666666666664" />
         <entry key="..\:/AndroidStudioApps/3/app/src/main/res/layout/settings_activity.xml" value="0.36666666666666664" />
         <entry key="..\:/AndroidStudioApps/3/app/src/main/res/layout/show_savings_fragment.xml" value="0.36666666666666664" />

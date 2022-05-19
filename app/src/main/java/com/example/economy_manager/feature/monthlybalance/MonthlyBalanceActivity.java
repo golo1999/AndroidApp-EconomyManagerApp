@@ -166,7 +166,7 @@ public class MonthlyBalanceActivity extends AppCompatActivity {
 
                                     final LinearLayout transactionLayout = (LinearLayout) View
                                             .inflate(MonthlyBalanceActivity.this,
-                                                    R.layout.monthly_balance_linearlayout,
+                                                    R.layout.monthly_balance_item_layout,
                                                     null);
                                     final TextView typeText = transactionLayout
                                             .findViewById(R.id.monthly_balance_relative_layout_type);

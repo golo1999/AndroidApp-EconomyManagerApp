@@ -154,7 +154,7 @@ public class TopFiveExpensesFragment extends Fragment {
                 for (final Transaction transaction :
                         (limitedExpensesList != null ? limitedExpensesList : expensesList)) {
                     final LinearLayout childLayout = (LinearLayout) getLayoutInflater()
-                            .inflate(R.layout.top_five_expenses_linearlayout, mainLayout, false);
+                            .inflate(R.layout.top_five_expenses_item_layout, mainLayout, false);
 
                     final TextView typeFromChildLayout =
                             childLayout.findViewById(R.id.typeText);

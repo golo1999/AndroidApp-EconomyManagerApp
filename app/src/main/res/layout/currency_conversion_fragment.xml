@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout>
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/mainLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:paddingHorizontal="10sp"
+        android:paddingVertical="20sp"
+        tools:context=".feature.currencyconversion.CurrencyConversionFragment">
+
+        <TextView
+            android:id="@+id/noRecordsText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAlignment="center"
+            android:textColor="@color/quaternaryLight"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            tools:text="@string/no_money_records_this_month" />
+
+    </LinearLayout>
+
+</layout>
