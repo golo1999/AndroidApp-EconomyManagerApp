@@ -99,6 +99,15 @@ public class MainScreenActivity
         binding.expensesChartFragmentContainer.setLayoutParams(moneySpentPercentageLayoutParams);
     }
 
+    /**
+     * Method for setting activity variables
+     */
+    private void setActivityVariables() {
+        binding = DataBindingUtil.setContentView(this, R.layout.main_screen_activity);
+        viewModel = new ViewModelProvider(this).get(MainScreenViewModel.class);
+        moneySpentPercentageLayoutParams = binding.expensesChartFragmentContainer.getLayoutParams();
+    }
+
     private void setDates() {
         if (!String.valueOf(binding.getGreetingText()).equals(viewModel.getGreetingMessage(this))) {
             binding.setGreetingText(viewModel.getGreetingMessage(this));
@@ -124,7 +133,22 @@ public class MainScreenActivity
                 .replace(R.id.expensesChartFragmentContainer,
                         viewModel.getMoneySpentPercentageFragment())
                 .replace(R.id.overallProfitFragmentContainer, viewModel.getOverallProfitFragment())
+                .replace(R.id.monthlyIncomesConvertedFragmentContainer, viewModel.getMonthlyIncomesConvertedFragment())
                 .commit();
+    }
+
+    /**
+     * Method for setting layout variables
+     */
+    private void setLayoutVariables() {
+        binding.setActivity(this);
+        binding.setAddExpenseActivity(AddExpenseActivity.class);
+        binding.setAddIncomeActivity(AddIncomeActivity.class);
+        binding.setEditProfileActivity(EditProfileActivity.class);
+        binding.setEditTransactionsActivity(EditTransactionsActivity.class);
+        binding.setMonthlyBalanceActivity(MonthlyBalanceActivity.class);
+        binding.setSettingsActivity(SettingsActivity.class);
+        binding.setViewModel(viewModel);
     }
 
     private void setMoneySpentPercentage() {
@@ -283,28 +307,5 @@ public class MainScreenActivity
 
                     }
                 });
-    }
-
-    /**
-     * Method for setting activity variables
-     */
-    private void setActivityVariables() {
-        binding = DataBindingUtil.setContentView(this, R.layout.main_screen_activity);
-        viewModel = new ViewModelProvider(this).get(MainScreenViewModel.class);
-        moneySpentPercentageLayoutParams = binding.expensesChartFragmentContainer.getLayoutParams();
-    }
-
-    /**
-     * Method for setting layout variables
-     */
-    private void setLayoutVariables() {
-        binding.setActivity(this);
-        binding.setAddExpenseActivity(AddExpenseActivity.class);
-        binding.setAddIncomeActivity(AddIncomeActivity.class);
-        binding.setEditProfileActivity(EditProfileActivity.class);
-        binding.setEditTransactionsActivity(EditTransactionsActivity.class);
-        binding.setMonthlyBalanceActivity(MonthlyBalanceActivity.class);
-        binding.setSettingsActivity(SettingsActivity.class);
-        binding.setViewModel(viewModel);
     }
 }

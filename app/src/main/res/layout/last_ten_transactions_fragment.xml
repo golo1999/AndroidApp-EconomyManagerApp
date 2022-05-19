@@ -8,7 +8,8 @@
     android:gravity="center"
     android:orientation="vertical"
     android:paddingHorizontal="10sp"
-    android:paddingVertical="20sp">
+    android:paddingVertical="20sp"
+    tools:context=".feature.lasttentransactions.LastTenTransactionsFragment">
 
     <TextView
         android:id="@+id/noRecordsText"

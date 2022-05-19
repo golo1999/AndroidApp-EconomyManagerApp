@@ -87,6 +87,22 @@ public final class MyCustomMethods {
     }
 
     @NonNull
+    public static String getCurrencySymbolFromCurrencyName(final @NonNull String currencyName) {
+        return currencyName.equals("AUD") ?
+                "A$" : currencyName.equals("BRL") ?
+                "R$" : currencyName.equals("CAD") ?
+                "C$" : currencyName.equals("CHF") ?
+                "CHF" : currencyName.equals("CNY") ?
+                "元" : currencyName.equals("EUR") ?
+                "€" : currencyName.equals("GBP") ?
+                "£" : currencyName.equals("INR") ?
+                "₹" : currencyName.equals("JPY") ?
+                "¥" : currencyName.equals("RON") ?
+                "RON" : currencyName.equals("RUB") ?
+                "₽" : "$";
+    }
+
+    @NonNull
     public static String getFormattedDate(@NonNull final LocalDate date) {
         final String dayName = date.getDayOfWeek().name().charAt(0) +
                 date.getDayOfWeek().name().substring(1).toLowerCase();

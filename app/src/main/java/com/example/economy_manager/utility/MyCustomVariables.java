@@ -17,6 +17,7 @@ public final class MyCustomVariables {
     private static final FirebaseAuth FIREBASE_AUTH = FirebaseAuth.getInstance();
     private static final String SHARED_PREFERENCES_FILE_NAME = "ECONOMY_MANAGER_USER_DATA";
     private static UserDetails userDetails;
+    private static final String CURRENCY_CONVERTER_API_DOMAIN = "https://api.apilayer.com/";
 
     private MyCustomVariables() {
 
@@ -48,5 +49,9 @@ public final class MyCustomVariables {
 
     public static void setUserDetails(UserDetails userDetails) {
         MyCustomVariables.userDetails = userDetails;
+    }
+
+    public static String getCurrencyConverterApiDomain() {
+        return CURRENCY_CONVERTER_API_DOMAIN;
     }
 }

@@ -67,8 +67,7 @@ public class LastTenTransactionsFragment extends Fragment {
     }
 
     private void setVariables(final @NonNull View v) {
-        viewModel = new ViewModelProvider((ViewModelStoreOwner) requireContext())
-                .get(MainScreenViewModel.class);
+        viewModel = new ViewModelProvider((ViewModelStoreOwner) requireContext()).get(MainScreenViewModel.class);
         mainLayout = v.findViewById(R.id.mainLayout);
     }
 
@@ -150,7 +149,7 @@ public class LastTenTransactionsFragment extends Fragment {
         for (final Transaction transaction :
                 (limitedTransactionsList != null ? limitedTransactionsList : transactionsList)) {
             final LinearLayout childLayout = (LinearLayout) getLayoutInflater()
-                    .inflate(R.layout.last_ten_transactions_linearlayout, mainLayout, false);
+                    .inflate(R.layout.last_ten_transactions_item_layout, mainLayout, false);
 
             final TextView typeFromChildLayout =
                     childLayout.findViewById(R.id.transactionTitle);

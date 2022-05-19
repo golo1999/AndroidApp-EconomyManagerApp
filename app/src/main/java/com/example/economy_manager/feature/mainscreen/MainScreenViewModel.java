@@ -13,6 +13,7 @@ import androidx.lifecycle.ViewModel;
 
 import com.example.economy_manager.R;
 import com.example.economy_manager.feature.budgetreview.BudgetReviewFragment;
+import com.example.economy_manager.feature.currencyconversion.CurrencyConversionFragment;
 import com.example.economy_manager.feature.favoriteexpenses.FavoriteExpensesCategoryFragment;
 import com.example.economy_manager.feature.lasttentransactions.LastTenTransactionsFragment;
 import com.example.economy_manager.feature.lastweekexpenses.LastWeekExpensesFragment;
@@ -46,6 +47,8 @@ public class MainScreenViewModel extends ViewModel {
             TopFiveExpensesFragment.newInstance();
     private final FavoriteExpensesCategoryFragment favoriteExpensesCategoryFragment =
             FavoriteExpensesCategoryFragment.newInstance();
+    private final CurrencyConversionFragment monthlyIncomesConvertedFragment =
+            CurrencyConversionFragment.newInstance("MONTHLY_INCOMES");
     private final MoneySpentPercentageFragment moneySpentPercentageFragment =
             MoneySpentPercentageFragment.newInstance();
 
@@ -176,6 +179,10 @@ public class MainScreenViewModel extends ViewModel {
 
     public FavoriteExpensesCategoryFragment getFavoriteExpensesCategoryFragment() {
         return favoriteExpensesCategoryFragment;
+    }
+
+    public CurrencyConversionFragment getMonthlyIncomesConvertedFragment() {
+        return monthlyIncomesConvertedFragment;
     }
 
     public MoneySpentPercentageFragment getMoneySpentPercentageFragment() {

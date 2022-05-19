@@ -90,6 +90,10 @@
             </intent-filter>
         </activity>
 
+        <meta-data
+            android:name="CURRENCY_CONVERTER_API_KEY"
+            android:value="${CURRENCY_CONVERTER_API_KEY}" />
+
     </application>
 
 </manifest>
