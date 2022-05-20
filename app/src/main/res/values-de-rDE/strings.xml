@@ -223,4 +223,6 @@
     <string name="the_new_password">Das neue Passwort</string>
     <string name="the_old_password">Das alte Passwort</string>
     <string name="overall_profit">Gesamtgewinn</string>
+    <string name="no_data">Keine Daten</string>
+    <string name="no_incomes_made_this_month">Keine Einnahmen in diesem Monat</string>
 </resources>

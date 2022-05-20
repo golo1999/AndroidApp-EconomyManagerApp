@@ -18,7 +18,7 @@ import com.example.economy_manager.feature.addincome.AddIncomeActivity;
 import com.example.economy_manager.feature.editprofile.EditProfileActivity;
 import com.example.economy_manager.feature.edittransactions.EditTransactionsActivity;
 import com.example.economy_manager.feature.monthlybalance.MonthlyBalanceActivity;
-import com.example.economy_manager.feature.monthlyexpensespiechart.MonthlyExpensesPieChartFragment;
+import com.example.economy_manager.feature.piechart.PieChartFragment;
 import com.example.economy_manager.feature.settings.SettingsActivity;
 import com.example.economy_manager.model.Transaction;
 import com.example.economy_manager.model.UserDetails;
@@ -36,7 +36,7 @@ import java.util.TimerTask;
 
 public class MainScreenActivity
         extends AppCompatActivity
-        implements MonthlyExpensesPieChartFragment.MonthlyExpensesPieChartListener {
+        implements PieChartFragment.PieChartListener {
 
     private MainScreenActivityBinding binding;
     private MainScreenViewModel viewModel;

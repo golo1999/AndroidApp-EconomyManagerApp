@@ -7,15 +7,14 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        tools:context=".feature.monthlyexpensespiechart.MonthlyExpensesPieChartFragment">
+        tools:context=".feature.piechart.PieChartFragment">
 
         <TextView
-            android:id="@+id/noExpensesMadeText"
+            android:id="@+id/noDataText"
             android:layout_width="0sp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:padding="20sp"
-            android:text="@string/no_expenses_made_this_month"
             android:textAlignment="center"
             android:textColor="@color/quaternaryLight"
             android:textSize="20sp"
@@ -23,7 +22,8 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="@string/no_data" />
 
         <org.eazegraph.lib.charts.PieChart
             android:id="@+id/pieChart"

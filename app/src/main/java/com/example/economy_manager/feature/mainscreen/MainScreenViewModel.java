@@ -17,9 +17,9 @@ import com.example.economy_manager.feature.currencyconversion.CurrencyConversion
 import com.example.economy_manager.feature.favoriteexpenses.FavoriteExpensesCategoryFragment;
 import com.example.economy_manager.feature.lasttentransactions.LastTenTransactionsFragment;
 import com.example.economy_manager.feature.lastweekexpenses.LastWeekExpensesFragment;
-import com.example.economy_manager.feature.monthlyexpensespiechart.MonthlyExpensesPieChartFragment;
 import com.example.economy_manager.feature.monthlysavings.MonthlySavingsFragment;
 import com.example.economy_manager.feature.overallprofit.OverallProfitFragment;
+import com.example.economy_manager.feature.piechart.PieChartFragment;
 import com.example.economy_manager.feature.topfiveexpenses.TopFiveExpensesFragment;
 import com.example.economy_manager.model.Transaction;
 import com.example.economy_manager.model.UserDetails;
@@ -35,22 +35,17 @@ import java.util.Locale;
 
 public class MainScreenViewModel extends ViewModel {
 
-    private final MonthlySavingsFragment monthlySavingsFragment =
-            MonthlySavingsFragment.newInstance();
+    private final MonthlySavingsFragment monthlySavingsFragment = MonthlySavingsFragment.newInstance();
     private final BudgetReviewFragment budgetReviewFragment = BudgetReviewFragment.newInstance();
     private final OverallProfitFragment overallProfitFragment = OverallProfitFragment.newInstance();
-    private final LastWeekExpensesFragment lastWeekExpensesFragment =
-            LastWeekExpensesFragment.newInstance();
-    private final LastTenTransactionsFragment lastTenTransactionsFragment =
-            LastTenTransactionsFragment.newInstance();
-    private final TopFiveExpensesFragment topFiveExpensesFragment =
-            TopFiveExpensesFragment.newInstance();
+    private final LastWeekExpensesFragment lastWeekExpensesFragment = LastWeekExpensesFragment.newInstance();
+    private final LastTenTransactionsFragment lastTenTransactionsFragment = LastTenTransactionsFragment.newInstance();
+    private final TopFiveExpensesFragment topFiveExpensesFragment = TopFiveExpensesFragment.newInstance();
     private final FavoriteExpensesCategoryFragment favoriteExpensesCategoryFragment =
             FavoriteExpensesCategoryFragment.newInstance();
     private final CurrencyConversionFragment monthlyIncomesConvertedFragment =
             CurrencyConversionFragment.newInstance("MONTHLY_INCOMES");
-    private final MonthlyExpensesPieChartFragment monthlyExpensesPieChartFragment =
-            MonthlyExpensesPieChartFragment.newInstance();
+    private final PieChartFragment monthlyExpensesPieChartFragment = PieChartFragment.newInstance("MONTHLY_EXPENSES");
 
     private UserDetails userDetails;
     private int timerCounter = 0;
@@ -185,7 +180,7 @@ public class MainScreenViewModel extends ViewModel {
         return monthlyIncomesConvertedFragment;
     }
 
-    public MonthlyExpensesPieChartFragment getMonthlyExpensesPieChartFragment() {
+    public PieChartFragment getMonthlyExpensesPieChartFragment() {
         return monthlyExpensesPieChartFragment;
     }
 
@@ -226,7 +221,11 @@ public class MainScreenViewModel extends ViewModel {
 
     public int getPieChartCategoryColor(final @NonNull Context context,
                                         final int key) {
-        return context.getColor(key == 4 ?
+        return context.getColor(key == 0 ?
+                R.color.incomes_deposits : key == 1 ?
+                R.color.incomes_independent_sources : key == 2 ?
+                R.color.incomes_salary : key == 3 ?
+                R.color.incomes_saving : key == 4 ?
                 R.color.expenses_bills : key == 5 ?
                 R.color.expenses_car : key == 6 ?
                 R.color.expenses_clothes : key == 7 ?

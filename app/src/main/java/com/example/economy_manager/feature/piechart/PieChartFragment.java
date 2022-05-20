@@ -1,4 +1,4 @@
-package com.example.economy_manager.feature.monthlyexpensespiechart;
+package com.example.economy_manager.feature.piechart;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -14,7 +14,7 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelStoreOwner;
 
 import com.example.economy_manager.R;
-import com.example.economy_manager.databinding.MonthlyExpensesPieChartFragmentBinding;
+import com.example.economy_manager.databinding.PieChartFragmentBinding;
 import com.example.economy_manager.feature.mainscreen.MainScreenViewModel;
 import com.example.economy_manager.model.Transaction;
 import com.example.economy_manager.model.UserDetails;
@@ -33,29 +33,33 @@ import java.util.Locale;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 
-public class MonthlyExpensesPieChartFragment extends Fragment {
+public class PieChartFragment extends Fragment {
 
-    private MonthlyExpensesPieChartFragmentBinding binding;
+    private PieChartFragmentBinding binding;
     private MainScreenViewModel viewModel;
     private UserDetails userDetails;
     private final LinkedHashMap<Integer, Float> transactionTypesMap = new LinkedHashMap<>();
-    private MonthlyExpensesPieChartListener listener;
+    private PieChartListener listener;
 
-    public MonthlyExpensesPieChartFragment() {
+    private static final String TYPE = "TYPE";
+    private String SELECTED_TYPE;
+
+    public PieChartFragment() {
         // Required empty public constructor
     }
 
     @NonNull
-    public static MonthlyExpensesPieChartFragment newInstance() {
-        final MonthlyExpensesPieChartFragment fragment = new MonthlyExpensesPieChartFragment();
+    public static PieChartFragment newInstance(String type) {
+        final PieChartFragment fragment = new PieChartFragment();
         final Bundle args = new Bundle();
 
+        args.putString(TYPE, type);
         fragment.setArguments(args);
 
         return fragment;
     }
 
-    public interface MonthlyExpensesPieChartListener {
+    public interface PieChartListener {
         void onEmptyPieChart();
 
         void onNotEmptyPieChart();
@@ -66,17 +70,20 @@ public class MonthlyExpensesPieChartFragment extends Fragment {
         super.onAttach(context);
 
         try {
-            listener = (MonthlyExpensesPieChartListener) context;
+            listener = (PieChartListener) context;
         } catch (ClassCastException e) {
-            throw new ClassCastException(context.getResources()
-                    .getString(R.string.must_implement_the_listener, context, context.getResources()
-                            .getString(R.string.monthly_expenses_pie_chart_listener)));
+            throw new ClassCastException(context.getResources().getString(R.string.must_implement_the_listener, context,
+                    context.getResources().getString(R.string.pie_chart_listener)));
         }
     }
 
     @Override
     public void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        if (getArguments() != null) {
+            SELECTED_TYPE = getArguments().getString(TYPE);
+        }
     }
 
     @Override
@@ -129,56 +136,73 @@ public class MonthlyExpensesPieChartFragment extends Fragment {
 
                         final Iterable<DataSnapshot> personalTransactions =
                                 snapshot.child("personalTransactions").getChildren();
-                        final int currentMonthIndex = LocalDate.now().getMonthValue();
-                        final int currentYear = LocalDate.now().getYear();
-                        final AtomicReference<Float> currentMonthExpensesTotal = new AtomicReference<>(0f);
+                        final AtomicReference<Float> currentMonthTotalExpenses = new AtomicReference<>(0f);
+                        final AtomicReference<Float> currentMonthTotalIncomes = new AtomicReference<>(0f);
 
                         if (!transactionTypesMap.isEmpty()) {
                             transactionTypesMap.clear();
                         }
 
-                        personalTransactions
-                                .forEach((final DataSnapshot transactionsIterator) -> {
-                                    final Transaction transaction = transactionsIterator.getValue(Transaction.class);
+                        personalTransactions.forEach((final DataSnapshot transactionsIterator) -> {
+                            final Transaction transaction = transactionsIterator.getValue(Transaction.class);
 
-                                    // if the transaction is a current month & year expense
-                                    if (transaction != null && transaction.getType() == 0 &&
-                                            transaction.getTime().getYear() == currentYear &&
-                                            transaction.getTime().getMonth() == currentMonthIndex) {
-                                        final int transactionCategory = transaction.getCategory();
+                            if (transaction == null) {
+                                return;
+                            }
 
-                                        currentMonthExpensesTotal.updateAndGet((final Float value) ->
-                                                value + Float.parseFloat(transaction.getValue()));
+                            final boolean isCurrentMonthExpense = transaction.getType() == 0 &&
+                                    transaction.getTime().getYear() == LocalDate.now().getYear() &&
+                                    transaction.getTime().getMonth() == LocalDate.now().getMonthValue();
+                            final boolean isCurrentMonthIncome = transaction.getType() == 1 &&
+                                    transaction.getTime().getYear() == LocalDate.now().getYear() &&
+                                    transaction.getTime().getMonth() == LocalDate.now().getMonthValue();
 
-                                        // updating current category's total value
-                                        // if it already exists
-                                        if (!transactionTypesMap.containsKey(transactionCategory)) {
-                                            final float transactionValue =
-                                                    Float.parseFloat(String.format(Locale.getDefault(), "%.0f",
-                                                            Float.parseFloat(transaction.getValue())));
+                            if (SELECTED_TYPE.equals("MONTHLY_EXPENSES") && !isCurrentMonthExpense) {
+                                return;
+                            } else if (SELECTED_TYPE.equals("MONTHLY_INCOMES") && !isCurrentMonthIncome) {
+                                return;
+                            }
 
-                                            transactionTypesMap.put(transactionCategory, transactionValue);
-                                        }
-                                        // if the current category doesn't exist yet
-                                        else {
-                                            final float currentSumOfCurrentCategory =
-                                                    Float.parseFloat(String.valueOf(transactionTypesMap
-                                                            .get(transactionCategory)));
+                            final int transactionCategory = transaction.getCategory();
 
-                                            final float transactionValue =
-                                                    Float.parseFloat(String.format(Locale.getDefault(), "%.0f",
-                                                            Float.parseFloat(transaction.getValue())));
+                            if (SELECTED_TYPE.equals("MONTHLY_EXPENSES")) {
+                                currentMonthTotalExpenses.updateAndGet((final Float value) ->
+                                        value + Float.parseFloat(transaction.getValue()));
+                            } else if (SELECTED_TYPE.equals("MONTHLY_INCOMES")) {
+                                currentMonthTotalIncomes.updateAndGet((final Float value) ->
+                                        value + Float.parseFloat(transaction.getValue()));
+                            }
 
-                                            transactionTypesMap.put(transactionCategory,
-                                                    currentSumOfCurrentCategory + transactionValue);
-                                        }
-                                    }
-                                });
+                            // updating current category's total value if it already exists
+                            if (!transactionTypesMap.containsKey(transactionCategory)) {
+                                final float transactionValue =
+                                        Float.parseFloat(String.format(Locale.getDefault(), "%.0f",
+                                                Float.parseFloat(transaction.getValue())));
+
+                                transactionTypesMap.put(transactionCategory, transactionValue);
+                            }
+                            // if the current category doesn't exist yet
+                            else {
+                                final float currentSumOfCurrentCategory =
+                                        Float.parseFloat(String.valueOf(transactionTypesMap
+                                                .get(transactionCategory)));
+
+                                final float transactionValue =
+                                        Float.parseFloat(String.format(Locale.getDefault(), "%.0f",
+                                                Float.parseFloat(transaction.getValue())));
+
+                                transactionTypesMap.put(transactionCategory,
+                                        currentSumOfCurrentCategory + transactionValue);
+                            }
+                        });
 
                         if (transactionTypesMap.isEmpty()) {
                             listener.onEmptyPieChart();
+                            binding.noDataText.setText(requireActivity().getResources()
+                                    .getString(SELECTED_TYPE.equals("MONTHLY_EXPENSES") ?
+                                            R.string.no_expenses_made_this_month : R.string.no_incomes_made_this_month));
                             binding.pieChart.setVisibility(View.GONE);
-                            binding.noExpensesMadeText.setVisibility(View.VISIBLE);
+                            binding.noDataText.setVisibility(View.VISIBLE);
 
                             if (binding.detailsLayout.getChildCount() > 0) {
                                 clearPieChart();
@@ -188,11 +212,12 @@ public class MonthlyExpensesPieChartFragment extends Fragment {
                         }
 
                         listener.onNotEmptyPieChart();
-                        binding.noExpensesMadeText.setVisibility(View.GONE);
+                        binding.noDataText.setVisibility(View.GONE);
                         binding.pieChart.setVisibility(View.VISIBLE);
 
                         MyCustomMethods.sortMapDescendingByValue(transactionTypesMap);
-                        setPieChartData(transactionTypesMap, currentMonthExpensesTotal.get());
+                        setPieChartData(transactionTypesMap, SELECTED_TYPE.equals("MONTHLY_EXPENSES") ?
+                                currentMonthTotalExpenses.get() : currentMonthTotalIncomes.get());
                     }
 
                     @Override
@@ -204,12 +229,12 @@ public class MonthlyExpensesPieChartFragment extends Fragment {
 
     private void setActivityVariables(final @NonNull LayoutInflater inflater,
                                       final ViewGroup container) {
-        binding = DataBindingUtil.inflate(inflater, R.layout.monthly_expenses_pie_chart_fragment, container, false);
+        binding = DataBindingUtil.inflate(inflater, R.layout.pie_chart_fragment, container, false);
         viewModel = new ViewModelProvider((ViewModelStoreOwner) requireContext()).get(MainScreenViewModel.class);
     }
 
     private void setPieChartData(final LinkedHashMap<Integer, Float> transactionTypesMap,
-                                 final float totalMonthlyExpenses) {
+                                 final float total) {
         final AtomicInteger transactionTypesIndex = new AtomicInteger(0);
 
         binding.pieChart.clearChart();
@@ -219,7 +244,7 @@ public class MonthlyExpensesPieChartFragment extends Fragment {
         }
 
         transactionTypesMap.forEach((final Integer key, final Float value) -> {
-            final int categoryPercentage = (int) (100 * (value / totalMonthlyExpenses));
+            final int categoryPercentage = (int) (100 * (value / total));
             final int categoryColor = viewModel.getPieChartCategoryColor(requireContext(), key);
             final PieModel pieSlice = new PieModel("category" + key, categoryPercentage, categoryColor);
 
