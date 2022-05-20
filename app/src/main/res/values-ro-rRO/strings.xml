@@ -197,7 +197,7 @@
     <string name="no_changes_have_been_made">Nu au fost efectuate modificări</string>
     <string name="passwords">Parolele</string>
     <string name="register">Înregistrare</string>
-    <string name="expenses_chart">Graficul cheltuielilor</string>
+    <string name="monthly_expenses_pie_chart">Diagrama circulară a cheltuielilor lunare</string>
     <string name="favorite_expenses">Cheltuielile preferate</string>
     <string name="you_spent_last_week">Ați cheltuit %s în ultima săptămână</string>
     <string name="you_spent_percentage_of_your_incomes">Ați cheltuit %s din venituri</string>

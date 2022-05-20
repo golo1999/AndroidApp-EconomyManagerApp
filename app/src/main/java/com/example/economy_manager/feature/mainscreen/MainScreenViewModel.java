@@ -17,7 +17,7 @@ import com.example.economy_manager.feature.currencyconversion.CurrencyConversion
 import com.example.economy_manager.feature.favoriteexpenses.FavoriteExpensesCategoryFragment;
 import com.example.economy_manager.feature.lasttentransactions.LastTenTransactionsFragment;
 import com.example.economy_manager.feature.lastweekexpenses.LastWeekExpensesFragment;
-import com.example.economy_manager.feature.moneyspentpercentage.MoneySpentPercentageFragment;
+import com.example.economy_manager.feature.monthlyexpensespiechart.MonthlyExpensesPieChartFragment;
 import com.example.economy_manager.feature.monthlysavings.MonthlySavingsFragment;
 import com.example.economy_manager.feature.overallprofit.OverallProfitFragment;
 import com.example.economy_manager.feature.topfiveexpenses.TopFiveExpensesFragment;
@@ -49,8 +49,8 @@ public class MainScreenViewModel extends ViewModel {
             FavoriteExpensesCategoryFragment.newInstance();
     private final CurrencyConversionFragment monthlyIncomesConvertedFragment =
             CurrencyConversionFragment.newInstance("MONTHLY_INCOMES");
-    private final MoneySpentPercentageFragment moneySpentPercentageFragment =
-            MoneySpentPercentageFragment.newInstance();
+    private final MonthlyExpensesPieChartFragment monthlyExpensesPieChartFragment =
+            MonthlyExpensesPieChartFragment.newInstance();
 
     private UserDetails userDetails;
     private int timerCounter = 0;
@@ -185,8 +185,8 @@ public class MainScreenViewModel extends ViewModel {
         return monthlyIncomesConvertedFragment;
     }
 
-    public MoneySpentPercentageFragment getMoneySpentPercentageFragment() {
-        return moneySpentPercentageFragment;
+    public MonthlyExpensesPieChartFragment getMonthlyExpensesPieChartFragment() {
+        return monthlyExpensesPieChartFragment;
     }
 
     public Calendar getCurrentTime() {

@@ -17,8 +17,8 @@ import com.example.economy_manager.feature.addexpense.AddExpenseActivity;
 import com.example.economy_manager.feature.addincome.AddIncomeActivity;
 import com.example.economy_manager.feature.editprofile.EditProfileActivity;
 import com.example.economy_manager.feature.edittransactions.EditTransactionsActivity;
-import com.example.economy_manager.feature.moneyspentpercentage.MoneySpentPercentageFragment;
 import com.example.economy_manager.feature.monthlybalance.MonthlyBalanceActivity;
+import com.example.economy_manager.feature.monthlyexpensespiechart.MonthlyExpensesPieChartFragment;
 import com.example.economy_manager.feature.settings.SettingsActivity;
 import com.example.economy_manager.model.Transaction;
 import com.example.economy_manager.model.UserDetails;
@@ -36,7 +36,7 @@ import java.util.TimerTask;
 
 public class MainScreenActivity
         extends AppCompatActivity
-        implements MoneySpentPercentageFragment.MoneySpentPercentageListener {
+        implements MonthlyExpensesPieChartFragment.MonthlyExpensesPieChartListener {
 
     private MainScreenActivityBinding binding;
     private MainScreenViewModel viewModel;
@@ -51,9 +51,7 @@ public class MainScreenActivity
             super.onBackPressed();
             return;
         } else {
-            backToast = Toast.makeText(this,
-                    getResources().getString(R.string.press_again_exit),
-                    Toast.LENGTH_SHORT);
+            backToast = Toast.makeText(this, getResources().getString(R.string.press_again_exit), Toast.LENGTH_SHORT);
             backToast.show();
         }
 
@@ -83,20 +81,19 @@ public class MainScreenActivity
             moneySpentPercentageLayoutParams.height = ViewGroup.LayoutParams.WRAP_CONTENT;
         }
 
-        binding.expensesChartFragmentContainer.setLayoutParams(moneySpentPercentageLayoutParams);
+        binding.monthlyExpensesPieChartFragmentContainer.setLayoutParams(moneySpentPercentageLayoutParams);
     }
 
     @Override
     public void onNotEmptyPieChart() {
         final int screenHeight = Resources.getSystem().getDisplayMetrics().heightPixels;
-
         final int percentageScreenHeight = (int) (screenHeight * 0.4);
 
         if (moneySpentPercentageLayoutParams.height != percentageScreenHeight) {
             moneySpentPercentageLayoutParams.height = percentageScreenHeight;
         }
 
-        binding.expensesChartFragmentContainer.setLayoutParams(moneySpentPercentageLayoutParams);
+        binding.monthlyExpensesPieChartFragmentContainer.setLayoutParams(moneySpentPercentageLayoutParams);
     }
 
     /**
@@ -105,7 +102,7 @@ public class MainScreenActivity
     private void setActivityVariables() {
         binding = DataBindingUtil.setContentView(this, R.layout.main_screen_activity);
         viewModel = new ViewModelProvider(this).get(MainScreenViewModel.class);
-        moneySpentPercentageLayoutParams = binding.expensesChartFragmentContainer.getLayoutParams();
+        moneySpentPercentageLayoutParams = binding.monthlyExpensesPieChartFragmentContainer.getLayoutParams();
     }
 
     private void setDates() {
@@ -124,14 +121,10 @@ public class MainScreenActivity
                 .replace(R.id.showSavingsFragmentContainer, viewModel.getShowSavingsFragment())
                 .replace(R.id.budgetReviewFragmentContainer, viewModel.getBudgetReviewFragment())
                 .replace(R.id.moneySpentFragmentContainer, viewModel.getMoneySpentFragment())
-                .replace(R.id.lastTenTransactionsFragmentContainer,
-                        viewModel.getLastTenTransactionsFragment())
-                .replace(R.id.topFiveExpensesFragmentContainer,
-                        viewModel.getTopFiveExpensesFragment())
-                .replace(R.id.favoriteExpensesCategoryFragmentContainer,
-                        viewModel.getFavoriteExpensesCategoryFragment())
-                .replace(R.id.expensesChartFragmentContainer,
-                        viewModel.getMoneySpentPercentageFragment())
+                .replace(R.id.lastTenTransactionsFragmentContainer, viewModel.getLastTenTransactionsFragment())
+                .replace(R.id.topFiveExpensesFragmentContainer, viewModel.getTopFiveExpensesFragment())
+                .replace(R.id.favoriteExpensesCategoryFragmentContainer, viewModel.getFavoriteExpensesCategoryFragment())
+                .replace(R.id.monthlyExpensesPieChartFragmentContainer, viewModel.getMonthlyExpensesPieChartFragment())
                 .replace(R.id.overallProfitFragmentContainer, viewModel.getOverallProfitFragment())
                 .replace(R.id.monthlyIncomesConvertedFragmentContainer, viewModel.getMonthlyIncomesConvertedFragment())
                 .commit();
@@ -187,28 +180,22 @@ public class MainScreenActivity
                                 final Transaction transaction = transactionEntry.getValue();
 
                                 if (transaction != null &&
-                                        transaction.getTime().getYear() ==
-                                                LocalDate.now().getYear() &&
-                                        transaction.getTime().getMonth() ==
-                                                LocalDate.now().getMonthValue()) {
+                                        transaction.getTime().getYear() == LocalDate.now().getYear() &&
+                                        transaction.getTime().getMonth() == LocalDate.now().getMonthValue()) {
                                     if (!currentMonthTransactionsExist) {
                                         currentMonthTransactionsExist = true;
                                     }
 
-                                    if (transaction.getCategory() > 0 &&
-                                            transaction.getCategory() < 4) {
-                                        totalMonthlyIncomes +=
-                                                Float.parseFloat(transaction.getValue());
+                                    if (transaction.getCategory() > 0 && transaction.getCategory() < 4) {
+                                        totalMonthlyIncomes += Float.parseFloat(transaction.getValue());
                                     } else {
-                                        totalMonthlyExpenses +=
-                                                Float.parseFloat(transaction.getValue());
+                                        totalMonthlyExpenses += Float.parseFloat(transaction.getValue());
                                     }
                                 }
                             }
 
                             final int percentage =
-                                    Float.valueOf(totalMonthlyExpenses / totalMonthlyIncomes * 100)
-                                            .intValue();
+                                    Float.valueOf(totalMonthlyExpenses / totalMonthlyIncomes * 100).intValue();
 
                             final String percentageText = currentMonthTransactionsExist ?
                                     getResources().getString(R
@@ -258,15 +245,12 @@ public class MainScreenActivity
             return;
         }
 
-        if (MyCustomSharedPreferences.retrieveUserDetailsFromSharedPreferences(this)
-                != null) {
-            viewModel.setUserDetails(MyCustomSharedPreferences
-                    .retrieveUserDetailsFromSharedPreferences(this));
+        if (MyCustomSharedPreferences.retrieveUserDetailsFromSharedPreferences(this) != null) {
+            viewModel.setUserDetails(MyCustomSharedPreferences.retrieveUserDetailsFromSharedPreferences(this));
         }
 
         if (viewModel.getUserDetails() != null) {
-            binding.setIsDarkThemeEnabled(viewModel.getUserDetails().getApplicationSettings()
-                    .isDarkThemeEnabled());
+            binding.setIsDarkThemeEnabled(viewModel.getUserDetails().getApplicationSettings().isDarkThemeEnabled());
         }
 
         MyCustomVariables.getDatabaseReference()

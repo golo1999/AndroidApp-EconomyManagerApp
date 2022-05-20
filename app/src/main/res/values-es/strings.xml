@@ -196,7 +196,7 @@
     <string name="no_changes_have_been_made">No se han hecho cambios</string>
     <string name="passwords">Contraseñas</string>
     <string name="register">Registrarse</string>
-    <string name="expenses_chart">Cuadro de gastos</string>
+    <string name="monthly_expenses_pie_chart">Gráfico circular de gastos mensuales</string>
     <string name="favorite_expenses">Gastos favoritos</string>
     <string name="title">Título</string>
     <string name="you_spent_last_week">Gastaste %s la semana pasada</string>

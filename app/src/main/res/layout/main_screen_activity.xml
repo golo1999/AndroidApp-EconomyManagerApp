@@ -389,7 +389,7 @@
                     app:cardBackgroundColor="@color/tertiaryLight"
                     app:cardCornerRadius="10sp"
                     app:cardElevation="10sp"
-                    app:layout_constraintBottom_toTopOf="@id/expensesChartText"
+                    app:layout_constraintBottom_toTopOf="@id/monthlyExpensesPieChartText"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/monthlyIncomesConvertedText"
@@ -403,21 +403,21 @@
                 </androidx.cardview.widget.CardView>
 
                 <TextView
-                    android:id="@+id/expensesChartText"
+                    android:id="@+id/monthlyExpensesPieChartText"
                     android:layout_width="0sp"
                     android:layout_height="wrap_content"
-                    android:text="@string/expenses_chart"
+                    android:text="@string/monthly_expenses_pie_chart"
                     android:textColor="@{isDarkThemeEnabled ? @color/tertiaryLight : @color/quaternaryLight}"
                     android:textSize="20sp"
                     android:textStyle="bold"
-                    app:layout_constraintBottom_toTopOf="@id/expensesChartCard"
+                    app:layout_constraintBottom_toTopOf="@id/monthlyExpensesPieChartCard"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/monthlyIncomesConvertedCard"
                     app:layout_constraintWidth_percent=".9" />
 
                 <androidx.cardview.widget.CardView
-                    android:id="@+id/expensesChartCard"
+                    android:id="@+id/monthlyExpensesPieChartCard"
                     android:layout_width="0sp"
                     android:layout_height="wrap_content"
                     android:layout_marginVertical="10sp"
@@ -427,11 +427,11 @@
                     app:layout_constraintBottom_toTopOf="@id/fabLayout"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/expensesChartText"
+                    app:layout_constraintTop_toBottomOf="@id/monthlyExpensesPieChartText"
                     app:layout_constraintWidth_percent=".9">
 
                     <androidx.fragment.app.FragmentContainerView
-                        android:id="@+id/expensesChartFragmentContainer"
+                        android:id="@+id/monthlyExpensesPieChartFragmentContainer"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content" />
 
@@ -460,7 +460,7 @@
                     app:addIncomeActivity="@{addIncomeActivity}"
                     app:isDarkThemeEnabled="@{isDarkThemeEnabled}"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/expensesChartCard"
+                    app:layout_constraintTop_toBottomOf="@id/monthlyExpensesPieChartCard"
                     app:viewModel="@{viewModel}" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
