@@ -34,6 +34,13 @@
     <color name="tertiaryLight">#E2E5F1</color>
     <color name="quaternaryLight">#697589</color>
 
+    <!-- Incomes -->
+
+    <color name="incomes_deposits">#D2281F</color>
+    <color name="incomes_independent_sources">#1FA922</color>
+    <color name="incomes_salary">#E3B19E</color>
+    <color name="incomes_saving">#3E8CF7</color>
+
     <!-- Expenses -->
 
     <color name="expenses_bills">#BB22BE</color>

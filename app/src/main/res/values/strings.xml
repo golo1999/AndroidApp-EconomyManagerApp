@@ -27,6 +27,7 @@
     <string name="expense_added_successfully">Expense added successfully</string>
     <string name="expenses">Expenses</string>
     <string name="monthly_expenses_pie_chart">Monthly expenses pie chart</string>
+    <string name="monthly_incomes_pie_chart">Monthly incomes pie chart</string>
     <string name="facebook_app_id" translatable="false">973649146445611</string>
     <string name="facebook_login_protocol_scheme" translatable="false">fb973649146445611</string>
     <string name="favorite_expenses">Favorite expenses</string>
@@ -50,7 +51,6 @@
     <string name="login">Login</string>
     <string name="login_successful">Login successful</string>
     <string name="minute">Minute</string>
-    <string name="monthly_expenses_pie_chart_listener" translatable="false">MonthlyExpensesPieChartListener</string>
     <string name="monthly_balance">Monthly balance</string>
     <string name="monthly_transactions">Monthly transactions</string>
     <string name="must_implement_the_listener">%s must implement %s</string>
@@ -58,8 +58,10 @@
     <string name="new_income">New income</string>
     <string name="new_password">New password</string>
     <string name="no_changes_have_been_made">No changes have been made</string>
+    <string name="no_data">No data</string>
     <string name="no_expenses_made_this_month">No expenses made this month</string>
     <string name="no_expenses_made_yet">No expenses made yet</string>
+    <string name="no_incomes_made_this_month">No incomes made this month</string>
     <string name="no_money_records_this_month">No money records this month</string>
     <string name="no_money_records_yet">No money records yet</string>
     <string name="no_money_spent_last_week">No money spent last week</string>
@@ -75,6 +77,7 @@
     <string name="passwords">Passwords</string>
     <string name="password_updated_successfully">Password updated successfully</string>
     <string name="phone_number">Phone number</string>
+    <string name="pie_chart_listener" translatable="false">PieChartListener</string>
     <string name="press_again_exit">Press again to exit</string>
     <string name="proceed">"Proceed "</string>
     <string name="profile_updated_successfully">Profile updated successfully</string>

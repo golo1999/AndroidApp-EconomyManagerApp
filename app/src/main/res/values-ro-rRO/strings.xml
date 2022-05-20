@@ -223,4 +223,7 @@
     <string name="the_old_password">Vechea parolă</string>
     <string name="the_new_password">Noua parolă</string>
     <string name="overall_profit">Profit total</string>
+    <string name="no_data">Nu există date</string>
+    <string name="no_incomes_made_this_month">Niciun venit realizat în luna curentă</string>
+    <string name="monthly_incomes_pie_chart">Diagrama circulară al veniturilor lunare</string>
 </resources>
