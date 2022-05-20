@@ -225,4 +225,5 @@
     <string name="overall_profit">Profitto complessivo</string>
     <string name="no_data">Nessun dato</string>
     <string name="no_incomes_made_this_month">Nessun reddito realizzato questo mese</string>
+    <string name="monthly_incomes_pie_chart">Grafico circolare dei redditi mensili</string>
 </resources>

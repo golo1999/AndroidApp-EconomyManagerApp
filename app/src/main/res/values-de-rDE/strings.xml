@@ -225,4 +225,5 @@
     <string name="overall_profit">Gesamtgewinn</string>
     <string name="no_data">Keine Daten</string>
     <string name="no_incomes_made_this_month">Keine Einnahmen in diesem Monat</string>
+    <string name="monthly_incomes_pie_chart">Kreisdiagramm der monatlichen Einkommen</string>
 </resources>

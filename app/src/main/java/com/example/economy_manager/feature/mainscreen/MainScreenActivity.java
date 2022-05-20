@@ -40,7 +40,8 @@ public class MainScreenActivity
 
     private MainScreenActivityBinding binding;
     private MainScreenViewModel viewModel;
-    private ViewGroup.LayoutParams moneySpentPercentageLayoutParams;
+    private ViewGroup.LayoutParams monthlyIncomesPieChartLayoutParams;
+    private ViewGroup.LayoutParams monthlyExpensesPieChartLayoutParams;
     private long backPressedTime;
     private Toast backToast;
 
@@ -77,11 +78,16 @@ public class MainScreenActivity
 
     @Override
     public void onEmptyPieChart() {
-        if (moneySpentPercentageLayoutParams.height != ViewGroup.LayoutParams.WRAP_CONTENT) {
-            moneySpentPercentageLayoutParams.height = ViewGroup.LayoutParams.WRAP_CONTENT;
+        if (monthlyIncomesPieChartLayoutParams.height != ViewGroup.LayoutParams.WRAP_CONTENT) {
+            monthlyIncomesPieChartLayoutParams.height = ViewGroup.LayoutParams.WRAP_CONTENT;
         }
 
-        binding.monthlyExpensesPieChartFragmentContainer.setLayoutParams(moneySpentPercentageLayoutParams);
+        if (monthlyExpensesPieChartLayoutParams.height != ViewGroup.LayoutParams.WRAP_CONTENT) {
+            monthlyExpensesPieChartLayoutParams.height = ViewGroup.LayoutParams.WRAP_CONTENT;
+        }
+
+        binding.monthlyIncomesPieChartFragmentContainer.setLayoutParams(monthlyIncomesPieChartLayoutParams);
+        binding.monthlyExpensesPieChartFragmentContainer.setLayoutParams(monthlyExpensesPieChartLayoutParams);
     }
 
     @Override
@@ -89,11 +95,16 @@ public class MainScreenActivity
         final int screenHeight = Resources.getSystem().getDisplayMetrics().heightPixels;
         final int percentageScreenHeight = (int) (screenHeight * 0.4);
 
-        if (moneySpentPercentageLayoutParams.height != percentageScreenHeight) {
-            moneySpentPercentageLayoutParams.height = percentageScreenHeight;
+        if (monthlyIncomesPieChartLayoutParams.height != percentageScreenHeight) {
+            monthlyIncomesPieChartLayoutParams.height = percentageScreenHeight;
         }
 
-        binding.monthlyExpensesPieChartFragmentContainer.setLayoutParams(moneySpentPercentageLayoutParams);
+        if (monthlyExpensesPieChartLayoutParams.height != percentageScreenHeight) {
+            monthlyExpensesPieChartLayoutParams.height = percentageScreenHeight;
+        }
+
+        binding.monthlyIncomesPieChartFragmentContainer.setLayoutParams(monthlyIncomesPieChartLayoutParams);
+        binding.monthlyExpensesPieChartFragmentContainer.setLayoutParams(monthlyExpensesPieChartLayoutParams);
     }
 
     /**
@@ -102,7 +113,8 @@ public class MainScreenActivity
     private void setActivityVariables() {
         binding = DataBindingUtil.setContentView(this, R.layout.main_screen_activity);
         viewModel = new ViewModelProvider(this).get(MainScreenViewModel.class);
-        moneySpentPercentageLayoutParams = binding.monthlyExpensesPieChartFragmentContainer.getLayoutParams();
+        monthlyIncomesPieChartLayoutParams = binding.monthlyIncomesPieChartFragmentContainer.getLayoutParams();
+        monthlyExpensesPieChartLayoutParams = binding.monthlyExpensesPieChartFragmentContainer.getLayoutParams();
     }
 
     private void setDates() {
@@ -124,6 +136,7 @@ public class MainScreenActivity
                 .replace(R.id.lastTenTransactionsFragmentContainer, viewModel.getLastTenTransactionsFragment())
                 .replace(R.id.topFiveExpensesFragmentContainer, viewModel.getTopFiveExpensesFragment())
                 .replace(R.id.favoriteExpensesCategoryFragmentContainer, viewModel.getFavoriteExpensesCategoryFragment())
+                .replace(R.id.monthlyIncomesPieChartFragmentContainer, viewModel.getMonthlyIncomesPieChartFragment())
                 .replace(R.id.monthlyExpensesPieChartFragmentContainer, viewModel.getMonthlyExpensesPieChartFragment())
                 .replace(R.id.overallProfitFragmentContainer, viewModel.getOverallProfitFragment())
                 .replace(R.id.monthlyIncomesConvertedFragmentContainer, viewModel.getMonthlyIncomesConvertedFragment())

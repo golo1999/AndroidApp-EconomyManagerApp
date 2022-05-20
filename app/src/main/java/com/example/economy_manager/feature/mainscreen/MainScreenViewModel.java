@@ -45,6 +45,7 @@ public class MainScreenViewModel extends ViewModel {
             FavoriteExpensesCategoryFragment.newInstance();
     private final CurrencyConversionFragment monthlyIncomesConvertedFragment =
             CurrencyConversionFragment.newInstance("MONTHLY_INCOMES");
+    private final PieChartFragment monthlyIncomesPieChartFragment = PieChartFragment.newInstance("MONTHLY_INCOMES");
     private final PieChartFragment monthlyExpensesPieChartFragment = PieChartFragment.newInstance("MONTHLY_EXPENSES");
 
     private UserDetails userDetails;
@@ -180,6 +181,10 @@ public class MainScreenViewModel extends ViewModel {
         return monthlyIncomesConvertedFragment;
     }
 
+    public PieChartFragment getMonthlyIncomesPieChartFragment() {
+        return monthlyIncomesPieChartFragment;
+    }
+
     public PieChartFragment getMonthlyExpensesPieChartFragment() {
         return monthlyExpensesPieChartFragment;
     }
@@ -270,16 +275,13 @@ public class MainScreenViewModel extends ViewModel {
                                           final int categoryPercentage,
                                           final int categoryColor) {
         final LinearLayout categoryLayout = new LinearLayout(context);
-
         final LinearLayout.LayoutParams categoryLayoutParams =
-                new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
-                        ViewGroup.LayoutParams.WRAP_CONTENT);
+                new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
 
         categoryLayoutParams.gravity = Gravity.CENTER_VERTICAL;
         categoryLayout.setLayoutParams(categoryLayoutParams);
 
         final View categoryView = new View(context);
-
         final ViewGroup.LayoutParams categoryViewParams = new ViewGroup.LayoutParams(30, 30);
 
         categoryView.setBackgroundColor(categoryColor);
@@ -287,11 +289,8 @@ public class MainScreenViewModel extends ViewModel {
         categoryLayout.addView(categoryView);
 
         final TextView categoryTextView = new TextView(context);
-
         final ViewGroup.LayoutParams categoryTextViewParams =
-                new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
-                        ViewGroup.LayoutParams.WRAP_CONTENT);
-
+                new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         final String categoryTextViewText = Types.getTranslatedType(context,
                 String.valueOf(Transaction.getTypeFromIndexInEnglish(categoryIndex))) +
                 " " + "(" + categoryPercentage + "%)";

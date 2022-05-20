@@ -243,17 +243,19 @@ public class PieChartFragment extends Fragment {
             binding.detailsLayout.removeAllViews();
         }
 
+        // showing only the first five categories descending by value
         transactionTypesMap.forEach((final Integer key, final Float value) -> {
+            if (transactionTypesIndex.get() >= 5) {
+                return;
+            }
+
             final int categoryPercentage = (int) (100 * (value / total));
             final int categoryColor = viewModel.getPieChartCategoryColor(requireContext(), key);
             final PieModel pieSlice = new PieModel("category" + key, categoryPercentage, categoryColor);
 
             binding.pieChart.addPieSlice(pieSlice);
             transactionTypesIndex.getAndIncrement();
-
-            if (transactionTypesIndex.get() <= 5) {
-                addPieChartDetail(key, categoryPercentage, categoryColor);
-            }
+            addPieChartDetail(key, categoryPercentage, categoryColor);
         });
     }
 

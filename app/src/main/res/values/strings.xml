@@ -27,6 +27,7 @@
     <string name="expense_added_successfully">Expense added successfully</string>
     <string name="expenses">Expenses</string>
     <string name="monthly_expenses_pie_chart">Monthly expenses pie chart</string>
+    <string name="monthly_incomes_pie_chart">Monthly incomes pie chart</string>
     <string name="facebook_app_id" translatable="false">973649146445611</string>
     <string name="facebook_login_protocol_scheme" translatable="false">fb973649146445611</string>
     <string name="favorite_expenses">Favorite expenses</string>
