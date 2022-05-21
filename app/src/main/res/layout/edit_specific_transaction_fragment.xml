@@ -148,16 +148,16 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10sp"
-                        android:background="@{isDarkThemeEnabled ? @drawable/ic_outlined_button_dark : @drawable/ic_outlined_button_light}"
+                        android:background="@{isDarkThemeEnabled ? @drawable/ic_button_dark : @drawable/ic_button_light}"
                         android:onClick="@{() -> viewModel.onSaveChangesButtonClicked(activity)}"
                         android:padding="10sp"
                         android:stateListAnimator="@null"
                         android:text="@string/save_changes"
-                        android:textColor="@{isDarkThemeEnabled ? @color/secondaryDark : @color/quaternaryLight}"
+                        android:textColor="@{isDarkThemeEnabled ? @color/primaryDark : @color/primaryLight}"
                         android:textSize="18sp"
                         android:textStyle="bold"
-                        tools:background="@drawable/ic_outlined_button_dark"
-                        tools:textColor="@color/secondaryDark" />
+                        tools:background="@drawable/ic_button_dark"
+                        tools:textColor="@color/primaryDark" />
 
                 </LinearLayout>
 

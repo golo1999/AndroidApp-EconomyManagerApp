@@ -150,38 +150,40 @@
                     android:layout_width="0sp"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="10sp"
-                    android:background="@{isDarkThemeEnabled ? @drawable/ic_outlined_button_dark : @drawable/ic_outlined_button_light}"
+                    android:background="@{isDarkThemeEnabled ? @drawable/ic_button_dark : @drawable/ic_button_light}"
                     android:onClick="@{() -> activity.onBackPressed()}"
                     android:padding="10sp"
                     android:text="@string/cancel"
-                    android:textColor="@{isDarkThemeEnabled ? @color/secondaryDark : @color/quaternaryLight}"
+                    android:textAllCaps="false"
+                    android:textColor="@{isDarkThemeEnabled ? @color/primaryDark : @color/primaryLight}"
                     android:textSize="18sp"
                     android:textStyle="bold"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toStartOf="@id/saveButton"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    tools:background="@drawable/ic_outlined_button_dark"
-                    tools:textColor="@color/secondaryDark" />
+                    tools:background="@drawable/ic_button_dark"
+                    tools:textColor="@color/primaryDark" />
 
                 <Button
                     android:id="@+id/saveButton"
                     android:layout_width="0sp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10sp"
-                    android:background="@{isDarkThemeEnabled ? @drawable/ic_outlined_button_dark : @drawable/ic_outlined_button_light}"
+                    android:background="@{isDarkThemeEnabled ? @drawable/ic_button_dark : @drawable/ic_button_light}"
                     android:onClick="@{() -> activity.onSaveButtonClicked()}"
                     android:padding="10sp"
                     android:text="@string/save"
-                    android:textColor="@{isDarkThemeEnabled ? @color/secondaryDark : @color/quaternaryLight}"
+                    android:textAllCaps="false"
+                    android:textColor="@{isDarkThemeEnabled ? @color/primaryDark : @color/primaryLight}"
                     android:textSize="18sp"
                     android:textStyle="bold"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@id/cancelButton"
                     app:layout_constraintTop_toTopOf="parent"
-                    tools:background="@drawable/ic_outlined_button_dark"
-                    tools:textColor="@color/secondaryDark" />
+                    tools:background="@drawable/ic_button_dark"
+                    tools:textColor="@color/primaryDark" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 

@@ -96,13 +96,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginVertical="10sp"
-                android:background="@drawable/ic_outlined_button_dark"
+                android:background="@drawable/ic_button_dark"
                 android:onClick="@{() -> viewModel.onLogInButtonClicked(activity, viewModel.enteredEmail, viewModel.enteredPassword)}"
                 android:padding="10sp"
                 android:stateListAnimator="@null"
                 android:text="@string/log_in"
                 android:textAlignment="center"
-                android:textColor="@color/secondaryDark"
+                android:textAllCaps="false"
+                android:textColor="@color/primaryDark"
                 android:textSize="18sp"
                 android:textStyle="bold" />
 
