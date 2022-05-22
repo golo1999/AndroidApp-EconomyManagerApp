@@ -46,6 +46,8 @@ public class MainScreenViewModel extends ViewModel {
             FavoriteExpensesCategoryFragment.newInstance();
     private final CurrencyConversionFragment monthlyIncomesConvertedFragment =
             CurrencyConversionFragment.newInstance("MONTHLY_INCOMES");
+    private final CurrencyConversionFragment monthlyExpensesConvertedFragment =
+            CurrencyConversionFragment.newInstance("MONTHLY_EXPENSES");
     private final BarChartFragment lastWeekExpensesBarChartFragment = BarChartFragment.newInstance("LAST_WEEK_EXPENSES");
     private final BarChartFragment currentYearIncomesBarChartFragment =
             BarChartFragment.newInstance("CURRENT_YEAR_INCOMES");
@@ -155,7 +157,7 @@ public class MainScreenViewModel extends ViewModel {
         this.userDetails = userDetails;
     }
 
-    public MonthlySavingsFragment getShowSavingsFragment() {
+    public MonthlySavingsFragment getMonthlySavingsFragment() {
         return monthlySavingsFragment;
     }
 
@@ -167,7 +169,7 @@ public class MainScreenViewModel extends ViewModel {
         return overallProfitFragment;
     }
 
-    public LastWeekExpensesFragment getMoneySpentFragment() {
+    public LastWeekExpensesFragment getLastWeekExpensesFragment() {
         return lastWeekExpensesFragment;
     }
 
@@ -185,6 +187,10 @@ public class MainScreenViewModel extends ViewModel {
 
     public CurrencyConversionFragment getMonthlyIncomesConvertedFragment() {
         return monthlyIncomesConvertedFragment;
+    }
+
+    public CurrencyConversionFragment getMonthlyExpensesConvertedFragment() {
+        return monthlyExpensesConvertedFragment;
     }
 
     public BarChartFragment getLastWeekExpensesBarChartFragment() {

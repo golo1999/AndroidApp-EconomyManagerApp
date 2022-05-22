@@ -232,4 +232,11 @@
     <string name="friday">Viernes</string>
     <string name="saturday">Sábado</string>
     <string name="sunday">Domingo</string>
+    <string name="no_expenses_made_this_year">No se han realizado gastos este año</string>
+    <string name="no_incomes_made_this_year">No hubo ingresos este año</string>
+    <string name="current_year_expenses_bar_chart">Gráfico de barras de gastos del año actual</string>
+    <string name="last_week_expenses_bar_chart">Gráfico de barras de gastos de la semana pasada</string>
+    <string name="current_year_incomes_bar_chart">Gráfico de barras de ingresos del año actual</string>
+    <string name="monthly_incomes_converted">Ingresos mensuales convertidos</string>
+    <string name="monthly_expenses_converted">Gastos mensuales convertidos</string>
 </resources>

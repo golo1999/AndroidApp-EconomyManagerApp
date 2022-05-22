@@ -232,4 +232,11 @@
     <string name="saturday">Sabato</string>
     <string name="friday">Venerdi</string>
     <string name="thursday">Giovedi</string>
+    <string name="no_expenses_made_this_year">Nessuna spesa fatta quest\'anno</string>
+    <string name="no_incomes_made_this_year">Nessun reddito realizzato quest\'anno</string>
+    <string name="current_year_expenses_bar_chart">Grafico a barre delle spese dell\'anno in corso</string>
+    <string name="last_week_expenses_bar_chart">Grafico a barre delle spese della scorsa settimana</string>
+    <string name="current_year_incomes_bar_chart">Grafico a barre dei redditi dell\'anno in corso</string>
+    <string name="monthly_incomes_converted">Reddito mensile convertito</string>
+    <string name="monthly_expenses_converted">Spese mensili convertite</string>
 </resources>

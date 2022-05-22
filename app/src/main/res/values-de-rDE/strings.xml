@@ -232,4 +232,11 @@
     <string name="friday">Freitag</string>
     <string name="saturday">Samstag</string>
     <string name="sunday">Sonntag</string>
+    <string name="no_expenses_made_this_year">"Keine Ausgaben in diesem Jahr "</string>
+    <string name="no_incomes_made_this_year">Keine Einnahmen in diesem Jahr</string>
+    <string name="current_year_expenses_bar_chart">Balkendiagramm der Ausgaben für das laufende Jahr</string>
+    <string name="last_week_expenses_bar_chart">Balkendiagramm der Ausgaben der letzten Woche</string>
+    <string name="current_year_incomes_bar_chart">Balkendiagramm der Einnahmen des laufenden Jahres</string>
+    <string name="monthly_incomes_converted">Monatseinkommen umgerechnet</string>
+    <string name="monthly_expenses_converted">Monatliche Ausgaben umgerechnet</string>
 </resources>

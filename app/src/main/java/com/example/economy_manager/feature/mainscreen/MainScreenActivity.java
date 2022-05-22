@@ -130,15 +130,17 @@ public class MainScreenActivity
     private void setFragments() {
         getSupportFragmentManager()
                 .beginTransaction()
-                .replace(R.id.showSavingsFragmentContainer, viewModel.getShowSavingsFragment())
+                .replace(R.id.showSavingsFragmentContainer, viewModel.getMonthlySavingsFragment())
                 .replace(R.id.budgetReviewFragmentContainer, viewModel.getBudgetReviewFragment())
-                .replace(R.id.moneySpentFragmentContainer, viewModel.getMoneySpentFragment())
+                .replace(R.id.moneySpentFragmentContainer, viewModel.getLastWeekExpensesFragment())
                 .replace(R.id.lastTenTransactionsFragmentContainer, viewModel.getLastTenTransactionsFragment())
                 .replace(R.id.topFiveExpensesFragmentContainer, viewModel.getTopFiveExpensesFragment())
                 .replace(R.id.favoriteExpensesCategoryFragmentContainer,
                         viewModel.getFavoriteExpensesCategoryFragment())
                 .replace(R.id.overallProfitFragmentContainer, viewModel.getOverallProfitFragment())
                 .replace(R.id.monthlyIncomesConvertedFragmentContainer, viewModel.getMonthlyIncomesConvertedFragment())
+                .replace(R.id.monthlyExpensesConvertedFragmentContainer,
+                        viewModel.getMonthlyExpensesConvertedFragment())
                 .replace(R.id.lastWeekExpensesBarChartFragmentContainer,
                         viewModel.getLastWeekExpensesBarChartFragment())
                 .replace(R.id.currentYearIncomesBarChartFragmentContainer,

@@ -55,6 +55,8 @@
     <string name="login_successful">Login successful</string>
     <string name="minute">Minute</string>
     <string name="monthly_balance">Monthly balance</string>
+    <string name="monthly_expenses_converted">Monthly expenses converted</string>
+    <string name="monthly_incomes_converted">Monthly incomes converted</string>
     <string name="monthly_transactions">Monthly transactions</string>
     <string name="must_implement_the_listener">%s must implement %s</string>
     <string name="new_expense">New expense</string>

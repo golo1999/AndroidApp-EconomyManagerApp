@@ -232,4 +232,11 @@
     <string name="friday">Vineri</string>
     <string name="saturday">Sâmbătă</string>
     <string name="sunday">Duminică</string>
+    <string name="no_expenses_made_this_year">Nicio cheltuială efectuată în anul curent</string>
+    <string name="no_incomes_made_this_year">Niciun venit realizat în anul curent</string>
+    <string name="current_year_expenses_bar_chart">Diagrama bară a cheltuielilor din anul curent</string>
+    <string name="current_year_incomes_bar_chart">Diagrama bară a veniturilor din anul curent</string>
+    <string name="last_week_expenses_bar_chart">Diagrama bară a cheltuielilor realizate în ultima săptămână</string>
+    <string name="monthly_incomes_converted">Veniturile lunare convertite</string>
+    <string name="monthly_expenses_converted">Cheltuielile lunare convertite</string>
 </resources>
