@@ -116,13 +116,6 @@
                 android:paddingTop="10sp"
                 android:paddingBottom="10sp" />
 
-            <com.google.android.gms.common.SignInButton
-                android:id="@+id/googleLogInButton"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginVertical="10sp" />
-
             <TextView
                 android:id="@+id/createAccountText"
                 android:layout_width="match_parent"
