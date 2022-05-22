@@ -87,10 +87,10 @@ public class PieChartFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(@NonNull final LayoutInflater inflater,
+    public View onCreateView(final @NonNull LayoutInflater inflater,
                              final ViewGroup container,
                              final Bundle savedInstanceState) {
-        setActivityVariables(inflater, container);
+        setFragmentVariables(inflater, container);
 
         return binding.getRoot();
     }
@@ -116,7 +116,7 @@ public class PieChartFragment extends Fragment {
     }
 
     /**
-     * Method for calculating each expense's percentage from the total expenses
+     * Method for populating the map and displaying the data based on it
      */
     private void populateMap() {
         if (MyCustomVariables.getFirebaseAuth().getUid() == null) {
@@ -157,9 +157,8 @@ public class PieChartFragment extends Fragment {
                                     transaction.getTime().getYear() == LocalDate.now().getYear() &&
                                     transaction.getTime().getMonth() == LocalDate.now().getMonthValue();
 
-                            if (SELECTED_TYPE.equals("MONTHLY_EXPENSES") && !isCurrentMonthExpense) {
-                                return;
-                            } else if (SELECTED_TYPE.equals("MONTHLY_INCOMES") && !isCurrentMonthIncome) {
+                            if ((SELECTED_TYPE.equals("MONTHLY_EXPENSES") && !isCurrentMonthExpense) ||
+                                    (SELECTED_TYPE.equals("MONTHLY_INCOMES") && !isCurrentMonthIncome)) {
                                 return;
                             }
 
@@ -227,7 +226,7 @@ public class PieChartFragment extends Fragment {
                 });
     }
 
-    private void setActivityVariables(final @NonNull LayoutInflater inflater,
+    private void setFragmentVariables(final @NonNull LayoutInflater inflater,
                                       final ViewGroup container) {
         binding = DataBindingUtil.inflate(inflater, R.layout.pie_chart_fragment, container, false);
         viewModel = new ViewModelProvider((ViewModelStoreOwner) requireContext()).get(MainScreenViewModel.class);

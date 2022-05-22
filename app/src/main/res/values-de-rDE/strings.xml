@@ -225,4 +225,11 @@
     <string name="no_data">Keine Daten</string>
     <string name="no_incomes_made_this_month">Keine Einnahmen in diesem Monat</string>
     <string name="monthly_incomes_pie_chart">Kreisdiagramm der monatlichen Einkommen</string>
+    <string name="monday">Montag</string>
+    <string name="tuesday">Dienstag</string>
+    <string name="wednesday">Mittwoch</string>
+    <string name="thursday">Donnerstag</string>
+    <string name="friday">Freitag</string>
+    <string name="saturday">Samstag</string>
+    <string name="sunday">Sonntag</string>
 </resources>

@@ -12,6 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.ViewModel;
 
 import com.example.economy_manager.R;
+import com.example.economy_manager.feature.barchart.BarChartFragment;
 import com.example.economy_manager.feature.budgetreview.BudgetReviewFragment;
 import com.example.economy_manager.feature.currencyconversion.CurrencyConversionFragment;
 import com.example.economy_manager.feature.favoriteexpenses.FavoriteExpensesCategoryFragment;
@@ -45,6 +46,7 @@ public class MainScreenViewModel extends ViewModel {
             FavoriteExpensesCategoryFragment.newInstance();
     private final CurrencyConversionFragment monthlyIncomesConvertedFragment =
             CurrencyConversionFragment.newInstance("MONTHLY_INCOMES");
+    private final BarChartFragment lastWeekExpensesBarChartFragment = BarChartFragment.newInstance("CURRENT_YEAR_EXPENSES");
     private final PieChartFragment monthlyIncomesPieChartFragment = PieChartFragment.newInstance("MONTHLY_INCOMES");
     private final PieChartFragment monthlyExpensesPieChartFragment = PieChartFragment.newInstance("MONTHLY_EXPENSES");
 
@@ -179,6 +181,10 @@ public class MainScreenViewModel extends ViewModel {
 
     public CurrencyConversionFragment getMonthlyIncomesConvertedFragment() {
         return monthlyIncomesConvertedFragment;
+    }
+
+    public BarChartFragment getLastWeekExpensesBarChartFragment() {
+        return lastWeekExpensesBarChartFragment;
     }
 
     public PieChartFragment getMonthlyIncomesPieChartFragment() {

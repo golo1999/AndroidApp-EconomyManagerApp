@@ -225,4 +225,11 @@
     <string name="no_data">Nu există date</string>
     <string name="no_incomes_made_this_month">Niciun venit realizat în luna curentă</string>
     <string name="monthly_incomes_pie_chart">Diagrama circulară al veniturilor lunare</string>
+    <string name="monday">Luni</string>
+    <string name="tuesday">Marți</string>
+    <string name="wednesday">Miercuri</string>
+    <string name="thursday">Joi</string>
+    <string name="friday">Vineri</string>
+    <string name="saturday">Sâmbătă</string>
+    <string name="sunday">Duminică</string>
 </resources>

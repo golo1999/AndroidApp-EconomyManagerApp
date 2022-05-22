@@ -225,4 +225,11 @@
     <string name="no_data">Sem dados</string>
     <string name="no_incomes_made_this_month">Nenhuma renda feita este mês</string>
     <string name="monthly_incomes_pie_chart">Gráfico circular de rendimentos mensais</string>
+    <string name="monday">Segunda-feira</string>
+    <string name="sunday">Domingo</string>
+    <string name="tuesday">Terça-feira</string>
+    <string name="wednesday">Quarta-feira</string>
+    <string name="thursday">Quinta-feira</string>
+    <string name="friday">Sexta-feira</string>
+    <string name="saturday">Sábado</string>
 </resources>

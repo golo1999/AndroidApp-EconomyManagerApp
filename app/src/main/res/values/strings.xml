@@ -205,6 +205,16 @@
     <string name="should_have_maximum_days">%s should have maximum %d days</string>
     <string name="should_not_be_empty">%s should not be empty</string>
 
+    <!-- Day names -->
+
+    <string name="monday">Monday</string>
+    <string name="tuesday">Tuesday</string>
+    <string name="wednesday">Wednesday</string>
+    <string name="thursday">Thursday</string>
+    <string name="friday">Friday</string>
+    <string name="saturday">Saturday</string>
+    <string name="sunday">Sunday</string>
+
     <!-- Genders -->
 
     <string name="female">Female</string>

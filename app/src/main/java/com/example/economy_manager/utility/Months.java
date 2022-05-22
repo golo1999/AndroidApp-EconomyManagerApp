@@ -2,6 +2,9 @@ package com.example.economy_manager.utility;
 
 import android.content.Context;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
 import com.example.economy_manager.R;
 
 public final class Months {
@@ -10,8 +13,8 @@ public final class Months {
 
     }
 
-    public static int getIndexFromMonth(final Context context,
-                                        final String monthName) {
+    public static int getIndexFromMonth(final @NonNull Context context,
+                                        final @NonNull String monthName) {
         return monthName.trim().equals(context.getString(R.string.january)) ?
                 0 : monthName.trim().equals(context.getString(R.string.february)) ?
                 1 : monthName.trim().equals(context.getString(R.string.march)) ?
@@ -27,7 +30,8 @@ public final class Months {
                 11 : -1;
     }
 
-    public static String getMonthFromIndex(final Context context,
+    @Nullable
+    public static String getMonthFromIndex(final @NonNull Context context,
                                            final int index) {
         return index == 0 ?
                 context.getString(R.string.january) : index == 1 ?
@@ -44,8 +48,9 @@ public final class Months {
                 context.getString(R.string.december) : null;
     }
 
-    public static String getMonthInEnglish(final Context context,
-                                           final String monthName) {
+    @NonNull
+    public static String getMonthInEnglish(final @NonNull Context context,
+                                           final @NonNull String monthName) {
         return monthName.trim().equals(context.getString(R.string.january)) ?
                 "January" : monthName.trim().equals(context.getString(R.string.february)) ?
                 "February" : monthName.trim().equals(context.getString(R.string.march)) ?
@@ -61,8 +66,8 @@ public final class Months {
                 "December" : "";
     }
 
-    public static String getTranslatedMonth(final Context context,
-                                            final String monthName) {
+    public static String getTranslatedMonth(final @NonNull Context context,
+                                            final @NonNull String monthName) {
         return monthName.equals("January") ?
                 context.getString(R.string.january) : monthName.equals("February") ?
                 context.getString(R.string.february) : monthName.equals("March") ?

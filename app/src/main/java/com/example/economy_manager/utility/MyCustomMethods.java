@@ -315,4 +315,22 @@ public final class MyCustomMethods {
 
         return isAfterOneWeekAgoDate && isBeforeCurrentDate;
     }
+
+    public static boolean transactionWasMadeInTheLastWeek(final @NonNull LocalDateTime transactionTime) {
+        final LocalDate oneWeekAgoDate = LocalDate.now().minusDays(8);
+        final LocalDateTime oneWeekAgoDateTime =
+                LocalDateTime.of(oneWeekAgoDate, LocalTime.of(23, 59, 59));
+
+        final LocalDate nextDayDate = LocalDate.now().plusDays(1);
+        final LocalDateTime nextDayDateTime = LocalDateTime.of(nextDayDate, LocalTime.of(0, 0));
+
+        final LocalDateTime transactionTimeParsed = LocalDateTime.of(transactionTime.getYear(),
+                transactionTime.getMonth(), transactionTime.getDayOfMonth(), transactionTime.getHour(),
+                transactionTime.getMinute(), transactionTime.getSecond());
+
+        final boolean isAfterOneWeekAgoDate = transactionTimeParsed.isAfter(oneWeekAgoDateTime);
+        final boolean isBeforeCurrentDate = transactionTimeParsed.isBefore(nextDayDateTime);
+
+        return isAfterOneWeekAgoDate && isBeforeCurrentDate;
+    }
 }

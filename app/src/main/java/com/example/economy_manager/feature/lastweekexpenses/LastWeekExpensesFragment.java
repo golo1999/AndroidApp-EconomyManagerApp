@@ -64,10 +64,8 @@ public class LastWeekExpensesFragment extends Fragment {
 
     private void setVariables(final @NonNull LayoutInflater inflater,
                               final ViewGroup container) {
-        binding = DataBindingUtil.inflate(inflater, R.layout.last_week_expenses_fragment,
-                container, false);
-        viewModel = new ViewModelProvider((ViewModelStoreOwner) requireContext())
-                .get(MainScreenViewModel.class);
+        binding = DataBindingUtil.inflate(inflater, R.layout.last_week_expenses_fragment, container, false);
+        viewModel = new ViewModelProvider((ViewModelStoreOwner) requireContext()).get(MainScreenViewModel.class);
     }
 
     private void setLastWeekExpenses() {
@@ -91,13 +89,11 @@ public class LastWeekExpensesFragment extends Fragment {
                                 snapshot.child("personalTransactions").hasChildren()) {
                             for (final DataSnapshot transactionIterator :
                                     snapshot.child("personalTransactions").getChildren()) {
-                                final Transaction transaction =
-                                        transactionIterator.getValue(Transaction.class);
+                                final Transaction transaction = transactionIterator.getValue(Transaction.class);
 
                                 if (transaction != null &&
                                         transaction.getType() == 0 &&
-                                        MyCustomMethods.transactionWasMadeInTheLastWeek(transaction
-                                                .getTime())) {
+                                        MyCustomMethods.transactionWasMadeInTheLastWeek(transaction.getTime())) {
                                     moneySpentLastWeek += Float.parseFloat(transaction.getValue());
                                 }
                             }
@@ -113,8 +109,7 @@ public class LastWeekExpensesFragment extends Fragment {
                                     String.valueOf(moneySpentLastWeek).length() -
                                             String.valueOf(moneySpentLastWeek).indexOf(".") > 3) {
                                 moneySpentLastWeek =
-                                        Float.parseFloat(String.format(Locale.getDefault(),
-                                                "%.2f", moneySpentLastWeek));
+                                        Float.parseFloat(String.format(Locale.getDefault(), "%.2f", moneySpentLastWeek));
                             }
 
                             final boolean languageIsEnglish = Locale.getDefault()
