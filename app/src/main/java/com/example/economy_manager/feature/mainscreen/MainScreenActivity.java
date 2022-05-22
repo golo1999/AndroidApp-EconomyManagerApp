@@ -135,10 +135,16 @@ public class MainScreenActivity
                 .replace(R.id.moneySpentFragmentContainer, viewModel.getMoneySpentFragment())
                 .replace(R.id.lastTenTransactionsFragmentContainer, viewModel.getLastTenTransactionsFragment())
                 .replace(R.id.topFiveExpensesFragmentContainer, viewModel.getTopFiveExpensesFragment())
-                .replace(R.id.favoriteExpensesCategoryFragmentContainer, viewModel.getFavoriteExpensesCategoryFragment())
+                .replace(R.id.favoriteExpensesCategoryFragmentContainer,
+                        viewModel.getFavoriteExpensesCategoryFragment())
                 .replace(R.id.overallProfitFragmentContainer, viewModel.getOverallProfitFragment())
                 .replace(R.id.monthlyIncomesConvertedFragmentContainer, viewModel.getMonthlyIncomesConvertedFragment())
-                .replace(R.id.lastWeekExpensesBarChartFragmentContainer, viewModel.getLastWeekExpensesBarChartFragment())
+                .replace(R.id.lastWeekExpensesBarChartFragmentContainer,
+                        viewModel.getLastWeekExpensesBarChartFragment())
+                .replace(R.id.currentYearIncomesBarChartFragmentContainer,
+                        viewModel.getCurrentYearIncomesBarChartFragment())
+                .replace(R.id.currentYearExpensesBarChartFragmentContainer,
+                        viewModel.getCurrentYearExpensesBarChartFragment())
                 .replace(R.id.monthlyIncomesPieChartFragmentContainer, viewModel.getMonthlyIncomesPieChartFragment())
                 .replace(R.id.monthlyExpensesPieChartFragmentContainer, viewModel.getMonthlyExpensesPieChartFragment())
                 .commit();

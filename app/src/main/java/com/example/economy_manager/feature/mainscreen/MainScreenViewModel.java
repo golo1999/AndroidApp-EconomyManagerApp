@@ -46,7 +46,11 @@ public class MainScreenViewModel extends ViewModel {
             FavoriteExpensesCategoryFragment.newInstance();
     private final CurrencyConversionFragment monthlyIncomesConvertedFragment =
             CurrencyConversionFragment.newInstance("MONTHLY_INCOMES");
-    private final BarChartFragment lastWeekExpensesBarChartFragment = BarChartFragment.newInstance("CURRENT_YEAR_EXPENSES");
+    private final BarChartFragment lastWeekExpensesBarChartFragment = BarChartFragment.newInstance("LAST_WEEK_EXPENSES");
+    private final BarChartFragment currentYearIncomesBarChartFragment =
+            BarChartFragment.newInstance("CURRENT_YEAR_INCOMES");
+    private final BarChartFragment currentYearExpensesBarChartFragment =
+            BarChartFragment.newInstance("CURRENT_YEAR_EXPENSES");
     private final PieChartFragment monthlyIncomesPieChartFragment = PieChartFragment.newInstance("MONTHLY_INCOMES");
     private final PieChartFragment monthlyExpensesPieChartFragment = PieChartFragment.newInstance("MONTHLY_EXPENSES");
 
@@ -185,6 +189,14 @@ public class MainScreenViewModel extends ViewModel {
 
     public BarChartFragment getLastWeekExpensesBarChartFragment() {
         return lastWeekExpensesBarChartFragment;
+    }
+
+    public BarChartFragment getCurrentYearIncomesBarChartFragment() {
+        return currentYearIncomesBarChartFragment;
+    }
+
+    public BarChartFragment getCurrentYearExpensesBarChartFragment() {
+        return currentYearExpensesBarChartFragment;
     }
 
     public PieChartFragment getMonthlyIncomesPieChartFragment() {

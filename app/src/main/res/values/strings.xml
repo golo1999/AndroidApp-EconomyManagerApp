@@ -11,6 +11,8 @@
     <string name="choose">Choose</string>
     <string name="country">Country</string>
     <string name="currency">Currency</string>
+    <string name="current_year_expenses_bar_chart">Current year expenses bar chart</string>
+    <string name="current_year_incomes_bar_chart">Current year incomes bar chart</string>
     <string name="custom_dialog_listener" translatable="false">CustomDialogListener</string>
     <string name="dark_theme">Dark theme</string>
     <string name="date">Date</string>
@@ -47,6 +49,7 @@
     <string name="last_name">Last name</string>
     <string name="last_ten_transactions">Last 10 transactions</string>
     <string name="last_week_expenses">Last week expenses</string>
+    <string name="last_week_expenses_bar_chart">Last week expenses bar chart</string>
     <string name="log_in">Log in</string>
     <string name="login">Login</string>
     <string name="login_successful">Login successful</string>
@@ -60,8 +63,10 @@
     <string name="no_changes_have_been_made">No changes have been made</string>
     <string name="no_data">No data</string>
     <string name="no_expenses_made_this_month">No expenses made this month</string>
+    <string name="no_expenses_made_this_year">No expenses made this year</string>
     <string name="no_expenses_made_yet">No expenses made yet</string>
     <string name="no_incomes_made_this_month">No incomes made this month</string>
+    <string name="no_incomes_made_this_year">No incomes made this year</string>
     <string name="no_money_records_this_month">No money records this month</string>
     <string name="no_money_records_yet">No money records yet</string>
     <string name="no_money_spent_last_week">No money spent last week</string>
