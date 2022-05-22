@@ -1,31 +1,21 @@
 <resources>
-    <string name="account">Account</string>
-    <string name="and_between_spaces">&#32;and&#32;</string>
     <string name="app_name" translatable="false">Economy Manager</string>
-    <string name="balance">Balance</string>
-    <string name="birth_date">Birth date</string>
     <string name="cancel">Cancel</string>
     <string name="career_title">Career title</string>
-    <string name="change_account_image">Change account image</string>
     <string name="change_password">Change password</string>
     <string name="choose">Choose</string>
-    <string name="country">Country</string>
     <string name="currency">Currency</string>
     <string name="current_year_expenses_bar_chart">Current year expenses bar chart</string>
     <string name="current_year_incomes_bar_chart">Current year incomes bar chart</string>
     <string name="custom_dialog_listener" translatable="false">CustomDialogListener</string>
     <string name="dark_theme">Dark theme</string>
     <string name="date">Date</string>
-    <string name="day">Day</string>
-    <string name="debt">Debt</string>
     <string name="delete_account">Delete account</string>
     <string name="delete_dialog_listener" translatable="false">DeleteDialogListener</string>
     <string name="edit_photo">Edit photo</string>
     <string name="edit_profile">Edit profile</string>
     <string name="edit_specific_transaction">Edit a transaction</string>
-    <string name="edit_transaction_date">Edit transaction date</string>
     <string name="email">Email</string>
-    <string name="expense">Expense</string>
     <string name="expense_added_successfully">Expense added successfully</string>
     <string name="expenses">Expenses</string>
     <string name="monthly_expenses_pie_chart">Monthly expenses pie chart</string>
@@ -35,17 +25,12 @@
     <string name="favorite_expenses">Favorite expenses</string>
     <string name="first_name">First name</string>
     <string name="forgot_password">Forgot password</string>
-    <string name="gender">Gender</string>
     <string name="go_back">Go back</string>
     <string name="good_afternoon">Good afternoon!</string>
     <string name="good_evening">Good evening!</string>
     <string name="good_morning">Good morning!</string>
-    <string name="hour">Hour</string>
-    <string name="income">Income</string>
     <string name="income_added_successfully">Income added successfully</string>
     <string name="incomes">Incomes</string>
-    <string name="incorrect_phone_number">Incorrect phone number</string>
-    <string name="language">Language</string>
     <string name="last_name">Last name</string>
     <string name="last_ten_transactions">Last 10 transactions</string>
     <string name="last_week_expenses">Last week expenses</string>
@@ -53,7 +38,6 @@
     <string name="log_in">Log in</string>
     <string name="login">Login</string>
     <string name="login_successful">Login successful</string>
-    <string name="minute">Minute</string>
     <string name="monthly_balance">Monthly balance</string>
     <string name="monthly_expenses_converted">Monthly expenses converted</string>
     <string name="monthly_incomes_converted">Monthly incomes converted</string>
@@ -72,16 +56,13 @@
     <string name="no_money_records_this_month">No money records this month</string>
     <string name="no_money_records_yet">No money records yet</string>
     <string name="no_money_spent_last_week">No money spent last week</string>
-    <string name="no_month_should_have_more_than_thirty_one_days">No month should have more than 31 days</string>
     <string name="no_transactions_made_this_month">No transactions made this month</string>
-    <string name="no_transactions_made_this_year">No transactions made this year</string>
     <string name="no_transactions_made_yet">No transactions made yet</string>
     <string name="note">Note</string>
     <string name="ok" translatable="false">OK</string>
     <string name="old_password">Old password</string>
     <string name="overall_profit">Overall profit</string>
     <string name="password">Password</string>
-    <string name="passwords">Passwords</string>
     <string name="password_updated_successfully">Password updated successfully</string>
     <string name="phone_number">Phone number</string>
     <string name="pie_chart_listener" translatable="false">PieChartListener</string>
@@ -96,15 +77,11 @@
     <string name="save">Save</string>
     <string name="save_changes">Save changes</string>
     <string name="saving">Saving</string>
-    <string name="second">Second</string>
-    <string name="select_the_month_and_the_year">Select the month and the year</string>
     <string name="settings">Settings</string>
     <string name="sign_out">Sign out</string>
-    <string name="space_character" translatable="false">" "</string>
     <string name="splash_screen_app_name" translatable="false"> The Economy\n Manager App </string>
     <string name="the_account_was_successfully_deleted">The account was successfully deleted</string>
     <string name="the_database_was_reset_successfully">The database was reset successfully</string>
-    <string name="the_deletion_could_not_be_performed">The deletion could not be performed</string>
     <string name="the_email">The email</string>
     <string name="the_first_name">The first name</string>
     <string name="the_last_name">The last name</string>
@@ -116,7 +93,6 @@
     <string name="time">Time</string>
     <string name="title">Title</string>
     <string name="top_five_expenses">Top 5 expenses</string>
-    <string name="transactions">Transactions</string>
     <string name="type">Type</string>
     <string name="unknown_country">Unknown country</string>
     <string name="unknown_gender">Unknown gender</string>
@@ -126,8 +102,6 @@
     <string name="value">Value</string>
     <string name="warning">Warning</string>
     <string name="website">Website</string>
-    <string name="whitespace" translatable="false">&#160;</string>
-    <string name="year">Year</string>
     <string name="yes">Yes</string>
     <string name="you_spent_last_week">You spent %s in the last week</string>
     <string name="you_spent_percentage_of_your_incomes">You spent %s of your incomes</string>
@@ -189,27 +163,17 @@
 
     <string name="contains_invalid_characters">%s contains invalid characters</string>
     <string name="email_already_exists">The email already exists</string>
-    <string name="email_and_password_are_not_valid">The email and the password are not valid</string>
     <string name="email_and_password_do_not_match">The email and the password do not match</string>
-    <string name="email_and_password_should_not_be_empty">The email and the password should not be empty</string>
     <string name="email_does_not_exist_in_the_database">The email does not exist in the database</string>
     <string name="email_is_not_valid">The email is not valid</string>
     <string name="facebook_authentication_failed">Facebook authentication failed</string>
     <string name="google_authentication_failed">Google authentication failed</string>
     <string name="incorrect_username_or_password">Incorrect username or password</string>
-    <string name="please_enter_a_valid_birth_date">Please enter a valid birth date</string>
-    <string name="please_complete_all_fields">Please complete all fields</string>
-    <string name="please_enter_a_valid_email">Please enter a valid email</string>
-    <string name="please_enter_your_password">Please enter your password</string>
     <string name="please_select_a_file_first">Please select a file first</string>
     <string name="please_select_an_option">Please select an option</string>
     <string name="please_try_again">Please try again</string>
     <string name="please_verify_your_email">Please verify your email</string>
-    <string name="should_be_between">%s should be between %d and %d</string>
     <string name="should_have_at_least_characters">%s should have at least %d characters</string>
-    <string name="should_have_characters">%s should have %d characters</string>
-    <string name="should_have_maximum_characters">%s should have maximum %d characters</string>
-    <string name="should_have_maximum_days">%s should have maximum %d days</string>
     <string name="should_not_be_empty">%s should not be empty</string>
 
     <!-- Day names -->
@@ -303,5 +267,4 @@
         <item> December </item>
     </string-array>
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment" translatable="false">Hello blank fragment</string>
 </resources>

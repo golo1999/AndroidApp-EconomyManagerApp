@@ -82,8 +82,7 @@ public class MonthlyBalanceActivity extends AppCompatActivity {
                     @Override
                     public void onDataChange(final @NonNull DataSnapshot snapshot) {
                         final String currencySymbol = viewModel.getUserDetails() != null ?
-                                viewModel.getUserDetails().getApplicationSettings()
-                                        .getCurrencySymbol() :
+                                viewModel.getUserDetails().getApplicationSettings().getCurrencySymbol() :
                                 MyCustomMethods.getCurrencySymbol();
                         final ArrayList<Transaction> transactionsList = new ArrayList<>();
 
@@ -97,17 +96,14 @@ public class MonthlyBalanceActivity extends AppCompatActivity {
 
                         for (final DataSnapshot databaseTransaction :
                                 snapshot.child("personalTransactions").getChildren()) {
-                            final Transaction transaction =
-                                    databaseTransaction.getValue(Transaction.class);
+                            final Transaction transaction = databaseTransaction.getValue(Transaction.class);
 
                             if (transaction != null && transaction.getTime() != null &&
                                     transaction.getTime().getYear() == LocalDate.now().getYear() &&
-                                    transaction.getTime().getMonth() ==
-                                            LocalDate.now().getMonthValue()) {
+                                    transaction.getTime().getMonth() == LocalDate.now().getMonthValue()) {
                                 transactionsList.add(transaction);
 
-                                if (viewModel.checkIfDayCanBeAddedToList(daysList,
-                                        transaction.getTime().getDay())) {
+                                if (viewModel.checkIfDayCanBeAddedToList(daysList, transaction.getTime().getDay())) {
                                     daysList.add(transaction.getTime().getDay());
                                 }
                             }
@@ -116,30 +112,23 @@ public class MonthlyBalanceActivity extends AppCompatActivity {
                         // sorting the list by value descending
                         transactionsList.sort((final Transaction firstTransaction,
                                                final Transaction secondTransaction) ->
-                                Float.compare(Float.parseFloat(String
-                                                .valueOf(secondTransaction.getValue())),
-                                        Float.parseFloat(String
-                                                .valueOf(firstTransaction.getValue()))));
+                                Float.compare(Float.parseFloat(String.valueOf(secondTransaction.getValue())),
+                                        Float.parseFloat(String.valueOf(firstTransaction.getValue()))));
                         daysList.sort(Collections.reverseOrder());
 
                         // setting the balance for each day from the list
                         for (final int dayFromDaysList : daysList) {
                             // calculating the total incomes and expenses for each day
                             float dateTotalIncome = 0f;
-
                             float dateTotalExpense = 0f;
-
                             final String dateTranslated = viewModel
                                     .getDateTranslated(MonthlyBalanceActivity.this,
                                             dayFromDaysList);
-
                             final ConstraintLayout dayAndSumLayout =
                                     (ConstraintLayout) View.inflate(MonthlyBalanceActivity.this,
                                             R.layout.monthly_balance_title_layout, null);
-
                             final TextView dayText = dayAndSumLayout
                                     .findViewById(R.id.monthly_balance_relative_layout_day);
-
                             final TextView totalSumText = dayAndSumLayout
                                     .findViewById(R.id.monthly_balance_relative_layout_day_total_sum);
 
@@ -148,46 +137,35 @@ public class MonthlyBalanceActivity extends AppCompatActivity {
                             dayText.setTextSize(25);
 
                             dayText.setTextColor(viewModel.getUserDetails() == null ||
-                                    viewModel.getUserDetails().getApplicationSettings()
-                                            .isDarkThemeEnabled() ?
-                                    getColor(R.color.secondaryDark) :
-                                    getColor(R.color.secondaryLight));
+                                    viewModel.getUserDetails().getApplicationSettings().isDarkThemeEnabled() ?
+                                    getColor(R.color.secondaryDark) : getColor(R.color.secondaryLight));
 
                             for (final Transaction transactionsListIterator : transactionsList) {
-                                if (dayFromDaysList ==
-                                        transactionsListIterator.getTime().getDay()) {
+                                if (dayFromDaysList == transactionsListIterator.getTime().getDay()) {
                                     if (transactionsListIterator.getType() == 1) {
-                                        dateTotalIncome += Float
-                                                .parseFloat(transactionsListIterator.getValue());
+                                        dateTotalIncome += Float.parseFloat(transactionsListIterator.getValue());
                                     } else {
-                                        dateTotalExpense += Float
-                                                .parseFloat(transactionsListIterator.getValue());
+                                        dateTotalExpense += Float.parseFloat(transactionsListIterator.getValue());
                                     }
 
-                                    final LinearLayout transactionLayout = (LinearLayout) View
-                                            .inflate(MonthlyBalanceActivity.this,
-                                                    R.layout.monthly_balance_item_layout,
-                                                    null);
+                                    final LinearLayout transactionLayout =
+                                            (LinearLayout) View.inflate(MonthlyBalanceActivity.this,
+                                                    R.layout.monthly_balance_item_layout, null);
                                     final TextView typeText = transactionLayout
                                             .findViewById(R.id.monthly_balance_relative_layout_type);
 
                                     final TextView valueText = transactionLayout
                                             .findViewById(R.id.monthly_balance_relative_layout_value);
 
-                                    typeText.setText(Types
-                                            .getTranslatedType(MonthlyBalanceActivity.this,
-                                                    String.valueOf(Transaction
-                                                            .getTypeFromIndexInEnglish(transactionsListIterator
-                                                                    .getCategory()))));
+                                    typeText.setText(Types.getTranslatedType(MonthlyBalanceActivity.this,
+                                            String.valueOf(Transaction.getTypeFromIndexInEnglish(transactionsListIterator
+                                                    .getCategory()))));
 
                                     typeText.setTextColor(viewModel.getUserDetails() == null ||
-                                            viewModel.getUserDetails().getApplicationSettings()
-                                                    .isDarkThemeEnabled() ?
-                                            getColor(R.color.tertiaryDark) :
-                                            getColor(R.color.quaternaryLight));
+                                            viewModel.getUserDetails().getApplicationSettings().isDarkThemeEnabled() ?
+                                            getColor(R.color.tertiaryDark) : getColor(R.color.quaternaryLight));
                                     valueText.setTextColor(viewModel.getUserDetails() == null ||
-                                            !viewModel.getUserDetails().getApplicationSettings()
-                                                    .isDarkThemeEnabled() ?
+                                            !viewModel.getUserDetails().getApplicationSettings().isDarkThemeEnabled() ?
                                             Color.BLACK : Color.WHITE);
 
                                     typeText.setTextSize(19);
@@ -208,17 +186,15 @@ public class MonthlyBalanceActivity extends AppCompatActivity {
                                 }
                             }
 
-                            final String textForTotalSum = Locale.getDefault().getDisplayLanguage()
-                                    .equals("English") ?
+                            final String textForTotalSum = Locale.getDefault().getDisplayLanguage().equals("English") ?
                                     currencySymbol + Math.abs(dateTotalIncome - dateTotalExpense) :
-                                    Math.abs(dateTotalIncome - dateTotalExpense) + " " +
-                                            currencySymbol;
+                                    Math.abs(dateTotalIncome - dateTotalExpense) + " " + currencySymbol;
 
                             totalSumText.setText(textForTotalSum);
                             totalSumText.setTextSize(25);
 
-                            totalSumText.setTextColor(dateTotalIncome - dateTotalExpense < 0f ?
-                                    Color.RED : Color.GREEN);
+                            totalSumText.setTextColor(getColor(dateTotalIncome - dateTotalExpense < 0f ?
+                                    R.color.crimson : R.color.secondaryLight));
                         }
                     }
 

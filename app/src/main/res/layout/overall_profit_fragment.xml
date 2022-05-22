@@ -2,13 +2,13 @@
 
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".feature.overallprofit.OverallProfitFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="20sp"
-        tools:context=".feature.overallprofit.OverallProfitFragment">
+        android:padding="20sp">
 
         <TextView
             android:id="@+id/text"

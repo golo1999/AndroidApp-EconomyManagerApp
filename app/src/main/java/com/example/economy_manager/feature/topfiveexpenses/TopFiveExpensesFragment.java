@@ -65,10 +65,8 @@ public class TopFiveExpensesFragment extends Fragment {
 
     private void setVariables(final @NonNull LayoutInflater inflater,
                               final ViewGroup container) {
-        binding = DataBindingUtil.inflate(inflater, R.layout.top_five_expenses_fragment, container,
-                false);
-        viewModel = new ViewModelProvider((ViewModelStoreOwner) requireContext())
-                .get(MainScreenViewModel.class);
+        binding = DataBindingUtil.inflate(inflater, R.layout.top_five_expenses_fragment, container, false);
+        viewModel = new ViewModelProvider((ViewModelStoreOwner) requireContext()).get(MainScreenViewModel.class);
     }
 
     private void createAndSetList() {
@@ -80,8 +78,7 @@ public class TopFiveExpensesFragment extends Fragment {
                         public void onDataChange(final @NonNull DataSnapshot snapshot) {
                             final ArrayList<Transaction> expensesList = new ArrayList<>();
                             final String currencySymbol = viewModel.getUserDetails() != null ?
-                                    viewModel.getUserDetails().getApplicationSettings()
-                                            .getCurrencySymbol() :
+                                    viewModel.getUserDetails().getApplicationSettings().getCurrencySymbol() :
                                     MyCustomMethods.getCurrencySymbol();
 
                             if (snapshot.exists() &&
@@ -89,14 +86,11 @@ public class TopFiveExpensesFragment extends Fragment {
                                     snapshot.child("personalTransactions").hasChildren()) {
                                 for (DataSnapshot transactionIterator :
                                         snapshot.child("personalTransactions").getChildren()) {
-                                    final Transaction transaction =
-                                            transactionIterator.getValue(Transaction.class);
+                                    final Transaction transaction = transactionIterator.getValue(Transaction.class);
 
                                     if (transaction != null && transaction.getTime() != null &&
-                                            transaction.getTime().getYear() ==
-                                                    LocalDate.now().getYear() &&
-                                            transaction.getTime().getMonth() ==
-                                                    LocalDate.now().getMonthValue() &&
+                                            transaction.getTime().getYear() == LocalDate.now().getYear() &&
+                                            transaction.getTime().getMonth() == LocalDate.now().getMonthValue() &&
                                             transaction.getType() == 0) {
                                         expensesList.add(transaction);
                                     }
@@ -156,20 +150,15 @@ public class TopFiveExpensesFragment extends Fragment {
                     final LinearLayout childLayout = (LinearLayout) getLayoutInflater()
                             .inflate(R.layout.top_five_expenses_item_layout, mainLayout, false);
 
-                    final TextView typeFromChildLayout =
-                            childLayout.findViewById(R.id.typeText);
-
-                    final TextView valueFromChildLayout =
-                            childLayout.findViewById(R.id.valueText);
+                    final TextView typeFromChildLayout = childLayout.findViewById(R.id.typeText);
+                    final TextView valueFromChildLayout = childLayout.findViewById(R.id.valueText);
 
                     final String valueWithCurrency = Locale.getDefault()
                             .getDisplayLanguage().equals(Languages.ENGLISH_LANGUAGE) ?
-                            currencySymbol + transaction.getValue() :
-                            transaction.getValue() + " " + currencySymbol;
+                            currencySymbol + transaction.getValue() : transaction.getValue() + " " + currencySymbol;
 
                     final String translatedType = Types.getTranslatedType(requireContext(),
-                            String.valueOf(Transaction
-                                    .getTypeFromIndexInEnglish(transaction.getCategory())));
+                            String.valueOf(Transaction.getTypeFromIndexInEnglish(transaction.getCategory())));
 
                     if (translatedType == null) {
                         return;

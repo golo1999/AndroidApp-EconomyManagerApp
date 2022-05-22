@@ -19,8 +19,7 @@ import java.util.Locale;
 public class MonthlyBalanceViewModel extends ViewModel {
 
     private UserDetails userDetails;
-    private final SimpleDateFormat currentMonthFormat =
-            new SimpleDateFormat("LLLL", Locale.ENGLISH);
+    private final SimpleDateFormat currentMonthFormat = new SimpleDateFormat("LLLL", Locale.ENGLISH);
     private final Calendar currentTime = Calendar.getInstance();
 
     public boolean checkIfDayCanBeAddedToList(final ArrayList<Integer> daysList,
@@ -47,7 +46,6 @@ public class MonthlyBalanceViewModel extends ViewModel {
 
     public String getActivityTitle(final Context context) {
         final int year = getCurrentYear();
-
         final String month = Months.getTranslatedMonth(context, getCurrentMonthName());
 
         return month.trim() + " " + year;
@@ -108,8 +106,7 @@ public class MonthlyBalanceViewModel extends ViewModel {
         final LocalDate currentDate = LocalDate.now();
 
         return Months.getTranslatedMonth(context, String.valueOf(currentDate.getMonth())
-                .charAt(0) + String.valueOf(currentDate.getMonth()).substring(1).toLowerCase())
-                .trim();
+                .charAt(0) + String.valueOf(currentDate.getMonth()).substring(1).toLowerCase()).trim();
     }
 
     public String getDateTranslated(final Context context, final int dayFromDaysList) {
