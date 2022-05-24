@@ -13,6 +13,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import com.example.economy_manager.R;
 import com.example.economy_manager.feature.login.LoginActivity;
@@ -48,12 +49,12 @@ public final class MyCustomMethods {
         manager.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
 
-    public static boolean stringIsNotEmpty(final @NonNull String enteredString) {
-        return !enteredString.trim().isEmpty();
+    public static boolean stringIsNotEmpty(final @Nullable String enteredString) {
+        return enteredString != null && !enteredString.trim().isEmpty();
     }
 
-    public static boolean emailIsValid(final @NonNull String email) {
-        return Patterns.EMAIL_ADDRESS.matcher(email).matches();
+    public static boolean emailIsValid(final @Nullable String email) {
+        return email != null && Patterns.EMAIL_ADDRESS.matcher(email).matches();
     }
 
     public static void finishActivityWithFadeTransition(final @NonNull Activity currentActivity) {
@@ -87,7 +88,11 @@ public final class MyCustomMethods {
     }
 
     @NonNull
-    public static String getCurrencySymbolFromCurrencyName(final @NonNull String currencyName) {
+    public static String getCurrencySymbolFromCurrencyName(final @Nullable String currencyName) {
+        if (currencyName == null) {
+            return "$";
+        }
+
         return currencyName.equals("AUD") ?
                 "A$" : currencyName.equals("BRL") ?
                 "R$" : currencyName.equals("CAD") ?
@@ -103,7 +108,11 @@ public final class MyCustomMethods {
     }
 
     @NonNull
-    public static String getFormattedDate(@NonNull final LocalDate date) {
+    public static String getFormattedDate(@Nullable LocalDate date) {
+        if (date == null) {
+            date = LocalDate.now();
+        }
+
         final String dayName = date.getDayOfWeek().name().charAt(0) +
                 date.getDayOfWeek().name().substring(1).toLowerCase();
         final String monthName = String.valueOf(date.getMonth()).charAt(0) +
@@ -207,7 +216,10 @@ public final class MyCustomMethods {
         currentActivity.finish();
     }
 
-    public static int nameIsValid(@NonNull final String name) {
+    public static int nameIsValid(final @Nullable String name) {
+        if (name == null) {
+            return -1;
+        }
         if (name.length() < 2) {
             return 0;
         } else {
@@ -252,8 +264,7 @@ public final class MyCustomMethods {
                                                             @NonNull String key,
                                                             Class<T> tClass) {
         SharedPreferences preferences =
-                parentActivity.getSharedPreferences(MyCustomVariables
-                        .getSharedPreferencesFileName(), MODE_PRIVATE);
+                parentActivity.getSharedPreferences(MyCustomVariables.getSharedPreferencesFileName(), MODE_PRIVATE);
         Gson gson = new Gson();
         String json = preferences.getString(key, "");
 
@@ -264,8 +275,7 @@ public final class MyCustomMethods {
                                                          @NonNull T object,
                                                          @NonNull String key) {
         SharedPreferences preferences =
-                parentActivity.getSharedPreferences(MyCustomVariables
-                        .getSharedPreferencesFileName(), MODE_PRIVATE);
+                parentActivity.getSharedPreferences(MyCustomVariables.getSharedPreferencesFileName(), MODE_PRIVATE);
 
         SharedPreferences.Editor editor = preferences.edit();
         Gson gson = new Gson();
@@ -298,7 +308,11 @@ public final class MyCustomMethods {
         activity.overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
     }
 
-    public static boolean transactionWasMadeInTheLastWeek(final @NonNull MyCustomTime transactionTime) {
+    public static boolean transactionWasMadeInTheLastWeek(final @Nullable MyCustomTime transactionTime) {
+        if (transactionTime == null) {
+            return false;
+        }
+
         final LocalDate oneWeekAgoDate = LocalDate.now().minusDays(8);
         final LocalDateTime oneWeekAgoDateTime =
                 LocalDateTime.of(oneWeekAgoDate, LocalTime.of(23, 59, 59));
@@ -316,7 +330,11 @@ public final class MyCustomMethods {
         return isAfterOneWeekAgoDate && isBeforeCurrentDate;
     }
 
-    public static boolean transactionWasMadeInTheLastWeek(final @NonNull LocalDateTime transactionTime) {
+    public static boolean transactionWasMadeInTheLastWeek(final @Nullable LocalDateTime transactionTime) {
+        if (transactionTime == null) {
+            return false;
+        }
+
         final LocalDate oneWeekAgoDate = LocalDate.now().minusDays(8);
         final LocalDateTime oneWeekAgoDateTime =
                 LocalDateTime.of(oneWeekAgoDate, LocalTime.of(23, 59, 59));
