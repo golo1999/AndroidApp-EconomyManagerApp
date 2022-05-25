@@ -12,13 +12,11 @@ public final class Theme {
 
     public static int getBackgroundColor(final Context context,
                                          final boolean isDarkThemeEnabled) {
-        return isDarkThemeEnabled ?
-                context.getColor(R.color.primaryDark) : context.getColor(R.color.primaryLight);
+        return isDarkThemeEnabled ? context.getColor(R.color.primaryDark) : context.getColor(R.color.primaryLight);
     }
 
     public static int getDropdownBackgroundColor(final Context context,
                                                  final boolean isDarkThemeEnabled) {
-        return isDarkThemeEnabled ?
-                context.getColor(R.color.tertiaryDark) : context.getColor(R.color.quaternaryLight);
+        return isDarkThemeEnabled ? context.getColor(R.color.tertiaryDark) : context.getColor(R.color.quaternaryLight);
     }
 }

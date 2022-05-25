@@ -14,7 +14,11 @@ public final class Months {
     }
 
     public static int getIndexFromMonth(final @NonNull Context context,
-                                        final @NonNull String monthName) {
+                                        final @Nullable String monthName) {
+        if (monthName == null) {
+            return -1;
+        }
+
         return monthName.trim().equals(context.getString(R.string.january)) ?
                 0 : monthName.trim().equals(context.getString(R.string.february)) ?
                 1 : monthName.trim().equals(context.getString(R.string.march)) ?
@@ -50,7 +54,11 @@ public final class Months {
 
     @NonNull
     public static String getMonthInEnglish(final @NonNull Context context,
-                                           final @NonNull String monthName) {
+                                           final @Nullable String monthName) {
+        if (monthName == null) {
+            return "";
+        }
+
         return monthName.trim().equals(context.getString(R.string.january)) ?
                 "January" : monthName.trim().equals(context.getString(R.string.february)) ?
                 "February" : monthName.trim().equals(context.getString(R.string.march)) ?
@@ -67,7 +75,11 @@ public final class Months {
     }
 
     public static String getTranslatedMonth(final @NonNull Context context,
-                                            final @NonNull String monthName) {
+                                            final @Nullable String monthName) {
+        if (monthName == null) {
+            return "";
+        }
+
         return monthName.equals("January") ?
                 context.getString(R.string.january) : monthName.equals("February") ?
                 context.getString(R.string.february) : monthName.equals("March") ?

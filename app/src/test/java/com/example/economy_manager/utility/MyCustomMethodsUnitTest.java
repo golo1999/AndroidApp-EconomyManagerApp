@@ -8,11 +8,14 @@ import com.example.economy_manager.model.MyCustomTime;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.junit.MockitoJUnitRunner;
 
 import java.time.DateTimeException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
+@RunWith(MockitoJUnitRunner.class)
 public class MyCustomMethodsUnitTest {
 
     private LocalDateTime currentDateTime;

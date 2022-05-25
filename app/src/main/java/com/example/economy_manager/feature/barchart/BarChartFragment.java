@@ -234,9 +234,7 @@ public class BarChartFragment extends Fragment {
                 .addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(final @NonNull DataSnapshot snapshot) {
-                        if (!snapshot.exists() ||
-                                !snapshot.hasChild("personalTransactions") ||
-                                !snapshot.child("personalTransactions").hasChildren()) {
+                        if (!snapshot.exists() || !snapshot.hasChild("personalTransactions")) {
                             return;
                         }
 
