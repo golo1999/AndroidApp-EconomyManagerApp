@@ -143,6 +143,8 @@ public class MainScreenActivity
                         viewModel.getMonthlyExpensesConvertedFragment())
                 .replace(R.id.lastWeekExpensesBarChartFragmentContainer,
                         viewModel.getLastWeekExpensesBarChartFragment())
+                .replace(R.id.lastFiveYearsEconomiesBarChartFragmentContainer,
+                        viewModel.getLastFiveYearsEconomiesBarChartFragment())
                 .replace(R.id.currentYearEconomiesBarChartFragmentContainer,
                         viewModel.getCurrentYearEconomiesBarChartFragment())
                 .replace(R.id.currentYearIncomesBarChartFragmentContainer,
