@@ -205,4 +205,6 @@
     <string name="current_year_incomes_bar_chart">Grafico a barre dei redditi dell\'anno in corso</string>
     <string name="monthly_incomes_converted">Reddito mensile convertito</string>
     <string name="monthly_expenses_converted">Spese mensili convertite</string>
+    <string name="current_year_economies_bar_chart">Grafico a barre delle economie dell\'anno in corso</string>
+    <string name="no_transactions_made_this_year">Nessuna transazione effettuata quest\'anno</string>
 </resources>

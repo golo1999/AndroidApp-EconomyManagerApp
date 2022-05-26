@@ -205,4 +205,6 @@
     <string name="last_week_expenses_bar_chart">Diagrama bară a cheltuielilor realizate în ultima săptămână</string>
     <string name="monthly_incomes_converted">Veniturile lunare convertite</string>
     <string name="monthly_expenses_converted">Cheltuielile lunare convertite</string>
+    <string name="current_year_economies_bar_chart">Diagrama bară a economiilor din anul curent</string>
+    <string name="no_transactions_made_this_year">Nicio tranzacție efectuată în acest an</string>
 </resources>

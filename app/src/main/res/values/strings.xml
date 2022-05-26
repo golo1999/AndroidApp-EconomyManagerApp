@@ -5,6 +5,7 @@
     <string name="change_password">Change password</string>
     <string name="choose">Choose</string>
     <string name="currency">Currency</string>
+    <string name="current_year_economies_bar_chart">Current year economies bar chart</string>
     <string name="current_year_expenses_bar_chart">Current year expenses bar chart</string>
     <string name="current_year_incomes_bar_chart">Current year incomes bar chart</string>
     <string name="custom_dialog_listener" translatable="false">CustomDialogListener</string>
@@ -57,6 +58,7 @@
     <string name="no_money_records_yet">No money records yet</string>
     <string name="no_money_spent_last_week">No money spent last week</string>
     <string name="no_transactions_made_this_month">No transactions made this month</string>
+    <string name="no_transactions_made_this_year">No transactions made this year</string>
     <string name="no_transactions_made_yet">No transactions made yet</string>
     <string name="note">Note</string>
     <string name="ok" translatable="false">OK</string>
