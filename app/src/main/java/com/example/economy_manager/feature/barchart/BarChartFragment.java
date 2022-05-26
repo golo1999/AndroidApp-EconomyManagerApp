@@ -1,6 +1,7 @@
 package com.example.economy_manager.feature.barchart;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -83,14 +84,13 @@ public class BarChartFragment extends Fragment {
             if (SELECTED_TYPE.equals("LAST_WEEK_EXPENSES")) {
                 parsedName = Days.getTranslatedDayName(requireContext(),
                         filteredTransaction.getTime().getDayName().substring(0, 1)
-                                .concat(filteredTransaction.getTime().getDayName()
-                                        .substring(1).toLowerCase()));
-            } else if (SELECTED_TYPE.equals("CURRENT_YEAR_INCOMES") ||
+                                .concat(filteredTransaction.getTime().getDayName().substring(1).toLowerCase()));
+            } else if (SELECTED_TYPE.equals("CURRENT_YEAR_ECONOMIES") ||
+                    SELECTED_TYPE.equals("CURRENT_YEAR_INCOMES") ||
                     SELECTED_TYPE.equals("CURRENT_YEAR_EXPENSES")) {
                 parsedName = Months.getTranslatedMonth(requireContext(),
                         filteredTransaction.getTime().getMonthName().substring(0, 1)
-                                .concat(filteredTransaction.getTime().getMonthName()
-                                        .substring(1).toLowerCase()));
+                                .concat(filteredTransaction.getTime().getMonthName().substring(1).toLowerCase()));
             }
 
             if (parsedName == null) {
@@ -101,17 +101,27 @@ public class BarChartFragment extends Fragment {
             final float transactionValue =
                     Float.parseFloat(String.format(Locale.getDefault(), "%.0f",
                             Float.parseFloat(filteredTransaction.getValue())));
+            final float newSum;
 
-            map.put(parsedName, currentSum + transactionValue);
+            if (SELECTED_TYPE.equals("CURRENT_YEAR_ECONOMIES")) {
+                newSum = filteredTransaction.getType() == 1 ?
+                        currentSum + transactionValue : currentSum - transactionValue;
+            } else {
+                newSum = currentSum + transactionValue;
+            }
+
+            map.put(parsedName, newSum);
         });
 
         // iterating the map (e.g. the week days map) and displaying a bar chart for each key (e.g. each week day)
         map.forEach((final String key, final Float value) -> {
             final String firstLetter = key.substring(0, 1);
-            final int color = requireContext().getColor(SELECTED_TYPE.equals("CURRENT_YEAR_INCOMES") ?
+            final int color = requireContext().getColor(SELECTED_TYPE.equals("CURRENT_YEAR_ECONOMIES") ||
+                    SELECTED_TYPE.equals("CURRENT_YEAR_INCOMES") ?
                     R.color.secondaryLight : R.color.crimson);
+            final float barValue = SELECTED_TYPE.equals("CURRENT_YEAR_ECONOMIES") && value < 0f ? 0f : value;
 
-            binding.barChart.addBar(new BarModel(firstLetter, value, color));
+            binding.barChart.addBar(new BarModel(firstLetter, barValue, color));
         });
     }
 
@@ -140,6 +150,7 @@ public class BarChartFragment extends Fragment {
                     transaction.getTime().getYear() == currentTime.getYear();
 
             if ((SELECTED_TYPE.equals("LAST_WEEK_EXPENSES") && !isLastWeekExpense) ||
+                    (SELECTED_TYPE.equals("CURRENT_YEAR_ECONOMIES") && !isCurrentYearIncome && !isCurrentYearExpense) ||
                     (SELECTED_TYPE.equals("CURRENT_YEAR_INCOMES") && !isCurrentYearIncome) ||
                     (SELECTED_TYPE.equals("CURRENT_YEAR_EXPENSES") && !isCurrentYearExpense)) {
                 return;
@@ -157,6 +168,9 @@ public class BarChartFragment extends Fragment {
             switch (SELECTED_TYPE) {
                 case "LAST_WEEK_EXPENSES":
                     noDataText = requireActivity().getResources().getString(R.string.no_money_spent_last_week);
+                    break;
+                case "CURRENT_YEAR_ECONOMIES":
+                    noDataText = requireActivity().getResources().getString(R.string.no_transactions_made_this_year);
                     break;
                 case "CURRENT_YEAR_INCOMES":
                     noDataText = requireActivity().getResources().getString(R.string.no_incomes_made_this_year);
@@ -195,7 +209,8 @@ public class BarChartFragment extends Fragment {
                 put(requireContext().getString(R.string.friday), 0f);
                 put(requireContext().getString(R.string.saturday), 0f);
                 put(requireContext().getString(R.string.sunday), 0f);
-            } else if (SELECTED_TYPE.equals("CURRENT_YEAR_INCOMES") ||
+            } else if (SELECTED_TYPE.equals("CURRENT_YEAR_ECONOMIES") ||
+                    SELECTED_TYPE.equals("CURRENT_YEAR_INCOMES") ||
                     SELECTED_TYPE.equals("CURRENT_YEAR_EXPENSES")) {
                 put(requireContext().getString(R.string.january), 0f);
                 put(requireContext().getString(R.string.february), 0f);

@@ -205,4 +205,6 @@
     <string name="current_year_incomes_bar_chart">Balkendiagramm der Einnahmen des laufenden Jahres</string>
     <string name="monthly_incomes_converted">Monatseinkommen umgerechnet</string>
     <string name="monthly_expenses_converted">Monatliche Ausgaben umgerechnet</string>
+    <string name="current_year_economies_bar_chart">Balkendiagramm der Volkswirtschaften des laufenden Jahres</string>
+    <string name="no_transactions_made_this_year">Keine Transaktionen in diesem Jahr</string>
 </resources>
