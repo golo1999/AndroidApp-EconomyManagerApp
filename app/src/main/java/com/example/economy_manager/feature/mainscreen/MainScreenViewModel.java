@@ -55,6 +55,8 @@ public class MainScreenViewModel extends ViewModel {
             BarChartFragment.newInstance("CURRENT_YEAR_INCOMES");
     private final BarChartFragment currentYearExpensesBarChartFragment =
             BarChartFragment.newInstance("CURRENT_YEAR_EXPENSES");
+    private final BarChartFragment lastFiveYearsEconomiesBarChartFragment =
+            BarChartFragment.newInstance("LAST_FIVE_YEARS_ECONOMIES");
     private final PieChartFragment monthlyIncomesPieChartFragment = PieChartFragment.newInstance("MONTHLY_INCOMES");
     private final PieChartFragment monthlyExpensesPieChartFragment = PieChartFragment.newInstance("MONTHLY_EXPENSES");
 
@@ -209,6 +211,10 @@ public class MainScreenViewModel extends ViewModel {
 
     public BarChartFragment getCurrentYearExpensesBarChartFragment() {
         return currentYearExpensesBarChartFragment;
+    }
+
+    public BarChartFragment getLastFiveYearsEconomiesBarChartFragment() {
+        return lastFiveYearsEconomiesBarChartFragment;
     }
 
     public PieChartFragment getMonthlyIncomesPieChartFragment() {

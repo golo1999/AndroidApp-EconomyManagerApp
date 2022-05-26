@@ -207,4 +207,6 @@
     <string name="monthly_expenses_converted">Gastos mensuales convertidos</string>
     <string name="current_year_economies_bar_chart">Gráfico de barras de las economías del año actual</string>
     <string name="no_transactions_made_this_year">No se realizaron transacciones este año</string>
+    <string name="no_transactions_made_in_the_last_years">No se han realizado transacciones en los últimos %d años</string>
+    <string name="last_years_economies_bar_chart">" Gráfico de barras de las economías de los últimos %d años"</string>
 </resources>

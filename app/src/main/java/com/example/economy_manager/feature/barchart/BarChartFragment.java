@@ -22,6 +22,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import org.eazegraph.lib.models.BarModel;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -72,151 +73,15 @@ public class BarChartFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
-        showData();
-    }
-
-    private void populateBarChart(@NonNull final LinkedHashMap<String, Float> map) {
-        // iterating through the filtered list and updating the sum for each one of map's keys
-        // e.g. updating the current sum for january's expenses if the selected param type is 'CURRENT_YEAR_EXPENSES'
-        filteredTransactionsList.forEach((final Transaction filteredTransaction) -> {
-            String parsedName = null;
-
-            if (SELECTED_TYPE.equals("LAST_WEEK_EXPENSES")) {
-                parsedName = Days.getTranslatedDayName(requireContext(),
-                        filteredTransaction.getTime().getDayName().substring(0, 1)
-                                .concat(filteredTransaction.getTime().getDayName().substring(1).toLowerCase()));
-            } else if (SELECTED_TYPE.equals("CURRENT_YEAR_ECONOMIES") ||
-                    SELECTED_TYPE.equals("CURRENT_YEAR_INCOMES") ||
-                    SELECTED_TYPE.equals("CURRENT_YEAR_EXPENSES")) {
-                parsedName = Months.getTranslatedMonth(requireContext(),
-                        filteredTransaction.getTime().getMonthName().substring(0, 1)
-                                .concat(filteredTransaction.getTime().getMonthName().substring(1).toLowerCase()));
-            }
-
-            if (parsedName == null) {
-                return;
-            }
-
-            final float currentSum = Float.parseFloat(String.valueOf(map.get(parsedName)));
-            final float transactionValue =
-                    Float.parseFloat(String.format(Locale.getDefault(), "%.0f",
-                            Float.parseFloat(filteredTransaction.getValue())));
-            final float newSum;
-
-            if (SELECTED_TYPE.equals("CURRENT_YEAR_ECONOMIES")) {
-                newSum = filteredTransaction.getType() == 1 ?
-                        currentSum + transactionValue : currentSum - transactionValue;
-            } else {
-                newSum = currentSum + transactionValue;
-            }
-
-            map.put(parsedName, newSum);
-        });
-
-        // iterating the map (e.g. the week days map) and displaying a bar chart for each key (e.g. each week day)
-        map.forEach((final String key, final Float value) -> {
-            final String firstLetter = key.substring(0, 1);
-            final int color = requireContext().getColor(SELECTED_TYPE.equals("CURRENT_YEAR_ECONOMIES") ||
-                    SELECTED_TYPE.equals("CURRENT_YEAR_INCOMES") ?
-                    R.color.secondaryLight : R.color.crimson);
-            final float barValue = SELECTED_TYPE.equals("CURRENT_YEAR_ECONOMIES") && value < 0f ? 0f : value;
-
-            binding.barChart.addBar(new BarModel(firstLetter, barValue, color));
-        });
-    }
-
-    private void populateFilteredTransactionsList(final @NonNull DataSnapshot snapshot) {
-        final Iterable<DataSnapshot> personalTransactions =
-                snapshot.child("personalTransactions").getChildren();
-        final LocalDateTime currentTime = LocalDateTime.now();
-
-        if (!filteredTransactionsList.isEmpty()) {
-            filteredTransactionsList.clear();
-        }
-
-        // iterating the transactions list and filtering it based on the selected bar chart param type
-        personalTransactions.forEach((final DataSnapshot transactionsIterator) -> {
-            final Transaction transaction = transactionsIterator.getValue(Transaction.class);
-
-            if (transaction == null) {
-                return;
-            }
-
-            final boolean isLastWeekExpense = transaction.getType() == 0 &&
-                    MyCustomMethods.transactionWasMadeInTheLastWeek(transaction.getTime());
-            final boolean isCurrentYearIncome = transaction.getType() == 1 &&
-                    transaction.getTime().getYear() == currentTime.getYear();
-            final boolean isCurrentYearExpense = transaction.getType() == 0 &&
-                    transaction.getTime().getYear() == currentTime.getYear();
-
-            if ((SELECTED_TYPE.equals("LAST_WEEK_EXPENSES") && !isLastWeekExpense) ||
-                    (SELECTED_TYPE.equals("CURRENT_YEAR_ECONOMIES") && !isCurrentYearIncome && !isCurrentYearExpense) ||
-                    (SELECTED_TYPE.equals("CURRENT_YEAR_INCOMES") && !isCurrentYearIncome) ||
-                    (SELECTED_TYPE.equals("CURRENT_YEAR_EXPENSES") && !isCurrentYearExpense)) {
-                return;
-            }
-
-            filteredTransactionsList.add(transaction);
-        });
-    }
-
-    private void populateMap() {
-        // displaying a message if there is not data found for the selected param type
-        if (filteredTransactionsList.isEmpty()) {
-            showNoDataText();
-            return;
-        }
-
-        // if there is data found for the selected param type
-        binding.noDataText.setVisibility(View.GONE);
-        binding.barChart.setVisibility(View.VISIBLE);
-        binding.barChart.clearChart();
-        binding.barChart.setShowValues(false);
-
-        // creating a map and pre-populating it based on the selected param type
-        // e.g. initializing the week days or the year months
-        final LinkedHashMap<String, Float> map = new LinkedHashMap<String, Float>() {{
-            if (SELECTED_TYPE.equals("LAST_WEEK_EXPENSES")) {
-                put(requireContext().getString(R.string.monday), 0f);
-                put(requireContext().getString(R.string.tuesday), 0f);
-                put(requireContext().getString(R.string.wednesday), 0f);
-                put(requireContext().getString(R.string.thursday), 0f);
-                put(requireContext().getString(R.string.friday), 0f);
-                put(requireContext().getString(R.string.saturday), 0f);
-                put(requireContext().getString(R.string.sunday), 0f);
-            } else if (SELECTED_TYPE.equals("CURRENT_YEAR_ECONOMIES") ||
-                    SELECTED_TYPE.equals("CURRENT_YEAR_INCOMES") ||
-                    SELECTED_TYPE.equals("CURRENT_YEAR_EXPENSES")) {
-                put(requireContext().getString(R.string.january), 0f);
-                put(requireContext().getString(R.string.february), 0f);
-                put(requireContext().getString(R.string.march), 0f);
-                put(requireContext().getString(R.string.april), 0f);
-                put(requireContext().getString(R.string.may), 0f);
-                put(requireContext().getString(R.string.june), 0f);
-                put(requireContext().getString(R.string.july), 0f);
-                put(requireContext().getString(R.string.august), 0f);
-                put(requireContext().getString(R.string.september), 0f);
-                put(requireContext().getString(R.string.october), 0f);
-                put(requireContext().getString(R.string.november), 0f);
-                put(requireContext().getString(R.string.december), 0f);
-            }
-        }};
-
-        populateBarChart(map);
-        binding.barChart.startAnimation();
-    }
-
-    private void setFragmentVariables(final @NonNull LayoutInflater inflater,
-                                      final ViewGroup container) {
-        binding = DataBindingUtil.inflate(inflater, R.layout.bar_chart_fragment, container, false);
+        displayData();
     }
 
     /**
      * Method for populating the filtered list and displaying the data based on it
      */
-    private void showData() {
+    private void displayData() {
         final String[] typesList = requireContext().getResources().getStringArray(R.array.barChartFragmentTypes);
-
+        // if the SELECTED_TYPE is not contained into the typesList or there is no authenticated user
         if (Arrays.stream(typesList).noneMatch(SELECTED_TYPE::equals) ||
                 MyCustomVariables.getFirebaseAuth().getUid() == null) {
             MyCustomMethods.showShortMessage(requireContext(), SELECTED_TYPE);
@@ -244,16 +109,193 @@ public class BarChartFragment extends Fragment {
                 });
     }
 
+    private void populateBarChart(final @NonNull LinkedHashMap<String, Float> map) {
+        // iterating through the filtered list and updating the sum for each one of map's keys
+        // e.g. updating the current sum for january's expenses if the selected param type is 'CURRENT_YEAR_EXPENSES'
+        filteredTransactionsList.forEach((final Transaction filteredTransaction) -> {
+            final String parsedName;
+
+            switch (SELECTED_TYPE) {
+                case "CURRENT_YEAR_ECONOMIES":
+                case "CURRENT_YEAR_EXPENSES":
+                case "CURRENT_YEAR_INCOMES":
+                    parsedName = Months.getTranslatedMonth(requireContext(),
+                            filteredTransaction.getTime().getMonthName().substring(0, 1)
+                                    .concat(filteredTransaction.getTime().getMonthName().substring(1).toLowerCase()));
+                    break;
+                case "LAST_FIVE_YEARS_ECONOMIES":
+                    final String transactionYear = String.valueOf(filteredTransaction.getTime().getYear());
+
+                    parsedName = transactionYear.substring(transactionYear.length() - 1);
+                    break;
+                case "LAST_WEEK_EXPENSES":
+                    parsedName = Days.getTranslatedDayName(requireContext(),
+                            filteredTransaction.getTime().getDayName().substring(0, 1)
+                                    .concat(filteredTransaction.getTime().getDayName().substring(1).toLowerCase()));
+                    break;
+                default:
+                    parsedName = null;
+                    break;
+            }
+
+            if (parsedName == null) {
+                return;
+            }
+
+            final float currentSum = Float.parseFloat(String.valueOf(map.get(parsedName)));
+            final float transactionValue =
+                    Float.parseFloat(String.format(Locale.getDefault(), "%.0f",
+                            Float.parseFloat(filteredTransaction.getValue())));
+            final float newSum;
+
+            switch (SELECTED_TYPE) {
+                case "CURRENT_YEAR_ECONOMIES":
+                case "LAST_FIVE_YEARS_ECONOMIES":
+                    newSum = filteredTransaction.getType() == 1 ?
+                            currentSum + transactionValue : currentSum - transactionValue;
+                    break;
+                default:
+                    newSum = currentSum + transactionValue;
+                    break;
+            }
+
+            map.put(parsedName, newSum);
+        });
+
+        // iterating the map (e.g. the week days map) and displaying a bar chart for each key (e.g. each week day)
+        map.forEach((final String key, final Float value) -> {
+            final String firstLetter = key.substring(0, 1);
+            final int color;
+            final float barValue = SELECTED_TYPE.equals("CURRENT_YEAR_ECONOMIES") && value < 0f ? 0f : value;
+
+            switch (SELECTED_TYPE) {
+                case "CURRENT_YEAR_ECONOMIES":
+                case "CURRENT_YEAR_INCOMES":
+                case "LAST_FIVE_YEARS_ECONOMIES":
+                    color = requireContext().getColor(R.color.secondaryLight);
+                    break;
+                default:
+                    color = requireContext().getColor(R.color.crimson);
+                    break;
+            }
+
+            binding.barChart.addBar(new BarModel(firstLetter, barValue, color));
+        });
+    }
+
+    private void populateFilteredTransactionsList(final @NonNull DataSnapshot snapshot) {
+        final Iterable<DataSnapshot> personalTransactions = snapshot.child("personalTransactions").getChildren();
+        final LocalDateTime currentTime = LocalDateTime.now();
+
+        if (!filteredTransactionsList.isEmpty()) {
+            filteredTransactionsList.clear();
+        }
+
+        // iterating the transactions list and filtering it based on the selected bar chart param type
+        personalTransactions.forEach((final DataSnapshot transactionsIterator) -> {
+            final Transaction transaction = transactionsIterator.getValue(Transaction.class);
+
+            if (transaction == null) {
+                return;
+            }
+
+            final boolean isCurrentYearExpense = transaction.getType() == 0 &&
+                    transaction.getTime().getYear() == currentTime.getYear();
+            final boolean isCurrentYearIncome = transaction.getType() == 1 &&
+                    transaction.getTime().getYear() == currentTime.getYear();
+            final boolean isCurrentYearEconomy = isCurrentYearExpense || isCurrentYearIncome;
+            final boolean isLastFiveYearsEconomy = transaction.getTime().getYear() >= currentTime.getYear() - 4;
+            final boolean isLastWeekExpense = transaction.getType() == 0 &&
+                    MyCustomMethods.transactionWasMadeInTheLastWeek(transaction.getTime());
+
+            if ((SELECTED_TYPE.equals("CURRENT_YEAR_ECONOMIES") && !isCurrentYearEconomy) ||
+                    (SELECTED_TYPE.equals("CURRENT_YEAR_EXPENSES") && !isCurrentYearExpense) ||
+                    (SELECTED_TYPE.equals("CURRENT_YEAR_INCOMES") && !isCurrentYearIncome) ||
+                    (SELECTED_TYPE.equals("LAST_FIVE_YEARS_ECONOMIES") && !isLastFiveYearsEconomy) ||
+                    (SELECTED_TYPE.equals("LAST_WEEK_EXPENSES") && !isLastWeekExpense)) {
+                return;
+            }
+
+            filteredTransactionsList.add(transaction);
+        });
+    }
+
+    private void populateMap() {
+        // displaying a message if there is not data found for the selected param type
+        if (filteredTransactionsList.isEmpty()) {
+            showNoDataText();
+            return;
+        }
+
+        // if there is data found for the selected param type
+        binding.noDataText.setVisibility(View.GONE);
+        binding.barChart.setVisibility(View.VISIBLE);
+        binding.barChart.clearChart();
+        binding.barChart.setShowValues(false);
+
+        // creating a map and pre-populating it based on the selected param type
+        // e.g. initializing the week days or the year months
+        final LinkedHashMap<String, Float> map = new LinkedHashMap<String, Float>() {{
+            switch (SELECTED_TYPE) {
+                case "CURRENT_YEAR_ECONOMIES":
+                case "CURRENT_YEAR_EXPENSES":
+                case "CURRENT_YEAR_INCOMES":
+                    final String[] monthNamesList = {requireContext().getString(R.string.january),
+                            requireContext().getString(R.string.february), requireContext().getString(R.string.march),
+                            requireContext().getString(R.string.april), requireContext().getString(R.string.may),
+                            requireContext().getString(R.string.june), requireContext().getString(R.string.july),
+                            requireContext().getString(R.string.august), requireContext().getString(R.string.september),
+                            requireContext().getString(R.string.october), requireContext().getString(R.string.november),
+                            requireContext().getString(R.string.december)};
+
+                    for (final String monthName : monthNamesList) {
+                        put(monthName, 0f);
+                    }
+                    break;
+                case "LAST_FIVE_YEARS_ECONOMIES":
+                    for (int counter = 4; counter >= 0; --counter) {
+                        final String year = String.valueOf(LocalDate.now().getYear() - counter);
+
+                        put(year.substring(year.length() - 1), 0f);
+                    }
+                    break;
+                case "LAST_WEEK_EXPENSES":
+                    final String[] weekDayNamesList = {requireContext().getString(R.string.monday),
+                            requireContext().getString(R.string.tuesday), requireContext().getString(R.string.wednesday),
+                            requireContext().getString(R.string.thursday), requireContext().getString(R.string.friday),
+                            requireContext().getString(R.string.saturday), requireContext().getString(R.string.sunday)};
+
+                    for (final String dayName : weekDayNamesList) {
+                        put(dayName, 0f);
+                    }
+                    break;
+            }
+        }};
+
+        populateBarChart(map);
+        binding.barChart.startAnimation();
+    }
+
+    private void setFragmentVariables(final @NonNull LayoutInflater inflater,
+                                      final ViewGroup container) {
+        binding = DataBindingUtil.inflate(inflater, R.layout.bar_chart_fragment, container, false);
+    }
+
     /**
      * Method for displaying a text if there is no transaction matching the selected type found
      */
     private void showNoDataText() {
-        final String noDataText =
-                requireActivity().getResources().getString(SELECTED_TYPE.equals("LAST_WEEK_EXPENSES") ?
-                        R.string.no_money_spent_last_week : SELECTED_TYPE.equals("CURRENT_YEAR_ECONOMIES") ?
-                        R.string.no_transactions_made_this_year : SELECTED_TYPE.equals("CURRENT_YEAR_INCOMES") ?
-                        R.string.no_incomes_made_this_year : SELECTED_TYPE.equals("CURRENT_YEAR_EXPENSES") ?
-                        R.string.no_expenses_made_this_year : R.string.no_data);
+        final String noDataText = SELECTED_TYPE.equals("CURRENT_YEAR_ECONOMIES") ?
+                requireContext().getString(R.string.no_transactions_made_this_year) :
+                SELECTED_TYPE.equals("CURRENT_YEAR_INCOMES") ?
+                        requireContext().getString(R.string.no_incomes_made_this_year) :
+                        SELECTED_TYPE.equals("CURRENT_YEAR_EXPENSES") ?
+                                requireContext().getString(R.string.no_expenses_made_this_year) :
+                                SELECTED_TYPE.equals("LAST_FIVE_YEARS_ECONOMIES") ?
+                                        requireContext().getString(R.string.no_transactions_made_in_the_last_years, 5) :
+                                        SELECTED_TYPE.equals("LAST_WEEK_EXPENSES") ?
+                                                requireContext().getString(R.string.no_money_spent_last_week) :
+                                                requireContext().getString(R.string.no_data);
 
         binding.noDataText.setText(noDataText);
         binding.barChart.setVisibility(View.GONE);

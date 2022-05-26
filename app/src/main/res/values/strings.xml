@@ -35,6 +35,7 @@
     <string name="last_name">Last name</string>
     <string name="last_ten_transactions">Last 10 transactions</string>
     <string name="last_week_expenses">Last week expenses</string>
+    <string name="last_years_economies_bar_chart">Last %d years economies bar chart</string>
     <string name="last_week_expenses_bar_chart">Last week expenses bar chart</string>
     <string name="log_in">Log in</string>
     <string name="login">Login</string>
@@ -57,6 +58,7 @@
     <string name="no_money_records_this_month">No money records this month</string>
     <string name="no_money_records_yet">No money records yet</string>
     <string name="no_money_spent_last_week">No money spent last week</string>
+    <string name="no_transactions_made_in_the_last_years">No transactions made in the last %d years</string>
     <string name="no_transactions_made_this_month">No transactions made this month</string>
     <string name="no_transactions_made_this_year">No transactions made this year</string>
     <string name="no_transactions_made_yet">No transactions made yet</string>
@@ -239,10 +241,11 @@
     <!-- Arrays -->
 
     <string-array name="barChartFragmentTypes">
-        <item>LAST_WEEK_EXPENSES</item>
         <item>CURRENT_YEAR_ECONOMIES</item>
         <item>CURRENT_YEAR_INCOMES</item>
         <item>CURRENT_YEAR_EXPENSES</item>
+        <item>LAST_FIVE_YEARS_ECONOMIES</item>
+        <item>LAST_WEEK_EXPENSES</item>
     </string-array>
 
     <string-array name="currencies">
