@@ -1,7 +1,6 @@
 package com.example.economy_manager.feature.barchart;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,6 +24,7 @@ import org.eazegraph.lib.models.BarModel;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.Locale;
 
@@ -163,32 +163,7 @@ public class BarChartFragment extends Fragment {
     private void populateMap() {
         // displaying a message if there is not data found for the selected param type
         if (filteredTransactionsList.isEmpty()) {
-            String noDataText = null;
-
-            switch (SELECTED_TYPE) {
-                case "LAST_WEEK_EXPENSES":
-                    noDataText = requireActivity().getResources().getString(R.string.no_money_spent_last_week);
-                    break;
-                case "CURRENT_YEAR_ECONOMIES":
-                    noDataText = requireActivity().getResources().getString(R.string.no_transactions_made_this_year);
-                    break;
-                case "CURRENT_YEAR_INCOMES":
-                    noDataText = requireActivity().getResources().getString(R.string.no_incomes_made_this_year);
-                    break;
-                case "CURRENT_YEAR_EXPENSES":
-                    noDataText = requireActivity().getResources().getString(R.string.no_expenses_made_this_year);
-                    break;
-            }
-
-            // not showing the 'no data' text if the param type is something else
-            if (noDataText == null) {
-                return;
-            }
-
-            binding.noDataText.setText(noDataText);
-            binding.barChart.setVisibility(View.GONE);
-            binding.noDataText.setVisibility(View.VISIBLE);
-
+            showNoDataText();
             return;
         }
 
@@ -240,7 +215,12 @@ public class BarChartFragment extends Fragment {
      * Method for populating the filtered list and displaying the data based on it
      */
     private void showData() {
-        if (MyCustomVariables.getFirebaseAuth().getUid() == null) {
+        final String[] typesList = requireContext().getResources().getStringArray(R.array.barChartFragmentTypes);
+
+        if (Arrays.stream(typesList).noneMatch(SELECTED_TYPE::equals) ||
+                MyCustomVariables.getFirebaseAuth().getUid() == null) {
+            MyCustomMethods.showShortMessage(requireContext(), SELECTED_TYPE);
+            showNoDataText();
             return;
         }
 
@@ -262,5 +242,21 @@ public class BarChartFragment extends Fragment {
 
                     }
                 });
+    }
+
+    /**
+     * Method for displaying a text if there is no transaction matching the selected type found
+     */
+    private void showNoDataText() {
+        final String noDataText =
+                requireActivity().getResources().getString(SELECTED_TYPE.equals("LAST_WEEK_EXPENSES") ?
+                        R.string.no_money_spent_last_week : SELECTED_TYPE.equals("CURRENT_YEAR_ECONOMIES") ?
+                        R.string.no_transactions_made_this_year : SELECTED_TYPE.equals("CURRENT_YEAR_INCOMES") ?
+                        R.string.no_incomes_made_this_year : SELECTED_TYPE.equals("CURRENT_YEAR_EXPENSES") ?
+                        R.string.no_expenses_made_this_year : R.string.no_data);
+
+        binding.noDataText.setText(noDataText);
+        binding.barChart.setVisibility(View.GONE);
+        binding.noDataText.setVisibility(View.VISIBLE);
     }
 }

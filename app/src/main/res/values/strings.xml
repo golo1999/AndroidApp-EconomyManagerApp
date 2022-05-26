@@ -238,35 +238,42 @@
 
     <!-- Arrays -->
 
+    <string-array name="barChartFragmentTypes">
+        <item>LAST_WEEK_EXPENSES</item>
+        <item>CURRENT_YEAR_ECONOMIES</item>
+        <item>CURRENT_YEAR_INCOMES</item>
+        <item>CURRENT_YEAR_EXPENSES</item>
+    </string-array>
+
     <string-array name="currencies">
-        <item> AUD </item>
-        <item> BRL </item>
-        <item> CAD </item>
-        <item> CHF </item>
-        <item> CNY </item>
-        <item> EUR </item>
-        <item> GBP </item>
-        <item> INR </item>
-        <item> JPY </item>
-        <item> RON </item>
-        <item> RUB </item>
-        <item> USD </item>
+        <item>AUD</item>
+        <item>BRL</item>
+        <item>CAD</item>
+        <item>CHF</item>
+        <item>CNY</item>
+        <item>EUR</item>
+        <item>GBP</item>
+        <item>INR</item>
+        <item>JPY</item>
+        <item>RON</item>
+        <item>RUB</item>
+        <item>USD</item>
     </string-array>
 
     <string-array name="months">
         <item />
-        <item> January </item>
-        <item> February </item>
-        <item> March </item>
-        <item> April </item>
-        <item> May </item>
-        <item> June </item>
-        <item> July </item>
-        <item> August </item>
-        <item> September </item>
-        <item> October </item>
-        <item> November </item>
-        <item> December </item>
+        <item>January</item>
+        <item>February</item>
+        <item>March</item>
+        <item>April</item>
+        <item>May</item>
+        <item>June</item>
+        <item>July</item>
+        <item>August</item>
+        <item>September</item>
+        <item>October</item>
+        <item>November</item>
+        <item>December</item>
     </string-array>
     <!-- TODO: Remove or change this placeholder text -->
 </resources>
