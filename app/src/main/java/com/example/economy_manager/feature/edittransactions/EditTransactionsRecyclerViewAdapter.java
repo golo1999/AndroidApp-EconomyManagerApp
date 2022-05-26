@@ -1,9 +1,6 @@
 package com.example.economy_manager.feature.edittransactions;
 
-import static android.content.Context.MODE_PRIVATE;
-
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,15 +17,13 @@ import com.example.economy_manager.dialog.DeleteTransactionCustomDialog;
 import com.example.economy_manager.model.Transaction;
 import com.example.economy_manager.model.UserDetails;
 import com.example.economy_manager.utility.MyCustomMethods;
-import com.example.economy_manager.utility.MyCustomVariables;
 import com.example.economy_manager.utility.Types;
 
 import java.util.ArrayList;
 import java.util.Locale;
 
 public class EditTransactionsRecyclerViewAdapter
-        extends RecyclerView.Adapter<EditTransactionsRecyclerViewAdapter
-        .EditTransactionsViewHolder> {
+        extends RecyclerView.Adapter<EditTransactionsRecyclerViewAdapter.EditTransactionsViewHolder> {
 
     private final EditTransactionsViewModel viewModel;
     private final ArrayList<Transaction> transactionsList;
@@ -57,11 +52,9 @@ public class EditTransactionsRecyclerViewAdapter
     @Override
     public EditTransactionsViewHolder onCreateViewHolder(final @NonNull ViewGroup parent,
                                                          final int viewType) {
-        final View view = LayoutInflater.from(context).inflate(R.layout.transaction_layout_cardview,
-                parent, false);
+        final View view = LayoutInflater.from(context).inflate(R.layout.transaction_layout_cardview, parent, false);
 
-        return new EditTransactionsViewHolder(view, viewModel, context, transactionsList,
-                recyclerView, fragmentManager);
+        return new EditTransactionsViewHolder(view, viewModel, context, transactionsList, recyclerView, fragmentManager);
     }
 
     @Override
@@ -85,8 +78,7 @@ public class EditTransactionsRecyclerViewAdapter
                 R.drawable.ic_yellow_gradient_soda : R.drawable.ic_white_gradient_tobacco_ad);
         holder.transactionPrice.setText(transactionPriceText);
         holder.transactionCategory.setText(translatedCategory);
-        holder.transactionNote.setText(transaction.getNote() != null ?
-                String.valueOf(transaction.getNote()) : "");
+        holder.transactionNote.setText(transaction.getNote() != null ? String.valueOf(transaction.getNote()) : "");
         holder.transactionEdit.setImageResource(R.drawable.ic_edit_black);
         holder.transactionDelete.setImageResource(R.drawable.ic_delete);
     }
@@ -108,7 +100,6 @@ public class EditTransactionsRecyclerViewAdapter
         private final RecyclerView recyclerView;
         private Transaction selectedTransaction;
         private ConstraintLayout mainLayout;
-        private SharedPreferences preferences;
         private final FragmentManager fragmentManager;
 
         public EditTransactionsViewHolder(final @NonNull View itemView,
@@ -130,9 +121,6 @@ public class EditTransactionsRecyclerViewAdapter
         }
 
         private void setVariables(@NonNull final View v) {
-            preferences =
-                    context.getSharedPreferences(MyCustomVariables.getSharedPreferencesFileName(),
-                            MODE_PRIVATE);
             transactionCategory = v.findViewById(R.id.transaction_category);
             transactionPrice = v.findViewById(R.id.transaction_price);
             transactionNote = v.findViewById(R.id.transaction_note);

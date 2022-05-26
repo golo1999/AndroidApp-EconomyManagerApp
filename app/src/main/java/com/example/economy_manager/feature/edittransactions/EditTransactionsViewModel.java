@@ -201,16 +201,14 @@ public class EditTransactionsViewModel extends ViewModel {
         final int selectedDay = getTransactionDate().getDayOfMonth();
         final int selectedHour = getTransactionTime().getHour();
         final int selectedMinute = getTransactionTime().getMinute();
-        final int selectedSecond =
-                (selectedYear != selectedTransaction.getTime().getYear() &&
-                        selectedMonth != selectedTransaction.getTime().getMonth() &&
-                        selectedDay != selectedTransaction.getTime().getDay() &&
-                        selectedHour != selectedTransaction.getTime().getHour() &&
-                        selectedMinute != selectedTransaction.getTime().getMinute()) ?
-                        LocalDateTime.now().getSecond() : selectedTransaction.getTime().getSecond();
+        final int selectedSecond = (selectedYear != selectedTransaction.getTime().getYear() &&
+                selectedMonth != selectedTransaction.getTime().getMonth() &&
+                selectedDay != selectedTransaction.getTime().getDay() &&
+                selectedHour != selectedTransaction.getTime().getHour() &&
+                selectedMinute != selectedTransaction.getTime().getMinute()) ?
+                LocalDateTime.now().getSecond() : selectedTransaction.getTime().getSecond();
 
-        final LocalDate selectedLocalDate =
-                LocalDate.of(selectedYear, selectedMonth, selectedDay);
+        final LocalDate selectedLocalDate = LocalDate.of(selectedYear, selectedMonth, selectedDay);
 
         final MyCustomTime editedTime = new MyCustomTime(selectedYear,
                 selectedMonth,
@@ -227,13 +225,11 @@ public class EditTransactionsViewModel extends ViewModel {
 
         updateTransaction(activity, selectedTransaction);
 
-        if (selectedTransaction.equals(editedTransaction) ||
-                getEditTransactionsRecyclerViewAdapter() == null) {
+        if (selectedTransaction.equals(editedTransaction) || editTransactionsRecyclerViewAdapter == null) {
             return;
         }
 
-        getEditTransactionsRecyclerViewAdapter()
-                .notifyItemChanged(getSelectedTransactionListPosition());
+        editTransactionsRecyclerViewAdapter.notifyItemChanged(getSelectedTransactionListPosition());
     }
 
     public void onDateTextClickedInFragment(final FragmentManager fragmentManager) {

@@ -66,8 +66,7 @@ public class AddIncomeActivity
 
         final int transactionCategoryIndex = Transaction.getIndexFromCategory(Types.
                 getTypeInEnglish(this, String.valueOf(radioButton.getText()).trim()));
-        final Transaction newTransaction =
-                !String.valueOf(binding.noteField.getText()).trim().isEmpty() ?
+        final Transaction newTransaction = !String.valueOf(binding.noteField.getText()).trim().isEmpty() ?
                         new Transaction(transactionCategoryIndex,
                                 1,
                                 String.valueOf(binding.noteField.getText()).trim(),

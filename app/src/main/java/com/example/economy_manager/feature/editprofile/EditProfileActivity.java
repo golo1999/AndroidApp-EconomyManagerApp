@@ -89,19 +89,15 @@ public class EditProfileActivity
         final int accountPhotoBorderColor = binding.getIsDarkThemeEnabled() ?
                 getColor(R.color.secondaryDark) : getColor(R.color.quaternaryLight);
 
-        final String retrievedFirstName =
-                String.valueOf(retrievedPersonalInformation.get("firstName"));
-        final String retrievedLastName =
-                String.valueOf(retrievedPersonalInformation.get("lastName"));
-        final String retrievedPhoneNumber =
-                String.valueOf(retrievedPersonalInformation.get("phoneNumber"));
+        final String retrievedFirstName = String.valueOf(retrievedPersonalInformation.get("firstName"));
+        final String retrievedLastName = String.valueOf(retrievedPersonalInformation.get("lastName"));
+        final String retrievedPhoneNumber = String.valueOf(retrievedPersonalInformation.get("phoneNumber"));
         final String retrievedWebsite = String.valueOf(retrievedPersonalInformation.get("website"));
         final int countrySpinnerSelection = Integer.parseInt(String.
                 valueOf(retrievedPersonalInformation.get("countrySpinnerSelection")));
         final int genderSpinnerSelection = Integer.parseInt(String.
                 valueOf(retrievedPersonalInformation.get("genderSpinnerSelection")));
-        final String retrievedCareerTitle =
-                String.valueOf(retrievedPersonalInformation.get("careerTitle"));
+        final String retrievedCareerTitle = String.valueOf(retrievedPersonalInformation.get("careerTitle"));
 
         binding.photo.setBorderColor(accountPhotoBorderColor);
         viewModel.setFirstName(retrievedFirstName);
@@ -134,8 +130,7 @@ public class EditProfileActivity
     }
 
     private void setProfilePhoto() {
-        final String photoURL =
-                String.valueOf(viewModel.getPersonalInformation(this).get("photoURL"));
+        final String photoURL = String.valueOf(viewModel.getPersonalInformation(this).get("photoURL"));
         final int photoPlaceholder = binding.getIsDarkThemeEnabled() ?
                 R.drawable.ic_person_dark : R.drawable.ic_person_light;
 
@@ -157,10 +152,8 @@ public class EditProfileActivity
 
     private void setSpinner(@NonNull final String spinnerType) {
         final ArrayAdapter<String> adapter =
-                new ArrayAdapter<String>(this,
-                        R.layout.custom_spinner_item,
-                        spinnerType.equals("COUNTRY_SPINNER") ?
-                                viewModel.getCountriesList() : viewModel.getGendersList()) {
+                new ArrayAdapter<String>(this, R.layout.custom_spinner_item, spinnerType.equals("COUNTRY_SPINNER") ?
+                        viewModel.getCountriesList() : viewModel.getGendersList()) {
                     @NonNull
                     @Override
                     public View getDropDownView(final int position,
@@ -182,8 +175,7 @@ public class EditProfileActivity
                         }
 
                         // setting elements' text color based on the selected theme
-                        v.setBackgroundColor(getColor(isDarkThemeEnabled ?
-                                R.color.primaryLight : R.color.primaryDark));
+                        v.setBackgroundColor(getColor(isDarkThemeEnabled ? R.color.primaryLight : R.color.primaryDark));
                         ((TextView) v).setTextColor(isDarkThemeEnabled ?
                                 getColor(R.color.quaternaryLight) : getColor(R.color.secondaryDark));
 
@@ -203,42 +195,39 @@ public class EditProfileActivity
      */
     private void setSpinnerOnSelectedItemListener(@NonNull final Spinner spinner,
                                                   final String spinnerType) {
-        final AdapterView.OnItemSelectedListener itemSelectedListener =
-                new AdapterView.OnItemSelectedListener() {
-                    @Override
-                    public void onItemSelected(final AdapterView<?> parent,
-                                               final View view,
-                                               final int position,
-                                               final long id) {
-                        if (userDetails == null) {
-                            userDetails = MyCustomVariables.getDefaultUserDetails();
-                        }
+        final AdapterView.OnItemSelectedListener itemSelectedListener = new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(final AdapterView<?> parent,
+                                       final View view,
+                                       final int position,
+                                       final long id) {
+                if (userDetails == null) {
+                    userDetails = MyCustomVariables.getDefaultUserDetails();
+                }
 
-                        if (userDetails.getApplicationSettings().isDarkThemeEnabled()
-                                != isDarkThemeEnabled) {
-                            isDarkThemeEnabled =
-                                    userDetails.getApplicationSettings().isDarkThemeEnabled();
-                        }
+                if (userDetails.getApplicationSettings().isDarkThemeEnabled() != isDarkThemeEnabled) {
+                    isDarkThemeEnabled = userDetails.getApplicationSettings().isDarkThemeEnabled();
+                }
 
-                        final int color = isDarkThemeEnabled ?
-                                getColor(R.color.secondaryDark) : getColor(R.color.quaternaryLight);
-                        // centering spinner's first item's text
-                        // and setting its color based on the selected theme
-                        ((TextView) parent.getChildAt(0)).setTextColor(color);
-                        ((TextView) parent.getChildAt(0)).setGravity(Gravity.START);
+                final int color = isDarkThemeEnabled ?
+                        getColor(R.color.secondaryDark) : getColor(R.color.quaternaryLight);
+                // centering spinner's first item's text
+                // and setting its color based on the selected theme
+                ((TextView) parent.getChildAt(0)).setTextColor(color);
+                ((TextView) parent.getChildAt(0)).setGravity(Gravity.START);
 
-                        if (spinnerType.trim().equals("COUNTRY_SPINNER")) {
-                            viewModel.setCountry(String.valueOf(parent.getItemAtPosition(position)));
-                        } else if (spinnerType.trim().equals("GENDER_SPINNER")) {
-                            viewModel.setGender(String.valueOf(parent.getItemAtPosition(position)));
-                        }
-                    }
+                if (spinnerType.trim().equals("COUNTRY_SPINNER")) {
+                    viewModel.setCountry(String.valueOf(parent.getItemAtPosition(position)));
+                } else if (spinnerType.trim().equals("GENDER_SPINNER")) {
+                    viewModel.setGender(String.valueOf(parent.getItemAtPosition(position)));
+                }
+            }
 
-                    @Override
-                    public void onNothingSelected(AdapterView<?> parent) {
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
 
-                    }
-                };
+            }
+        };
 
         spinner.setOnItemSelectedListener(itemSelectedListener);
     }
@@ -250,8 +239,7 @@ public class EditProfileActivity
 
         binding.setIsDarkThemeEnabled(isDarkThemeEnabled);
 
-        final int color = getColor(isDarkThemeEnabled ?
-                R.color.secondaryDark : R.color.quaternaryLight);
+        final int color = getColor(isDarkThemeEnabled ? R.color.secondaryDark : R.color.quaternaryLight);
 
         // setting arrow color
         binding.countrySpinner.getBackground().setColorFilter(color, PorterDuff.Mode.SRC_ATOP);

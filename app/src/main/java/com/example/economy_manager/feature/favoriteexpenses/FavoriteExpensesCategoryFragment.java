@@ -94,16 +94,12 @@ public class FavoriteExpensesCategoryFragment extends Fragment {
 
                                 if (transaction != null && transaction.getType() == 0) {
                                     final Integer transactionCategory = transaction.getCategory();
+                                    final Float transactionValue = Float.parseFloat(transaction.getValue());
 
-                                    final Float transactionValue =
-                                            Float.parseFloat(transaction.getValue());
-
-                                    if (expensesMap.isEmpty() ||
-                                            !expensesMap.containsKey(transactionCategory)) {
+                                    if (expensesMap.isEmpty() || !expensesMap.containsKey(transactionCategory)) {
                                         expensesMap.put(transactionCategory, transactionValue);
                                     } else if (expensesMap.containsKey(transactionCategory)) {
-                                        final Float currentCategoryTotalValue =
-                                                expensesMap.get(transactionCategory);
+                                        final Float currentCategoryTotalValue = expensesMap.get(transactionCategory);
 
                                         if (currentCategoryTotalValue != null) {
                                             final Float newCategoryTotalValue =
@@ -127,12 +123,10 @@ public class FavoriteExpensesCategoryFragment extends Fragment {
                             final float favoriteExpenseAmount =
                                     (float) expensesMap.values().toArray()[0];
                             final String currencySymbol = viewModel.getUserDetails() != null ?
-                                    viewModel.getUserDetails().getApplicationSettings()
-                                            .getCurrencySymbol() :
+                                    viewModel.getUserDetails().getApplicationSettings().getCurrencySymbol() :
                                     MyCustomMethods.getCurrencySymbol();
                             final String favoriteExpenseAmountWithCurrency =
-                                    Locale.getDefault().getDisplayLanguage()
-                                            .equals(Languages.ENGLISH_LANGUAGE) ?
+                                    Locale.getDefault().getDisplayLanguage().equals(Languages.ENGLISH_LANGUAGE) ?
                                             currencySymbol + favoriteExpenseAmount :
                                             favoriteExpenseAmount + " " + currencySymbol;
                             fragmentText = favoriteExpenseCategoryName +
@@ -154,9 +148,7 @@ public class FavoriteExpensesCategoryFragment extends Fragment {
 
     private void setFragmentVariables(final @NonNull LayoutInflater inflater,
                                       final ViewGroup container) {
-        binding = DataBindingUtil.inflate(inflater, R.layout.favorite_expenses_category_fragment,
-                container, false);
-        viewModel = new ViewModelProvider((ViewModelStoreOwner) requireContext())
-                .get(MainScreenViewModel.class);
+        binding = DataBindingUtil.inflate(inflater, R.layout.favorite_expenses_category_fragment, container, false);
+        viewModel = new ViewModelProvider((ViewModelStoreOwner) requireContext()).get(MainScreenViewModel.class);
     }
 }

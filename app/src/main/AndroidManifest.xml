@@ -26,8 +26,6 @@
             </intent-filter>
         </activity>
 
-        <activity android:name="com.example.economy_manager.feature.editspecifictransaction.EditSpecificTransactionActivity" />
-
         <activity
             android:name="com.example.economy_manager.feature.editphoto.EditPhotoActivity"
             android:parentActivityName="com.example.economy_manager.feature.editprofile.EditProfileActivity" />

@@ -65,12 +65,9 @@ public class EditPhotoViewModel extends ViewModel {
                         @Override
                         public void onDataChange(final @NonNull DataSnapshot snapshot) {
                             if (snapshot.hasChild("photoURL")) {
-                                final String URL =
-                                        String.valueOf(snapshot.child("photoURL").getValue());
-                                final int noPhotoIcon =
-                                        userDetails.getApplicationSettings().isDarkThemeEnabled() ?
-                                                R.drawable.ic_no_photo_dark :
-                                                R.drawable.ic_no_photo_light;
+                                final String URL = String.valueOf(snapshot.child("photoURL").getValue());
+                                final int noPhotoIcon = userDetails.getApplicationSettings().isDarkThemeEnabled() ?
+                                        R.drawable.ic_no_photo_dark : R.drawable.ic_no_photo_light;
 
                                 if (!URL.trim().isEmpty()) {
                                     Picasso.get()

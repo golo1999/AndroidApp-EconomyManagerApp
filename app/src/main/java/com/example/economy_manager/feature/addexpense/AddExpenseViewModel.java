@@ -5,6 +5,7 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.widget.EditText;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.ViewModel;
 
@@ -35,68 +36,68 @@ public class AddExpenseViewModel extends ViewModel {
         this.userDetails = userDetails;
     }
 
-    public String getBillsText(final Context context) {
+    public String getBillsText(final @NonNull Context context) {
         return context.getResources().getString(R.string.bills).trim();
     }
 
-    public String getCarText(final Context context) {
+    public String getCarText(final @NonNull Context context) {
         return context.getResources().getString(R.string.car).trim();
     }
 
-    public String getClothesText(final Context context) {
+    public String getClothesText(final @NonNull Context context) {
         return context.getResources().getString(R.string.clothes).trim();
     }
 
-    public String getCommunicationsText(final Context context) {
+    public String getCommunicationsText(final @NonNull Context context) {
         return context.getResources().getString(R.string.communications).trim();
     }
 
-    public String getEatingOutText(final Context context) {
+    public String getEatingOutText(final @NonNull Context context) {
         return context.getResources().getString(R.string.eating_out).trim();
     }
 
-    public String getEntertainmentText(final Context context) {
+    public String getEntertainmentText(final @NonNull Context context) {
         return context.getResources().getString(R.string.entertainment).trim();
     }
 
-    public String getFoodText(final Context context) {
+    public String getFoodText(final @NonNull Context context) {
         return context.getResources().getString(R.string.food).trim();
     }
 
-    public String getGiftsText(final Context context) {
+    public String getGiftsText(final @NonNull Context context) {
         return context.getResources().getString(R.string.gifts).trim();
     }
 
-    public String getHealthText(final Context context) {
+    public String getHealthText(final @NonNull Context context) {
         return context.getResources().getString(R.string.health).trim();
     }
 
-    public String getHouseText(final Context context) {
+    public String getHouseText(final @NonNull Context context) {
         return context.getResources().getString(R.string.house).trim();
     }
 
-    public String getPetsText(final Context context) {
+    public String getPetsText(final @NonNull Context context) {
         return context.getResources().getString(R.string.pets).trim();
     }
 
-    public String getSportsText(final Context context) {
+    public String getSportsText(final @NonNull Context context) {
         return context.getResources().getString(R.string.sports).trim();
     }
 
-    public String getTaxiText(final Context context) {
+    public String getTaxiText(final @NonNull Context context) {
         return context.getResources().getString(R.string.taxi).trim();
     }
 
-    public String getToiletryText(final Context context) {
+    public String getToiletryText(final @NonNull Context context) {
         return context.getResources().getString(R.string.toiletry).trim();
     }
 
-    public String getTransportText(final Context context) {
+    public String getTransportText(final @NonNull Context context) {
         return context.getResources().getString(R.string.transport).trim();
     }
 
     // method for limiting the number to only two decimals
-    public void limitTwoDecimals(final EditText field) {
+    public void limitTwoDecimals(final @NonNull EditText field) {
         field.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(final CharSequence s,

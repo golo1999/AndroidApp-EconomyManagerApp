@@ -65,10 +65,8 @@ public class AddExpenseActivity
         final LocalTime currentTime = LocalTime.now();
 
         final int transactionCategoryIndex = Transaction.getIndexFromCategory(Types.
-                getTypeInEnglish(AddExpenseActivity.this,
-                        String.valueOf(radioButton.getText()).trim()));
-        final Transaction newTransaction =
-                !String.valueOf(binding.noteField.getText()).trim().isEmpty() ?
+                getTypeInEnglish(AddExpenseActivity.this, String.valueOf(radioButton.getText()).trim()));
+        final Transaction newTransaction = !String.valueOf(binding.noteField.getText()).trim().isEmpty() ?
                         new Transaction(transactionCategoryIndex,
                                 0,
                                 String.valueOf(binding.noteField.getText()).trim(),
@@ -246,10 +244,8 @@ public class AddExpenseActivity
             return;
         }
 
-        if (MyCustomSharedPreferences.retrieveUserDetailsFromSharedPreferences(this)
-                != null) {
-            viewModel.setUserDetails(MyCustomSharedPreferences
-                    .retrieveUserDetailsFromSharedPreferences(this));
+        if (MyCustomSharedPreferences.retrieveUserDetailsFromSharedPreferences(this) != null) {
+            viewModel.setUserDetails(MyCustomSharedPreferences.retrieveUserDetailsFromSharedPreferences(this));
         }
 
         if (viewModel.getUserDetails() != null) {
