@@ -1,5 +1,6 @@
 <resources>
     <string name="app_name" translatable="false">Economy Manager</string>
+    <string name="budget_review">Budget review</string>
     <string name="cancel">Cancel</string>
     <string name="career_title">Career title</string>
     <string name="change_password">Change password</string>
@@ -40,9 +41,9 @@
     <string name="log_in">Log in</string>
     <string name="login">Login</string>
     <string name="login_successful">Login successful</string>
-    <string name="monthly_balance">Monthly balance</string>
     <string name="monthly_expenses_converted">Monthly expenses converted</string>
     <string name="monthly_incomes_converted">Monthly incomes converted</string>
+    <string name="monthly_savings">Monthly savings</string>
     <string name="monthly_transactions">Monthly transactions</string>
     <string name="must_implement_the_listener">%s must implement %s</string>
     <string name="new_expense">New expense</string>
@@ -74,7 +75,6 @@
     <string name="proceed">"Proceed "</string>
     <string name="profile_updated_successfully">Profile updated successfully</string>
     <string name="register">Register</string>
-    <string name="remaining_monthly_income">Remaining monthly income</string>
     <string name="reset_database">Reset database</string>
     <string name="reset_password">Reset password</string>
     <string name="salary">Salary</string>

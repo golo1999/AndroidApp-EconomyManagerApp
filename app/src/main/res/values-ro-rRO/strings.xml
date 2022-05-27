@@ -19,7 +19,7 @@
     <string name="email_already_exists">Email-ul există deja</string>
     <string name="should_not_be_empty">%s nu trebuie să fie gol</string>
     <string name="password">Parolă</string>
-    <string name="remaining_monthly_income">Venit lunar rămas</string>
+    <string name="monthly_savings">Economiile lunare</string>
     <string name="reset_database">Resetați baza de date</string>
     <string name="salary">Salariu</string>
     <string name="save">Salvați</string>
@@ -36,12 +36,12 @@
     <string name="email_does_not_exist_in_the_database">Email-ul nu există în baza de date</string>
     <string name="incomes">Venituri</string>
     <string name="last_ten_transactions">Ultimele 10 tranzacții</string>
-    <string name="last_week_expenses">Cheltuieli în ultima săptămână</string>
+    <string name="last_week_expenses">Cheltuielile din ultima săptămână</string>
     <string name="forgot_password">Am uitat parola</string>
     <string name="incorrect_username_or_password">Numele de utilizator sau parolă incorectă</string>
     <string name="email_is_not_valid">Email-ul nu este valid</string>
     <string name="please_select_an_option">Vă rugăm să selectați o opțiune</string>
-    <string name="monthly_balance">Balanță lunară</string>
+    <string name="budget_review">Revizuirea bugetului</string>
     <string name="no_money_spent_last_week">Nicio cheltuială efectuată în ultima săptămână</string>
     <string name="no_money_records_yet">Nicio tranzacție înregistrată</string>
     <string name="no_transactions_made_this_month">Nicio tranzacție efectuată în această lună</string>
@@ -187,7 +187,7 @@
     <string name="the_last_name">Numele</string>
     <string name="the_old_password">Vechea parolă</string>
     <string name="the_new_password">Noua parolă</string>
-    <string name="overall_profit">Profit total</string>
+    <string name="overall_profit">Profitul total</string>
     <string name="no_data">Nu există date</string>
     <string name="no_incomes_made_this_month">Niciun venit realizat în luna curentă</string>
     <string name="monthly_incomes_pie_chart">Diagrama circulară al veniturilor lunare</string>

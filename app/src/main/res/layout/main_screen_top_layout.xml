@@ -61,7 +61,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="5sp"
-            android:contentDescription="@string/monthly_balance"
+            android:contentDescription="@string/budget_review"
             android:onClick="@{() -> viewModel.goToActivity(activity, monthlyBalanceActivity)}"
             android:src="@{isDarkThemeEnabled ? @drawable/ic_balance_dark : @drawable/ic_balance_light}"
             app:layout_constraintBottom_toBottomOf="parent"

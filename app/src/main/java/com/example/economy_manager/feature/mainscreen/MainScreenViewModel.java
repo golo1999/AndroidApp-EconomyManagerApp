@@ -49,14 +49,14 @@ public class MainScreenViewModel extends ViewModel {
     private final CurrencyConversionFragment monthlyExpensesConvertedFragment =
             CurrencyConversionFragment.newInstance("MONTHLY_EXPENSES");
     private final BarChartFragment lastWeekExpensesBarChartFragment = BarChartFragment.newInstance("LAST_WEEK_EXPENSES");
+    private final BarChartFragment lastFiveYearsEconomiesBarChartFragment =
+            BarChartFragment.newInstance("LAST_FIVE_YEARS_ECONOMIES");
     private final BarChartFragment currentYearEconomiesBarChartFragment =
             BarChartFragment.newInstance("CURRENT_YEAR_ECONOMIES");
     private final BarChartFragment currentYearIncomesBarChartFragment =
             BarChartFragment.newInstance("CURRENT_YEAR_INCOMES");
     private final BarChartFragment currentYearExpensesBarChartFragment =
             BarChartFragment.newInstance("CURRENT_YEAR_EXPENSES");
-    private final BarChartFragment lastFiveYearsEconomiesBarChartFragment =
-            BarChartFragment.newInstance("LAST_FIVE_YEARS_ECONOMIES");
     private final PieChartFragment monthlyIncomesPieChartFragment = PieChartFragment.newInstance("MONTHLY_INCOMES");
     private final PieChartFragment monthlyExpensesPieChartFragment = PieChartFragment.newInstance("MONTHLY_EXPENSES");
 

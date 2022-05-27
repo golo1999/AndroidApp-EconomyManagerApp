@@ -125,7 +125,7 @@
     <string name="save">Salvar</string>
     <string name="salary">Salario</string>
     <string name="reset_database">Restablecer base de datos</string>
-    <string name="remaining_monthly_income">Ingreso mensual restante</string>
+    <string name="monthly_savings">Ahorros mensuales</string>
     <string name="note">Nota</string>
     <string name="password">Contraseña</string>
     <string name="please_select_an_option">Por favor seleccione una opción</string>
@@ -145,7 +145,7 @@
     <string name="no_money_records_yet">Aún no hay registros de dinero</string>
     <string name="no_money_records_this_month">No hay registros de dinero este mes</string>
     <string name="no_money_spent_last_week">No gasté dinero la semana pasada</string>
-    <string name="monthly_balance">Saldo mensual</string>
+    <string name="budget_review">Revisión del presupuesto</string>
     <string name="incomes">Ingresos</string>
     <string name="the_account_was_successfully_deleted">La cuenta fue eliminada con éxito</string>
     <string name="the_database_was_reset_successfully">La base de datos se restableció correctamente</string>

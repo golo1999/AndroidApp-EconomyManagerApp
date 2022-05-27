@@ -31,7 +31,7 @@
     <string name="email">E-mail</string>
     <string name="expenses">Spese</string>
     <string name="reset_password">Resetta la password</string>
-    <string name="remaining_monthly_income">Reddito mensile rimanente</string>
+    <string name="monthly_savings">Risparmio mensile</string>
     <string name="reset_database">Reimposta le base dei dati</string>
     <string name="email_already_exists">L\'e-mail già esistente</string>
     <string name="should_not_be_empty">%s non deve essere vuota</string>
@@ -50,7 +50,7 @@
     <string name="no_money_records_yet">Nessun record di denaro ancora</string>
     <string name="no_money_records_this_month">Nessun record di denaro questo mese</string>
     <string name="no_money_spent_last_week">Nessun denaro speso la scorsa settimana</string>
-    <string name="monthly_balance">Saldo mensile</string>
+    <string name="budget_review">Revisione del bilancio</string>
     <string name="bills">Bollette</string>
     <string name="car">Auto</string>
     <string name="food">Alimentari</string>

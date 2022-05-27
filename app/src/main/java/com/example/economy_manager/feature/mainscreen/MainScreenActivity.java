@@ -130,14 +130,14 @@ public class MainScreenActivity
     private void setFragments() {
         getSupportFragmentManager()
                 .beginTransaction()
-                .replace(R.id.showSavingsFragmentContainer, viewModel.getMonthlySavingsFragment())
+                .replace(R.id.monthlySavingsFragmentContainer, viewModel.getMonthlySavingsFragment())
                 .replace(R.id.budgetReviewFragmentContainer, viewModel.getBudgetReviewFragment())
-                .replace(R.id.moneySpentFragmentContainer, viewModel.getLastWeekExpensesFragment())
+                .replace(R.id.overallProfitFragmentContainer, viewModel.getOverallProfitFragment())
+                .replace(R.id.lastWeekExpensesFragmentContainer, viewModel.getLastWeekExpensesFragment())
                 .replace(R.id.lastTenTransactionsFragmentContainer, viewModel.getLastTenTransactionsFragment())
                 .replace(R.id.topFiveExpensesFragmentContainer, viewModel.getTopFiveExpensesFragment())
                 .replace(R.id.favoriteExpensesCategoryFragmentContainer,
                         viewModel.getFavoriteExpensesCategoryFragment())
-                .replace(R.id.overallProfitFragmentContainer, viewModel.getOverallProfitFragment())
                 .replace(R.id.monthlyIncomesConvertedFragmentContainer, viewModel.getMonthlyIncomesConvertedFragment())
                 .replace(R.id.monthlyExpensesConvertedFragmentContainer,
                         viewModel.getMonthlyExpensesConvertedFragment())

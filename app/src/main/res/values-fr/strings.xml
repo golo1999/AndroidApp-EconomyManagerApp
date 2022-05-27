@@ -105,7 +105,7 @@
     <string name="value">Valeur</string>
     <string name="upload">Télécharger</string>
     <string name="note">Note</string>
-    <string name="monthly_balance">Solde mensuel</string>
+    <string name="budget_review">Examen budgétaire</string>
     <string name="no_money_spent_last_week">Pas d\'argent dépensé la semaine dernière</string>
     <string name="no_money_records_this_month">Aucun enregistrement d\'argent ce mois-ci</string>
     <string name="no_money_records_yet">Pas encore de registres d\'argent</string>
@@ -118,7 +118,7 @@
     <string name="toiletry">Le cosmétique</string>
     <string name="taxi">Taxi</string>
     <string name="password">Mot de passe</string>
-    <string name="remaining_monthly_income">Revenu mensuel restant</string>
+    <string name="monthly_savings">Épargne mensuelle</string>
     <string name="reset_database">Réinitialiser la base de données</string>
     <string name="salary">Le salaire</string>
     <string name="save">Sauver</string>

@@ -39,7 +39,7 @@
     <string name="incomes">Einkommen</string>
     <string name="please_select_an_option">Bitte wähle eine Option</string>
     <string name="password">Passwort</string>
-    <string name="remaining_monthly_income">Verbleibendes monatliches Einkommen</string>
+    <string name="monthly_savings">Monatliche Einsparungen</string>
     <string name="no_money_spent_last_week">Letzte Woche wurde kein Geld ausgegeben</string>
     <string name="no_money_records_this_month">Diesen Monat gibt es keine Geldaufzeichnungen</string>
     <string name="no_money_records_yet">Noch keine Geldaufzeichnungen</string>
@@ -50,7 +50,7 @@
     <string name="forgot_password">Passwort vergessen</string>
     <string name="last_week_expenses">Letzte Woche Ausgaben</string>
     <string name="last_ten_transactions">Letzte 10 Transaktionen</string>
-    <string name="monthly_balance">Monatlicher Balance</string>
+    <string name="budget_review">Budgetüberprüfung</string>
     <string name="car">Auto</string>
     <string name="eating_out">Essen gehen</string>
     <string name="taxi">Taxi</string>
