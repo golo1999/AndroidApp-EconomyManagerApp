@@ -131,7 +131,7 @@ public class SettingsViewModel extends AndroidViewModel {
                     if (MyCustomVariables.getFirebaseAuth().getUid() != null) {
                         MyCustomVariables.getDatabaseReference()
                                 .child(MyCustomVariables.getFirebaseAuth().getUid())
-                                .child("PersonalTransactions")
+                                .child("personalTransactions")
                                 .removeValue();
                     }
 
@@ -332,7 +332,7 @@ public class SettingsViewModel extends AndroidViewModel {
                     if (reAuthenticateTask.isSuccessful()) {
                         MyCustomVariables.getDatabaseReference()
                                 .child(MyCustomVariables.getFirebaseAuth().getUid())
-                                .child("PersonalTransactions")
+                                .child("personalTransactions")
                                 .removeValue();
 
                         MyCustomMethods.showShortMessage(currentActivity,
@@ -367,7 +367,7 @@ public class SettingsViewModel extends AndroidViewModel {
                         if (reAuthenticateTask.isSuccessful()) {
                             MyCustomVariables.getDatabaseReference()
                                     .child(MyCustomVariables.getFirebaseAuth().getUid())
-                                    .child("PersonalTransactions")
+                                    .child("personalTransactions")
                                     .removeValue();
 
                             MyCustomMethods.showShortMessage(currentActivity,
