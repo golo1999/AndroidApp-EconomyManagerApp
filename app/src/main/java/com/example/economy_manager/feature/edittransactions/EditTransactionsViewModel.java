@@ -13,11 +13,11 @@ import com.example.economy_manager.databinding.EditSpecificTransactionFragmentBi
 import com.example.economy_manager.model.MyCustomTime;
 import com.example.economy_manager.model.Transaction;
 import com.example.economy_manager.model.UserDetails;
-import com.example.economy_manager.utility.DatePickerFragment;
+import com.example.economy_manager.model.DatePickerFragment;
 import com.example.economy_manager.utility.Months;
 import com.example.economy_manager.utility.MyCustomMethods;
 import com.example.economy_manager.utility.MyCustomVariables;
-import com.example.economy_manager.utility.TimePickerFragment;
+import com.example.economy_manager.model.TimePickerFragment;
 import com.example.economy_manager.utility.Types;
 
 import java.time.LocalDate;

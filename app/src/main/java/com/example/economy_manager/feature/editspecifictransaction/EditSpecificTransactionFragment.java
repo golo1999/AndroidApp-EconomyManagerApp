@@ -24,7 +24,7 @@ import com.example.economy_manager.feature.edittransactions.EditTransactionsView
 import com.example.economy_manager.model.Transaction;
 import com.example.economy_manager.utility.MyCustomMethods;
 import com.example.economy_manager.utility.MyCustomVariables;
-import com.example.economy_manager.utility.TransactionTypesSpinnerAdapter;
+import com.example.economy_manager.model.TransactionTypesSpinnerAdapter;
 import com.example.economy_manager.utility.Types;
 
 import java.time.LocalDate;

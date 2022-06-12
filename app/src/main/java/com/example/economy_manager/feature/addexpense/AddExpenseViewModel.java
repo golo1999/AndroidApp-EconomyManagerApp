@@ -11,7 +11,7 @@ import androidx.lifecycle.ViewModel;
 
 import com.example.economy_manager.R;
 import com.example.economy_manager.model.UserDetails;
-import com.example.economy_manager.utility.DatePickerFragment;
+import com.example.economy_manager.model.DatePickerFragment;
 
 import java.time.LocalDate;
 

@@ -1,4 +1,4 @@
-package com.example.economy_manager.utility;
+package com.example.economy_manager.model;
 
 import android.app.Dialog;
 import android.app.TimePickerDialog;

@@ -20,7 +20,7 @@ import com.example.economy_manager.databinding.SettingsActivityBinding;
 import com.example.economy_manager.dialog.ChangePasswordCustomDialog;
 import com.example.economy_manager.dialog.DeleteAccountCustomDialog;
 import com.example.economy_manager.model.UserDetails;
-import com.example.economy_manager.utility.CurrenciesSpinnerAdapter;
+import com.example.economy_manager.model.CurrenciesSpinnerAdapter;
 import com.example.economy_manager.utility.MyCustomMethods;
 import com.example.economy_manager.utility.MyCustomSharedPreferences;
 import com.example.economy_manager.utility.MyCustomVariables;

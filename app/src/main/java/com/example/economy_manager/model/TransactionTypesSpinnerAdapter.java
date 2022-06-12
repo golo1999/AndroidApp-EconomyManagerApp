@@ -1,4 +1,4 @@
-package com.example.economy_manager.utility;
+package com.example.economy_manager.model;
 
 import android.content.Context;
 import android.view.Gravity;
@@ -11,6 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.example.economy_manager.R;
+import com.example.economy_manager.utility.MyCustomVariables;
 
 import java.util.ArrayList;
 
