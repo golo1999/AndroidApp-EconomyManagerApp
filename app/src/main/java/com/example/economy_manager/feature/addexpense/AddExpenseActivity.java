@@ -67,13 +67,13 @@ public class AddExpenseActivity
         final int transactionCategoryIndex = Transaction.getIndexFromCategory(Types.
                 getTypeInEnglish(AddExpenseActivity.this, String.valueOf(radioButton.getText()).trim()));
         final Transaction newTransaction = !String.valueOf(binding.noteField.getText()).trim().isEmpty() ?
-                        new Transaction(transactionCategoryIndex,
-                                0,
-                                String.valueOf(binding.noteField.getText()).trim(),
-                                String.valueOf(binding.valueField.getText()).trim()) :
-                        new Transaction(transactionCategoryIndex,
-                                0,
-                                String.valueOf(binding.valueField.getText()).trim());
+                new Transaction(transactionCategoryIndex,
+                        0,
+                        String.valueOf(binding.noteField.getText()).trim(),
+                        String.valueOf(binding.valueField.getText()).trim()) :
+                new Transaction(transactionCategoryIndex,
+                        0,
+                        String.valueOf(binding.valueField.getText()).trim());
         // setting transaction's time
         final LocalDate newTransactionDate = viewModel.getTransactionDate();
 
@@ -215,7 +215,7 @@ public class AddExpenseActivity
     }
 
     private void setDateText(final LocalDate date) {
-        final String formattedDate = MyCustomMethods.getFormattedDate(date);
+        final String formattedDate = MyCustomMethods.getFormattedDate(this, date);
 
         if (!viewModel.getTransactionDate().equals(date)) {
             viewModel.setTransactionDate(date);

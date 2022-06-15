@@ -22,9 +22,9 @@ import com.example.economy_manager.databinding.EditSpecificTransactionFragmentBi
 import com.example.economy_manager.feature.edittransactions.EditTransactionsActivity;
 import com.example.economy_manager.feature.edittransactions.EditTransactionsViewModel;
 import com.example.economy_manager.model.Transaction;
+import com.example.economy_manager.model.TransactionTypesSpinnerAdapter;
 import com.example.economy_manager.utility.MyCustomMethods;
 import com.example.economy_manager.utility.MyCustomVariables;
-import com.example.economy_manager.model.TransactionTypesSpinnerAdapter;
 import com.example.economy_manager.utility.Types;
 
 import java.time.LocalDate;
@@ -86,7 +86,7 @@ public class EditSpecificTransactionFragment extends Fragment {
     }
 
     public void setDateText(final LocalDate date) {
-        final String formattedDate = MyCustomMethods.getFormattedDate(date);
+        final String formattedDate = MyCustomMethods.getFormattedDate(requireContext(), date);
 
         if (!viewModel.getTransactionDate().equals(date)) {
             viewModel.setTransactionDate(date);

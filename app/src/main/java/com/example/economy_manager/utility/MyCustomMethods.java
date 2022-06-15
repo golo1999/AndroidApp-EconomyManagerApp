@@ -108,27 +108,82 @@ public final class MyCustomMethods {
     }
 
     @NonNull
-    public static String getFormattedDate(@Nullable LocalDate date) {
+    public static String getFormattedDate(final Context context,
+                                          @Nullable LocalDate date) {
         if (date == null) {
             date = LocalDate.now();
         }
 
-        final String dayName = date.getDayOfWeek().name().charAt(0) +
-                date.getDayOfWeek().name().substring(1).toLowerCase();
-        final String monthName = String.valueOf(date.getMonth()).charAt(0) +
-                String.valueOf(date.getMonth()).substring(1).toLowerCase();
+        final String datePrefix = Locale.getDefault().getDisplayLanguage()
+                .equals(Languages.GERMAN_LANGUAGE) ?
+                // german
+                "der" : Locale.getDefault().getDisplayLanguage().equals(Languages.ITALIAN_LANGUAGE) ?
+                // italian
+                "il" : Locale.getDefault().getDisplayLanguage().equals(Languages.PORTUGUESE_LANGUAGE) ?
+                // portuguese
+                "de" :
+                // every other language
+                "";
+        final String separator = Locale.getDefault().getDisplayLanguage()
+                .equals(Languages.SPANISH_LANGUAGE) ?
+                // spanish
+                "de" :
+                // every other language but spanish
+                "";
+
+        final String dayName = Days.getTranslatedDayName(context,
+                date.getDayOfWeek().name().charAt(0) + date.getDayOfWeek().name().substring(1).toLowerCase());
+        final String monthName = Months.getTranslatedMonth(context,
+                String.valueOf(date.getMonth()).charAt(0) + String.valueOf(date.getMonth()).substring(1).toLowerCase());
         final int day = date.getDayOfMonth();
+        final int year = date.getYear();
 
         final StringBuilder transactionDate = new StringBuilder(dayName)
-                .append(", ")
-                .append(monthName)
-                .append(" ")
-                .append(day);
+                .append(", ");
+
+        switch (Locale.getDefault().getDisplayLanguage()) {
+            case Languages.GERMAN_LANGUAGE:
+            case Languages.ITALIAN_LANGUAGE:
+            case Languages.ROMANIAN_LANGUAGE:
+                final String formattedMonthName =
+                        !Locale.getDefault().getDisplayLanguage().equals(Languages.GERMAN_LANGUAGE) ?
+                                monthName.toLowerCase() : monthName;
+
+                transactionDate.append(datePrefix).append(" ").append(day).append(" ").append(formattedMonthName);
+                break;
+            case Languages.SPANISH_LANGUAGE:
+                transactionDate.append(day).append(" ").append(separator).append(" ").append(monthName.toLowerCase());
+                break;
+            case Languages.FRENCH_LANGUAGE:
+                transactionDate.append(day).append(" ").append(monthName.toLowerCase());
+                break;
+            case Languages.PORTUGUESE_LANGUAGE:
+                transactionDate.append(day).append(" ").append(datePrefix).append(" ").append(monthName.toLowerCase());
+                break;
+            default:
+                transactionDate.append(monthName).append(" ").append(day);
+                break;
+        }
 
         // displaying the year if it's not the current one
         if (date.getYear() != LocalDate.now().getYear()) {
-            transactionDate.append(", ")
-                    .append(date.getYear());
+            switch (Locale.getDefault().getDisplayLanguage()) {
+                case Languages.FRENCH_LANGUAGE:
+                case Languages.GERMAN_LANGUAGE:
+                case Languages.ITALIAN_LANGUAGE:
+                case Languages.ROMANIAN_LANGUAGE:
+                    transactionDate.append(" ").append(year);
+                    break;
+                case Languages.PORTUGUESE_LANGUAGE:
+                    transactionDate.append(" ").append(datePrefix).append(" ").append(year);
+                    break;
+                case Languages.SPANISH_LANGUAGE:
+                    transactionDate.append(" ").append(separator).append(" ").append(year);
+                    break;
+                default:
+                    transactionDate.append(", ").append(year);
+                    break;
+            }
         }
 
         return String.valueOf(transactionDate);
