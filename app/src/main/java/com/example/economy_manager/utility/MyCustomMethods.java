@@ -20,10 +20,12 @@ import com.example.economy_manager.feature.login.LoginActivity;
 import com.example.economy_manager.model.MyCustomTime;
 import com.google.gson.Gson;
 
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -49,8 +51,15 @@ public final class MyCustomMethods {
         manager.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
 
-    public static boolean stringIsNotEmpty(final @Nullable String enteredString) {
-        return enteredString != null && !enteredString.trim().isEmpty();
+    @NonNull
+    public static String decodeText(final String encodedText) {
+        final byte[] decodedBytes = Base64.getDecoder().decode(encodedText);
+
+        return new String(decodedBytes);
+    }
+
+    public static String encodeText(final @NonNull String text) {
+        return Base64.getEncoder().encodeToString(text.getBytes(StandardCharsets.UTF_8));
     }
 
     public static boolean emailIsValid(final @Nullable String email) {
@@ -361,6 +370,10 @@ public final class MyCustomMethods {
         activity.finishAffinity();
         activity.startActivity(new Intent(activity, LoginActivity.class));
         activity.overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+    }
+
+    public static boolean stringIsNotEmpty(final @Nullable String enteredString) {
+        return enteredString != null && !enteredString.trim().isEmpty();
     }
 
     public static boolean transactionWasMadeInTheLastWeek(final @Nullable MyCustomTime transactionTime) {

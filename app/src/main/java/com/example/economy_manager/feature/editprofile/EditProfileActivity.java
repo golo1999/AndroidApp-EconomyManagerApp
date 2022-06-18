@@ -89,15 +89,20 @@ public class EditProfileActivity
         final int accountPhotoBorderColor = binding.getIsDarkThemeEnabled() ?
                 getColor(R.color.secondaryDark) : getColor(R.color.quaternaryLight);
 
-        final String retrievedFirstName = String.valueOf(retrievedPersonalInformation.get("firstName"));
-        final String retrievedLastName = String.valueOf(retrievedPersonalInformation.get("lastName"));
-        final String retrievedPhoneNumber = String.valueOf(retrievedPersonalInformation.get("phoneNumber"));
-        final String retrievedWebsite = String.valueOf(retrievedPersonalInformation.get("website"));
-        final int countrySpinnerSelection = Integer.parseInt(String.
-                valueOf(retrievedPersonalInformation.get("countrySpinnerSelection")));
-        final int genderSpinnerSelection = Integer.parseInt(String.
-                valueOf(retrievedPersonalInformation.get("genderSpinnerSelection")));
-        final String retrievedCareerTitle = String.valueOf(retrievedPersonalInformation.get("careerTitle"));
+        final String retrievedFirstName =
+                MyCustomMethods.decodeText(String.valueOf(retrievedPersonalInformation.get("firstName")));
+        final String retrievedLastName =
+                MyCustomMethods.decodeText(String.valueOf(retrievedPersonalInformation.get("lastName")));
+        final String retrievedPhoneNumber =
+                MyCustomMethods.decodeText(String.valueOf(retrievedPersonalInformation.get("phoneNumber")));
+        final String retrievedWebsite =
+                MyCustomMethods.decodeText(String.valueOf(retrievedPersonalInformation.get("website")));
+        final int countrySpinnerSelection =
+                Integer.parseInt(String.valueOf(retrievedPersonalInformation.get("countrySpinnerSelection")));
+        final int genderSpinnerSelection =
+                Integer.parseInt(String.valueOf(retrievedPersonalInformation.get("genderSpinnerSelection")));
+        final String retrievedCareerTitle =
+                MyCustomMethods.decodeText(String.valueOf(retrievedPersonalInformation.get("careerTitle")));
 
         binding.photo.setBorderColor(accountPhotoBorderColor);
         viewModel.setFirstName(retrievedFirstName);

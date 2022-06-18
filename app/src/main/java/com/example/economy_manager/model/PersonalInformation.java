@@ -1,5 +1,7 @@
 package com.example.economy_manager.model;
 
+import com.example.economy_manager.utility.MyCustomMethods;
+
 import lombok.Data;
 
 @Data
@@ -15,7 +17,8 @@ public class PersonalInformation {
 
     public PersonalInformation() {
         // Required empty public constructor
-        this("", "", "", "", "Unknown country", "Unknown gender", "", "");
+        this("", "", "", "", MyCustomMethods.encodeText("Unknown country"),
+                MyCustomMethods.encodeText("Unknown gender"), "", "");
     }
 
     public PersonalInformation(final String firstName,
