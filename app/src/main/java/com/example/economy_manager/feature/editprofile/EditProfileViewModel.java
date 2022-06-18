@@ -152,12 +152,14 @@ public class EditProfileViewModel extends AndroidViewModel {
         final Object countrySpinnerSelection =
                 Countries.getCountryPositionInList(getApplication(), countriesList,
                         getUserDetails() != null ?
-                                getUserDetails().getPersonalInformation().getCountry().trim() : "");
+                                MyCustomMethods.decodeText(getUserDetails().getPersonalInformation().getCountry())
+                                        .trim() : "");
 
         final Object genderSpinnerSelection =
                 Genders.getPositionInGenderList(activity, gendersList,
                         getUserDetails() != null ?
-                                getUserDetails().getPersonalInformation().getGender().trim() : "");
+                                MyCustomMethods.decodeText(getUserDetails().getPersonalInformation().getGender())
+                                        .trim() : "");
 
         final Object careerTitle = getUserDetails() == null ||
                 getUserDetails().getPersonalInformation().getCareerTitle().trim().isEmpty() ?
@@ -194,10 +196,6 @@ public class EditProfileViewModel extends AndroidViewModel {
                 enteredCareerTitle == null) {
             return;
         }
-
-        final String enteredCountryInEnglish =
-                Countries.getCountryNameInEnglish(activity, enteredCountry);
-        final String enteredGenderInEnglish = Genders.getGenderInEnglish(activity, enteredGender);
 
         // if there are invalid fields
         if (MyCustomMethods.nameIsValid(enteredFirstName) != 1 ||
@@ -250,6 +248,18 @@ public class EditProfileViewModel extends AndroidViewModel {
             return;
         }
 
+        final String enteredCountryInEnglish =
+                Countries.getCountryNameInEnglish(activity, enteredCountry);
+        final String enteredGenderInEnglish = Genders.getGenderInEnglish(activity, enteredGender);
+
+        final String encodedEnteredFirstName = MyCustomMethods.encodeText(enteredFirstName);
+        final String encodedEnteredLastName = MyCustomMethods.encodeText(enteredLastName);
+        final String encodedEnteredPhoneNumber = MyCustomMethods.encodeText(enteredPhoneNumber);
+        final String encodedEnteredWebsite = MyCustomMethods.encodeText(enteredWebsite);
+        final String encodedEnteredCountryInEnglish = MyCustomMethods.encodeText(enteredCountryInEnglish);
+        final String encodedEnteredGenderInEnglish = MyCustomMethods.encodeText(enteredGenderInEnglish);
+        final String encodedEnteredCareerTitle = MyCustomMethods.encodeText(enteredCareerTitle);
+
         MyCustomVariables.getDatabaseReference()
                 .child(MyCustomVariables.getFirebaseAuth().getUid())
                 .addListenerForSingleValueEvent(new ValueEventListener() {
@@ -268,54 +278,54 @@ public class EditProfileViewModel extends AndroidViewModel {
                         }
 
                         final boolean enteredFirstNameIsTheSame =
-                                enteredFirstName.trim().equals(personalInformation.getFirstName());
+                                encodedEnteredFirstName.trim().equals(personalInformation.getFirstName());
                         final boolean enteredLastNameIsTheSame =
-                                enteredLastName.trim().equals(personalInformation.getLastName());
+                                encodedEnteredLastName.trim().equals(personalInformation.getLastName());
                         final boolean enteredPhoneNumberIsTheSame =
-                                enteredPhoneNumber.trim().equals(personalInformation.getPhoneNumber());
+                                encodedEnteredPhoneNumber.trim().equals(personalInformation.getPhoneNumber());
                         final boolean enteredWebsiteIsTheSame =
-                                enteredWebsite.trim().equals(personalInformation.getWebsite());
+                                encodedEnteredWebsite.trim().equals(personalInformation.getWebsite());
                         final boolean enteredCountryIsTheSame =
-                                enteredCountryInEnglish.trim().equals(personalInformation.getCountry());
+                                encodedEnteredCountryInEnglish.trim().equals(personalInformation.getCountry());
                         final boolean enteredGenderIsTheSame =
-                                enteredGenderInEnglish.trim().equals(personalInformation.getGender());
+                                encodedEnteredGenderInEnglish.trim().equals(personalInformation.getGender());
                         final boolean enteredCareerTitleIsTheSame =
-                                enteredCareerTitle.trim().equals(personalInformation.getCareerTitle());
+                                encodedEnteredCareerTitle.trim().equals(personalInformation.getCareerTitle());
 
                         boolean isProfileModified = false;
 
                         if (!enteredFirstNameIsTheSame) {
-                            personalInformation.setFirstName(enteredFirstName);
+                            personalInformation.setFirstName(encodedEnteredFirstName);
                             isProfileModified = true;
                         }
 
                         if (!enteredLastNameIsTheSame) {
-                            personalInformation.setLastName(enteredLastName);
+                            personalInformation.setLastName(encodedEnteredLastName);
                             isProfileModified = true;
                         }
 
                         if (!enteredPhoneNumberIsTheSame) {
-                            personalInformation.setPhoneNumber(enteredPhoneNumber);
+                            personalInformation.setPhoneNumber(encodedEnteredPhoneNumber);
                             isProfileModified = true;
                         }
 
                         if (!enteredWebsiteIsTheSame) {
-                            personalInformation.setWebsite(enteredWebsite);
+                            personalInformation.setWebsite(encodedEnteredWebsite);
                             isProfileModified = true;
                         }
 
                         if (!enteredCountryIsTheSame) {
-                            personalInformation.setCountry(enteredCountryInEnglish);
+                            personalInformation.setCountry(encodedEnteredCountryInEnglish);
                             isProfileModified = true;
                         }
 
                         if (!enteredGenderIsTheSame) {
-                            personalInformation.setGender(enteredGenderInEnglish);
+                            personalInformation.setGender(encodedEnteredGenderInEnglish);
                             isProfileModified = true;
                         }
 
                         if (!enteredCareerTitleIsTheSame) {
-                            personalInformation.setCareerTitle(enteredCareerTitle);
+                            personalInformation.setCareerTitle(encodedEnteredCareerTitle);
                             isProfileModified = true;
                         }
 

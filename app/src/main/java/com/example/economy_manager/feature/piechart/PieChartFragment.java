@@ -11,11 +11,9 @@ import androidx.annotation.NonNull;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.lifecycle.ViewModelStoreOwner;
 
 import com.example.economy_manager.R;
 import com.example.economy_manager.databinding.PieChartFragmentBinding;
-import com.example.economy_manager.feature.mainscreen.MainScreenViewModel;
 import com.example.economy_manager.model.Transaction;
 import com.example.economy_manager.model.UserDetails;
 import com.example.economy_manager.utility.MyCustomMethods;
@@ -36,7 +34,7 @@ import java.util.concurrent.atomic.AtomicReference;
 public class PieChartFragment extends Fragment {
 
     private PieChartFragmentBinding binding;
-    private MainScreenViewModel viewModel;
+    private PieChartViewModel viewModel;
     private UserDetails userDetails;
     private final LinkedHashMap<Integer, Float> transactionTypesMap = new LinkedHashMap<>();
     private PieChartListener listener;
@@ -229,7 +227,7 @@ public class PieChartFragment extends Fragment {
     private void setFragmentVariables(final @NonNull LayoutInflater inflater,
                                       final ViewGroup container) {
         binding = DataBindingUtil.inflate(inflater, R.layout.pie_chart_fragment, container, false);
-        viewModel = new ViewModelProvider((ViewModelStoreOwner) requireContext()).get(MainScreenViewModel.class);
+        viewModel = new ViewModelProvider(requireActivity()).get(PieChartViewModel.class);
     }
 
     private void setPieChartData(final LinkedHashMap<Integer, Float> transactionTypesMap,
