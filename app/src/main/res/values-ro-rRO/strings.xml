@@ -209,4 +209,5 @@
     <string name="no_transactions_made_this_year">Nicio tranzacție efectuată în acest an</string>
     <string name="no_transactions_made_in_the_last_years">Nicio tranzacție efectuată în ultimii %d ani</string>
     <string name="last_years_economies_bar_chart">Diagrama bară a economiilor din ultimii %d ani</string>
+    <string name="could_not_fetch_data">Datele nu au putut fi preluate</string>
 </resources>

@@ -209,4 +209,5 @@
     <string name="no_transactions_made_this_year">Keine Transaktionen in diesem Jahr</string>
     <string name="no_transactions_made_in_the_last_years">Keine Transaktionen in den letzten %d Jahren</string>
     <string name="last_years_economies_bar_chart">Balkendiagramm der Volkswirtschaften der letzten %d Jahre</string>
+    <string name="could_not_fetch_data">Daten konnten nicht abgerufen werden</string>
 </resources>

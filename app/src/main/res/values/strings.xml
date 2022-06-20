@@ -5,6 +5,7 @@
     <string name="career_title">Career title</string>
     <string name="change_password">Change password</string>
     <string name="choose">Choose</string>
+    <string name="could_not_fetch_data">Could not fetch data</string>
     <string name="currency">Currency</string>
     <string name="current_year_economies_bar_chart">Current year economies bar chart</string>
     <string name="current_year_expenses_bar_chart">Current year expenses bar chart</string>

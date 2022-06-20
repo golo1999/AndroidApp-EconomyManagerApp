@@ -87,7 +87,7 @@ public class CurrencyConversionFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
-//        createAndSetList();
+        createAndSetList();
     }
 
     /**
@@ -182,72 +182,116 @@ public class CurrencyConversionFragment extends Fragment {
         if (value == 0f) {
             showNoTransactionsLayout(mainLayout, requireContext().getResources()
                     .getString(R.string.no_transactions_made_this_month));
-
             return;
         }
 
-        final String[] currenciesArray = requireContext().getResources().getStringArray(R.array.currencies);
-        final List<String> currenciesList = Arrays.stream(currenciesArray).collect(Collectors.toList());
+        try {
+            final ApplicationInfo applicationInfo = getApplicationContext()
+                    .getPackageManager()
+                    .getApplicationInfo(getApplicationContext().getPackageName(),
+                            PackageManager.GET_META_DATA);
+            final String CURRENCY_CONVERTER_API_KEY =
+                    String.valueOf(applicationInfo.metaData.get("CURRENCY_CONVERTER_API_KEY"));
+            final Call<CurrencyConversionResult> currencyConversionResultCall =
+                    api.getConversionRateBetween("RON", "GBP", 0f, CURRENCY_CONVERTER_API_KEY);
 
-        // filtering the currencies array with all of its values but the current currency
-        currenciesList.stream().filter(currency -> !currency.equals(currentCurrencyName)).forEach(currency -> {
-            final LinearLayout childLayout = (LinearLayout) getLayoutInflater()
-                    .inflate(R.layout.currency_conversion_item_layout, mainLayout, false);
+            // checking if data can be fetched from the API
+            currencyConversionResultCall.enqueue(new Callback<CurrencyConversionResult>() {
+                @Override
+                public void onResponse(@NonNull Call<CurrencyConversionResult> call,
+                                       @NonNull Response<CurrencyConversionResult> response) {
+                    CurrencyConversionResult currencyConversionResult = response.body();
 
-            if (childLayout == null) {
-                return;
-            }
-
-            // trying to convert the value from the current currency to the other ones
-            try {
-                final ApplicationInfo applicationInfo = getApplicationContext()
-                        .getPackageManager()
-                        .getApplicationInfo(getApplicationContext().getPackageName(),
-                                PackageManager.GET_META_DATA);
-
-                final String CURRENCY_CONVERTER_API_KEY =
-                        String.valueOf(applicationInfo.metaData.get("CURRENCY_CONVERTER_API_KEY"));
-
-                final Call<CurrencyConversionResult> currencyConversionResultCall =
-                        api.getConversionRateBetween(currentCurrencyName, currency, value, CURRENCY_CONVERTER_API_KEY);
-
-                currencyConversionResultCall.enqueue(new Callback<CurrencyConversionResult>() {
-                    @Override
-                    public void onResponse(@NonNull Call<CurrencyConversionResult> call,
-                                           @NonNull Response<CurrencyConversionResult> response) {
-                        // getting the conversion result and displaying it on the child layout which will be appended
-                        // to the main layout's vertical LinearLayout
-                        CurrencyConversionResult currencyConversionResult = response.body();
-
-                        if (currencyConversionResult == null) {
-                            return;
-                        }
-
-                        final TextView currencyNameTextView = childLayout.findViewById(R.id.currencyName);
-                        final TextView convertedValueTextView = childLayout.findViewById(R.id.convertedValue);
-                        final String currencySymbol = MyCustomMethods.getCurrencySymbolFromCurrencyName(currency);
-                        final float convertedValue = Float.parseFloat(currencyConversionResult.getConversionResult());
-                        final String convertedValueWithCurrency =
-                                Locale.getDefault().getDisplayLanguage().equals("English") ?
-                                        currencySymbol + convertedValue : convertedValue + " " + currencySymbol;
-
-                        currencyNameTextView.setText(currency);
-                        convertedValueTextView.setText(convertedValueWithCurrency);
-
-                        mainLayout.addView(childLayout);
+                    // if data cannot be fetched
+                    if (currencyConversionResult == null) {
+                        showNoTransactionsLayout(binding.mainLayout,
+                                requireContext().getString(R.string.could_not_fetch_data));
                     }
+                    // if data can be fetched
+                    else {
+                        final String[] currenciesArray =
+                                requireContext().getResources().getStringArray(R.array.currencies);
+                        final List<String> currenciesList = Arrays.stream(currenciesArray).collect(Collectors.toList());
 
-                    @Override
-                    public void onFailure(@NonNull Call<CurrencyConversionResult> call,
-                                          @NonNull Throwable t) {
+                        // filtering the currencies array with all of its values but the current currency
+                        currenciesList.stream()
+                                .filter(currency -> !currency.equals(currentCurrencyName)).forEach(currency -> {
+                            final LinearLayout childLayout = (LinearLayout) getLayoutInflater()
+                                    .inflate(R.layout.currency_conversion_item_layout, mainLayout, false);
 
+                            if (childLayout == null) {
+                                return;
+                            }
+
+                            // trying to convert the value from the current currency to the other ones
+                            try {
+                                final ApplicationInfo applicationInfo = getApplicationContext()
+                                        .getPackageManager()
+                                        .getApplicationInfo(getApplicationContext().getPackageName(),
+                                                PackageManager.GET_META_DATA);
+
+                                final String CURRENCY_CONVERTER_API_KEY =
+                                        String.valueOf(applicationInfo.metaData.get("CURRENCY_CONVERTER_API_KEY"));
+
+                                final Call<CurrencyConversionResult> currencyConversionResultCall =
+                                        api.getConversionRateBetween(currentCurrencyName, currency, value,
+                                                CURRENCY_CONVERTER_API_KEY);
+
+                                currencyConversionResultCall.enqueue(new Callback<CurrencyConversionResult>() {
+                                    @Override
+                                    public void onResponse(@NonNull Call<CurrencyConversionResult> call,
+                                                           @NonNull Response<CurrencyConversionResult> response) {
+                                        // getting the conversion result and displaying it on the child layout
+                                        // which will be appended to the main layout's vertical LinearLayout
+                                        CurrencyConversionResult currencyConversionResult = response.body();
+
+                                        if (currencyConversionResult == null) {
+                                            return;
+                                        }
+
+                                        final TextView currencyNameTextView =
+                                                childLayout.findViewById(R.id.currencyName);
+                                        final TextView convertedValueTextView =
+                                                childLayout.findViewById(R.id.convertedValue);
+                                        final String currencySymbol =
+                                                MyCustomMethods.getCurrencySymbolFromCurrencyName(currency);
+                                        final float convertedValue =
+                                                Float.parseFloat(currencyConversionResult.getConversionResult());
+                                        final String convertedValueWithCurrency =
+                                                Locale.getDefault().getDisplayLanguage().equals("English") ?
+                                                        currencySymbol + convertedValue :
+                                                        convertedValue + " " + currencySymbol;
+
+                                        currencyNameTextView.setText(currency);
+                                        convertedValueTextView.setText(convertedValueWithCurrency);
+
+                                        mainLayout.addView(childLayout);
+                                    }
+
+                                    @Override
+                                    public void onFailure(@NonNull Call<CurrencyConversionResult> call,
+                                                          @NonNull Throwable t) {
+
+                                    }
+                                });
+                            } catch (PackageManager.NameNotFoundException e) {
+                                Log.d("currencyConverterApiKey", "COULDN'T BE FETCHED FROM BUILD CONFIG");
+                                e.printStackTrace();
+                            }
+                        });
                     }
-                });
-            } catch (PackageManager.NameNotFoundException e) {
-                Log.d("currencyConverterApiKey", "COULDN'T BE FETCHED FROM BUILD CONFIG");
-                e.printStackTrace();
-            }
-        });
+                }
+
+                @Override
+                public void onFailure(@NonNull Call<CurrencyConversionResult> call,
+                                      @NonNull Throwable t) {
+
+                }
+            });
+        } catch (PackageManager.NameNotFoundException e) {
+            Log.d("currencyConverterApiKey", "COULDN'T BE FETCHED FROM BUILD CONFIG");
+            e.printStackTrace();
+        }
     }
 
     /**

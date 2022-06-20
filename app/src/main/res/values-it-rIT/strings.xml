@@ -209,4 +209,5 @@
     <string name="no_transactions_made_this_year">Nessuna transazione effettuata quest\'anno</string>
     <string name="no_transactions_made_in_the_last_years">Nessuna transazione effettuata negli ultimi %d anni</string>
     <string name="last_years_economies_bar_chart">Grafico a barre delle economie degli ultimi %d anni</string>
+    <string name="could_not_fetch_data">Impossibile recuperare i dati</string>
 </resources>
